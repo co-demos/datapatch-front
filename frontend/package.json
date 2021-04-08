@@ -1,0 +1,24 @@
+{
+  "name": "datapatch-front",
+  "version": "1.0.0",
+  "description": "core frontend for datapatch",
+  "author": "Julien Paris",
+  "private": true,
+  "scripts": {
+    "analyze": "nuxt build --analyze",
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "gsap": "file:gsap-bonus.tgz",
+    "nuxt": "^2.0.0",
+    "nuxt-i18n": "^6.23.0",
+    "standard": "^16.0.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.0.0"
+  }
+}
