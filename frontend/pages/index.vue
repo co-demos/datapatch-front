@@ -19,12 +19,14 @@
         />
       </div>
 
-      <v-card>
-        <v-card-title class="headline">
+      <v-card 
+        class="elevation-0"
+        >
+        <v-card-title class="headline justify-center">
           {{ $t('datapatch.intro') }}
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="mt-4">
           <p>
             {{ $t('datapatch.pitch') }}
           </p>
@@ -39,13 +41,16 @@
           </p>
         </v-card-text>
 
-        <v-card-actions>
-          <v-spacer />
+        <v-card-actions class="justify-center">
+          <!-- <v-spacer /> -->
           <v-btn
             dark
+            tile
+            elevation="0"
             color="primary"
             nuxt
-            to="/inspire"
+            large
+            to="/login"
             >
             {{ $t('buttons.continue') }}
           </v-btn>

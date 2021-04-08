@@ -5,6 +5,7 @@ export default {
     pitch: 'Data Patch is an open source alternative to airtable.',
     infos: 'For more information on Data Patch, check out the ',
     repo: "Github repository",
+    codemos: "an open source project by co-demos",
   },
   buttons: {
     prev: 'Previous',
@@ -25,7 +26,7 @@ export default {
     in: 'Log in',
     out: 'Log out',
     sign: 'Sign in',
-    forgotpwd: 'Password forgotten  ,',
+    forgotpwd: 'Password forgotten ?',
     resetpwd: 'Send me a link to reset my password',
     isAccount: 'Already an account ?',
     formName: 'Name',
@@ -34,6 +35,6 @@ export default {
     formEmailLabel: 'Email',
     formPwd: 'Your password',
     formPwdChoose: 'Choose a password',
-    formPwdlabel: 'Password',
+    formPwdLabel: 'Password',
   },
 }

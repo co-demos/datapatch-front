@@ -1,7 +1,7 @@
 <template>
     <v-container 
       fill-height
-      style="height: 80vh;"
+      style="height: 60vh;"
       >
 
       <v-row

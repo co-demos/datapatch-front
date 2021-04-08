@@ -1,7 +1,7 @@
 <template>
     <v-container 
       fill-height
-      style="height: 80vh;"
+      style="height: 60vh;"
       >
 
       <v-row
@@ -26,7 +26,7 @@
 
             <v-card-title class="justify-center mb-3">
               <v-icon>
-                icon-edit3
+                icon-edit-3
               </v-icon>
               <span class="ml-3">
               {{ $t('login.sign') }}
