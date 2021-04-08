@@ -2,6 +2,7 @@
   <v-menu
     offset-y
     close-on-click
+    open-on-hover
     >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -27,7 +28,11 @@
   </v-menu>
 </template>
 <script>
+
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'Languages',
 }
+
 </script>

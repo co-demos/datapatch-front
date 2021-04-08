@@ -13,6 +13,27 @@ export default {
   pages: {
     home: 'Home',
     me: 'My infos',
-    contacts: 'Contacts'
+    groups: 'My groups',
+    notifications: 'My notifications',
+    documentation: 'Documentation',
+    workspaces: 'Open workspaces',
+    schemas: 'Open schemas',
+    myworkspaces: 'My workspaces',
+    myschemas: 'My schemas',
+  },
+  login: {
+    in: 'Log in',
+    out: 'Log out',
+    sign: 'Sign in',
+    forgotpwd: 'Password forgotten  ,',
+    resetpwd: 'Send me a link to reset my password',
+    isAccount: 'Already an account ?',
+    formName: 'Name',
+    formSurname: 'Surname',
+    formEmail: 'Your email adress',
+    formEmailLabel: 'Email',
+    formPwd: 'Your password',
+    formPwdChoose: 'Choose a password',
+    formPwdlabel: 'Password',
   },
 }

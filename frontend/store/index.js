@@ -11,6 +11,8 @@ export const state = () => ({
   locale: undefined,
   locales: undefined,
 
+  api: process.env.CONFIG_APP_BACKEND,
+
 })
 
 export const getters = {

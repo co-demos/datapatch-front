@@ -18,8 +18,8 @@ const RUN_MODE = process.env.NUXT_ENV_RUN_MODE || process.env.NUXT_ENV_RUN_MODE_
 
 
 const config = new configApp(RUN_MODE, process.env)
-console.log('>>> nuxt.config.js (start) / config : ', config)
-
+// console.log('>>> nuxt.config.js (start) / config : ', config)
+console.log('>>> nuxt.config.js (start) / config.backendApi : ', config.backendApi)
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - -
@@ -56,7 +56,8 @@ export default {
   env: {
     MODE_APP: config.mode,
     LOG: logAllowed.includes(config.mode),
-    CONFIG_APP: config
+    CONFIG_APP: config,
+    CONFIG_APP_BACKEND: config.backendApi,
   },
 
   /*

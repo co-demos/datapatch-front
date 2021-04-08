@@ -3,12 +3,13 @@
     column
     justify-center
     align-center
-  >
+    >
     <v-flex
       xs12
       sm8
       md6
       >
+
       <div class="text-center mt-5">
         <LogoAnimated
           :yoyo="true"
@@ -57,7 +58,7 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+// import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {

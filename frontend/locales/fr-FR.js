@@ -13,6 +13,27 @@ export default {
   pages: {
     home: 'Accueil',
     me: 'Mes infos',
-    contacts: 'Contacts'
+    groups: 'Mes groupes',
+    notifications: 'Mes notifications',
+    documentation: 'Documentation',
+    workspaces: 'Workspaces partagés',
+    schemas: 'Schémas partagés',
+    myworkspaces: 'Mes espaces de travail',
+    myschemas: 'Mes schémas',
+  },
+  login: {
+    in: 'Se connecter',
+    out: 'Se déconnecter',
+    sign: 'Créer un compte',
+    forgotpwd: "Mot de passe oublié ?",
+    resetpwd: "M'envoyer un lien pour créer un nouveau mot de passe",
+    isAccount: 'Déjà un compte ?',
+    formName: 'Prénom',
+    formSurname: 'Nom',
+    formEmail: 'Votre adresse email',
+    formEmailLabel: 'Email',
+    formPwd: 'Votre mot de passe',
+    formPwdChoose: 'Choose a password',
+    formPwdLabel: 'Mot de passe',
   },
 }

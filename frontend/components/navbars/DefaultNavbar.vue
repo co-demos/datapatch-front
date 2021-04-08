@@ -1,35 +1,40 @@
 <template>
-  <div>
+
+  <v-container>
+
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
-      :clipped="true"
+      :clipped="clipped"
+      :expand-on-hover="miniVariant"
       fixed
       app
       >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-          >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+
+      <MenuList
+        :items="items"
+        :isFirst="true"
+      />
+
+      <MenuList 
+        v-if="isAuthenticated"
+        :items="itemsUser.connected"
+      />
+
+      <MenuList 
+        v-else
+        :items="itemsUser.notConnected"
+      />
+
     </v-navigation-drawer>
 
     <v-app-bar
-      :clipped-left="clipped"
       color="primary"
+      class="px-4"
+      clipped-left
       dark
       fixed
+      dense
       flat
       app
       >
@@ -38,91 +43,115 @@
         @click.stop="drawer = !drawer"
         />
       
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-        >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-        >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-        >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-
       <v-toolbar-title v-text="title" />
 
       <v-spacer />
 
       <Languages/>
 
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-        >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+      <UserButton/>
 
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-      >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+  </v-container>
 
-
-  </div>
 </template>
 
 <script>
+
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   components: {
     Languages: () => import('@/components/buttons/Languages.vue'),
+    UserButton: () => import('@/components/buttons/UserButton.vue'),
   },
   data () {
     return {
+      title: 'Data patch',
       clipped: true,
-      drawer: false,
+      drawer: !this.isAuthenticated,
+      miniVariant: true,
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'icon-home',
+          title: 'pages.home',
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Data patch'
+          icon: 'icon-info1',
+          title: `pages.documentation`,
+          to: '/documentation'
+        },
+     ],
+      itemsUser: {
+        connected: [
+          { divider: true },
+          {
+            icon: 'icon-database',
+            title: `pages.myworkspaces`,
+            to: '/workspaces'
+          },
+          {
+            icon: 'icon-clipboard',
+            title: `pages.myschemas`,
+            to: '/schemas'
+          },
+          { divider: true },
+          {
+            icon: 'icon-user',
+            title: 'pages.me',
+            to: '/me'
+          },
+          {
+            icon: 'icon-bell',
+            title: 'pages.notifications',
+            to: '/notifications'
+          },
+          {
+            icon: 'icon-users',
+            title: 'pages.groups',
+            to: '/groups'
+          },
+          { divider: true },
+          {
+            icon: 'icon-log-out',
+            title: 'login.out',
+            to: '/logout'
+          },
+        ],
+        notConnected: [
+          { divider: true },
+          {
+            icon: 'icon-database',
+            title: `pages.workspaces`,
+            to: '/workspaces'
+          },
+          {
+            icon: 'icon-clipboard',
+            title: `pages.schemas`,
+            to: '/schemas'
+          },
+          { divider: true },
+          {
+            icon: 'icon-log-in',
+            title: 'login.in',
+            to: '/login'
+          },
+          {
+            icon: 'icon-edit-3',
+            title: 'login.sign',
+            to: '/sign'
+          },
+        ],
+      }
     }
+  },
+  computed: {
+    ...mapState({
+      isAuthenticated: (state) =>  state.user.auth.isAuthenticated
+    })
   }
 }
 </script>
