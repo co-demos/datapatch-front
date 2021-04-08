@@ -43,7 +43,14 @@
         @click.stop="drawer = !drawer"
         />
       
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title>
+        <nuxt-link
+          class="white--text link-light"
+          to="/"
+          >
+          {{ title }}
+        </nuxt-link>
+      </v-toolbar-title>
 
       <v-spacer />
 
