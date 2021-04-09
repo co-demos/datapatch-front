@@ -3,7 +3,7 @@ export default {
   datapatch: {
     intro: 'Bienvenue sur Data Patch',
     introUser: 'Bienvenue de nouveau sur Data Patch, {name}',
-    pitch: 'Data Patch est une alternative open source à airtable.',
+    pitch: 'Data Patch est (bientôt) une alternative open source à airtable.',
     infos: "Pour plus d'informations consultez la documentation sur le ",
     repo: "repo sur Github",
     codemos: "un projet libre par co-demos",

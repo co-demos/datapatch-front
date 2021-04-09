@@ -29,13 +29,16 @@
               <v-icon>
                 icon-log-in
               </v-icon>
-              <span class="ml-3">
-              {{ $t('login.in') }}
+              <span v-if="isLoading || isConnected" class="ml-3">
+                {{ $t('login.inMsg') }}
+              </span>
+              <span v-else class="ml-3">
+                {{ $t('login.in') }}
               </span>
             </v-card-title>
 
 
-            <v-form>
+            <v-form v-show="!isConnected">
 
               <!-- email -->
               <v-text-field
@@ -90,7 +93,7 @@
             </v-form>
 
 
-            <v-container class="mt-4">
+            <v-container v-if="!isConnected" class="mt-4">
               <v-row>
                 <v-col cols="6" class="px-0">
                   <v-btn 
@@ -144,6 +147,7 @@ export default {
   data () {
     return {
       isLoading: false,
+      isConnected: false,
       showPwd: false,
       password: '',
       email: '',
@@ -179,6 +183,7 @@ export default {
         .post(`${this.api.users}/token`, formData)
         .then(resp => {
           // this.log && console.log('C-login > submit > resp.data : ', resp.data)
+          this.isConnected = true
           const token = resp.data
           this.authenticateUser(token)
 

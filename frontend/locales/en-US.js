@@ -3,7 +3,7 @@ export default {
   datapatch: {
     intro: 'Welcome to Data Patch',
     introUser: 'Welcome back to Data Patch, {name}',
-    pitch: 'Data Patch is an open source alternative to airtable.',
+    pitch: 'Data Patch is (almost) an open source alternative to airtable.',
     infos: 'For more information on Data Patch, check out the ',
     repo: "Github repository",
     codemos: "an open source project by co-demos",
@@ -45,7 +45,8 @@ export default {
     emailSent: 'A verification email has been sent to you.',
     checkEmail: 'Please check your mailbox and click on the link to verify your email',
     verifyEmail: 'Verifying your email...',
-    verifyOk: 'your email has been verified and your account is now activated...',
+    verifyOk: 'Your email has been verified.',
+    verifyOk2: 'Your account is now activated.s',
     failVerify: 'Verification failed...',
   },
   me: {

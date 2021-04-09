@@ -50,6 +50,7 @@
                 v-if="hasFailed && errorMsg"
                 dense
                 outlined
+                icon="icon-alert-triangle"
                 type="error"
                 >
                 <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
@@ -58,7 +59,7 @@
             </v-card-title>
 
 
-            <v-container v-if="isVerified" class="mt-4">
+            <v-container v-if="isVerified || hasFailed" class="mt-4">
               <v-row>
                 <v-col cols="12" class="px-0">
                   <v-btn 
@@ -67,11 +68,14 @@
                     tile
                     elevation="0"
                     dark
-                    to="/login"
+                    :to="`/${isVerified ? 'login' : ''}`"
                     router
                     >
-                  <span class="text-center">
+                  <span v-if="isVerified" class="text-center">
                     {{ $t('login.in') }}
+                  </span>
+                  <span v-else class="text-center">
+                    {{ $t('pages.home') }}
                   </span>
                   </v-btn>
                 </v-col>
