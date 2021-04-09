@@ -4,6 +4,7 @@
     this.tokenType = tokenType
     this.headersObj = {
       accept: 'application/json',
+      'content-type': 'application/json',
       Authorization: `${tokenType} ${token}`
     };
   }

@@ -18,13 +18,7 @@
             elevation="0"
             class="pa-5">
 
-            <!-- <div>
-              <code><pre>
-                {{ api }}
-              </pre></code>
-            </div> -->
-
-            <v-card-title class="justify-center mb-3">
+            <v-card-title class="justify-center mb-3 px-0">
               <v-icon>
                 icon-edit-3
               </v-icon>
@@ -42,7 +36,21 @@
               </p>
             </v-card-text>
             
-            <v-form v-if="!checkEmail">
+            <v-alert
+              v-model="alert"
+              class="my-5"
+              dense
+              outlined
+              icon="icon-alert-triangle"
+              type="error"
+              dismissible
+             >
+              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
+            </v-alert>
+
+            <br/>
+
+            <v-form v-if="!checkEmail" ref="form">
 
               <!-- username -->
               <v-text-field
@@ -57,6 +65,7 @@
                 :label="$t('login.formUsername')"
                 :placeholder="$t('login.formUsername')"
                 prepend-inner-icon="icon-user"
+                :rules="valueRules"
                 ></v-text-field>
 
               <!-- name -->
@@ -72,6 +81,7 @@
                 :label="$t('login.formName')"
                 :placeholder="$t('login.formName')"
                 prepend-inner-icon="icon-user"
+                :rules="valueRules"
                 ></v-text-field>
 
               <!-- surname -->
@@ -87,6 +97,7 @@
                 :label="$t('login.formSurname')"
                 :placeholder="$t('login.formSurname')"
                 prepend-inner-icon="icon-user"
+                :rules="valueRules"
                 ></v-text-field>
 
               <!-- email -->
@@ -102,6 +113,7 @@
                 :label="$t('login.formEmailLabel')"
                 :placeholder="$t('login.formEmail')"
                 prepend-inner-icon="icon-mail"
+                :rules="emailRules"
                 ></v-text-field>
 
               <!-- password -->
@@ -118,25 +130,32 @@
                 :label="$t('login.formPwdLabel')"
                 :placeholder="$t('login.formPwdChoose')"
                 prepend-inner-icon="icon-lock"
+                :rules="passwordRules"
                 ></v-text-field>
 
+              <v-checkbox
+                class="mb-5"
+                v-model="checkbox"
+                :rules="checkboxRules"
+                :label="$t('login.formCheckLabel')"
+                required
+              ></v-checkbox>
               
               <!-- submit -->
               <v-btn
+                class="mt-3"
                 color="primary"
                 block
                 large
                 elevation="0"
                 tile
                 dark
-                class="mr-4"
                 @click="submit"
                 >
                 {{ $t('login.signBtn') }}
               </v-btn>
 
             </v-form>
-
 
             <v-container v-if="!checkEmail" class="mt-4">
               <v-row>
@@ -172,6 +191,7 @@
 
 import axios from 'axios'
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
@@ -180,11 +200,23 @@ export default {
       isLoading: false,
       checkEmail: false,
       showPwd: false,
+      alert: false,
+
       username: '',
       name: '',
       surname: '',
       email: '',
       password: '',
+      checkbox: false,
+
+      valueRules: rules.valueRules( this.$t('rules.valEnter') ),
+      emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
+      passwordRules: rules.passwordRules( this.$t('rules.pwdType'), this.$t('rules.pwdChars') ),
+      checkboxRules: rules.checkboxRules( this.$t('rules.checkAgree') ),
+
+      hasFailed: false,
+      errorMsg: undefined,
+      errorCode: undefined,
     }
   },
   computed: {
@@ -200,25 +232,37 @@ export default {
     }),
     submit () {
 
-      let newUser = {
-        username: this.username,
-        name: this.name,
-        surname: this.surname,
-        email: this.email,
-        locale: this.$i18n.locale,
-        password: this.password,
+      if ( this.$refs.form.validate() ) {
+        this.alert = false
+        let newUser = {
+          username: this.username,
+          name: this.name,
+          surname: this.surname,
+          email: this.email,
+          locale: this.$i18n.locale,
+          password: this.password,
+        }
+        this.log && console.log('P-Sign > submit > newUser : ', newUser)
+  
+        axios
+          .post(`${this.api.users}/`, newUser)
+          .then(resp => {
+            this.log && console.log('P-Sign > submit > resp.data : ', resp.data)
+            const userData = resp.data
+            this.populateUser(userData)
+            // this.$router.push('/login')
+            this.checkEmail = true
+          })
+          .catch(error => {
+            this.alert = true
+            this.hasFailed = true
+            this.isLoading = false
+            this.log && console.log('P-Sign > error.response : ', error.response)
+            this.errorMsg = error.response.data.detail
+            this.errorCode = error.response.status
+          })
       }
-      this.log && console.log('C-sign > submit > newUser : ', newUser)
-
-      axios
-        .post(`${this.api.users}/`, newUser)
-        .then(resp => {
-          this.log && console.log('C-sign > submit > resp.data : ', resp.data)
-          const userData = resp.data
-          this.populateUser(userData)
-          // this.$router.push('/login')
-          this.checkEmail = true
-        })
+      
     }
   }
 }

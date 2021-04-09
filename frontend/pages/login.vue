@@ -25,7 +25,7 @@
               </pre></code>
             </div> -->
 
-            <v-card-title class="justify-center mb-3">
+            <v-card-title class="justify-center mb-3 px-0">
               <v-icon>
                 icon-log-in
               </v-icon>
@@ -37,8 +37,21 @@
               </span>
             </v-card-title>
 
+            <v-alert
+              v-model="alert"
+              class="my-5"
+              dense
+              outlined
+              icon="icon-alert-triangle"
+              type="error"
+              dismissible
+              >
+              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
+            </v-alert>
+            
+            <br/>
 
-            <v-form v-show="!isConnected">
+            <v-form v-show="!isConnected" ref="form">
 
               <!-- email -->
               <v-text-field
@@ -52,6 +65,7 @@
                 :label="$t('login.formEmailLabel')"
                 :placeholder="$t('login.formEmail')"
                 prepend-inner-icon="icon-mail"
+                :rules="emailRules"
                 ></v-text-field>
 
               <!-- password -->
@@ -68,10 +82,12 @@
                 :label="$t('login.formPwdLabel')"
                 :placeholder="$t('login.formPwd')"
                 prepend-inner-icon="icon-lock"
+                :rules="passwordLoginRules"
                 ></v-text-field>
 
               <!-- submit -->
               <v-btn
+                class="mt-3"
                 :color="isLoading ? 'grey' : 'primary'"
                 block
                 large
@@ -79,7 +95,6 @@
                 :depressed="isLoading"
                 tile
                 dark
-                class="mr-4"
                 @click="submit"
                 >
                 <span v-if="!isLoading">
@@ -114,7 +129,7 @@
                     text
                     color="grey"
                     block
-                    to="/reset-password"
+                    to="/recover-password"
                     route
                     >
                   <span class="text-center text-none">
@@ -124,7 +139,6 @@
                 </v-col>
               </v-row>
             </v-container>
-
 
           </v-card>
 
@@ -139,8 +153,9 @@
 <script>
 
 import axios from 'axios'
-import { configHeaders } from '@/utils/utilsAxios'
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { configHeaders } from '@/utils/utilsAxios'
+import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
@@ -149,12 +164,21 @@ export default {
       isLoading: false,
       isConnected: false,
       showPwd: false,
-      password: '',
+      alert: false,
+
       email: '',
+      password: '',
+      emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
+      passwordLoginRules: rules.passwordLoginRules( this.$t('rules.pwdType') ),
+
       scopes: [
         'me',
         'items'
-      ]
+      ],
+
+      hasFailed: false,
+      errorMsg: undefined,
+      errorCode: undefined,
     }
   },
   computed: {
@@ -169,42 +193,57 @@ export default {
       populateUser: 'user/populateUser',
     }),
     submit () {
-      // this.log && console.log('C-login > submit > this.scopes : ', this.scopes)
-      this.isLoading = true
-      const formData = new FormData()
-      formData.append('username', this.email)
-      formData.append('password', this.password)
-
-      // cf : https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#scope
-      formData.append('scope', this.scopes.join(' ') )
-      
-      // this.log && console.log('C-login > submit > formData.getAll("scope") : ', formData.getAll('scope'))
-      axios
-        .post(`${this.api.users}/token`, formData)
-        .then(resp => {
-          // this.log && console.log('C-login > submit > resp.data : ', resp.data)
-          this.isConnected = true
-          const token = resp.data
-          this.authenticateUser(token)
-
-          let config = new configHeaders(token.access_token, token.token_type)
-          // this.log && console.log('C-login > submit > config.headers : ', config.headers)
-
-          axios
-            .get(`${this.api.users}/me/`, config.headers)
-            .then(resp => {
-              this.log && console.log('C-login > me > resp.data : ', resp.data)
-              const userData = resp.data
-              this.populateUser(userData)
-              this.$i18n.setLocale(userData.locale)
-              this.isLoading = false
-              this.$router.push('/')
-            })
-            .catch(error => {
-              this.log && console.log('C-login > me > error : ', error)
-            })
-
-        })
+      if ( this.$refs.form.validate() ) {
+        // this.log && console.log('P-Login > submit > this.scopes : ', this.scopes)
+        this.alert = false
+        this.isLoading = true
+        const formData = new FormData()
+        formData.append('username', this.email)
+        formData.append('password', this.password)
+  
+        // cf : https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#scope
+        formData.append('scope', this.scopes.join(' ') )
+        
+        // this.log && console.log('P-Login > submit > formData.getAll("scope") : ', formData.getAll('scope'))
+        axios
+          .post(`${this.api.users}/token`, formData)
+          .then(resp => {
+            // this.log && console.log('P-Login > submit > resp.data : ', resp.data)
+            this.isConnected = true
+            const token = resp.data
+            this.authenticateUser(token)
+  
+            let config = new configHeaders(token.access_token, token.token_type)
+            // this.log && console.log('P-Login > submit > config.headers : ', config.headers)
+  
+            axios
+              .get(`${this.api.users}/me/`, config.headers)
+              .then(resp => {
+                this.log && console.log('P-Login > me > resp.data : ', resp.data)
+                const userData = resp.data
+                this.populateUser(userData)
+                this.$i18n.setLocale(userData.locale)
+                this.isLoading = false
+                this.$router.push('/')
+              })
+              .catch(error => {
+                this.alert = true
+                this.hasFailed = true
+                this.isLoading = false
+                this.log && console.log('P-Login > error.response : ', error.response)
+                this.errorMsg = error.response.data.detail
+                this.errorCode = error.response.status
+              })
+          })
+          .catch(error => {
+            this.alert = true
+            this.hasFailed = true
+            this.isLoading = false
+            this.log && console.log('P-Login > error.response : ', error.response)
+            this.errorMsg = error.response.data.detail
+            this.errorCode = error.response.status
+          })
+      }
     }
   }
 }

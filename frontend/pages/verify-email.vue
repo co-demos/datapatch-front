@@ -45,19 +45,22 @@
                 </span>
               </span>
 
-              <v-alert
-                class="mt-5"
-                v-if="hasFailed && errorMsg"
-                dense
-                outlined
-                icon="icon-alert-triangle"
-                type="error"
-                >
-                <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
-              </v-alert>
-
             </v-card-title>
 
+            <v-alert
+              v-model="alert"
+              class="my-5"
+              v-if="hasFailed && errorMsg"
+              dense
+              outlined
+              icon="icon-alert-triangle"
+              type="error"
+              dismissible
+              >
+              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
+            </v-alert>
+
+            <br/>
 
             <v-container v-if="isVerified || hasFailed" class="mt-4">
               <v-row>
@@ -71,12 +74,12 @@
                     :to="`/${isVerified ? 'login' : ''}`"
                     router
                     >
-                  <span v-if="isVerified" class="text-center">
-                    {{ $t('login.in') }}
-                  </span>
-                  <span v-else class="text-center">
-                    {{ $t('pages.home') }}
-                  </span>
+                    <span v-if="isVerified" class="text-center">
+                      {{ $t('login.in') }}
+                    </span>
+                    <span v-else class="text-center">
+                      {{ $t('pages.home') }}
+                    </span>
                   </v-btn>
                 </v-col>
 
@@ -97,7 +100,6 @@
 <script>
 
 import axios from 'axios'
-import { configHeaders } from '@/utils/utilsAxios'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -105,9 +107,11 @@ export default {
   data () {
     return {
       isLoading: true,
-      hasFailed: false,
       isVerified: false,
       tokenToCheck: undefined,
+      alert: false,
+
+      hasFailed: false,
       errorMsg: undefined,
       errorCode: undefined,
     }
@@ -132,6 +136,7 @@ export default {
   },
   methods: {
     verifyEmail(token) {
+      this.alert = false
       this.log && console.log('P-VerifyEmail > token : ', token)
       let url = `${this.api.users}/verify-email/?token=${token}`
       this.log && console.log('P-VerifyEmail > url : ', url)
@@ -144,6 +149,7 @@ export default {
           // this.$router.push('/')
         })
         .catch(error => {
+          this.alert = true
           this.hasFailed = true
           this.isLoading = false
           this.log && console.log('P-VerifyEmail > error.response : ', error.response)

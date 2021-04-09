@@ -17,13 +17,7 @@
             elevation="0"
             class="pa-5">
 
-            <!-- <div>
-              <code><pre>
-                {{ api }}
-              </pre></code>
-            </div> -->
-
-            <v-card-title class="justify-center mb-3">
+            <v-card-title class="justify-center mb-3 px-0">
               <v-icon>
                 icon-log-out
               </v-icon>
@@ -66,7 +60,6 @@
 <script>
 
 import axios from 'axios'
-import { configHeaders } from '@/utils/utilsAxios'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -88,7 +81,7 @@ export default {
       resetUser: 'user/resetUser',
     }),
     submit () {
-      // this.log && console.log('C-login > submit > this.scopes : ', this.scopes)
+      // this.log && console.log('P-Logout > submit > this.scopes : ', this.scopes)
       this.isLoading = true
       this.resetUser()
       this.isLoading = false
