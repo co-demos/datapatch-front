@@ -29,28 +29,53 @@
                 icon-edit-3
               </v-icon>
               <span class="ml-3">
-              {{ $t('login.sign') }}
+                {{ $t('login.sign') }}
               </span>
             </v-card-title>
 
 
             <v-form>
 
+              <!-- username -->
               <v-text-field
+                id="username"
+                v-model="username"
+                outlined
+                single-line
+                clearable
+                :disabled="isLoading"
+                :readonly="isLoading"
+                :loading="isLoading"
+                :label="$t('login.formUsername')"
+                :placeholder="$t('login.formUsername')"
+                prepend-inner-icon="icon-user"
+                ></v-text-field>
+
+              <!-- name -->
+              <v-text-field
+                id="name"
                 v-model="name"
                 outlined
                 single-line
                 clearable
+                :disabled="isLoading"
+                :readonly="isLoading"
+                :loading="isLoading"
                 :label="$t('login.formName')"
                 :placeholder="$t('login.formName')"
                 prepend-inner-icon="icon-user"
                 ></v-text-field>
 
+              <!-- surname -->
               <v-text-field
+                id="surname"
                 v-model="surname"
                 outlined
                 single-line
                 clearable
+                :disabled="isLoading"
+                :readonly="isLoading"
+                :loading="isLoading"
                 :label="$t('login.formSurname')"
                 :placeholder="$t('login.formSurname')"
                 prepend-inner-icon="icon-user"
@@ -58,10 +83,14 @@
 
               <!-- email -->
               <v-text-field
+                id="email"
                 v-model="email"
                 outlined
                 single-line
                 clearable
+                :disabled="isLoading"
+                :readonly="isLoading"
+                :loading="isLoading"
                 :label="$t('login.formEmailLabel')"
                 :placeholder="$t('login.formEmail')"
                 prepend-inner-icon="icon-mail"
@@ -72,8 +101,12 @@
                 v-model="password"
                 outlined
                 single-line
-                clearable
-                type="password"
+                :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
+                :disabled="isLoading"
+                :readonly="isLoading"
+                :loading="isLoading"
+                :type="showPwd ? 'text' : 'password'"
+                @click:append="showPwd = !showPwd"
                 :label="$t('login.formPwdLabel')"
                 :placeholder="$t('login.formPwdChoose')"
                 prepend-inner-icon="icon-lock"
@@ -91,7 +124,7 @@
                 class="mr-4"
                 @click="submit"
                 >
-                {{ $t('login.in') }}
+                {{ $t('login.signBtn') }}
               </v-btn>
 
             </v-form>
@@ -129,27 +162,53 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
-import 'axios'
+import axios from 'axios'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 
   data () {
     return {
-      password: '',
+      isLoading: false,
+      showPwd: false,
+      username: '',
       name: '',
       surname: '',
       email: '',
+      password: '',
     }
   },
   computed: {
     ...mapState({
-      api: (state) => state.api
+      log: (state) => state.log,
+      api: (state) => state.api,
     })
   },
   methods: {
+    ...mapActions({
+      // authenticateUser: 'user/authenticateUser',
+      populateUser: 'user/populateUser',
+    }),
     submit () {
 
+      let newUser = {
+        username: this.username,
+        name: this.name,
+        surname: this.surname,
+        email: this.email,
+        locale: this.$i18n.locale,
+        password: this.password,
+      }
+      this.log && console.log('C-sign > submit > newUser : ', newUser)
+
+      axios
+        .post(`${this.api.users}/`, newUser)
+        .then(resp => {
+          this.log && console.log('C-sign > submit > resp.data : ', resp.data)
+          const userData = resp.data
+          this.populateUser(userData)
+          this.$router.push('/login')
+        })
     }
   }
 }

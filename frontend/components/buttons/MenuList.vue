@@ -10,7 +10,7 @@
       exact
       >
 
-      <v-divider v-if="item.divider"></v-divider>
+      <v-divider v-if="item.divider"/>
 
       <v-list-item-action
         v-if="!item.divider"

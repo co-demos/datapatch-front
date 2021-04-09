@@ -19,7 +19,13 @@
         </v-icon>
       </v-btn>
     </template>
+
+    <v-list-item v-if="isAuthenticated">
+      {{ $t('hi', { name: this.userData.name } ) }}
+    </v-list-item>
     
+    <v-divider class="mb-5" v-if="isAuthenticated"/>
+
     <MenuList
       v-if="!isAuthenticated"
       :items="itemsLogin"
@@ -40,6 +46,7 @@ export default {
   name: 'UserButton',
   data () {
     return {
+      connected: false,
       itemsLogin:  [
         {
           icon: 'icon-log-in',
@@ -79,7 +86,11 @@ export default {
   },
   computed: {
     ...mapState({
-      isAuthenticated: (state) =>  state.user.auth.isAuthenticated
+      log: (state) => state.log,
+      userData: (state) =>  state.user.userData,
+    }),
+    ...mapGetters({
+      isAuthenticated: 'user/isAuthenticated'
     })
   }
 }

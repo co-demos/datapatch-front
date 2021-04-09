@@ -76,8 +76,9 @@
 
 <script>
 
+import axios from 'axios'
+
 import { mapState, mapGetters } from 'vuex'
-import 'axios'
 
 export default {
 

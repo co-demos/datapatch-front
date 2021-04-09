@@ -157,7 +157,10 @@ export default {
   },
   computed: {
     ...mapState({
-      isAuthenticated: (state) =>  state.user.auth.isAuthenticated
+      log: (state) =>  state.log
+    }),
+    ...mapGetters({
+      isAuthenticated: 'user/isAuthenticated'
     })
   }
 }

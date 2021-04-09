@@ -1,7 +1,8 @@
 export default {
-  hello: 'Hello World',
+  hi: 'Hello, {name}',
   datapatch: {
     intro: 'Welcome to Data Patch',
+    introUser: 'Welcome back to Data Patch, {name}',
     pitch: 'Data Patch is an open source alternative to airtable.',
     infos: 'For more information on Data Patch, check out the ',
     repo: "Github repository",
@@ -10,6 +11,7 @@ export default {
   buttons: {
     prev: 'Previous',
     continue: 'Continue',
+    submit: 'Submit',
   },
   pages: {
     home: 'Home',
@@ -24,11 +26,15 @@ export default {
   },
   login: {
     in: 'Log in',
+    inMsg: 'Connection...',
     out: 'Log out',
+    outMsg: 'Disconnection...',
     sign: 'Sign in',
+    signBtn: 'Create my account',
     forgotpwd: 'Password forgotten ?',
     resetpwd: 'Send me a link to reset my password',
     isAccount: 'Already an account ?',
+    formUsername: 'Pseudo',
     formName: 'Name',
     formSurname: 'Surname',
     formEmail: 'Your email adress',
@@ -36,5 +42,14 @@ export default {
     formPwd: 'Your password',
     formPwdChoose: 'Choose a password',
     formPwdLabel: 'Password',
+  },
+  me: {
+    save: 'Save my changes',
+    deleteMe: 'Delete my account',
+    name: 'Name',
+    surname: 'Surname',
+    email: 'Email',
+    description: 'Description',
+    avatar: 'Avatar',
   },
 }

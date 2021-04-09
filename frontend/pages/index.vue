@@ -13,7 +13,7 @@
       <div class="text-center mt-5">
         <LogoAnimated
           :yoyo="true"
-          :repeat="-1"
+          :repeat="0"
           :animated="true"
           :height="'300px'"
         />
@@ -23,7 +23,12 @@
         class="elevation-0"
         >
         <v-card-title class="headline justify-center">
-          {{ $t('datapatch.intro') }}
+          <span v-if="isAuthenticated">
+            {{ $t('datapatch.introUser', { name: userData.name }) }}
+          </span>
+          <span v-else>
+            {{ $t('datapatch.intro') }}
+          </span>
         </v-card-title>
 
         <v-card-text class="mt-4">
@@ -47,12 +52,13 @@
             dark
             tile
             elevation="0"
+            class="px-5"
             color="primary"
             nuxt
             large
-            to="/login"
+            :to="`/${ isAuthenticated ? 'me' : 'login'}`"
             >
-            {{ $t('buttons.continue') }}
+            {{ $t(`${ isAuthenticated ? 'buttons.continue' : 'login.in'}`) }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -63,10 +69,17 @@
 
 <script>
 
-// import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  components: {
+  computed: {
+    ...mapState({
+      log: (state) => state.log,
+      userData: (state) =>  state.user.userData,
+    }),
+    ...mapGetters({
+      isAuthenticated: 'user/isAuthenticated'
+    })
   }
 }
 </script>
