@@ -73,11 +73,16 @@ export default {
     Languages: () => import('@/components/buttons/Languages.vue'),
     UserButton: () => import('@/components/buttons/UserButton.vue'),
   },
+  watch: {
+    isAuthenticated(next) {
+      this.drawer = next ? true : false
+    },
+  },
   data () {
     return {
       title: 'Data patch',
       clipped: true,
-      drawer: !this.isAuthenticated,
+      drawer: false,
       miniVariant: true,
       fixed: false,
       items: [

@@ -42,6 +42,11 @@ export default {
     formPwd: 'Your password',
     formPwdChoose: 'Choose a password',
     formPwdLabel: 'Password',
+    emailSent: 'A verification email has been sent to you.',
+    checkEmail: 'Please check your mailbox and click on the link to verify your email',
+    verifyEmail: 'Verifying your email...',
+    verifyOk: 'your email has been verified and your account is now activated...',
+    failVerify: 'Verification failed...',
   },
   me: {
     save: 'Save my changes',

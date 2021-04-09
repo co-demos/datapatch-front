@@ -169,7 +169,7 @@ svg {
 
     mounted() {
 
-      console.clear();
+      // console.clear();
       let targets = gsap.utils.toArray("#arcsReveal path");
 
       let arcsReveal2 = document.querySelector("#arcsReveal2");

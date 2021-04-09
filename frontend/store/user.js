@@ -1,3 +1,5 @@
+import { configHeaders } from '@//utils/utilsAxios.js' 
+
 class User {
   constructor () {
     this.id = undefined;
@@ -49,15 +51,19 @@ export const state = () => ({
     groups: [],
   },
   auth: {
-    isSuperUser: false,
     accessToken: undefined,
     tokenType: undefined,
+    isSuperUser: false,
   }
 })
 
 export const getters = {
   isAuthenticated: (state) => {
     return state.auth.accessToken
+  },
+  headerUser: (state) => {
+    let config = new configHeaders(state.auth.accessToken)
+    return config.headers
   },
 }
 

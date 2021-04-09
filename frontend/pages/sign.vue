@@ -33,8 +33,16 @@
               </span>
             </v-card-title>
 
-
-            <v-form>
+            <v-card-text v-if="checkEmail">
+              <p>
+                {{ $t('login.emailSent') }}
+              </p>
+              <p>
+                {{ $t('login.checkEmail') }}
+              </p>
+            </v-card-text>
+            
+            <v-form v-if="!checkEmail">
 
               <!-- username -->
               <v-text-field
@@ -130,7 +138,7 @@
             </v-form>
 
 
-            <v-container class="mt-4">
+            <v-container v-if="!checkEmail" class="mt-4">
               <v-row>
                 <v-col cols="12" class="px-0">
                   <v-btn 
@@ -170,6 +178,7 @@ export default {
   data () {
     return {
       isLoading: false,
+      checkEmail: false,
       showPwd: false,
       username: '',
       name: '',
@@ -207,7 +216,8 @@ export default {
           this.log && console.log('C-sign > submit > resp.data : ', resp.data)
           const userData = resp.data
           this.populateUser(userData)
-          this.$router.push('/login')
+          // this.$router.push('/login')
+          this.checkEmail = true
         })
     }
   }

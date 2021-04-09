@@ -42,6 +42,12 @@ export default {
     formPwd: 'Votre mot de passe',
     formPwdChoose: 'Choose a password',
     formPwdLabel: 'Mot de passe',
+    emailSent: 'Un email de vérification vous a été envoyé.',
+    checkEmail: 'Merci de consulter votre boîte mail et cliquez sur le lien afin de vérifier votre email',
+    verifyEmail: 'Vérification de votre email...',
+    verifyOk: 'Votre email a bien été vérifié.',
+    verifyOk2: 'Votre compte est maintenant actif.',
+    failVerify: 'Echec de la vérification...',
   },
   me: {
     save: 'Enregistrer mes changements',
