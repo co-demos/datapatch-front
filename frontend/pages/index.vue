@@ -3,6 +3,7 @@
     column
     justify-center
     align-center
+    class="mt-5"
     >
   
     <v-flex

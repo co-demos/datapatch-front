@@ -30,7 +30,10 @@ export const state = () => ({
 
 export const getters = {
   isAxiosResponse: (state) => {
-    return state.axiosResponse.type !== ''
+    return state.axiosResponse && state.axiosResponse.type !== ''
+  },
+  hasFailed: (state) => {
+    return state.axiosResponse.type === 'error'
   },
   getAxiosResponse: (state) => {
     return state.axiosResponse
@@ -42,8 +45,8 @@ export const mutations = {
     state.isLoading = isLoading
   },
   setAxiosResponse (state, {resp, type}) {
-    // console.log('S-dialogs > setAxiosResponse > resp : ', resp)
-    // console.log('S-dialogs > setAxiosResponse > type : ', type)
+    console.log('S-dialogs > setAxiosResponse > resp : ', resp)
+    console.log('S-dialogs > setAxiosResponse > type : ', type)
     state.axiosResponse.status = parseInt(resp && resp.status) || 418
     state.axiosResponse.statusText = resp && resp.statusText || 'something went wrong...'
     state.axiosResponse.msg = resp && resp.data && resp.data.detail || 'oups'
@@ -60,6 +63,7 @@ export const actions = {
     commit('setIsLoading', isLoading)
   },
   commitAxiosReponse ({ commit }, {resp, type}) {
+    commit('resetAxiosResponse')
     commit('setAxiosResponse', {resp, type})
   },
   resetAxiosReponse ({ commit }) {

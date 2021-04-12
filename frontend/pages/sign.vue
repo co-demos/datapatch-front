@@ -27,7 +27,7 @@
               </span>
             </v-card-title>
 
-            <v-card-text v-if="checkEmail">
+            <v-card-text v-if="checkEmail" class="text-center">
               <p>
                 {{ $t('login.emailSent') }}
               </p>

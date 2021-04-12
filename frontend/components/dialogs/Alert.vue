@@ -3,10 +3,10 @@
   <div>
 
     <!-- alert : {{ alert }} <br> -->
+    <!-- isAxiosResponse : {{ isAxiosResponse }} <br> -->
     <!-- axiosResponse: <code><pre>{{ axiosResponse }}</pre></code> -->
 
     <v-alert
-      v-if="isAxiosResponse"
       v-model="alert"
       class="my-5"
       dense
@@ -42,9 +42,8 @@ export default {
     'dismissible'
   ],
   watch: {
-    isAxiosResponse(next) {
-      // this.log && console.log('C-Alert > w > isAxiosResponse > next : ', next)
-      // this.log && console.log('C-Alert > w > isAxiosResponse > prev : ', prev)
+    isAxiosResponse(next, prev) {
+      this.log && console.log('C-Alert > w > isAxiosResponse > next : ', next)
       this.alert = next
     }
   },
@@ -59,13 +58,16 @@ export default {
       }
     }
   },
+  beforeMount() {
+    this.alert = this.isAxiosResponse
+  },
   computed: {
     ...mapState({
       log: (state) => state.log,
+      axiosResponse: (state) => state.dialogs.axiosResponse
     }),
     ...mapGetters({
       isAxiosResponse: 'dialogs/isAxiosResponse',
-      axiosResponse: 'dialogs/getAxiosResponse',
     })
   },
   methods: {

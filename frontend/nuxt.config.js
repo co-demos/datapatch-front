@@ -66,6 +66,7 @@ export default {
    router: {
     prefetchLinks: false,
     middleware: [
+      'resetDialogs',
       'checkUserToken'
     ]
   },

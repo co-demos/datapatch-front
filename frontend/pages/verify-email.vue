@@ -53,7 +53,7 @@
 
             <br/>
 
-            <v-container v-if="isVerified" class="mt-4">
+            <v-container v-if="isVerified || hasFailed" class="mt-4">
               <v-row>
                 <v-col cols="12" class="px-0">
                   <v-btn 
@@ -90,7 +90,7 @@
 
 <script>
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 
@@ -127,6 +127,9 @@ export default {
       log: (state) => state.log,
       api: (state) => state.api,
       isLoading: (state) => state.dialogs.isLoading,
+    }),
+    ...mapGetters({
+      hasFailed: 'dialogs/hasFailed'
     })
   },
   methods: {
@@ -143,7 +146,6 @@ export default {
         .then(resp => {
           this.log && console.log('P-VerifyEmail > resp : ', resp)
           this.isVerified = true
-          // this.$router.push('/')
         })
     }
   }
