@@ -52,12 +52,16 @@ export const state = () => ({
   },
   auth: {
     accessToken: undefined,
+    refreshToken: undefined,
     tokenType: undefined,
     isSuperUser: false,
   }
 })
 
 export const getters = {
+  isUserPopulated: (state) => {
+    return state.userData.email
+  },
   isAuthenticated: (state) => {
     return state.auth.accessToken
   },

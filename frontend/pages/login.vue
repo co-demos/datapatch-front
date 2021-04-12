@@ -37,24 +37,17 @@
               </span>
             </v-card-title>
 
-            <v-alert
-              v-model="alert"
-              class="my-5"
-              dense
-              outlined
-              icon="icon-alert-triangle"
-              type="error"
-              dismissible
-              >
-              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
-            </v-alert>
-            
+            <Alert 
+              :dismissible="true"
+            />
+
             <br/>
 
             <v-form v-show="!isConnected" ref="form">
 
               <!-- email -->
               <v-text-field
+                id="email"
                 v-model="email"
                 outlined
                 single-line
@@ -152,8 +145,7 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { configHeaders } from '@/utils/utilsAxios'
 import { rules } from '@/utils/utilsRules.js'
 
@@ -161,10 +153,12 @@ export default {
 
   data () {
     return {
-      isLoading: false,
+      // isLoading: false,
+
       isConnected: false,
       showPwd: false,
-      alert: false,
+
+      // alert: false,
 
       email: '',
       password: '',
@@ -173,30 +167,30 @@ export default {
 
       scopes: [
         'me',
+        'shared',
         'items'
       ],
 
-      hasFailed: false,
-      errorMsg: undefined,
-      errorCode: undefined,
     }
   },
   computed: {
     ...mapState({
       log: (state) => state.log,
-      api: (state) => state.api
-    }),
+      api: (state) => state.api,
+      isLoading: (state) => state.dialogs.isLoading,
+    })
   },
   methods: {
     ...mapActions({
       authenticateUser: 'user/authenticateUser',
       populateUser: 'user/populateUser',
+      populateUser: 'user/populateUser',
     }),
     submit () {
       if ( this.$refs.form.validate() ) {
         // this.log && console.log('P-Login > submit > this.scopes : ', this.scopes)
-        this.alert = false
-        this.isLoading = true
+        // this.alert = false
+        // this.isLoading = true
         const formData = new FormData()
         formData.append('username', this.email)
         formData.append('password', this.password)
@@ -205,43 +199,30 @@ export default {
         formData.append('scope', this.scopes.join(' ') )
         
         // this.log && console.log('P-Login > submit > formData.getAll("scope") : ', formData.getAll('scope'))
-        axios
+        this.$axios
           .post(`${this.api.users}/token`, formData)
           .then(resp => {
-            // this.log && console.log('P-Login > submit > resp.data : ', resp.data)
+            // this.log && console.log('P-Login > submit > A > resp.data : ', resp.data)
             this.isConnected = true
             const token = resp.data
+            // this.log && console.log('P-Login > submit > A > token : ', token)
+
             this.authenticateUser(token)
+            this.$cookies.set('access_token', token.access_token)
+            this.$cookies.set('refresh_token', token.refresh_token)
   
             let config = new configHeaders(token.access_token, token.token_type)
             // this.log && console.log('P-Login > submit > config.headers : ', config.headers)
   
-            axios
+            this.$axios
               .get(`${this.api.users}/me/`, config.headers)
               .then(resp => {
-                this.log && console.log('P-Login > me > resp.data : ', resp.data)
+                // this.log && console.log('P-Login > B > me > resp.data : ', resp.data)
                 const userData = resp.data
                 this.populateUser(userData)
                 this.$i18n.setLocale(userData.locale)
-                this.isLoading = false
                 this.$router.push('/')
               })
-              .catch(error => {
-                this.alert = true
-                this.hasFailed = true
-                this.isLoading = false
-                this.log && console.log('P-Login > error.response : ', error.response)
-                this.errorMsg = error.response.data.detail
-                this.errorCode = error.response.status
-              })
-          })
-          .catch(error => {
-            this.alert = true
-            this.hasFailed = true
-            this.isLoading = false
-            this.log && console.log('P-Login > error.response : ', error.response)
-            this.errorMsg = error.response.data.detail
-            this.errorCode = error.response.status
           })
       }
     }

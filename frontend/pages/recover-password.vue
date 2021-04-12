@@ -35,18 +35,10 @@
               {{ $t('login.newpwdSent') }}
             </v-card-text>
 
-            <v-alert
-              v-model="alert"
-              class="my-5"
-              v-if="hasFailed && errorMsg"
-              dense
-              outlined
-              icon="icon-alert-triangle"
-              type="error"
-              dismissible
-              >
-              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
-            </v-alert>
+
+            <Alert 
+              :dismissible="true"
+            />
 
             <br/>
 
@@ -54,6 +46,7 @@
 
               <!-- email -->
               <v-text-field
+                id="email"
                 v-model="email"
                 outlined
                 single-line
@@ -81,6 +74,24 @@
 
             </v-form>
 
+            <v-container class="mt-4">
+              <v-row>
+                <v-col class="px-0">
+                  <v-btn 
+                    text
+                    color="grey"
+                    block
+                    to="/login"
+                    router
+                    >
+                  <span class="text-center text-none">
+                    {{ $t('login.forgotpwdBack') }}
+                  </span>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+
           </v-card>
 
         </v-col>
@@ -93,52 +104,39 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
   data () {
     return {
-      isLoading: false,
       isSent: false,
-      alert: false,
 
       email: '',
       emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
 
-      hasFailed: false,
-      errorMsg: undefined,
-      errorCode: undefined,
     }
   },
   computed: {
     ...mapState({
       log: (state) => state.log,
-      api: (state) => state.api
+      api: (state) => state.api,
+      isLoading: (state) => state.dialogs.isLoading,
     })
   },
   methods: {
+    ...mapActions({
+    }),
     submit () {
       if ( this.$refs.form.validate() ) {
-       this.alert = false
        let url = `${this.api.users}/password-recovery/${this.email}`
-        axios
+        this.$axios
           .post(url, {})
           .then(resp => {
             this.log && console.log('P-RecoverPwd > resp.data : ', resp.data)
-            this.isLoading = false
             this.isSent = true
             // this.$router.push('/')
-          })
-          .catch(error => {
-            this.alert = true
-            this.hasFailed = true
-            this.isLoading = false
-            this.log && console.log('P-RecoverPwd > error.response : ', error.response)
-            this.errorMsg = error.response.data.detail
-            this.errorCode = error.response.status
           })
       }
     }

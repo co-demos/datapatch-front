@@ -31,6 +31,10 @@
           </span>
         </v-card-title>
 
+        <Alert 
+          :dismissible="true"
+        />
+
         <v-card-text class="mt-4">
           <p>
             {{ $t('datapatch.pitch') }}

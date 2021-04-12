@@ -47,18 +47,9 @@
 
             </v-card-title>
 
-            <v-alert
-              v-model="alert"
-              class="my-5"
-              v-if="hasFailed && errorMsg"
-              dense
-              outlined
-              icon="icon-alert-triangle"
-              type="error"
-              dismissible
-              >
-              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
-            </v-alert>
+            <Alert 
+              :dismissible="true"
+            />
 
             <br/>
 
@@ -99,21 +90,14 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
 
   data () {
     return {
-      isLoading: true,
       isVerified: false,
       tokenToCheck: undefined,
-      alert: false,
-
-      hasFailed: false,
-      errorMsg: undefined,
-      errorCode: undefined,
     }
   },
   watch: {
@@ -131,30 +115,25 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
-      api: (state) => state.api
+      api: (state) => state.api,
+      isLoading: (state) => state.dialogs.isLoading,
     })
   },
   methods: {
+    ...mapActions({
+    }),
     verifyEmail(token) {
       this.alert = false
       this.log && console.log('P-VerifyEmail > token : ', token)
       let url = `${this.api.users}/verify-email/?token=${token}`
       this.log && console.log('P-VerifyEmail > url : ', url)
-      axios
+      this.$axios
         .get(url)
         .then(resp => {
           this.log && console.log('P-VerifyEmail > resp : ', resp)
           this.isLoading = false
           this.isVerified = true
           // this.$router.push('/')
-        })
-        .catch(error => {
-          this.alert = true
-          this.hasFailed = true
-          this.isLoading = false
-          this.log && console.log('P-VerifyEmail > error.response : ', error.response)
-          this.errorMsg = error.response.data.detail
-          this.errorCode = error.response.status
         })
     }
   }

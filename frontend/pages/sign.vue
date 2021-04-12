@@ -36,17 +36,9 @@
               </p>
             </v-card-text>
             
-            <v-alert
-              v-model="alert"
-              class="my-5"
-              dense
-              outlined
-              icon="icon-alert-triangle"
-              type="error"
-              dismissible
-             >
-              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
-            </v-alert>
+            <Alert 
+              :dismissible="true"
+            />
 
             <br/>
 
@@ -189,18 +181,15 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
   data () {
     return {
-      isLoading: false,
       checkEmail: false,
       showPwd: false,
-      alert: false,
 
       username: '',
       name: '',
@@ -214,16 +203,14 @@ export default {
       passwordRules: rules.passwordRules( this.$t('rules.pwdType'), this.$t('rules.pwdChars') ),
       checkboxRules: rules.checkboxRules( this.$t('rules.checkAgree') ),
 
-      hasFailed: false,
-      errorMsg: undefined,
-      errorCode: undefined,
     }
   },
   computed: {
     ...mapState({
       log: (state) => state.log,
       api: (state) => state.api,
-    })
+      isLoading: (state) => state.dialogs.isLoading,
+   })
   },
   methods: {
     ...mapActions({
@@ -244,7 +231,7 @@ export default {
         }
         this.log && console.log('P-Sign > submit > newUser : ', newUser)
   
-        axios
+        this.$axios
           .post(`${this.api.users}/`, newUser)
           .then(resp => {
             this.log && console.log('P-Sign > submit > resp.data : ', resp.data)
@@ -252,14 +239,6 @@ export default {
             this.populateUser(userData)
             // this.$router.push('/login')
             this.checkEmail = true
-          })
-          .catch(error => {
-            this.alert = true
-            this.hasFailed = true
-            this.isLoading = false
-            this.log && console.log('P-Sign > error.response : ', error.response)
-            this.errorMsg = error.response.data.detail
-            this.errorCode = error.response.status
           })
       }
       

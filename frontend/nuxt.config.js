@@ -66,13 +66,13 @@ export default {
    router: {
     prefetchLinks: false,
     middleware: [
+      'checkUserToken'
     ]
   },
 
   /*
   ** Customize the progress-bar color
   */
-  // loading: { color: '#fff' },
   loading: {
     color: config.loadingColor,
     height: config.loadingHeight,
@@ -93,6 +93,7 @@ export default {
   */
   plugins: [
     '~/plugins/globalComponents',
+    {src: '~/plugins/axios', mode: 'client'},
   ],
 
   /*
@@ -121,9 +122,17 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    'nuxt-i18n'
+    '@nuxtjs/axios',
+    ['cookie-universal-nuxt', {
+      alias: 'cookies'
+    }],
+    ['nuxt-i18n', {
+      strategy: 'no_prefix',
+      defaultLocale: 'en'
+    }],
   ],
 
+  
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module

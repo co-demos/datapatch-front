@@ -34,18 +34,9 @@
               {{ $t('login.newpwdFor', { email: userEmail }) }}
             </v-card-text>
 
-            <v-alert
-              v-model="alert"
-              v-if="hasFailed && errorMsg"
-              class="my-5"
-              dense
-              outlined
-              icon="icon-alert-triangle"
-              type="error"
-              dismissible
-              >
-              <strong>error {{ errorCode }}</strong> - {{ errorMsg }}
-            </v-alert>
+            <Alert 
+              :dismissible="true"
+            />
 
             <br/>
 
@@ -139,20 +130,17 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters } from 'vuex'
-import { configHeaders } from '@/utils/utilsAxios'
+import { mapState, mapActions } from 'vuex'
+// import { configHeaders } from '@/utils/utilsAxios'
 import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
   data () {
     return {
-      isLoading: false,
       showPwd: false,
       tokenToSend: undefined,
       pwdIsChanged: false,
-      alert: false,
 
       userEmail: '',
       password: '',
@@ -164,9 +152,6 @@ export default {
         (value) => value === this.password || this.$t('rules.pwdConfirmMatch'),
       ],
 
-      hasFailed: false,
-      errorMsg: undefined,
-      errorCode: undefined,
     }
   },
   mounted () {
@@ -178,10 +163,13 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
-      api: (state) => state.api
+      api: (state) => state.api,
+      isLoading: (state) => state.dialogs.isLoading,
     })
   },
   methods: {
+    ...mapActions({
+    }),
     submit () {
       if ( this.$refs.form.validate() ) {
         this.alert = false
@@ -193,22 +181,13 @@ export default {
           }
           // let config = new configHeaders(this.tokenToSend)
           // this.log && console.log('P-ResetPwd > config.headers : ', config.headers)
-          axios
+          this.$axios
             // .post(url, payload, config.headers)
             .post(url, payload)
             .then(resp => {
               this.log && console.log('P-ResetPwd > resp : ', resp)
-              this.isLoading = false
               this.pwdIsChanged = true
               // this.$router.push('/')
-            })
-            .catch(error => {
-              this.alert = true
-              this.hasFailed = true
-              this.isLoading = false
-              this.log && console.log('P-ResetPwd > error.response : ', error.response)
-              this.errorMsg = error.response.data.detail
-              this.errorCode = error.response.status
             })
         }
       }

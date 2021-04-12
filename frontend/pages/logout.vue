@@ -59,8 +59,7 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
 
@@ -84,6 +83,8 @@ export default {
       // this.log && console.log('P-Logout > submit > this.scopes : ', this.scopes)
       this.isLoading = true
       this.resetUser()
+      this.$cookies.remove('access_token')
+      this.$cookies.remove('refresh_token')
       this.isLoading = false
       this.$router.push('/')
     }

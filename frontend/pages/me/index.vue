@@ -65,7 +65,6 @@
                       v-model="avatar"
                       hide-input
                       :disabled="isLoading"
-                      :readonly="isLoading"
                       :loading="isLoading"
                       :label="$t('me.avatar')"
                       :placeholder="$t('me.avatar')"
@@ -173,14 +172,12 @@
 
 <script>
 
-import axios from 'axios'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
 
   data () {
     return {
-      isLoading: false,
       name: '',
       surname: '',
       email: '',
@@ -193,6 +190,7 @@ export default {
       log: (state) => state.log,
       api: (state) => state.api,
       user: (state) => state.user.userData,
+      isLoading: (state) => state.dialogs.isLoading,
     })
   },
   beforeMount() {
@@ -204,10 +202,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      // authenticateUser: 'user/authenticateUser',
-      // populateUser: 'user/populateUser',
     }),
     saveUser () {
+      // TO DO
       let updateUser = {
         name: this.name,
         surname: this.surname,

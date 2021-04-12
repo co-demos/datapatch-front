@@ -32,6 +32,7 @@ export default {
     sign: 'Créer un compte',
     signBtn: 'Créer mon compte',
     forgotpwd: "Mot de passe oublié ?",
+    forgotpwdBack: "Retour au login",
     resetpwd: "M'envoyer un lien pour créer un nouveau mot de passe",
     newpwd: "Entrer un nouveau mot de passe",
     newpwdFor: "utilisateur : {email}",
