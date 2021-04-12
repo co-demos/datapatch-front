@@ -65,9 +65,18 @@ export default {
 
   data () {
     return {
+      pathItems: [
+        { 
+          text: 'login.out',
+          disabled: true,
+        }
+      ],
       isLoading: false,
       showPwd: false,
     }
+  },
+  beforeMount () {
+    this.updatePath(this.pathItems)
   },
   computed: {
     ...mapState({
@@ -77,6 +86,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      updatePath: 'updateCrumbsPath',
       resetUser: 'user/resetUser',
     }),
     submit () {

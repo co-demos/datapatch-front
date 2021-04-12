@@ -52,13 +52,16 @@
         </nuxt-link>
       </v-toolbar-title>
 
-      <v-spacer />
+      <Breadcrumbs/>
+
+      <v-spacer/>
 
       <Languages/>
 
       <UserButton/>
 
     </v-app-bar>
+
 
   </v-container>
 

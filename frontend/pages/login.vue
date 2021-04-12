@@ -153,12 +153,17 @@ export default {
 
   data () {
     return {
-      // isLoading: false,
+      pathItems: [
+        { 
+          text: 'login.in',
+          disabled: true,
+          to: '/login',
+        }
+      ],
 
       isConnected: false,
       showPwd: false,
 
-      // alert: false,
 
       email: '',
       password: '',
@@ -173,6 +178,9 @@ export default {
 
     }
   },
+  beforeMount () {
+    this.updatePath(this.pathItems)
+  },
   computed: {
     ...mapState({
       log: (state) => state.log,
@@ -182,6 +190,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      updatePath: 'updateCrumbsPath',
       authenticateUser: 'user/authenticateUser',
       populateUser: 'user/populateUser',
       populateUser: 'user/populateUser',

@@ -4,6 +4,7 @@
     justify-center
     align-center
     >
+  
     <v-flex
       xs12
       sm8
@@ -73,9 +74,12 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
+  beforeMount () {
+    this.resetPathList()
+  },
   computed: {
     ...mapState({
       log: (state) => state.log,
@@ -83,6 +87,11 @@ export default {
     }),
     ...mapGetters({
       isAuthenticated: 'user/isAuthenticated'
+    })
+  },
+  methods: {
+    ...mapActions({
+      resetPathList: 'resetPathList',
     })
   }
 }

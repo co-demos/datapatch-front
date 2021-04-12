@@ -3,7 +3,8 @@
 
     <DefaultNavbar/>
 
-    <v-main>
+    <v-main class="pt-5">
+
       <v-container>
         <nuxt />
       </v-container>
@@ -21,9 +22,9 @@ export default {
     DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
     BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
   },
-  data () {
-    return {
-    }
-  }
+  // data () {
+  //   return {
+  //   }
+  // },
 }
 </script>

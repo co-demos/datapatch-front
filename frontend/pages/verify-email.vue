@@ -53,7 +53,7 @@
 
             <br/>
 
-            <v-container v-if="isVerified || hasFailed" class="mt-4">
+            <v-container v-if="isVerified" class="mt-4">
               <v-row>
                 <v-col cols="12" class="px-0">
                   <v-btn 
@@ -96,6 +96,13 @@ export default {
 
   data () {
     return {
+      pathItems: [
+        { 
+          text: 'login.verifyEmail',
+          disabled: true,
+          to: '/verify-email',
+        }
+      ],
       isVerified: false,
       tokenToCheck: undefined,
     }
@@ -106,6 +113,9 @@ export default {
         this.verifyEmail(next)
       }
     }
+  },
+  beforeMount () {
+    this.updatePath(this.pathItems)
   },
   mounted () {
     let tokenFromUrl = this.$route.query
@@ -121,6 +131,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      updatePath: 'updateCrumbsPath',
     }),
     verifyEmail(token) {
       this.alert = false
@@ -131,7 +142,6 @@ export default {
         .get(url)
         .then(resp => {
           this.log && console.log('P-VerifyEmail > resp : ', resp)
-          this.isLoading = false
           this.isVerified = true
           // this.$router.push('/')
         })

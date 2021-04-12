@@ -178,6 +178,18 @@ export default {
 
   data () {
     return {
+      pathItems: [
+        { 
+          text: 'pages.me',
+          disabled: false,
+          to: '/me',
+        },
+        { 
+          text: 'pages.me',
+          disabled: true,
+          to: '/me',
+        }
+      ],
       name: '',
       surname: '',
       email: '',
@@ -194,6 +206,7 @@ export default {
     })
   },
   beforeMount() {
+    this.updatePath(this.pathItems)
     this.name = this.user.name
     this.surname = this.user.surname
     this.email = this.user.email
@@ -202,7 +215,8 @@ export default {
   },
   methods: {
     ...mapActions({
-    }),
+      updatePath: 'updateCrumbsPath',
+   }),
     saveUser () {
       // TO DO
       let updateUser = {

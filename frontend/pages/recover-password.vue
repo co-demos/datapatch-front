@@ -111,12 +111,22 @@ export default {
 
   data () {
     return {
+      pathItems: [
+        { 
+          text: 'login.forgotpwd',
+          disabled: true,
+          to: '/recover-password',
+        }
+      ],
       isSent: false,
 
       email: '',
       emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
 
     }
+  },
+  beforeMount () {
+    this.updatePath(this.pathItems)
   },
   computed: {
     ...mapState({
@@ -127,6 +137,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      updatePath: 'updateCrumbsPath',
     }),
     submit () {
       if ( this.$refs.form.validate() ) {

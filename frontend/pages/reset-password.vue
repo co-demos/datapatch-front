@@ -138,6 +138,13 @@ export default {
 
   data () {
     return {
+      pathItems: [
+        { 
+          text: 'login.resetpwd',
+          disabled: true,
+          to: '/reset-password',
+        }
+      ],
       showPwd: false,
       tokenToSend: undefined,
       pwdIsChanged: false,
@@ -154,6 +161,9 @@ export default {
 
     }
   },
+  beforeMount () {
+    this.updatePath(this.pathItems)
+  },
   mounted () {
     let tokenFromUrl = this.$route.query
     this.log && console.log('P-ResetPwd > tokenFromUrl : ', tokenFromUrl)
@@ -169,6 +179,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      updatePath: 'updateCrumbsPath',
     }),
     submit () {
       if ( this.$refs.form.validate() ) {

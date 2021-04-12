@@ -188,6 +188,14 @@ export default {
 
   data () {
     return {
+      pathItems: [
+        { 
+          text: 'login.sign',
+          disabled: true,
+          to: '/sign',
+        }
+      ],
+
       checkEmail: false,
       showPwd: false,
 
@@ -205,6 +213,9 @@ export default {
 
     }
   },
+  beforeMount () {
+    this.updatePath(this.pathItems)
+  },
   computed: {
     ...mapState({
       log: (state) => state.log,
@@ -214,7 +225,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      // authenticateUser: 'user/authenticateUser',
+      updatePath: 'updateCrumbsPath',
       populateUser: 'user/populateUser',
     }),
     submit () {
