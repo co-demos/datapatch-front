@@ -41,7 +41,7 @@
             <br/>
 
             <v-card-text v-if="pwdIsChanged">
-              <p>
+              <p class="text-center">
                 {{ $t('login.newpwdOk') }}
               </p>
             </v-card-text>
