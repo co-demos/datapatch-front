@@ -96,7 +96,7 @@
 
     <v-row
       v-if="!item.addBtn"
-      class="align-center justify-center mt-4"
+      class="align-center justify-center mt-4 text-center"
       >
       <span class="text-body-2">
         {{ item.name }}

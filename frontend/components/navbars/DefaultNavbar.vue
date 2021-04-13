@@ -40,8 +40,14 @@
       >
 
       <v-app-bar-nav-icon
+        small
+        class="ml-2"
         @click.stop="drawer = !drawer"
-        />
+        >
+        <v-icon small>
+          icon-menu
+        </v-icon>
+      </v-app-bar-nav-icon>
       
       <v-toolbar-title>
         <nuxt-link

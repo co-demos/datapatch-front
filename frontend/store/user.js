@@ -2,14 +2,14 @@ import { configHeaders } from '@//utils/utilsAxios.js'
 
 class User {
   constructor () {
-    this.id = undefined;
-    this.name = undefined;
-    this.surname = undefined;
-    this.email = undefined;
-    this.description = undefined;
-    this.locale = undefined;
-    this.avatar = undefined;
-    this.groups = [];
+    this.id = undefined
+    this.name = undefined
+    this.surname = undefined
+    this.email = undefined
+    this.description = undefined
+    this.locale = undefined
+    this.avatar = undefined
+    this.groups = []
   }
   get data () {
     return {
@@ -26,9 +26,9 @@ class User {
 }
 class Auth {
   constructor () {
-    this.isSuperUser = false;
-    this.accessToken = undefined;
-    this.tokenType = undefined;
+    this.isSuperUser = false
+    this.accessToken = undefined
+    this.tokenType = undefined
   }
   get data () {
     return {

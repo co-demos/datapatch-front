@@ -10,7 +10,7 @@
         >
 
         <v-col 
-          cols="6"
+          cols="4"
           class="mt-5"
           >
           
@@ -31,9 +31,9 @@
             <v-btn
               color="warning"
               block
+              rounded
               large
               elevation="0"
-              tile
               dark
               class="mr-4"
               @click="submit"

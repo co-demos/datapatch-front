@@ -1,9 +1,9 @@
 class AxiosResponse {
   constructor () {
-    this.status = undefined;
-    this.statusText = undefined;
-    this.msg = undefined;
-    this.type = '';
+    this.status = undefined
+    this.statusText = undefined
+    this.msg = undefined
+    this.type = ''
   }
   get data () {
     return {
