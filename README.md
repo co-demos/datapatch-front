@@ -1,13 +1,15 @@
 # DATA PATCH - DMS BACKEND PROJECT
 
-A simple boilerplate of a frontend for the API server **data patch backend** . The backend [CRUD][CRUD_def] operations, powered by **[FastAPI][fastapi]** framework with a **PostgreSQL** database. 
+A simple boilerplate of a frontend for the API server **[data patch backend][datapatch-back]**. The backend is mainly for [CRUD][CRUD_def] and autth operations, powered by **[FastAPI][fastapi]** framework with a **PostgreSQL** database. 
+
+This frontend is developped as an SPA (client-only) app, so it could be completely developped independently from the backend.
 
 ## Features
 
 The current goal is to make it work with the following generic features, so it could be adapted for later purposes :
 
-- [x] **Authentication** pages & components
-- [x] **Workspaces** pages & components
+- [x] **Authentication** pages & components : login + renew password + middlewares
+- [ ] **Workspaces** pages & components (current) : list of datasets + meta
 - [ ] **Datasets** pages & components
 - [ ] **Tables** pages & components
 - [ ] **Schemas** pages & components
@@ -24,7 +26,8 @@ The current goal is to make it work with the following generic features, so it c
 - Axios
 - i18n
 - Vuetify
-- Draggablle
+- Draggable
+- GSAP
 
 
 ## Installation
@@ -69,6 +72,9 @@ npm run analyze
 ```
 
 ---
+
+
+[datapatch-back]:https://github.com/co-demos/fastapi-boilerplate
 
 [CRUD_def]:https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
 [fastapi]:https://fastapi.tiangolo.com/
