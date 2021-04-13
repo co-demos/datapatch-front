@@ -31,7 +31,7 @@ The current goal is to make it work with the following generic features, so it c
 - i18n
 - vuedraggable
 - GSAP
-- SocketIo || Yjs (not implemented)
+- SocketIo || Yjs (not implemented yet)
 
 
 ## Installation
