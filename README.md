@@ -18,16 +18,19 @@ The current goal is to make it work with the following generic features, so it c
 - [ ] **Comments** pages & components
 - [ ] **Notifications** pages & components
 - [ ] **Invitations** pages & components
+- [ ] **Chat & collaboration on datasets** socketiio & components
 
 
 ## Stack
 
 - Vue.js + Nuxt.js
-- Axios
-- i18n
 - Vuetify
-- Draggable
+- Axios (@nuxt/axios)
+- Cookie-universal-nuxt
+- i18n
+- vuedraggable
 - GSAP
+- SocketIo || Yjs (not implemented)
 
 
 ## Installation
