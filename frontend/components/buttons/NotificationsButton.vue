@@ -3,9 +3,10 @@
   <v-btn
     icon
     dark
+    small
     class="mr-3"
     >
-    <v-icon>
+    <v-icon small>
       icon-bell
     </v-icon>
   </v-btn>

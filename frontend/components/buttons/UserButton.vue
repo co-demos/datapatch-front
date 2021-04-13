@@ -8,23 +8,24 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         icon
+        small
         class="mr-3"
         dark
         v-bind="attrs"
         v-on="on"
         >
-        <v-icon v-if="!isAuthenticated">
+        <v-icon small v-if="!isAuthenticated">
           icon-log-in
         </v-icon>
-        <v-icon v-else>
+        <v-icon small v-else>
           icon-user
         </v-icon>
       </v-btn>
     </template>
 
     <v-list dense v-if="isAuthenticated">
-      <v-list-item>
-        <span class="mt-3 ml-1">
+      <v-list-item class="text-center">
+        <span class="mt-3 mx-1">
           {{ $t('hi', { name: this.userData.name } ) }}
         </span>
       </v-list-item>

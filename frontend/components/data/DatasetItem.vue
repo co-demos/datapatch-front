@@ -84,6 +84,10 @@
         />
         <v-divider class="bg-white"/>
         <MenuList
+          :items="itemsShare"
+        />
+        <v-divider class="bg-white"/>
+        <MenuList
           :items="itemsDelete"
         />
       </v-menu>
@@ -161,7 +165,12 @@ export default {
         { title: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
       ],
       itemsSettings: [
+        { title: 'datasets.renameDataset', icon: 'icon-edit-3', function: 'importData' },
         { title: 'datasets.prefsDataset', icon: 'icon-settings', function: 'importData' },
+        { title: 'datasets.copyDataset', icon: 'icon-copy', function: 'importData' },
+      ],
+      itemsShare: [
+        { title: 'datasets.inviteDataset', icon: 'icon-user-plus', menu: [] },
       ],
       itemsDelete: [
         { title: 'datasets.deleteDataset', icon: 'icon-trash-2', function: 'deleteDataset' },

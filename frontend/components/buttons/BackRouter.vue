@@ -3,13 +3,17 @@
   <v-btn
     text
     dark
+    rounded
+    small
     @click="$router.back()"
     class="text-none ml-5"
     >
-    <v-icon small>
+    <v-icon small class="">
       icon-arrow-left
     </v-icon>
-    {{ $t('buttons.back') }}
+    <span class="body-2">
+      {{ $t('buttons.back') }}
+    </span>
   </v-btn>
 
 </template>

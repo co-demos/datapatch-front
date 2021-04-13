@@ -8,7 +8,7 @@
       >
 
       <v-col 
-        cols="10"
+        cols="8"
         >
 
         <v-card
@@ -49,6 +49,10 @@
               </template>
               <MenuList
                 :items="itemsSettings"
+              />
+              <v-divider class="bg-white"/>
+              <MenuList
+                :items="itemsShare"
               />
               <v-divider class="bg-white"/>
               <MenuList
@@ -182,11 +186,14 @@ export default {
         { title: 'workspaces.searchDataset', icon: 'icon-search1', left: true, menu: [] },
       ],
       itemsSettings: [
-        { title: 'workspaces.editWorkspace', icon: 'icon-edit-3', function: 'editWorkspace' },
+        { title: 'workspaces.renameWorkspace', icon: 'icon-edit-3', function: 'editWorkspace' },
+        { title: 'workspaces.editWorkspace', icon: 'icon-hash', function: 'editWorkspace' },
+      ],
+      itemsShare: [
         { title: 'workspaces.inviteWorkspace', icon: 'icon-user-plus', menu: [] },
       ],
       itemsDelete: [
-        { title: 'workspaces.deleteWorkspace', icon: 'icon-copy', function: 'deleteWorkspace' },
+        { title: 'workspaces.deleteWorkspace', icon: 'icon-trash-2', function: 'deleteWorkspace' },
       ],
       myWorkspaces: [
         {
