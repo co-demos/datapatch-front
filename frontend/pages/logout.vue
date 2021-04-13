@@ -1,15 +1,17 @@
 <template>
     <v-container 
       fill-height
+      class="mt-5"
       >
 
       <v-row
         fill-height
-        class="justify-center align-center"
+        class="justify-center align-center mt-5"
         >
 
         <v-col 
           cols="6"
+          class="mt-5"
           >
           
           <v-card 

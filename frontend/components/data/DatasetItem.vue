@@ -21,7 +21,7 @@
         <template v-slot:activator="{ on, attrs, value }">
           <v-avatar
             :color="`${value ? 'black' : 'grey'} lighten-1`"
-            class="ml-5"
+            class="ml-0"
             rounded
             size="56"
             v-bind="attrs"
@@ -49,12 +49,12 @@
     <!-- DATASET CARD -->
     <v-row 
       v-if="!item.addBtn"
-      class="align-center justify-center pl-5"
+      class="align-center justify-center"
       >
 
       <!-- DATASET AVATAR -->
       <nuxt-link
-        class="ml-3 no-decoration"
+        class="ml-0 no-decoration"
         :to="`/dataset/${item.id}`"
         >
         <v-avatar
@@ -72,9 +72,9 @@
       </nuxt-link>
 
       <!-- DATASET BTNS -->
-      <v-col
+      <!-- <v-col
         class="ml-0"
-        >
+        > -->
 
         <v-tooltip right>
           <template v-slot:activator="{ on, attrs }">
@@ -104,7 +104,7 @@
           <span>{{ $t('datasets.editDataset') }}</span>
         </v-tooltip> -->
 
-      </v-col>
+      <!-- </v-col> -->
     </v-row>
 
     <v-row
