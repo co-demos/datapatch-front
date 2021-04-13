@@ -33,7 +33,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn 
                   icon
-                  small
+                  x-small
                   class="ml-2"
                   v-bind="attrs"
                   v-on="on"
@@ -135,7 +135,7 @@ export default {
       ],
       singleExpand: false,
       workspaceButtonsAfterTitle: [
-        { textCode: 'workspaces.prefsWorkspace', icon: 'icon-more-vertical', menu: [] },
+        { textCode: 'workspaces.prefsWorkspace', icon: 'icon-settings', menu: [] },
       ],
       workspaceButtonsEnd: [
         { textCode: 'workspaces.addDataset', icon: 'icon-plus', menu: [] },
