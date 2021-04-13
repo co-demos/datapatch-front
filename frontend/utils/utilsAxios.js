@@ -6,7 +6,7 @@
       accept: 'application/json',
       'content-type': 'application/json',
       Authorization: `${tokenType} ${token}`
-    };
+    }
   }
 
   get headers () {

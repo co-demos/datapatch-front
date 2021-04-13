@@ -7,6 +7,7 @@
     <!-- axiosResponse: <code><pre>{{ axiosResponse }}</pre></code> -->
 
     <v-alert
+      v-if="alert"
       v-model="alert"
       class="my-5"
       dense
@@ -43,7 +44,7 @@ export default {
   ],
   watch: {
     isAxiosResponse(next, prev) {
-      this.log && console.log('C-Alert > w > isAxiosResponse > next : ', next)
+      // this.log && console.log('C-Alert > w > isAxiosResponse > next : ', next)
       this.alert = next
     }
   },

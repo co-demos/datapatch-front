@@ -94,7 +94,8 @@ export default {
   */
   plugins: [
     '~/plugins/globalComponents',
-    {src: '~/plugins/axios', mode: 'client'},
+    { src: '~/plugins/axios', mode: 'client' },
+    { src: '~/plugins/draggable.js', mode: 'client' }
   ],
 
   /*

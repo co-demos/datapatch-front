@@ -22,9 +22,5 @@ export default {
     DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
     BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
   },
-  // data () {
-  //   return {
-  //   }
-  // },
 }
 </script>

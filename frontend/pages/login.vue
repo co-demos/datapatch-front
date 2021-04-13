@@ -1,7 +1,6 @@
 <template>
     <v-container 
       fill-height
-      style="height: 60vh;"
       >
 
       <v-row
@@ -151,6 +150,7 @@ import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
+  name: 'Login',
   data () {
     return {
       pathItems: [

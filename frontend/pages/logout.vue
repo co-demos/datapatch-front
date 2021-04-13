@@ -1,7 +1,6 @@
 <template>
     <v-container 
       fill-height
-      style="height: 60vh;"
       >
 
       <v-row
@@ -63,6 +62,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
 
+  name: 'Logout',
   data () {
     return {
       pathItems: [
@@ -81,7 +81,6 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
-      // api: (state) => state.api
     })
   },
   methods: {

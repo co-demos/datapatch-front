@@ -3,6 +3,7 @@
     offset-y
     close-on-click
     open-on-hover
+    color="white"
     >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -20,11 +21,16 @@
       </v-btn>
     </template>
 
-    <v-list-item v-if="isAuthenticated">
-      {{ $t('hi', { name: this.userData.name } ) }}
-    </v-list-item>
-    
-    <v-divider class="mb-5" v-if="isAuthenticated"/>
+    <v-list v-if="isAuthenticated">
+      <v-list-item>
+        <span class="mt-3">
+          {{ $t('hi', { name: this.userData.name } ) }}
+        </span>
+      </v-list-item>
+      <v-list-item>
+        <v-divider class="my-3"/>
+      </v-list-item>
+    </v-list>
 
     <MenuList
       v-if="!isAuthenticated"
@@ -79,7 +85,8 @@ export default {
         {
           icon: 'icon-log-out',
           title: 'login.out',
-          to: '/logout'
+          to: '/logout',
+          addClass: 'mb-4'
         },
       ]
     }

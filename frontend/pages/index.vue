@@ -3,13 +3,14 @@
     column
     justify-center
     align-center
-    class="mt-5"
+    class="my-5"
     >
   
     <v-flex
       xs12
       sm8
       md6
+      class="mb-5"
       >
 
       <div class="text-center mt-5">
@@ -62,7 +63,7 @@
             color="primary"
             nuxt
             large
-            :to="`/${ isAuthenticated ? 'me' : 'login'}`"
+            :to="`/${ isAuthenticated ? 'workspaces' : 'login'}`"
             >
             {{ $t(`${ isAuthenticated ? 'buttons.continue' : 'login.in'}`) }}
           </v-btn>
@@ -78,6 +79,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: 'Home',
   beforeMount () {
     this.resetPathList()
   },

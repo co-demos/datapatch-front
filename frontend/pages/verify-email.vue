@@ -1,7 +1,6 @@
 <template>
     <v-container 
       fill-height
-      style="height: 60vh;"
       >
 
       <v-row
@@ -94,6 +93,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 
+  name: 'VerifyEmail',
   data () {
     return {
       pathItems: [

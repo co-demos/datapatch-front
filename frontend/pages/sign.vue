@@ -1,7 +1,7 @@
 <template>
     <v-container 
       fill-height
-      style="height: 60vh;"
+      class="mb-5"
       >
 
       <v-row
@@ -50,6 +50,7 @@
                 v-model="username"
                 outlined
                 single-line
+                dense
                 clearable
                 :disabled="isLoading"
                 :readonly="isLoading"
@@ -66,6 +67,7 @@
                 v-model="name"
                 outlined
                 single-line
+                dense
                 clearable
                 :disabled="isLoading"
                 :readonly="isLoading"
@@ -82,6 +84,7 @@
                 v-model="surname"
                 outlined
                 single-line
+                dense
                 clearable
                 :disabled="isLoading"
                 :readonly="isLoading"
@@ -98,6 +101,7 @@
                 v-model="email"
                 outlined
                 single-line
+                dense
                 clearable
                 :disabled="isLoading"
                 :readonly="isLoading"
@@ -113,6 +117,7 @@
                 v-model="password"
                 outlined
                 single-line
+                dense
                 :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
                 :disabled="isLoading"
                 :readonly="isLoading"
@@ -127,6 +132,7 @@
 
               <v-checkbox
                 class="mb-5"
+                dense
                 v-model="checkbox"
                 :rules="checkboxRules"
                 :label="$t('login.formCheckLabel')"
@@ -186,6 +192,7 @@ import { rules } from '@/utils/utilsRules.js'
 
 export default {
 
+  name: 'Sign',
   data () {
     return {
       pathItems: [

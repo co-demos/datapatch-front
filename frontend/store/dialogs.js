@@ -45,8 +45,8 @@ export const mutations = {
     state.isLoading = isLoading
   },
   setAxiosResponse (state, {resp, type}) {
-    console.log('S-dialogs > setAxiosResponse > resp : ', resp)
-    console.log('S-dialogs > setAxiosResponse > type : ', type)
+    // console.log('S-dialogs > setAxiosResponse > resp : ', resp)
+    // console.log('S-dialogs > setAxiosResponse > type : ', type)
     state.axiosResponse.status = parseInt(resp && resp.status) || 418
     state.axiosResponse.statusText = resp && resp.statusText || 'something went wrong...'
     state.axiosResponse.msg = resp && resp.data && resp.data.detail || 'oups'

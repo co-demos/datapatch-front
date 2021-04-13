@@ -6,6 +6,7 @@
       v-for="(item, i) in items"
       :key="i"
       :to="item.divider ? '' : item.to"
+      :class="item.addClass ? item.addClass : '' "
       router
       exact
       >
