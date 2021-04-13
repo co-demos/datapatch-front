@@ -11,122 +11,11 @@
         cols="8"
         >
 
-        <v-card
-          class="mb-5 pb-5"
+        <WorkspaceItem
           v-for="ws in myWorkspaces"
           :key="ws.id"
-          flat
-          >
-
-          <!-- my workspaces / toolbar -->
-          <v-toolbar
-            class="mb-5"
-            dense
-            flat
-            >
-
-            <v-toolbar-title class="text-h6 pl-0 font-weight-bold">
-              {{ ws.name }}
-            </v-toolbar-title>
-
-            <v-menu
-              v-for="btn in workspaceButtonsAfterTitle"
-              :key="btn.icon"
-              right
-              offset-x
-              open-on-hover
-              >
-              <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
-                <v-btn 
-                  icon
-                  x-small
-                  class="ml-4"
-                  v-bind="{...attrsMenu}"
-                  v-on="{...onMenu}"
-                  >
-                  <v-icon>{{ btn.icon}}</v-icon>
-                </v-btn>
-              </template>
-              <MenuList
-                :items="itemsSettings"
-              />
-              <v-divider class="bg-white"/>
-              <MenuList
-                :items="itemsShare"
-              />
-              <v-divider class="bg-white"/>
-              <MenuList
-                :items="itemsDelete"
-              />
-            </v-menu>
-
-            <v-spacer></v-spacer>
-
-            <v-tooltip 
-              v-for="btn in workspaceButtonsEnd"
-              :key="btn.icon"
-              :left="btn.left" 
-              :bottom="btn.bottom" 
-              :right="btn.right" 
-              :top="btn.top" 
-              >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn 
-                  icon
-                  small
-                  class="ml-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  >
-                  <v-icon>{{ btn.icon}}</v-icon>
-                </v-btn>
-              </template>
-              <span>{{ $t(btn.title) }}</span>
-            </v-tooltip>
-
-          </v-toolbar>
-
-          <br/>
-
-          <!-- my workspaces / data -->
-          <draggable
-            v-model="ws.datasets"
-            draggable=".dataset"
-            class="row wrap"
-            group="dataset"
-            @start="drag=true"
-            @end="drag=false"
-            >
-            <v-col
-              v-for="item in ws.datasets"
-              :key="item.id"
-              class="mb-3 dataset"
-              cols="4"
-              sm="4"
-              md="3"
-              lg="2"
-              >
-              <DatasetItem 
-                :item="item"
-              />
-            </v-col>
-            <v-col
-              class="mb-3"
-              cols="4"
-              sm="4"
-              md="3"
-              lg="2"
-              >
-              <DatasetItem 
-                :item="newDataset"
-              />
-            </v-col>
-          </draggable>
-
-          <v-divider class="mt-5"/>
-  
-        </v-card>
-
+          :ws="ws"
+        />
 
         <!-- ADD WORKSPACE -->
         <v-card
@@ -161,13 +50,13 @@
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { configHeaders } from '@/utils/utilsAxios'
-import { Workspace } from '@/utils/utilsWorkspaces'
-import { Dataset } from '@/utils/utilsDatasets'
+// import { Workspace } from '@/utils/utilsWorkspaces'
+// import { Dataset } from '@/utils/utilsDatasets'
 
 export default {
   name: 'Workspaces',
   components: {
-    DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
+    WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
   },
   data () {
     return {
@@ -178,36 +67,19 @@ export default {
           to: '/workspaces',
         }
       ],
-      workspaceButtonsAfterTitle: [
-        { title: 'workspaces.prefsWorkspace', icon: 'icon-settings', menu: [] },
-      ],
-      workspaceButtonsEnd: [
-        // { title: 'workspaces.addDataset', icon: 'icon-plus', left: true, menu: [] },
-        { title: 'workspaces.searchDataset', icon: 'icon-search1', left: true, menu: [] },
-      ],
-      itemsSettings: [
-        { title: 'workspaces.renameWorkspace', icon: 'icon-edit-3', function: 'editWorkspace' },
-        { title: 'workspaces.editWorkspace', icon: 'icon-hash', function: 'editWorkspace' },
-      ],
-      itemsShare: [
-        { title: 'workspaces.inviteWorkspace', icon: 'icon-user-plus', menu: [] },
-      ],
-      itemsDelete: [
-        { title: 'workspaces.deleteWorkspace', icon: 'icon-trash-2', function: 'deleteWorkspace' },
-      ],
       myWorkspaces: [
         {
           name: 'Workspace number 1',
           id: 'wp1',
           description : 'test WP 1',
           creationDate : '2021-04-13',
-          icon: 'icon-database',
+          // icon: 'icon-database',
           owner: 'userId1',
           datasets: [
-            { name: 'some dataset', color: 'secondary', id: 'ds1', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'another dataset', color: 'primary', id: 'ds2', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'important data for me', color: 'info', id: 'ds3', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'work in progress', color: 'primary', id: 'ds4', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'some dataset', icon: false, color: 'secondary', id: 'ds1', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'another dataset', icon: false, color: 'primary', id: 'ds2', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'important data for me', icon: false, color: 'info', id: 'ds3', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'work in progress', icon: false, color: 'primary', id: 'ds4', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
           ]
         },
         {
@@ -215,23 +87,13 @@ export default {
           id: 'wp2',
           description : 'test WP 2',
           creationDate : '2021-04-13',
-          icon: 'icon-database',
+          // icon: 'icon-database',
           owner: 'userId1',
           datasets: [
-            { name: 'dataset for test', color: 'primary', id: 'ds5', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'dataset for test', icon: false, color: 'primary', id: 'ds5', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
           ]
         },
       ],
-      newDataset: {
-        addBtn: true,
-        owner: undefined,
-        name: 'datasets.newDataset',
-        id: 'new',
-        description: 'new dataset description',
-        creationDate: undefined,
-        icon: 'icon-database',
-        tables: []
-      },
     }
   },
   beforeMount () {

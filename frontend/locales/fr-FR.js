@@ -15,6 +15,8 @@ export default {
     showDetails: 'Voir les détails',
     close: 'Fermer',
     back: 'Retour',
+    save: 'Enregister',
+    cancel: 'Annuler',
   },
   pages: {
     home: 'Accueil',
@@ -81,7 +83,9 @@ export default {
     checkAgree: 'Vous devez accepter pour continuer',
   },
   dataPackage: {
-    workspace: 'Espace de travail', 
+    workspace: 'Espace de travail',
+    dataset: 'Jeu de données', 
+    datasets: 'Jeux de données', 
     table: 'Table', 
     tables: 'Tables', 
     schema: 'Schema', 
@@ -91,9 +95,10 @@ export default {
     owner: 'Propriétaire',
     id: 'Id',
     name: 'Nom',
+    color: 'Couleur', 
     description: 'Description', 
     creationDate: 'Date de création',
-    icon: 'Icone', 
+    icon: 'Icône', 
     licence: 'License', 
   },
   workspaces: {

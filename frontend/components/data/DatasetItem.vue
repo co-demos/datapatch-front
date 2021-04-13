@@ -57,7 +57,10 @@
           rounded
           size="56"
           >
-          <span class="white--text headline no-decoration">
+          <v-icon v-if="item.icon" dark>
+            {{ item.icon }}
+          </v-icon>
+          <span v-else class="white--text headline no-decoration">
             {{ getInitials(item.name) }}
           </span>
         </v-avatar>
@@ -75,6 +78,7 @@
             x-small
             v-bind="{...attrsMenu}"
             v-on="{...onMenu}"
+            @click.stop="dialog += 1"
             >
             <v-icon>icon-more-vertical</v-icon>
           </v-btn>
@@ -102,42 +106,14 @@
         {{ item.name }}
       </span>
     </v-row>
-
-    <!-- <v-card outlined>
-
-      <v-card-title>
-        <h4>{{ item.name }}</h4>
-      </v-card-title>
-
-      <v-switch
-        :input-value="isExpanded(item)"
-        :label="$t(`buttons.${isExpanded(item) ? 'close' : 'showDetails'}`)"
-        class="pl-4 mt-0"
-        @change="(v) => expand(item, v)"
-      ></v-switch>
-
-      <v-divider></v-divider>
-
-      <v-list
-        v-if="isExpanded(item)"
-        dense
-        >
-        <v-list-item 
-          v-for="info in infos"
-          :key="info.key"
-          >
-          <v-list-item-content>
-            {{ $t(info.textCode) }}
-          </v-list-item-content>
-          <v-list-item-content class="align-end">
-            {{ item[ info.key ] }}
-          </v-list-item-content>
-        </v-list-item>
-
-      </v-list>
-
-    </v-card> -->
-
+    
+    <!-- DIALOG FOR DATASET INFOS -->
+    <ModalItem
+      :item="item"
+      :itemModel="itemModel"
+      :parentDialog="dialog"
+    />
+  
   </div>
 </template>
 
@@ -146,26 +122,26 @@
 
 import { mapState } from 'vuex'
 import { Workspace } from '@/utils/utilsWorkspaces'
+import { Dataset, initialsFromString } from '@/utils/utilsDatasets'
 
 export default {
 
   name: 'DatasetItem',
   props: [
     'item',
-    // 'isExpanded',
-    // 'expand'
   ],
   data () {
     return {
-      show: false,
+      dialog: 0,
       hover: false,
+      itemModel: undefined,
       itemsCreate: [
         { title: 'datasets.importData', icon: 'icon-download', function: 'importData' },
         { title: 'datasets.blankDataset', icon: 'icon-edit-3', function: 'blankDataset' },
         { title: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
       ],
       itemsSettings: [
-        { title: 'datasets.renameDataset', icon: 'icon-edit-3', function: 'importData' },
+        // { title: 'datasets.renameDataset', icon: 'icon-edit-3', function: 'importData' },
         { title: 'datasets.prefsDataset', icon: 'icon-settings', function: 'importData' },
         { title: 'datasets.copyDataset', icon: 'icon-copy', function: 'importData' },
       ],
@@ -184,6 +160,10 @@ export default {
       ]
     }
   },
+  beforeMount () {
+    let emptyDataset = new Dataset()
+    this.itemModel = emptyDataset.model
+  },
   computed: {
     ...mapState({
       log: (state) => state.log,
@@ -192,12 +172,7 @@ export default {
   },
   methods: {
     getInitials(itemName) {
-      let rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu')
-      let initials = [...itemName.matchAll(rgx)] || []
-      initials = (
-        (initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')
-      ).toUpperCase()
-      return initials
+      return initialsFromString(itemName)
     },
     addDataset() {
       this.log && console.log("C-DatasetItem > addDataset ...")

@@ -15,6 +15,8 @@ export default {
     showDetails: 'Show details',
     close: 'Close',
     back: 'Back',
+    save: 'Save',
+    cancel: 'Cancel',
   },
   pages: {
     home: 'Home',
@@ -93,6 +95,7 @@ export default {
     owner: 'Owner',
     id: 'Id',
     name: 'Name',
+    color: 'Color', 
     description: 'Description', 
     creationDate: 'Creation date',
     icon: 'Icon', 

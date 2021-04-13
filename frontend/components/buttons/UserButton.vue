@@ -25,7 +25,7 @@
 
     <v-list dense v-if="isAuthenticated">
       <v-list-item class="text-center">
-        <span class="mt-3 mx-1">
+        <span class="mt-1 mx-1">
           {{ $t('hi', { name: this.userData.name } ) }}
         </span>
       </v-list-item>
