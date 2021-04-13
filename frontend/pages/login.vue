@@ -230,7 +230,8 @@ export default {
                 const userData = resp.data
                 this.populateUser(userData)
                 this.$i18n.setLocale(userData.locale)
-                this.$router.push('/')
+                // this.$router.push('/')
+                this.$router.push('/workspaces')
               })
           })
       }

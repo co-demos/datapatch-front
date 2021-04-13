@@ -30,19 +30,11 @@
             <v-icon dark>icon-plus</v-icon>
           </v-avatar>
         </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in itemsCreate"
-            :key="index"
-            >
-            <v-list-item-title>
-              <v-icon small class="mr-2">
-                {{ item.icon }}
-              </v-icon>
-              {{ $t(item.textCode) }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
+
+        <MenuList
+          :items="itemsCreate"
+        />
+
       </v-menu>
     </v-row>
 
@@ -60,7 +52,7 @@
         <v-avatar
           @mouseover="hover = true"
           @mouseleave="hover = false"
-          :color="`${hover ? 'black' : item.color}`"
+          :color="`${item.color} ${hover ? 'darken-2' : ''}`"
           class="ml-5"
           rounded
           size="56"
@@ -72,39 +64,30 @@
       </nuxt-link>
 
       <!-- DATASET BTNS -->
-      <!-- <v-col
-        class="ml-0"
-        > -->
+      <v-menu
+        right
+        offset-x
+        open-on-hover
+        >
+        <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
+          <v-btn 
+            icon
+            x-small
+            v-bind="{...attrsMenu}"
+            v-on="{...onMenu}"
+            >
+            <v-icon>icon-more-vertical</v-icon>
+          </v-btn>
+        </template>
+        <MenuList
+          :items="itemsSettings"
+        />
+        <v-divider class="bg-white"/>
+        <MenuList
+          :items="itemsDelete"
+        />
+      </v-menu>
 
-        <v-tooltip right>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn 
-              icon
-              x-small
-              v-bind="attrs"
-              v-on="on"
-              >
-              <v-icon>icon-more-vertical</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t('datasets.prefsDataset') }}</span>
-        </v-tooltip>
-
-        <!-- <v-tooltip right>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn 
-              icon
-              x-small
-              v-bind="attrs"
-              v-on="on"
-              >
-              <v-icon>icon-settings</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t('datasets.editDataset') }}</span>
-        </v-tooltip> -->
-
-      <!-- </v-col> -->
     </v-row>
 
     <v-row
@@ -173,16 +156,22 @@ export default {
       show: false,
       hover: false,
       itemsCreate: [
-        { textCode: 'datasets.importData', icon: 'icon-upload', function: 'importData' },
-        { textCode: 'datasets.blankDataset', icon: 'icon-edit-3', function: 'blankDataset' },
-        { textCode: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
+        { title: 'datasets.importData', icon: 'icon-download', function: 'importData' },
+        { title: 'datasets.blankDataset', icon: 'icon-edit-3', function: 'blankDataset' },
+        { title: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
+      ],
+      itemsSettings: [
+        { title: 'datasets.prefsDataset', icon: 'icon-settings', function: 'importData' },
+      ],
+      itemsDelete: [
+        { title: 'datasets.deleteDataset', icon: 'icon-trash-2', function: 'deleteDataset' },
       ],
       infos: [
-        { textCode: 'dataPackage.description', key: 'description' },
-        { textCode: 'dataPackage.owner', key: 'owner' },
-        { textCode: 'dataPackage.creationDate', key: 'creationDate' },
-        { textCode: 'dataPackage.licence', key: 'licence' },
-        { textCode: 'dataPackage.id', key: 'id' },
+        { title: 'dataPackage.description', key: 'description' },
+        { title: 'dataPackage.owner', key: 'owner' },
+        { title: 'dataPackage.creationDate', key: 'creationDate' },
+        { title: 'dataPackage.licence', key: 'licence' },
+        { title: 'dataPackage.id', key: 'id' },
       ]
     }
   },

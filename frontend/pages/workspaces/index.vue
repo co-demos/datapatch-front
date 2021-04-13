@@ -29,24 +29,43 @@
               {{ ws.name }}
             </v-toolbar-title>
 
-            <v-tooltip right v-for="btn in workspaceButtonsAfterTitle" :key="btn.icon">
-              <template v-slot:activator="{ on, attrs }">
+            <v-menu
+              v-for="btn in workspaceButtonsAfterTitle"
+              :key="btn.icon"
+              right
+              offset-x
+              open-on-hover
+              >
+              <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
                 <v-btn 
                   icon
                   x-small
-                  class="ml-2"
-                  v-bind="attrs"
-                  v-on="on"
+                  class="ml-4"
+                  v-bind="{...attrsMenu}"
+                  v-on="{...onMenu}"
                   >
                   <v-icon>{{ btn.icon}}</v-icon>
                 </v-btn>
               </template>
-              <span>{{ $t(btn.textCode) }}</span>
-            </v-tooltip>
+              <MenuList
+                :items="itemsSettings"
+              />
+              <v-divider class="bg-white"/>
+              <MenuList
+                :items="itemsDelete"
+              />
+            </v-menu>
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom v-for="btn in workspaceButtonsEnd" :key="btn.icon">
+            <v-tooltip 
+              v-for="btn in workspaceButtonsEnd"
+              :key="btn.icon"
+              :left="btn.left" 
+              :bottom="btn.bottom" 
+              :right="btn.right" 
+              :top="btn.top" 
+              >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn 
                   icon
@@ -58,7 +77,7 @@
                   <v-icon>{{ btn.icon}}</v-icon>
                 </v-btn>
               </template>
-              <span>{{ $t(btn.textCode) }}</span>
+              <span>{{ $t(btn.title) }}</span>
             </v-tooltip>
 
           </v-toolbar>
@@ -104,8 +123,30 @@
   
         </v-card>
 
-      </v-col>
 
+        <!-- ADD WORKSPACE -->
+        <v-card
+          class="mb-5 pb-5"
+          flat
+          >
+          <v-btn 
+            text
+            rounded
+            large 
+            class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
+            color="grey"
+            @click="createNewWorkspace()"
+            >
+            <span>
+              <v-icon class="pb-1 mr-2">
+                icon-plus-circle
+              </v-icon>
+              {{ $t('workspaces.addWorkspace') }}
+            </span>
+          </v-btn>
+        </v-card>
+
+      </v-col>
     </v-row>
 
   </v-container>
@@ -133,13 +174,19 @@ export default {
           to: '/workspaces',
         }
       ],
-      singleExpand: false,
       workspaceButtonsAfterTitle: [
-        { textCode: 'workspaces.prefsWorkspace', icon: 'icon-settings', menu: [] },
+        { title: 'workspaces.prefsWorkspace', icon: 'icon-settings', menu: [] },
       ],
       workspaceButtonsEnd: [
-        { textCode: 'workspaces.addDataset', icon: 'icon-plus', menu: [] },
-        { textCode: 'workspaces.searchDataset', icon: 'icon-search1', menu: [] },
+        // { title: 'workspaces.addDataset', icon: 'icon-plus', left: true, menu: [] },
+        { title: 'workspaces.searchDataset', icon: 'icon-search1', left: true, menu: [] },
+      ],
+      itemsSettings: [
+        { title: 'workspaces.editWorkspace', icon: 'icon-edit-3', function: 'editWorkspace' },
+        { title: 'workspaces.inviteWorkspace', icon: 'icon-user-plus', menu: [] },
+      ],
+      itemsDelete: [
+        { title: 'workspaces.deleteWorkspace', icon: 'icon-copy', function: 'deleteWorkspace' },
       ],
       myWorkspaces: [
         {
@@ -164,7 +211,7 @@ export default {
           icon: 'icon-database',
           owner: 'userId1',
           datasets: [
-            { name: 'dataset 2', color: 'primary', id: 'ds2', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'dataset for test', color: 'primary', id: 'ds5', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
           ]
         },
       ],
@@ -195,7 +242,10 @@ export default {
   methods: {
     ...mapActions({
       updatePath: 'updateCrumbsPath',
-    })
+    }),
+    createNewWorkspace() {
+      this.log && console.log("P-Workspaces > createNewWorkspace ...")
+    }
   }
 }
 

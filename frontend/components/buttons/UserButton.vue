@@ -8,6 +8,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         icon
+        class="mr-3"
         dark
         v-bind="attrs"
         v-on="on"
@@ -21,16 +22,15 @@
       </v-btn>
     </template>
 
-    <v-list v-if="isAuthenticated">
+    <v-list dense v-if="isAuthenticated">
       <v-list-item>
-        <span class="mt-3">
+        <span class="mt-3 ml-1">
           {{ $t('hi', { name: this.userData.name } ) }}
         </span>
       </v-list-item>
-      <v-list-item>
-        <v-divider class="my-3"/>
-      </v-list-item>
     </v-list>
+
+    <v-divider class="bg-white"/>
 
     <MenuList
       v-if="!isAuthenticated"
@@ -40,6 +40,13 @@
     <MenuList
       v-if="isAuthenticated"
       :items="itemsUser"
+    />
+
+    <v-divider class="bg-white" v-if="isAuthenticated"/>
+
+    <MenuList
+      v-if="isAuthenticated"
+      :items="itemsUserLogout"
     />
 
   </v-menu>
@@ -81,12 +88,12 @@ export default {
           title: 'pages.notifications',
           to: '/notifications'
         },
-        { divider: true },
+      ],
+      itemsUserLogout:  [
         {
           icon: 'icon-log-out',
           title: 'login.out',
           to: '/logout',
-          addClass: 'mb-4'
         },
       ]
     }

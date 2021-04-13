@@ -51,13 +51,14 @@
           {{ title }}
         </nuxt-link>
       </v-toolbar-title>
-
+      
+      <BackRouter/>
       <Breadcrumbs/>
 
       <v-spacer/>
 
       <Languages/>
-
+      <NotificationsButton v-if="isAuthenticated"/>
       <UserButton/>
 
     </v-app-bar>
@@ -74,6 +75,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   components: {
     Languages: () => import('@/components/buttons/Languages.vue'),
+    NotificationsButton: () => import('@/components/buttons/NotificationsButton.vue'),
     UserButton: () => import('@/components/buttons/UserButton.vue'),
   },
   watch: {
