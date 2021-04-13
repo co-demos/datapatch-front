@@ -20,6 +20,7 @@ The current goal is to make it work with the following generic features, so it c
 - [ ] **Notifications** pages & components
 - [ ] **Invitations** pages & components
 - [ ] **Chat & collaboration on datasets** socketiio & components
+- [ ] **Documentation** pages & components
 
 
 ## Stack
