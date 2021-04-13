@@ -48,7 +48,7 @@ nvm use
 npm run dev
 ```
 
-You should have somethiing like this :
+You should have something like this :
 
 ![screenshot-landing](./docs/statics/screenshot-front-landing-1.png)
 
