@@ -1,4 +1,4 @@
-import { Licences } from '@/utils/utilsLicences.js'
+import * as models from '@/utils/utilsModels.js'
 
 export const initialsFromString = (str) => {
   let rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu')
@@ -13,6 +13,7 @@ export class Dataset {
   constructor (
     owner=undefined,
     id=undefined,
+    url=undefined,
     name='My new dataset',
     description='My dataset description',
     color='primary',
@@ -20,9 +21,15 @@ export class Dataset {
     icon='icon-database',
     licence='ODbL',
     tables=[],
+    read='owner-only',
+    comment='owner-only',
+    patch='owner-only',
+    write='owner-only',
+    manage='owner-only',
     ) {
     this.owner = owner
     this.id = id
+    this.url = url
     this.name = name
     this.description = description
     this.color = color
@@ -30,140 +37,53 @@ export class Dataset {
     this.icon = icon
     this.licence=licence
     this.tables = tables
+    this.read = read
+    this.comment = comment
+    this.patch = patch
+    this.write = write
+    this.manage = manage
   }
 
   get data () {
     return { 
       owner: this.owner,
       id: this.id,
+      url: this.url,
       name: this.name,
       description: this.description, 
       color: this.color,
       creationDate: this.creationDate,
-      icon: this.icon, 
-      licence: this.licence, 
-      tables: this.tables, 
+      icon: this.icon,
+      licence: this.licence,
+      tables: this.tables,
+      read: this.read,
+      comment: this.comment,
+      patch: this.patch,
+      write: this.write,
+      manage: this.manage,
     }
   }
 
-  get model () {
-    return [ 
-      {
-        name: 'name',
-        field: 'text',
-        label: 'dataPackage.name',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: undefined
-      },
-      {
-        name: 'description',
-        field: 'textarea',
-        label: 'dataPackage.description',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: undefined
-      }, 
-      {
-        name: 'id',
-        field: 'text',
-        label: 'dataPackage.id',
-        inModal: true,
-        visible: true,
-        readonly: true,
-        options: undefined
-      },
-      {
-        name: 'owner',
-        field: 'text',
-        label: 'dataPackage.owner',
-        inModal: true,
-        visible: true,
-        readonly: true,
-        options: undefined
-      },
-      {
-        name: 'creationDate',
-        field: 'text',
-        label: 'dataPackage.creationDate',
-        inModal: true,
-        visible: true,
-        readonly: true,
-        options: undefined
-      },
-      {
-        name: 'licence',
-        field: 'select',
-        label: 'dataPackage.licence',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: {
-          text: 'name',
-          value: 'name',
-          items: Licences
-        }
-      },
-      {
-        name: 'color',
-        field: 'select',
-        label: 'dataPackage.color',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: {
-          prependColor: true,
-          items: [
-            'primary', 'accent', 'secondary', 'info', 'warning', 'error', 'success',
-            'blue', 'green', 'red', 'yellow', 'purple', 'pink', 'orange'
-          ]
-        }
-      },
-      {
-        name: 'icon',
-        field: 'select',
-        label: 'dataPackage.icon',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: {
-          prependIcon: true,
-          items: [
-            'icon-database',
-            'icon-star',
-            'icon-apps',
-            'icon-settings',
-            'icon-trello',
-            'icon-map-pin',
-            'icon-work',
-            'icon-paperclip',
-            'icon-map',
-            'icon-message-square',
-            'icon-layers',
-            'icon-globe',
-            'icon-bookmark',
-            'icon-camera',
-            'icon-at-sign',
-            'icon-bell',
-            'icon-bar-chart-2',
-            'icon-archive',
-            'icon-folder',
-            'icon-power'
-          ]
-        }
-      }, 
-      {
-        name: 'tables',
-        field: 'list',
-        label: 'dataPackage.tables',
-        inModal: false,
-        visible: true,
-        readonly: false,
-        options: undefined
-      }, 
+  get infos () {
+    return [
+      ...models.itemInfosModel,
+      ...models.itemLicenceModel,
     ]
   }
-
+  get auth () {
+    return [
+      ...models.itemAuthModelAll,
+    ]
+  }
+  get prefs () {
+    return [
+      ...models.itemPrefsModel,
+    ]
+  }
+  get meta () {
+    return [
+      ...models.itemMetaModelUrl,
+      ...models.itemMetaModel,
+    ]
+  }
  }

@@ -13,7 +13,16 @@
       >
 
       <v-toolbar-title class="text-h6 pl-0 font-weight-bold">
-        {{ ws.name }}
+        <v-icon 
+          v-if="ws.icon"
+          :color="ws.color || 'black'"
+          class="pb-1 mr-4"
+          >
+          {{ ws.icon}}
+        </v-icon>
+        <span :class="`${ws.color || 'black'}--text`">
+          {{ ws.name }}
+        </span>
       </v-toolbar-title>
 
       <v-menu
@@ -48,12 +57,14 @@
         />
       </v-menu>
 
-      <!-- DIALOG FOR DATASET INFOS -->
+      <!-- DIALOG FOR WORKSPACE INFOS -->
       <ModalItem
         :item="ws"
         :noAvatar="true"
         :itemModel="itemModel"
         :parentDialog="dialog"
+        :itemType="'workspace'"
+        :action="'update'"
       />
 
       <v-spacer></v-spacer>
@@ -84,6 +95,13 @@
 
     <br/>
 
+    <!-- DEBUGGING -->
+    <!-- 
+    <v-row>
+      <code>{{ ws.datasets.map( ds => ds.id ) }}</code>
+    </v-row>
+    -->
+
     <!-- workspace / draggable datasets -->
     <draggable
       v-model="ws.datasets"
@@ -93,6 +111,8 @@
       @start="drag=true"
       @end="drag=false"
       >
+
+      <!-- existing datasets -->
       <v-col
         v-for="item in ws.datasets"
         :key="item.id"
@@ -104,8 +124,11 @@
         >
         <DatasetItem 
           :item="item"
+          :action="'update'"
         />
       </v-col>
+
+      <!-- create new dataset -->
       <v-col
         class="mb-3"
         cols="4"
@@ -114,7 +137,8 @@
         lg="2"
         >
         <DatasetItem 
-          :item="newDataset"
+          :item="emptyDataset"
+          :action="'create'"
         />
       </v-col>
     </draggable>
@@ -129,6 +153,7 @@
 
 import { mapState } from 'vuex'
 import { Workspace } from '@/utils/utilsWorkspaces'
+import { Dataset } from '@/utils/utilsDatasets'
 
 export default {
 
@@ -144,7 +169,7 @@ export default {
       dialog: 0,
       itemModel:  undefined,
       workspaceButtonsAfterTitle: [
-        { title: 'workspaces.prefsWorkspace', icon: 'icon-settings', menu: [] },
+        { title: 'workspaces.prefsWorkspace', icon: 'icon-more-vertical', menu: [] },
       ],
       workspaceButtonsEnd: [
         { title: 'workspaces.searchDataset', icon: 'icon-search1', left: true, menu: [] },
@@ -159,21 +184,19 @@ export default {
       itemsDelete: [
         { title: 'workspaces.deleteWorkspace', icon: 'icon-trash-2', function: 'deleteWorkspace' },
       ],
-      newDataset: {
-        addBtn: true,
-        owner: undefined,
-        name: 'datasets.newDataset',
-        id: 'new',
-        description: 'new dataset description',
-        creationDate: undefined,
-        icon: 'icon-database',
-        tables: []
-      },
+      emptyDataset: undefined,
     }
   },
   beforeMount () {
     let emptyWorkspace = new Workspace()
-    this.itemModel = emptyWorkspace.model
+    this.itemModel = {
+      infos: emptyWorkspace.infos,
+      auth: emptyWorkspace.auth,
+      prefs: emptyWorkspace.prefs,
+      meta: emptyWorkspace.meta
+    }
+    let emptyDataset = new Dataset()
+    this.emptyDataset = emptyDataset.data
   },
   computed: {
     ...mapState({

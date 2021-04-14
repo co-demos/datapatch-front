@@ -1,20 +1,35 @@
- export class Workspace {
+import * as models from '@/utils/utilsModels.js'
+import { AuthsModels } from '@/utils/utilsAuths.js'
+
+export class Workspace {
   constructor (
     owner=undefined,
     id=undefined,
+    color='black',
     name='My new workspace',
     description='My workspace description',
-    // icon='icon-database',
+    icon='icon-apps',
     creationDate=undefined,
     datasets=[],
+    read='owner-only',
+    // comment='owner-only',
+    // patch='owner-only',
+    write='owner-only',
+    manage='owner-only',
     ) {
     this.owner = owner
     this.id = id
     this.name = name
     this.description = description
     this.creationDate = creationDate
-    // this.icon = icon
+    this.color = color
+    this.icon = icon
     this.datasets = datasets
+    this.read = read
+    // this.comment = comment
+    // this.patch = patch
+    this.write = write
+    this.manage = manage
   }
 
   get data () {
@@ -24,67 +39,35 @@
       name: this.name,
       description: this.description, 
       creationDate: this.creationDate,
-      // icon: this.icon, 
-      datasets: this.datasets, 
+      color: this.color,
+      icon: this.icon, 
+      datasets: this.datasets,
+      read: this.read,
+      // comment: this.comment,
+      // patch: this.patch,
+      write: this.write,
+      manage: this.manage,
     }
   }
 
-  get model () {
+  get infos () {
     return [
-      {
-        name: 'name',
-        field: 'text',
-        label: 'dataPackage.name',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: undefined
-      },
-      {
-        name: 'description',
-        field: 'textarea',
-        label: 'dataPackage.description',
-        inModal: true,
-        visible: true,
-        readonly: false,
-        options: undefined
-      }, 
-      {
-        name: 'id',
-        field: 'text',
-        label: 'dataPackage.id',
-        inModal: true,
-        visible: true,
-        readonly: true,
-        options: undefined
-      },
-      {
-        name: 'owner',
-        field: 'text',
-        label: 'dataPackage.owner',
-        inModal: true,
-        visible: true,
-        readonly: true,
-        options: undefined
-      },
-      {
-        name: 'creationDate',
-        field: 'text',
-        label: 'dataPackage.creationDate',
-        inModal: true,
-        visible: true,
-        readonly: true,
-        options: undefined
-      },
-      {
-        name: 'datasets',
-        field: 'list',
-        label: 'dataPackage.datasets',
-        inModal: false,
-        visible: true,
-        readonly: false,
-        options: undefined
-      }, 
+      ...models.itemInfosModel,
+    ]
+  }
+  get auth () {
+    return [
+      ...models.itemAuthModelBasic,
+    ]
+  }
+  get prefs () {
+    return [
+      ...models.itemPrefsModel,
+    ]
+  }
+  get meta () {
+    return [
+      ...models.itemMetaModel,
     ]
   }
 

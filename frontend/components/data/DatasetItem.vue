@@ -10,7 +10,7 @@
 
     <!-- ADD DATASET BTN -->
     <v-row 
-      v-if="item.addBtn"
+      v-if="action === 'create'"
       class="align-center justify-center pt-0"
       >
       <v-menu
@@ -26,6 +26,7 @@
             size="56"
             v-bind="attrs"
             v-on="on"
+            @click.stop="dialog += 1"
             >
             <v-icon dark>icon-plus</v-icon>
           </v-avatar>
@@ -40,7 +41,7 @@
 
     <!-- DATASET CARD -->
     <v-row 
-      v-if="!item.addBtn"
+      v-if="action !== 'create'"
       class="align-center justify-center"
       >
 
@@ -99,7 +100,7 @@
     </v-row>
 
     <v-row
-      v-if="!item.addBtn"
+      v-if="action !== 'create'"
       class="align-center justify-center mt-4 text-center"
       >
       <span class="text-body-2">
@@ -112,6 +113,8 @@
       :item="item"
       :itemModel="itemModel"
       :parentDialog="dialog"
+      :itemType="'dataset'"
+      :action="action"
     />
   
   </div>
@@ -121,7 +124,6 @@
 <script>
 
 import { mapState } from 'vuex'
-import { Workspace } from '@/utils/utilsWorkspaces'
 import { Dataset, initialsFromString } from '@/utils/utilsDatasets'
 
 export default {
@@ -129,6 +131,7 @@ export default {
   name: 'DatasetItem',
   props: [
     'item',
+    'action'
   ],
   data () {
     return {
@@ -162,7 +165,12 @@ export default {
   },
   beforeMount () {
     let emptyDataset = new Dataset()
-    this.itemModel = emptyDataset.model
+    this.itemModel = {
+      infos: emptyDataset.infos,
+      auth: emptyDataset.auth,
+      prefs: emptyDataset.prefs,
+      meta: emptyDataset.meta,
+    }
   },
   computed: {
     ...mapState({

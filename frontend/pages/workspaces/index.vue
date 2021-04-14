@@ -28,7 +28,7 @@
             large 
             class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
             color="grey"
-            @click="createNewWorkspace()"
+            @click="dialog += 1"
             >
             <span>
               <v-icon class="pb-1 mr-2">
@@ -37,6 +37,17 @@
               {{ $t('workspaces.addWorkspace') }}
             </span>
           </v-btn>
+
+          <!-- DIALOG FOR WORKSPACE INFOS -->
+          <ModalItem
+            :item="newWorkspace"
+            :noAvatar="true"
+            :itemModel="itemModel"
+            :parentDialog="dialog"
+            :itemType="'workspace'"
+            :action="'create'"
+          />
+
         </v-card>
 
       </v-col>
@@ -50,8 +61,7 @@
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { configHeaders } from '@/utils/utilsAxios'
-// import { Workspace } from '@/utils/utilsWorkspaces'
-// import { Dataset } from '@/utils/utilsDatasets'
+import { Workspace } from '@/utils/utilsWorkspaces'
 
 export default {
   name: 'Workspaces',
@@ -60,6 +70,7 @@ export default {
   },
   data () {
     return {
+      dialog: 0,
       pathItems: [
         { 
           text: 'pages.workspaces',
@@ -67,19 +78,34 @@ export default {
           to: '/workspaces',
         }
       ],
+      itemModel:  undefined,
+      newWorkspace: undefined,
       myWorkspaces: [
         {
-          name: 'Workspace number 1',
+          name: 'default workspace...',
+          id: 'wp0',
+          description : 'test WP 2',
+          creationDate : '2021-04-13',
+          icon: 'icon-apps',
+          color: 'black',
+          owner: 'userId1',
+          read: 'owner-only',
+          write: 'owner-only',
+          manage: 'owner-only',
+          datasets: []
+        },
+        {
+          name: 'Workspace without icon',
           id: 'wp1',
           description : 'test WP 1',
           creationDate : '2021-04-13',
-          // icon: 'icon-database',
+          icon: undefined,
           owner: 'userId1',
           datasets: [
-            { name: 'some dataset', icon: false, color: 'secondary', id: 'ds1', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'another dataset', icon: false, color: 'primary', id: 'ds2', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'important data for me', icon: false, color: 'info', id: 'ds3', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'work in progress', icon: false, color: 'primary', id: 'ds4', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'some dataset', icon: false, color: 'secondary', id: 'ds1', url: 'https://datapatch.io/datasets/ds1', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'another dataset', icon: false, color: 'primary', id: 'ds2', url: 'https://datapatch.io/datasets/ds2', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'important data for me', icon: false, color: 'info', id: 'ds3', url: 'https://datapatch.io/datasets/ds3', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'work in progress', icon: false, color: 'primary', id: 'ds4', url: 'https://datapatch.io/datasets/ds4', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
           ]
         },
         {
@@ -87,10 +113,11 @@ export default {
           id: 'wp2',
           description : 'test WP 2',
           creationDate : '2021-04-13',
-          // icon: 'icon-database',
+          icon: 'icon-settings',
+          color: 'primary',
           owner: 'userId1',
           datasets: [
-            { name: 'dataset for test', icon: false, color: 'primary', id: 'ds5', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { name: 'dataset for test', icon: false, color: 'primary', id: 'ds5', url: 'https://datapatch.io/datasets/ds5', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
           ]
         },
       ],
@@ -98,6 +125,14 @@ export default {
   },
   beforeMount () {
     this.updatePath(this.pathItems)
+    let emptyWorkspace = new Workspace()
+    this.newWorkspace = emptyWorkspace.data
+    this.itemModel = {
+      infos: emptyWorkspace.infos,
+      auth: emptyWorkspace.auth,
+      prefs: emptyWorkspace.prefs,
+      // meta: emptyWorkspace.meta
+    }
   },
   computed: {
     ...mapState({
