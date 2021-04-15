@@ -169,7 +169,9 @@ export default {
       infos: emptyDataset.infos,
       auth: emptyDataset.auth,
       prefs: emptyDataset.prefs,
-      meta: emptyDataset.meta,
+    }
+    if (this.action === 'update') {
+      this.itemModel.meta = emptyDataset.meta
     }
   },
   computed: {

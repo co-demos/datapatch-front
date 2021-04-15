@@ -185,6 +185,16 @@ export default {
         { title: 'workspaces.deleteWorkspace', icon: 'icon-trash-2', function: 'deleteWorkspace' },
       ],
       emptyDataset: undefined,
+      // newDataset: {
+      //   addBtn: true,
+      //   owner: undefined,
+      //   name: 'datasets.newDataset',
+      //   id: 'new',
+      //   description: 'new dataset description',
+      //   creationDate: undefined,
+      //   icon: 'icon-database',
+      //   tables: []
+      // },
     }
   },
   beforeMount () {

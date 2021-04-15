@@ -1,6 +1,6 @@
 <template>
 
-  <v-container class="mt-5">
+  <v-container class="my-5">
 
     <v-row
       fill-height

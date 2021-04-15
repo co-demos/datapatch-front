@@ -1,7 +1,8 @@
 <template>
 
   <v-btn
-    text
+
+    icon
     dark
     rounded
     small
@@ -11,19 +12,31 @@
     <v-icon small class="">
       icon-arrow-left
     </v-icon>
-    <span class="body-2">
+    
+    <!-- <span class="body-2">
       {{ $t('buttons.back') }}
-    </span>
+    </span> -->
+
   </v-btn>
 
 </template>
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'BackRouter',
+  data () {
+    return {
+    }
+  },
+  computed: {
+    ...mapState({
+      log: (state) => state.log,
+    }),
+
+  },
 }
 
 </script>

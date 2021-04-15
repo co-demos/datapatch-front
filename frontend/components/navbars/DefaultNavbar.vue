@@ -49,7 +49,7 @@
         </v-icon>
       </v-app-bar-nav-icon>
       
-      <v-toolbar-title>
+      <v-toolbar-title v-if="!noTitle">
         <nuxt-link
           class="white--text link-light"
           to="/"
@@ -57,14 +57,17 @@
           {{ title }}
         </nuxt-link>
       </v-toolbar-title>
-      
-      <BackRouter/>
+
+      <BackRouter v-if="!noBack && $nuxt.context.from"/>
+
       <Breadcrumbs/>
 
       <v-spacer/>
 
       <Languages/>
+
       <NotificationsButton v-if="isAuthenticated"/>
+
       <UserButton/>
 
     </v-app-bar>
@@ -84,6 +87,10 @@ export default {
     NotificationsButton: () => import('@/components/buttons/NotificationsButton.vue'),
     UserButton: () => import('@/components/buttons/UserButton.vue'),
   },
+  props: [
+    'noTitle',
+    'noBack'
+  ],
   watch: {
     isAuthenticated(next) {
       this.drawer = next ? true : false

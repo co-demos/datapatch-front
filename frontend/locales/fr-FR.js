@@ -27,6 +27,7 @@ export default {
     notifications: 'Mes notifications',
     documentation: 'Documentation',
     workspaces: 'Espaces de travail',
+    dataset: 'Jeu de données',
     workspacesOpen: 'Espaces de travail partagés',
     schemas: 'Schémas',
     schemasOpen: 'Schémas partagés',

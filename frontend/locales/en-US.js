@@ -28,6 +28,7 @@ export default {
     documentation: 'Documentation',
     workspaces: 'Workspaces',
     workspacesOpen: 'Open workspaces',
+    dataset: 'Dataset',
     schemas: 'Schemas',
     schemasOpen: 'Open schemas',
     myworkspaces: 'My workspaces',

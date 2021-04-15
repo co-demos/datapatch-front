@@ -13,7 +13,7 @@
         <span 
           :class="`${item.disabled ? 'grey-lighten-2-' : 'white-'}-text`"
           >
-          {{ $t(item.text) }}
+          {{ item.noTranslate ? item.text : $t(item.text) }}
         </span>
       </v-breadcrumbs-item>
     </template>
