@@ -1,6 +1,6 @@
 <template>
 
-  <v-container class="my-5">
+  <v-container class="mt-8 mb-12">
 
     <v-row
       fill-height
@@ -44,8 +44,9 @@
             :noAvatar="true"
             :itemModel="itemModel"
             :parentDialog="dialog"
-            :itemType="'workspace'"
+            :itemType="itemType"
             :action="'create'"
+            :apiUrl="apiUrl"
           />
 
         </v-card>
@@ -78,11 +79,13 @@ export default {
           to: '/workspaces',
         }
       ],
-      itemModel:  undefined,
+      itemType: 'workspaces',
+      itemModel: undefined,
+      apiUrl: undefined,
       newWorkspace: undefined,
       myWorkspaces: [
         {
-          name: 'default workspace...',
+          title: 'default workspace...',
           id: 'wp0',
           description : 'test WP 2',
           creationDate : '2021-04-13',
@@ -95,21 +98,21 @@ export default {
           datasets: []
         },
         {
-          name: 'Workspace without icon',
+          title: 'Workspace without icon',
           id: 'wp1',
           description : 'test WP 1',
           creationDate : '2021-04-13',
           icon: undefined,
           owner: 'userId1',
           datasets: [
-            { name: 'some dataset', icon: false, color: 'secondary', id: 'ds1', url: 'https://datapatch.io/datasets/ds1', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'another dataset', icon: false, color: 'primary', id: 'ds2', url: 'https://datapatch.io/datasets/ds2', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'important data for me', icon: false, color: 'info', id: 'ds3', url: 'https://datapatch.io/datasets/ds3', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
-            { name: 'work in progress', icon: false, color: 'primary', id: 'ds4', url: 'https://datapatch.io/datasets/ds4', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { title: 'Some dataset', icon: false, color: 'secondary', id: 'ds1', url: 'https://datapatch.io/datasets/ds1', creationDate : '2021-04-13', owner_id: 'userId1', description: 'descr...' },
+            { title: 'Another dataset', icon: false, color: 'primary', id: 'ds2', url: 'https://datapatch.io/datasets/ds2', creationDate : '2021-04-13', owner_id: 'userId1', description: 'descr...' },
+            { title: 'Important data for me and a very long text...', icon: 'icon-star', color: 'info', id: 'ds3', url: 'https://datapatch.io/datasets/ds3', creationDate : '2021-04-13', owner_id: 'userId1', description: 'descr...' },
+            { title: 'work in progress', icon: false, color: 'primary', id: 'ds4', url: 'https://datapatch.io/datasets/ds4', creationDate : '2021-04-13', owner_id: 'userId1', description: 'descr...' },
           ]
         },
         {
-          name: 'another workspace...',
+          title: 'another workspace...',
           id: 'wp2',
           description : 'test WP 2',
           creationDate : '2021-04-13',
@@ -117,7 +120,7 @@ export default {
           color: 'primary',
           owner: 'userId1',
           datasets: [
-            { name: 'dataset for test', icon: false, color: 'primary', id: 'ds5', url: 'https://datapatch.io/datasets/ds5', creationDate : '2021-04-13', owner: 'userId1', description: 'descr...' },
+            { title: 'dataset for test', icon: false, color: 'primary', id: 'ds5', url: 'https://datapatch.io/datasets/ds5', creationDate : '2021-04-13', owner_id: 'userId1', description: 'descr...' },
           ]
         },
       ],
@@ -133,6 +136,10 @@ export default {
       prefs: emptyWorkspace.prefs,
       // meta: emptyWorkspace.meta
     }
+    this.log && console.log("P-Workspaces > beforeMount > this.api : ", this.api)
+    this.log && console.log("P-Workspaces > beforeMount > this.itemType : ", this.itemType)
+    this.apiUrl = this.api[this.itemType]
+    this.log && console.log("P-Workspaces > beforeMount > this.apiUrl : ", this.apiUrl)
   },
   computed: {
     ...mapState({

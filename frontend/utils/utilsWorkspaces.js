@@ -3,10 +3,10 @@ import { AuthsModels } from '@/utils/utilsAuths.js'
 
 export class Workspace {
   constructor (
-    owner=undefined,
+    owner_id=undefined,
     id=undefined,
     color='black',
-    name='My new workspace',
+    title='My new workspace',
     description='My workspace description',
     icon='icon-apps',
     creationDate=undefined,
@@ -17,9 +17,9 @@ export class Workspace {
     write='owner-only',
     manage='owner-only',
     ) {
-    this.owner = owner
+    this.owner_id = owner_id
     this.id = id
-    this.name = name
+    this.title = title
     this.description = description
     this.creationDate = creationDate
     this.color = color
@@ -34,9 +34,9 @@ export class Workspace {
 
   get data () {
     return { 
-      owner: this.owner,
+      owner_id: this.owner,
       id: this.id,
-      name: this.name,
+      title: this.title,
       description: this.description, 
       creationDate: this.creationDate,
       color: this.color,

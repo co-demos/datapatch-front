@@ -21,7 +21,7 @@
           {{ ws.icon}}
         </v-icon>
         <span :class="`${ws.color || 'black'}--text`">
-          {{ ws.name }}
+          {{ ws.title }}
         </span>
       </v-toolbar-title>
 
@@ -41,7 +41,9 @@
             v-on="{...onMenu}"
             @click.stop="dialog += 1"
            >
-            <v-icon>{{ btn.icon}}</v-icon>
+            <v-icon small>
+              {{ btn.icon}}
+            </v-icon>
           </v-btn>
         </template>
         <MenuList
@@ -85,7 +87,9 @@
             v-bind="attrs"
             v-on="on"
             >
-            <v-icon>{{ btn.icon}}</v-icon>
+            <v-icon small>
+              {{ btn.icon}}
+            </v-icon>
           </v-btn>
         </template>
         <span>{{ $t(btn.title) }}</span>
@@ -116,11 +120,11 @@
       <v-col
         v-for="item in ws.datasets"
         :key="item.id"
-        class="mb-3 dataset"
-        cols="4"
-        sm="4"
-        md="3"
-        lg="2"
+        class=" dataset"
+        cols="6"
+        sm="12"
+        md="6"
+        lg="4"
         >
         <DatasetItem 
           :item="item"
@@ -130,11 +134,11 @@
 
       <!-- create new dataset -->
       <v-col
-        class="mb-3"
-        cols="4"
-        sm="4"
-        md="3"
-        lg="2"
+        class=""
+        cols="6"
+        sm="12"
+        md="6"
+        lg="4"
         >
         <DatasetItem 
           :item="emptyDataset"
@@ -142,6 +146,8 @@
         />
       </v-col>
     </draggable>
+
+    <br/>
 
     <v-divider class="mt-5"/>
 

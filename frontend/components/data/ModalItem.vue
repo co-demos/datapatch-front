@@ -33,7 +33,7 @@
                 {{ localItem.icon }}
               </v-icon>
               <span v-else class="white--text">
-                {{ getInitials(localItem.name) }}
+                {{ getInitials(localItem.title) }}
               </span>
             </v-avatar>
 
@@ -51,7 +51,7 @@
             <span
               :class="`${localItem.color || 'black'}--text`"
               >
-              {{ localItem.name }}
+              {{ localItem.title }}
             </span>
             <v-spacer/>
           </v-col>
@@ -84,7 +84,8 @@
       </v-toolbar>
 
       <!-- TABS ITEMS -->
-      <v-tabs-items v-model="tab" class="py-0 mb-5">
+      <v-tabs-items v-model="tab" 
+        :class="`${action === 'create' ? 'py-0 mb-5' : 'pt-0 pb-5'}`">
 
         <v-tab-item 
           v-for="tabname in tabsSpaces"
@@ -103,7 +104,7 @@
 
 
       <!-- BTNS -->
-      <v-card-actions class="mr-5 pb-5">
+      <v-card-actions v-if="action === 'create'" class="mr-5 pb-5">
         <v-spacer></v-spacer>
         <v-btn
           color="grey darken-1"
@@ -123,7 +124,7 @@
           large
           tile
           elevation="0"
-          @click="dialog = false"
+          @click="createItem()"
           >
           {{ $t(`buttons.${action}`) }}
         </v-btn>
@@ -135,6 +136,7 @@
 
 <script>
 
+import { mapState } from 'vuex'
 import { initialsFromString } from '@/utils/utilsDatasets'
 
 export default {
@@ -146,6 +148,7 @@ export default {
     'parentDialog',
     'itemType',
     'action',
+    'apiUrl',
     'noAvatar'
   ],
   watch: {
@@ -161,6 +164,11 @@ export default {
       tabsSpaces: []
     }
   },
+  computed: {
+    ...mapState({
+      log: (state) => state.log,
+    })
+  },
   beforeMount () {
     this.tabsSpaces = Object.keys(this.itemModel)
   },
@@ -168,6 +176,13 @@ export default {
     getInitials(itemName) {
       return initialsFromString(itemName)
     },
+    createItem() {
+      this.log && console.log('c-ModalField > createItem > this.itemType :' , this.itemType)
+      this.log && console.log('c-ModalField > createItem > this.apiUrl :' , this.apiUrl)
+      let itemPayload = this.localItem
+      this.log && console.log('c-ModalField > createItem > itemPayload :' , itemPayload)
+
+    }
   }
 }
 

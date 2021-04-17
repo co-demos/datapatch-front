@@ -41,8 +41,8 @@ export const AuthsModelsRead = [
     },
   },
 ]
-export const AuthsModelsPatch = [
-    {
+export const AuthsModelsComment = [
+  {
     name: 'comment',
     nameDetails: 'read+comment',
     field: 'select',
@@ -60,6 +60,9 @@ export const AuthsModelsPatch = [
       items: AuthsOptions
     },
   },
+]
+
+export const AuthsModelsPatch = [
   {
     name: 'patch',
     nameDetails: 'read+comment+patch',
@@ -86,7 +89,7 @@ export const AuthsModelsWrite = [
     field: 'select',
     label: 'auth.write',
     default: 'owner-only',
-    help: 'Can read, comment, patch, and write on the item data',
+    help: 'Can read, comment, patch, accept proposals, and write on the item data',
     inModal: true,
     visible: true,
     readonly: false,
@@ -104,7 +107,7 @@ export const AuthsModelsWrite = [
     field: 'select',
     label: 'auth.manage',
     default: 'owner-only',
-    help: 'Can read, comment, patch, write, delete and change owner of the item data',
+    help: 'Can read, comment, patch, accept proposals, write, delete and change owner/groups authorized of the item data',
     inModal: true,
     visible: true,
     readonly: false,

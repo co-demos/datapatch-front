@@ -3,9 +3,9 @@ import { Licences } from '@/utils/utilsLicences.js'
 
 export const itemInfosModel = [ 
   {
-    name: 'name',
+    name: 'title',
     field: 'text',
-    label: 'dataPackage.name',
+    label: 'dataPackage.title',
     inModal: true,
     visible: true,
     readonly: false,
@@ -31,8 +31,8 @@ export const itemLicenceModel = [
     visible: true,
     readonly: false,
     options: {
-      text: 'name',
-      value: 'name',
+      text: 'title',
+      value: 'title',
       items: Licences
     }
   },
@@ -71,9 +71,9 @@ export const itemMetaModel = [
     options: undefined
   },
   {
-    name: 'owner',
+    name: 'owner_id',
     field: 'text',
-    label: 'dataPackage.owner',
+    label: 'dataPackage.owner_id',
     inModal: true,
     visible: true,
     readonly: true,

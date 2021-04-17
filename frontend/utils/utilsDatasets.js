@@ -11,26 +11,26 @@ export const initialsFromString = (str) => {
 
 export class Dataset {
   constructor (
-    owner=undefined,
+    owner_id=undefined,
     id=undefined,
     url=undefined,
-    name='My new dataset',
+    title='My new dataset',
     description='My dataset description',
     color='primary',
     creationDate=undefined,
     icon='icon-database',
     licence='ODbL',
     tables=[],
-    read='owner-only',
-    comment='owner-only',
-    patch='owner-only',
-    write='owner-only',
+    read='public',
+    // comment='owner-only',
+    patch='public',
+    write='owner+groups',
     manage='owner-only',
     ) {
-    this.owner = owner
+    this.owner_id = owner_id
     this.id = id
     this.url = url
-    this.name = name
+    this.title = title
     this.description = description
     this.color = color
     this.creationDate = creationDate
@@ -38,7 +38,7 @@ export class Dataset {
     this.licence=licence
     this.tables = tables
     this.read = read
-    this.comment = comment
+    // this.comment = comment
     this.patch = patch
     this.write = write
     this.manage = manage
@@ -46,10 +46,10 @@ export class Dataset {
 
   get data () {
     return { 
-      owner: this.owner,
+      owner_id: this.owner_id,
       id: this.id,
       url: this.url,
-      name: this.name,
+      title: this.title,
       description: this.description, 
       color: this.color,
       creationDate: this.creationDate,
@@ -57,7 +57,7 @@ export class Dataset {
       licence: this.licence,
       tables: this.tables,
       read: this.read,
-      comment: this.comment,
+      // comment: this.comment,
       patch: this.patch,
       write: this.write,
       manage: this.manage,
