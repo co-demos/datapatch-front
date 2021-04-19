@@ -21,7 +21,7 @@
         v-for="lang in $i18n.locales"
         :key="lang.code"
         :value="lang.code"
-        @click="$i18n.setLocale(lang.code)"
+        @click="$i18n.setLocale(lang.code), updateUserLoc(lang.code)"
         >
         {{ lang.name }}
         </v-list-item
@@ -31,10 +31,42 @@
 </template>
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { configHeaders } from '@/utils/utilsAxios'
 
 export default {
   name: 'Languages',
+  computed: {
+    ...mapState({
+      log: (state) => state.log,
+      api: (state) => state.api,
+      user: (state) => state.user.userData,
+    }),
+    ...mapGetters({
+      isAuthenticated: 'user/isAuthenticated',
+      userBasicInfos: 'user/userBasicInfos',
+      headerUser: 'user/headerUser'
+    })
+  },
+  methods: {
+    ...mapActions({
+      populateUserLocale: 'user/populateUserLocale'
+    }),
+    updateUserLoc (loc) {
+      if (this.isAuthenticated) {
+        let userBasicInfos = this.userBasicInfos
+        userBasicInfos.locale = loc
+        this.log && console.log("C-Languages > updateUserLoc > userBasicInfos :", userBasicInfos)
+        this.log && console.log("C-Languages > updateUserLoc > this.headerUser :", this.headerUser)
+        this.$axios
+          .put(`${this.api.users}/me/`, userBasicInfos, this.headerUser)
+          .then(resp => {
+            this.log && console.log('C-Languages > updateUserLoc > resp.data : ', resp.data)
+            this.populateUserLocale(resp.data)
+          })
+      }
+    }
+  }
 }
 
 </script>

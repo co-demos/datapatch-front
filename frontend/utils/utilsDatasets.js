@@ -12,13 +12,13 @@ export const initialsFromString = (str) => {
 export class Dataset {
   constructor (
     owner_id=undefined,
-    id=undefined,
-    url=undefined,
     title='My new dataset',
     description='My dataset description',
+    id=undefined,
+    url=undefined,
     color='primary',
     creationDate=undefined,
-    icon='icon-database',
+    icon='icon-table',
     licence='ODbL',
     tables=[],
     read='public',

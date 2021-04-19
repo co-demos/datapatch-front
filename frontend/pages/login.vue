@@ -12,7 +12,6 @@
           cols="6"
           >
           
-
           <v-card 
             elevation="0"
             class="pa-5"

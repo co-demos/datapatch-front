@@ -15,6 +15,7 @@ export default {
     showDetails: 'Show details',
     close: 'Close',
     back: 'Back',
+    options: 'Options',
     save: 'Save',
     update: 'Update',
     create: 'Create',
@@ -69,6 +70,7 @@ export default {
   me: {
     save: 'Save my changes',
     deleteMe: 'Delete my account',
+    username: 'Username',
     name: 'Name',
     surname: 'Surname',
     email: 'Email',
@@ -125,6 +127,8 @@ export default {
     licence: 'Licence',
   },
   workspaces: {
+    defaultTitle: 'My new workspace',
+    defaultDescription: 'My workspace description',
     myWorkspaces: 'My workspaces',
     inviteWorkspace: 'Invite people or group',
     prefsWorkspace: 'Workspace preferences',
@@ -136,6 +140,8 @@ export default {
     deleteWorkspace: 'Delete this workspace',
   },
   datasets: {
+    defaultTitle: 'My new dataset',
+    defaultDescription: 'My dataset description',
     prefsDataset: 'Dataset preferences',
     inviteDataset: 'Invite people or group',
     editDataset: 'Edit dataset infos',

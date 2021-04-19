@@ -11,8 +11,8 @@
       :key="i"
       :to="item.divider ? '' : item.to"
       :class="item.addClass ? item.addClass : '' "
-      router
-      exact
+      :router="!item.divider && !!item.to"
+      :exact="!item.divider && !!item.to"
       >
 
       <v-list-item-action>
@@ -34,12 +34,30 @@
 
 <script>
 
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { configHeaders } from '@/utils/utilsAxios'
+
 export default {
 
   name: 'MenuList',
   props: [
     'items',
-    'isFirst'
+    'isFirst',
+    'itemType',
+    'apiUrl',
+    'action'
   ],
+  computed: {
+    ...mapState({
+      log: (state) => state.log,
+      api: (state) => state.api,
+    }),
+    ...mapGetters({
+      isAuthenticated: 'user/isAuthenticated'
+    })
+  },
+  methods: {
+
+  }
 }
 </script>

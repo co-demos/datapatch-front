@@ -119,6 +119,7 @@ export const itemPrefsModel = [
       custom: true,
       prependIcon: true,
       items: [
+        '',
         'icon-database',
         'icon-star',
         'icon-apps',

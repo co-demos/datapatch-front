@@ -3,6 +3,7 @@ import { configHeaders } from '@//utils/utilsAxios.js'
 class User {
   constructor () {
     this.id = undefined
+    this.username = undefined
     this.name = undefined
     this.surname = undefined
     this.email = undefined
@@ -14,6 +15,7 @@ class User {
   get data () {
     return {
       id: this.id,
+      username: this.username,
       name: this.name,
       surname: this.surname,
       email: this.email,
@@ -42,6 +44,7 @@ class Auth {
 export const state = () => ({
   userData: {
     id: undefined,
+    username: undefined,
     name: undefined,
     surname: undefined,
     email: undefined,
@@ -55,10 +58,13 @@ export const state = () => ({
     refreshToken: undefined,
     tokenType: undefined,
     isSuperUser: false,
-  }
+  },
 })
 
 export const getters = {
+  userId: (state) => {
+    return state.userData.id
+  },
   isUserPopulated: (state) => {
     return state.userData.email
   },
@@ -69,6 +75,17 @@ export const getters = {
     let config = new configHeaders(state.auth.accessToken)
     return config.headers
   },
+  userBasicInfos: (state) => {
+    let basicInfos = {
+      username: state.userData.username,
+      name: state.userData.name,
+      surname: state.userData.surname,
+      description: state.userData.description,
+      locale: state.userData.locale,
+      avatar: state.userData.avatar,
+    }
+    return basicInfos
+  }
 }
 
 export const mutations = {
@@ -78,16 +95,23 @@ export const mutations = {
     state.auth.tokenType = token.token_type
     // console.log('S-user > setAccessToken > state.auth : ', state.auth)
   },
+  setUserLocale (state, userData) {
+    state.userData.locale = userData.locale
+  },
   setUserData (state, userData) {
     // console.log('S-user > setUserData > userData : ', userData)
     state.userData.id = userData.id
+    state.userData.email = userData.email
+    state.userData.locale = userData.locale
+    state.userData.groups = userData.groups
+  },
+  setUserBasicInfos (state, userData) {
+    state.userData.username = userData.username
     state.userData.name = userData.name
     state.userData.surname = userData.surname
-    state.userData.email = userData.email
     state.userData.description = userData.description
     state.userData.locale = userData.locale
     state.userData.avatar = userData.avatar
-    state.userData.groups = userData.groups
   },
   
 }
@@ -97,7 +121,15 @@ export const actions = {
     commit('setAccessToken', token)
   },
   populateUser ({ commit }, userData) {
+    commit('setUserLocale', userData)
+    commit('setUserBasicInfos', userData)
     commit('setUserData', userData)
+  },
+  populateUserLocale ({ commit }, userData) {
+    commit('setUserLocale', userData)
+  },
+  populateUserBasicInfos ({ commit }, userData) {
+    commit('setUserBasicInfos', userData)
   },
   resetUser ({ commit }) {
     let emptyUser = new User

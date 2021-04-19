@@ -24,7 +24,9 @@
           v-if="model.field === 'text'"
           v-model="localItem[model.name]"
           dense
+          @input="updateItem()"
         />
+
         <v-textarea
           filled
           rows="3"
@@ -34,6 +36,7 @@
           v-if="model.field === 'textarea'"
           v-model="localItem[model.name]"
           dense
+          @input="updateItem()"
         />
         <v-select
           filled
@@ -46,6 +49,7 @@
           :item-text="model.options.text"
           :item-value="model.options.value"
           dense
+          @change="updateItem()"
           >
           <!-- custom items list -->
           <template 
@@ -101,18 +105,58 @@
 
 <script>
 
+  import { mapState, mapGetters, mapActions } from 'vuex'
+
   export default {
     name: 'ModalFields',
     props: [
       'item',
-      'itemModel'
+      'itemModel',
+      'itemType',
+      'apiUrl',
+      'action'
     ],
     data () {
       return {
-        localItem: this.item,
+        localItem: undefined,
         dialog: false,
         tab: null,
       }
     },
+    watch: {
+      item (next) {
+        this.localItem = this.item
+      }
+    },
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+      }),
+      ...mapGetters({
+        headerUser: 'user/headerUser'
+      })
+    },
+    beforeMount () {
+      // this.log && console.log('C-ModalFields > beforeMount > this.apiUrl :' , this.apiUrl)
+      // this.log && console.log('C-ModalFields > beforeMount > this.item :' , this.item)
+      this.localItem = this.item
+      // this.log && console.log('C-ModalFields > beforeMount > this.localItem :' , this.localItem)
+    },
+    methods: {
+      updateItem() {
+        if (this.action === 'update'){
+          // this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
+          let itemPayload = this.localItem
+          // this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
+          // this.log && console.log('C-ModalFields > updateItem > this.itemModel :' , this.itemModel)
+          this.$axios
+            .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
+            .then(resp => {
+              this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
+              this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
+            })
+        }
+      },
+    }
   }
 </script>

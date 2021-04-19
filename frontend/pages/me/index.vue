@@ -77,6 +77,21 @@
 
           <v-card-text>
 
+            <!-- username -->
+            <v-text-field
+              v-model="username"
+              outlined
+              background-color="white"
+              single-line
+              clearable
+              :disabled="isLoading"
+              :readonly="isLoading"
+              :loading="isLoading"
+              :label="$t('me.username')"
+              :placeholder="$t('me.username')"
+              prepend-inner-icon="icon-user"
+              ></v-text-field>
+
             <!-- name -->
             <v-text-field
               v-model="name"
@@ -139,7 +154,7 @@
               tile
               dark
               class="mr-4"
-              @click="saveUser"
+              @click="saveUserinfos()"
               >
               {{ $t('me.save') }}
             </v-btn>
@@ -172,17 +187,25 @@
 
 <script>
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   
   name: 'Me',
+  head() {
+    return {
+      title: `${this.appTitle} - ${this.$t('pages.me')}`,
+      htmlAttrs: {
+        lang: this.$i18n.locale
+      },
+    }
+  },
   data () {
     return {
       pathItems: [
         { 
           text: 'pages.me',
-          disabled: false,
+          disabled: true,
           to: '/me',
         },
         { 
@@ -191,6 +214,9 @@ export default {
           to: '/me',
         }
       ],
+      itemType: 'users',
+      apiUrl: undefined,
+      username: '',
       name: '',
       surname: '',
       email: '',
@@ -198,17 +224,28 @@ export default {
       description: '',
     }
   },
+  beforeMount() {
+    this.apiUrl = this.api[this.itemType]
+  },
   computed: {
     ...mapState({
       log: (state) => state.log,
+      appTitle: (state) => state.appTitle,
       api: (state) => state.api,
       user: (state) => state.user.userData,
       isLoading: (state) => state.dialogs.isLoading,
+    }),
+    ...mapGetters({
+      userBasicInfos: 'user/userBasicInfos',
+      headerUser: 'user/headerUser'
     })
   },
   beforeMount() {
     this.updatePath(this.pathItems)
+    this.log && console.log("P-me/index > this.user :", this.user)
+    this.log && console.log("P-me/index > this.userBasicInfos :", this.userBasicInfos)
     this.name = this.user.name
+    this.username = this.user.username
     this.surname = this.user.surname
     this.email = this.user.email
     this.avatar = this.user.avatar
@@ -217,14 +254,20 @@ export default {
   methods: {
     ...mapActions({
       updatePath: 'updateCrumbsPath',
+      populateUserBasicInfos: 'user/populateUserBasicInfos'
    }),
-    saveUser () {
-      // TO DO
-      let updateUser = {
-        name: this.name,
-        surname: this.surname,
-        description: this.description,
-      }
+    saveUserinfos () {
+      let userBasicInfos = this.userBasicInfos
+      userBasicInfos.username = this.username
+      userBasicInfos.name = this.name
+      userBasicInfos.surname = this.surname
+      userBasicInfos.description = this.description
+      this.$axios
+        .put(`${this.apiUrl}/me/`, userBasicInfos, this.headerUser)
+        .then(resp => {
+          this.log && console.log('P-Me > saveUserinfos > resp.data : ', resp.data)
+          this.populateUserBasicInfos(resp.data)
+        })
     },
     deleteUser () {
 

@@ -3,8 +3,8 @@
 
     <DefaultNavbar/>
 
-    <v-main class="pt-5">
-
+    <v-main class="mt-5 pt-5">
+      <!-- {{ $i18n.locale }} -->
       <v-container>
         <nuxt />
       </v-container>
@@ -17,10 +17,24 @@
 
 <script>
 
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
   components: {
     DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
     BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
+  },
+  // head() {
+  //   return {
+  //     htmlAttrs: {
+  //       lang: this.$i18n.locale
+  //     },
+  //   }
+  // },
+  computed: {
+    ...mapState({
+      log: (state) => state.log,
+    }),
   },
 }
 </script>

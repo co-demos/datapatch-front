@@ -80,12 +80,21 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
+  head() {
+    return {
+      title: `${this.appTitle} - ${this.$t('pages.home')}`,
+      htmlAttrs: {
+        lang: this.$i18n.locale
+      },
+    }
+  },
   beforeMount () {
     this.resetPathList()
   },
   computed: {
     ...mapState({
       log: (state) => state.log,
+      appTitle: (state) => state.appTitle,
       userData: (state) =>  state.user.userData,
     }),
     ...mapGetters({

@@ -32,8 +32,8 @@ export default {
   ** Headers of the page
   */
   head: {
-    titleTemplate: process.env.NUXT_ENV_APP_TITLE || 'DATA PATCH',
-    title: process.env.npm_package_name || '',
+    // titleTemplate: process.env.NUXT_ENV_APP_TITLE || 'DATA PATCH',
+    // title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

@@ -19,6 +19,14 @@ export default {
   layout: 'dataset',
   components: {
   },
+  head() {
+    return {
+      title: `${this.appTitle} - ${this.$t('pages.dataset')}`,
+      htmlAttrs: {
+        lang: this.$i18n.locale
+      },
+    }
+  },
   data () {
     return {
       dialog: 0,
@@ -49,6 +57,7 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
+      appTitle: (state) => state.appTitle,
       api: (state) => state.api,
     }),
     ...mapGetters({

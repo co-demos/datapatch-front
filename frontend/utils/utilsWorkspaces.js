@@ -4,10 +4,10 @@ import { AuthsModels } from '@/utils/utilsAuths.js'
 export class Workspace {
   constructor (
     owner_id=undefined,
-    id=undefined,
-    color='black',
     title='My new workspace',
     description='My workspace description',
+    id=undefined,
+    color='black',
     icon='icon-apps',
     creationDate=undefined,
     datasets=[],

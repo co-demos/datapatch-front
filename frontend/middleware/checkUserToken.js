@@ -58,6 +58,7 @@ export default function ({
             store.dispatch('user/authenticateUser', {access_token: accessTokenCookie, token_type: 'Bearer'})
             const userData = resp.data
             store.dispatch('user/populateUser', userData)
+            store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
             i18n.setLocale(userData.locale)
           }
 

@@ -47,7 +47,7 @@
             </v-icon>
 
           </v-col>
-          <v-col cols="8">
+          <v-col cols="7">
             <span
               :class="`${localItem.color || 'black'}--text`"
               >
@@ -96,6 +96,9 @@
             <ModalFields
               :item="localItem"
               :itemModel="itemModel[tabname]"
+              :itemType="itemType"
+              :apiUrl="apiUrl"
+              :action="action"
             />
           </v-card-text>
         </v-tab-item>
@@ -136,7 +139,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { initialsFromString } from '@/utils/utilsDatasets'
 
 export default {
@@ -144,6 +147,7 @@ export default {
   name: 'ModalItem',
   props: [
     'item',
+    'emptyItem',
     'itemModel',
     'parentDialog',
     'itemType',
@@ -154,11 +158,11 @@ export default {
   watch: {
     parentDialog () {
       this.dialog = true
-    }
+    },
   },
   data () {
     return {
-      localItem: this.item,
+      localItem: undefined,
       dialog: false,
       tab: null,
       tabsSpaces: []
@@ -167,9 +171,14 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
+    }),
+    ...mapGetters({
+      userId: 'user/userId',
+      headerUser: 'user/headerUser'
     })
   },
   beforeMount () {
+    this.localItem = { ...this.item }
     this.tabsSpaces = Object.keys(this.itemModel)
   },
   methods: {
@@ -177,12 +186,23 @@ export default {
       return initialsFromString(itemName)
     },
     createItem() {
-      this.log && console.log('c-ModalField > createItem > this.itemType :' , this.itemType)
-      this.log && console.log('c-ModalField > createItem > this.apiUrl :' , this.apiUrl)
+      this.log && console.log('C-ModalItem > createItem > this.itemType :' , this.itemType)
+      this.log && console.log('C-ModalItem > createItem > this.apiUrl :' , this.apiUrl)
       let itemPayload = this.localItem
-      this.log && console.log('c-ModalField > createItem > itemPayload :' , itemPayload)
-
-    }
+      itemPayload.owner_id = this.userId
+      this.log && console.log('C-ModalItem > createItem > itemPayload :' , itemPayload)
+      this.$axios
+        .post(`${this.apiUrl}/`, itemPayload, this.headerUser)
+        .then(resp => {
+          this.log && console.log('C-ModalItem > createItem > resp.data : ', resp.data)
+          this.$store.dispatch(`${this.itemType}/appendUserItem`, resp.data)
+          this.log && console.log('C-ModalItem > createItem > this.localItem : ', this.localItem)
+          this.log && console.log('C-ModalItem > createItem > this.emptyItem : ', this.emptyItem)
+          this.localItem  = this.emptyItem
+          this.tab = 0
+          this.dialog = false
+        })
+    },
   }
 }
 

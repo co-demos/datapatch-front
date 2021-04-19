@@ -15,6 +15,7 @@ export default {
     showDetails: 'Voir les détails',
     close: 'Fermer',
     back: 'Retour',
+    options: 'Options',
     save: 'Enregister',
     update: 'Mettre à jour',
     create: 'Créer',
@@ -69,6 +70,7 @@ export default {
   me: {
     save: 'Enregistrer mes changements',
     deleteMe: 'Supprimer mon compte',
+    username: 'Pseudo',
     name: 'Prénom',
     surname: 'Nom',
     email: 'Email',
@@ -125,6 +127,8 @@ export default {
     licence: 'License', 
   },
   workspaces: {
+    defaultTitle: 'Mon nouvel espace de travail',
+    defaultDescription: 'La description de mon espace de travail',
     myWorkspaces: 'Mes espaces de travail',
     inviteWorkspace: 'Inviter une personne ou un groupe',
     prefsWorkspace: "Préférences de l'espace de travail",
@@ -136,6 +140,8 @@ export default {
     deleteWorkspace: 'Supprimer cet espace de travail',
   },
   datasets: {
+    defaultTitle: 'Mon nouveau jeu de données',
+    defaultDescription: 'La description de mon jeu de données',
     prefsDataset: 'Préférences du jeu de données',
     inviteDataset: 'Inviter une personne ou un groupe',
     editDataset: 'Editer les informations du jeu de données',
