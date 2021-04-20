@@ -2,17 +2,29 @@ import { Workspace } from '@/utils/utilsWorkspaces.js'
 
 
 export const state = () => ({
+  uxWorkspaces: {},
+
   userWorkspaces: [],
   sharedWorkspaces: []
 })
 
 
 export const getters = {
+  getUserUx: (state) => {
+    return state.uxWorkspaces
+  },
+
   getUserItems: (state) => {
     return state.userWorkspaces
   },
+  getUserItemById: (state) => (id) => {
+    return state.userWorkspaces.find( ws => ws.id === id)
+  },
   getSharedItems: (state) => {
     return state.sharedWorkspaces
+  },
+  getSharedItemById: (state) => (id) => {
+    return state.sharedWorkspaces.find( ws => ws.id === id)
   },
 }
 
@@ -41,6 +53,10 @@ export const mutations = {
 }
 
 export const actions = {
+
+  populateUserUX ({ commit }, ux_prefs) {
+    commit('setItems', {space: 'uxWorkspaces', items: ux_prefs})
+  },
 
   populateUserItems ({ commit }, workspaces) {
     commit('setItems', {space: 'userWorkspaces', items: workspaces})

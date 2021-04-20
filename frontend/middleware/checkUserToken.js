@@ -59,6 +59,8 @@ export default function ({
             const userData = resp.data
             store.dispatch('user/populateUser', userData)
             store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
+            store.dispatch('datasets/populateUserItems', userData.my_datasets)
+            store.dispatch('workspaces/populateUserUX', userData.ux_workspaces)
             i18n.setLocale(userData.locale)
           }
 

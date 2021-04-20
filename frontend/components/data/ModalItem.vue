@@ -6,7 +6,8 @@
     >
     <!-- MODAL TITLE -->
     <v-card>
-
+      
+      <!-- CLOSE MODAL -->
       <v-card-actions class="mr-5 pt-3 pb-0 px-0">
         <v-spacer></v-spacer>
         <v-btn
@@ -20,6 +21,7 @@
         </v-btn>
       </v-card-actions>
 
+      <!-- TITLE MODAL -->
       <v-card-title class="headline pt-0 mb-2">
         <v-row class="align-center">
           <v-col cols="4" class="text-center">
@@ -52,6 +54,7 @@
               :class="`${localItem.color || 'black'}--text`"
               >
               {{ localItem.title }}
+              <!-- <br> wsId: {{ fromWorkspace }} -->
             </span>
             <v-spacer/>
           </v-col>
@@ -147,6 +150,7 @@ export default {
   name: 'ModalItem',
   props: [
     'item',
+    'fromWorkspace',
     'emptyItem',
     'itemModel',
     'parentDialog',
@@ -171,9 +175,11 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
+      api: (state) => state.api,
     }),
     ...mapGetters({
       userId: 'user/userId',
+      getUserWorkspaceById: 'workspaces/getUserItemById',
       headerUser: 'user/headerUser'
     })
   },
@@ -186,21 +192,40 @@ export default {
       return initialsFromString(itemName)
     },
     createItem() {
-      this.log && console.log('C-ModalItem > createItem > this.itemType :' , this.itemType)
-      this.log && console.log('C-ModalItem > createItem > this.apiUrl :' , this.apiUrl)
+      // this.log && console.log('C-ModalItem > createItem > this.itemType :' , this.itemType)
+      // this.log && console.log('C-ModalItem > createItem > this.apiUrl :' , this.apiUrl)
       let itemPayload = this.localItem
       itemPayload.owner_id = this.userId
-      this.log && console.log('C-ModalItem > createItem > itemPayload :' , itemPayload)
+      // itemPayload.from_workspace_id = this.fromWorkspace
+      // this.log && console.log('C-ModalItem > createItem > itemPayload :' , itemPayload)
       this.$axios
         .post(`${this.apiUrl}/`, itemPayload, this.headerUser)
         .then(resp => {
-          this.log && console.log('C-ModalItem > createItem > resp.data : ', resp.data)
+          // this.log && console.log('C-ModalItem > createItem > resp.data : ', resp.data)
           this.$store.dispatch(`${this.itemType}/appendUserItem`, resp.data)
-          this.log && console.log('C-ModalItem > createItem > this.localItem : ', this.localItem)
-          this.log && console.log('C-ModalItem > createItem > this.emptyItem : ', this.emptyItem)
+          // this.log && console.log('C-ModalItem > createItem > this.localItem : ', this.localItem)
+          // this.log && console.log('C-ModalItem > createItem > this.emptyItem : ', this.emptyItem)
           this.localItem  = this.emptyItem
           this.tab = 0
           this.dialog = false
+
+          // if action from workspace append dataset to workspace.datasets
+          if (this.fromWorkspace) {
+            let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
+            // this.log && console.log('C-ModalItem > createItem > currentWs : ', currentWs)
+            let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
+            let payloadWs = { ...currentWs }
+            payloadWs.datasets = {
+                ids: [ ...wsPreviousDatasets, resp.data.id ]
+            }
+            // this.log && console.log('C-ModalItem > createItem > payloadWs : ', payloadWs)
+            this.$axios
+              .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
+              .then( resp => {
+                this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
+              })
+          }
+
         })
     },
   }

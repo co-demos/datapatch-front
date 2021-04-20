@@ -133,6 +133,7 @@
         log: (state) => state.log,
       }),
       ...mapGetters({
+        getUserWorkspaceById: 'workspaces/getUserItemById',
         headerUser: 'user/headerUser'
       })
     },
@@ -145,14 +146,21 @@
     methods: {
       updateItem() {
         if (this.action === 'update'){
-          // this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
+          this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
           let itemPayload = this.localItem
-          // this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
-          // this.log && console.log('C-ModalFields > updateItem > this.itemModel :' , this.itemModel)
+          this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
+          this.log && console.log('C-ModalFields > updateItem > this.itemModel :' , this.itemModel)
+
+          // don't forget ux if update workspace
+          if (this.itemType === 'workspaces') {
+            let currentWs = this.getUserWorkspaceById(this.item.id)
+            itemPayload.datasets = currentWs.datasets
+          }
+
           this.$axios
             .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
             .then(resp => {
-              this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
+              // this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
               this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
             })
         }

@@ -127,6 +127,7 @@ export default {
     licence: 'License', 
   },
   workspaces: {
+    defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
     defaultTitle: 'Mon nouvel espace de travail',
     defaultDescription: 'La description de mon espace de travail',
     myWorkspaces: 'Mes espaces de travail',

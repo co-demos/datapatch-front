@@ -2,41 +2,84 @@
 
   <v-container class="mt-8 mb-12">
 
+    <AlertSnack
+      :position="'bottom'"
+      :onlyErrors="true"
+    />
+
     <v-row
       fill-height
-      class="justify-center align-center"
+      class="justify-center align-top"
       >
 
+      <v-col cols="2" class="">
+        uxWorkspaces : <code><pre>{{ uxWorkspaces }}</pre></code><hr>
+        <!-- myWorkspaces : <code><pre>{{ myWorkspaces }}</pre></code><hr> -->
+        userDatasets.map : <code><pre>{{ userDatasets.map(ds => ds.id) }}</pre></code><hr>
+      </v-col>
+
+      <!-- existing datasets -->
+      <!-- <v-col 
+        cols="10"
+        class="mb-5 px-7"
+        >
+        <v-row wrap align-center>
+          <v-col
+            v-for="ds in userDatasets"
+            :key="ds.id"
+            class="pt-0 dataset"
+            cols="6"
+            sm="12"
+            md="6"
+            lg="4"
+            >
+            <DatasetItem 
+              :datasetId="ds.id"
+              :action="'update'"
+            />
+          </v-col>
+        </v-row>
+      </v-col> -->
+
       <v-col 
-        cols="8"
-        class="offset-2"
+        cols="9"
+        class="offset-1"
         >
 
         <!-- workspace / draggable datasets -->
         <draggable
           v-model="myWorkspaces"
+          v-bind="dragOptions"
           draggable=".workspace"
-          group="workspace"
+          group="workspaces"
           @start="drag=true"
-          @end="drag=false"
+          @end="drag=false; updateWorkspacePositions()"
           >
+          <!-- <transition-group type="transition" :name="!drag ? 'flip-list' : null"> -->
           <WorkspaceItem
             v-for="ws in myWorkspaces"
             :key="ws.id"
             :workspace="ws"
             :apiUrl="apiUrl"
+            :dragging="drag"
           />
+          <!-- </transition-group> -->
         </draggable>
-
+        
         <!-- ADD WORKSPACE -->
         <v-card
           class="mb-5 pb-5 pl-2"
           flat
           >
+
+          <v-card-title v-if="! myWorkspaces.length">
+            {{ $t('workspaces.defaultHelp') }}
+          </v-card-title>
+
           <v-btn 
             text
             rounded
-            large 
+            large
             class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
             color="grey"
             @click="dialog += 1"
@@ -74,11 +117,13 @@
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { Workspace } from '@/utils/utilsWorkspaces'
+import { mapOrder } from '@/utils/utilsFunctions'
 
 export default {
   name: 'Workspaces',
   components: {
     WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
+    DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
   },
   head() {
     return {
@@ -91,6 +136,7 @@ export default {
   data () {
     return {
       dialog: 0,
+      drag: false,
       pathItems: [
         { 
           text: 'pages.workspaces',
@@ -104,66 +150,30 @@ export default {
       newWorkspace: undefined,
       emptyWorkspace: undefined,
       myWorkspaces: [],
-      myWorkspacesDummies: [
-        // {
-        //   title: 'default workspace...',
-        //   id: 'wp0',
-        //   description : 'test WP 2',
-        //   creationDate : '2021-04-13',
-        //   icon: 'icon-apps',
-        //   color: 'black',
-        //   owner: 'userId1',
-        //   read: 'owner-only',
-        //   write: 'owner-only',
-        //   manage: 'owner-only',
-        //   datasets: []
-        // },
-        {
-          title: 'Workspace without icon',
-          id: 'wp1',
-          description : 'test WP 1',
-          creationDate : '2021-04-13',
-          icon: undefined,
-          owner: 1,
-          datasets: [
-            { title: 'Some dataset', icon: false, color: 'secondary', id: 1, url: 'https://datapatch.io/datasets/ds1', creationDate : '2021-04-13', owner_id: 1, description: 'descr...' },
-            { title: 'Another dataset', icon: false, color: 'primary', id: 2, url: 'https://datapatch.io/datasets/ds2', creationDate : '2021-04-13', owner_id: 1, description: 'descr...' },
-            { title: 'Important data for me and a very long text...', icon: 'icon-star', color: 'info', id: 3, url: 'https://datapatch.io/datasets/ds3', creationDate : '2021-04-13', owner_id: 1, description: 'descr...' },
-            { title: 'work in progress', icon: false, color: 'primary', id: 4, url: 'https://datapatch.io/datasets/ds4', creationDate : '2021-04-13', owner_id: 1, description: 'descr...' },
-          ]
-        },
-        {
-          title: 'another workspace...',
-          id: 'wp2',
-          description : 'test WP 2',
-          creationDate : '2021-04-13',
-          icon: 'icon-settings',
-          color: 'primary',
-          owner: 1,
-          datasets: [
-            { title: 'dataset for test', icon: false, color: 'primary', id: 5, url: 'https://datapatch.io/datasets/ds5', creationDate : '2021-04-13', owner_id: 1, description: 'descr...' },
-          ]
-        },
-      ],
     }
   },
   beforeMount () {
     this.updatePath(this.pathItems)
-    this.myWorkspaces =[ ...this.userWorkspaces, ...this.myWorkspacesDummies ]
-    this.log && console.log("P-Workspaces > beforeMount > this.userId : ", this.userId)
-    this.log && console.log("P-Workspaces > beforeMount > this.userWorkspaces : ", this.userWorkspaces)
-    // this.myWorkspaces = [ ...this.userWorkspaces , ...this.myWorkspacesDummies]
+    this.orderWorkspaces()
     this.resetEmptyWorkspace()
     this.apiUrl = this.api[this.itemType]
   },
   watch: {
     userWorkspaces (next) {
-      this.log && console.log("P-Workspaces > watch > userWorkspaces ...")
-      this.myWorkspaces =[ ...this.userWorkspaces, ...this.myWorkspacesDummies ]
+      this.log && console.log("P-Workspaces > watch > userWorkspaces > next : ", next)
+      this.orderWorkspaces()
       this.resetEmptyWorkspace()
     }
   },
   computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "workspaces",
+        disabled: false,
+        ghostClass: "ghost"
+      }
+    },
     ...mapState({
       log: (state) => state.log,
       appTitle: (state) => state.appTitle,
@@ -172,14 +182,27 @@ export default {
     ...mapGetters({
       isAuthenticated: 'user/isAuthenticated',
       userId: 'user/userId',
+      uxWorkspaces: 'workspaces/getUserUx',
       userWorkspaces: 'workspaces/getUserItems',
       sharedWorkspaces: 'workspaces/getSharedItems',
+      userDatasets: 'datasets/getUserItems',
+      sharedDatasets: 'datasets/getSharedItems',
+      headerUser: 'user/headerUser'
     })
   },
   methods: {
     ...mapActions({
       updatePath: 'updateCrumbsPath',
     }),
+    orderWorkspaces() {
+      if (this.uxWorkspaces && this.uxWorkspaces.workspaces_order) {
+        const workspaces_order = this.uxWorkspaces.workspaces_order
+        this.myWorkspaces = mapOrder( [...this.userWorkspaces], workspaces_order, 'id')
+      } else {
+      // this.myWorkspaces =[ ...this.userWorkspaces, ...this.myWorkspacesDummies ]
+        this.myWorkspaces = [...this.userWorkspaces]
+      }
+    },
     resetEmptyWorkspace() {
       let emptyWorkspace = new Workspace(this.userId, this.$t('workspaces.defaultTitle'), this.$t('workspaces.defaultDescription'))
       this.emptyWorkspace = emptyWorkspace.data
@@ -190,6 +213,22 @@ export default {
         prefs: emptyWorkspace.prefs,
         // meta: emptyWorkspace.meta
       }
+    },
+    updateWorkspacePositions() {
+      // this.log && console.log("\nP-Workspaces > updateWorkspacePositions > this.myWorkspaces : ", this.myWorkspaces)
+      let wsIndexes = this.myWorkspaces.map(ws => ws.id)
+      let payloadUser = {
+        ux_workspaces: {
+          workspaces_order: wsIndexes
+        }
+      }
+      // this.log && console.log("P-Workspaces > updateWorkspacePositions > wsIndexes : ", wsIndexes)
+      this.$axios
+        .put(`${this.api.users}/me/ux`, payloadUser, this.headerUser)
+        .then(resp => {
+          // this.log && console.log('P-Workspaces > updateWorkspacePositions > resp.data : ', resp.data)
+          this.$store.dispatch('workspaces/populateUserUX', resp.data.ux_workspaces)
+        })
     }
   }
 }

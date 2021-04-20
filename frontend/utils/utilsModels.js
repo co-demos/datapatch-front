@@ -120,6 +120,7 @@ export const itemPrefsModel = [
       prependIcon: true,
       items: [
         '',
+        'icon-table',
         'icon-database',
         'icon-star',
         'icon-apps',

@@ -11,8 +11,14 @@ export const getters = {
   getUserItems: (state) => {
     return state.userDatasets
   },
+  getUserItemById: (state) => (id) => {
+    return state.userDatasets.find( ds => ds.id === id)
+  },
   getSharedItems: (state) => {
     return state.shareddatasets
+  },
+  getSharedItemById: (state) => (id) => {
+    return state.shareddatasets.find( ds => ds.id === id)
   },
 }
 

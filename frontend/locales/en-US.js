@@ -127,6 +127,7 @@ export default {
     licence: 'Licence',
   },
   workspaces: {
+    defaultHelp: 'You can now create a new workspace to begin ...',
     defaultTitle: 'My new workspace',
     defaultDescription: 'My workspace description',
     myWorkspaces: 'My workspaces',
