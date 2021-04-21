@@ -55,7 +55,7 @@
 
         <v-list dense>
         
-          <v-subheader class="pa-5">
+          <v-subheader class="pa-5 text-uppercase">
             {{ $t('buttons.options') }}
           </v-subheader>
 
@@ -212,7 +212,7 @@
 
         <v-list dense>
         
-          <v-subheader class="pa-5">
+          <v-subheader class="pa-5 text-uppercase">
             {{ $t('buttons.options') }}
           </v-subheader>
 
