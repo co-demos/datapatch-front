@@ -61,7 +61,7 @@
 
             <!-- @click.stop="dialog += 1" -->
           <v-list-item
-            @click.stop="dialogCreate += 1"
+            @click.stop="openCreateWithPreset('csv')"
             >
             <v-list-item-action>
               <v-icon small>
@@ -70,7 +70,7 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>
-                {{ $t('datasets.importData') }}
+                {{ $t('datasets.importDataCsv') }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -78,7 +78,7 @@
           <v-divider/>
 
           <v-list-item
-            @click.stop="dialog += 1"
+            @click.stop="openCreateWithPreset('blank')"
             >
             <v-list-item-action>
               <v-icon small>
@@ -95,7 +95,7 @@
           <v-divider/>
 
           <v-list-item
-            @click.stop="dialog += 1"
+            @click.stop="openCreateWithPreset('copyPaste')"
             >
             <v-list-item-action>
               <v-icon small>
@@ -309,6 +309,7 @@
       :itemType="itemType"
       :action="action"
       :apiUrl="apiUrl"
+      :presetCreate="presetCreate"
       @createItem="createDataset"
     />
 
@@ -347,6 +348,9 @@ export default {
       dialog: 0,
       dialogCreate:0,
       dialogDelete: 0,
+
+      presetCreate: undefined,
+
       heightAvatar: 50,
       hover: false,
       
@@ -430,6 +434,11 @@ export default {
     },
   },
   methods: {
+    openCreateWithPreset (preset) {
+      this.log && console.log("C-DatasetItem > openCreateWithPreset > preset :", preset)
+      this.presetCreate = preset
+      this.dialogCreate += 1
+    },
     shareDataset() {
       // TO DO
       this.log && console.log("C-DatasetItem > shareDataset > this.headerUser :", this.headerUser)

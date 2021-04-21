@@ -57,15 +57,19 @@
           <!-- <v-spacer /> -->
           <v-btn
             dark
-            tile
             elevation="0"
-            class="px-5"
+            class="px-12 font-weight-bold"
             color="primary"
             nuxt
             large
             :to="`/${ isAuthenticated ? 'workspaces' : 'login'}`"
             >
-            {{ $t(`${ isAuthenticated ? 'buttons.continue' : 'login.in'}`) }}
+            <span>
+              {{ $t(`${ isAuthenticated ? 'buttons.continue' : 'login.in'}`) }}
+            </span>
+            <v-icon class="ml-3">
+              {{ isAuthenticated ? 'icon-chevron-right1' : 'icon-log-in'}}
+            </v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>

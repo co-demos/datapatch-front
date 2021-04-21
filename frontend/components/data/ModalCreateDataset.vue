@@ -4,8 +4,14 @@
   box-shadow: none !important;
 }
 
-</style>
+.no-shadow {
+  box-shadow: none !important;
+}
+.no-color {
+  background-color: none !important;
+}
 
+</style>
 
 <template>
 
@@ -18,48 +24,42 @@
     transition="dialog-bottom-transition"
     >
     <!-- MODAL TITLE -->
-    <v-card class="mb-n8">
+    <v-card class="fill-height">
       
       <!-- CLOSE MODAL -->
-      <v-card-actions class="mr-5 pt-3 pb-0 px-0">
+      <v-card-actions class="mr-5 pt-5 pb-0 px-0">
         <v-spacer></v-spacer>
         <v-btn
           icon
-          small
+          large
           rounded
           elevation="0"
           @click="dialog = false"
           >
-          <v-icon>icon-clear</v-icon>
+          <v-icon>
+            icon-clear
+          </v-icon>
         </v-btn>
       </v-card-actions>
 
       <!-- TITLE MODAL -->
-      <!-- <v-card-title class="headline pt-0 mb-2">
-        <v-row class="align-center">
-          <v-col cols="4" class="text-center">
-
-            <ItemAvatar
-              :item="localItem"
-              :noAvatar="noAvatar"
-              :hover="false"
-              :heightAvatar="56"
-            />
-
-          </v-col>
-          <v-col cols="7">
-            <span
-              :class="`${localItem.color || 'black'}--text`"
-              >
-              {{ localItem.title }}
-            </span>
-            <v-spacer/>
-          </v-col>
-        </v-row>
-      </v-card-title> -->
       <v-card-title class="headline justify-center pt-0 mb-2">
         {{ $t('datasets.newDataset') }}
       </v-card-title>
+
+      <!-- DEBUGGING -->
+      <!-- <v-row class="mx-10">
+        <v-col>
+          e1: <code>{{ e1 }}</code>
+        </v-col>
+        <v-col>
+          visited includes e1: <code>{{ visited.includes(e1) }}</code>
+        </v-col>
+        <v-col>
+          visited entries: <code>{{ visited }}</code>
+        </v-col>
+      </v-row> -->
+
 
       <!-- STEPPER -->
       <v-container>
@@ -81,12 +81,19 @@
               <v-stepper-step
                 :key="`${index}-step`"
                 edit-icon="icon-check"
+                error-icon="icon-alert-triangle"
                 edit-complete="icon-check"
                 :complete="e1 > index"
                 :step="index"
+                :rules="stepInfo.rules"
                 editable
+                @click="addToVisited(e1)"
                 >
-                {{ $t(stepInfo.title) }}
+                <span
+                  class="text-center"
+                  >
+                  {{ $t(stepInfo.title) }}
+                </span>
               </v-stepper-step>
               <v-divider
                 v-if="index + 1 !== stepsList.length"
@@ -118,13 +125,16 @@
                 <template v-if="stepInfo.component === 'importType'">
                   <div class="mt-5 mb-8">
                     <DatasetImportOptions
+                      :presetCreate="presetCreate"
                       @setImportFormat="setImportFormat"
                     />
                   </div>
                 </template>
 
-                <template v-if="stepInfo.component === 'fileImport'">
-                  {{ stepInfo.component }} - importType : {{ importType }}
+                <template v-if="stepInfo.component === 'dataImport'">
+                  {{ stepInfo.component }} <br>
+                  - importType : <code>{{ importType }}</code><br>
+                  - dataImport : <code>{{ dataImport }}</code><br>
                 </template>
 
                 <template v-if="stepInfo.component === 'datasetMeta'">
@@ -140,82 +150,83 @@
                 </template>
 
                 <template v-if="stepInfo.component === 'datasetCreate'">
-                  {{ stepInfo.component }}
+                  {{ stepInfo.component }} <br>
                 </template>
 
               </v-card>
 
-              <!-- BUTTONS BACK AND FORWARD -->
-              <v-footer color="white" tile>
-                <v-row>
-                  <v-col>
-                    <v-btn
-                      color="grey darken-1"
-                      class="px-3"
-                      dark
-                      block
-                      large
-                      tile
-                      elevation="0"
-                      @click="index === 0 ? dialog=false : backStep(index)"
-                      >
-                      <span v-if="index !== 0">
-                        <v-icon medium class="mr-2 pb-1">
-                          icon-chevron-left1
-                        </v-icon>
-                        {{ $t('buttons.back') }}
-                      </span>
-                      <span v-else>
-                        <v-icon medium class="mr-2 pb-1">
-                          icon-x
-                        </v-icon>
-                        {{ $t('buttons.cancel') }}
-                      </span>
-                    </v-btn>
-                  </v-col>
-                  <v-spacer/>
-                  <v-col>
-                    <v-btn
-                      color="primary darken-1"
-                      class="px-3"
-                      dark
-                      block
-                      large
-                      tile
-                      elevation="0"
-                      @click="index+1 === stepsList.length ? createItem() : nextStep(index)"
-                      >
-                      <span v-if="index+1 !== stepsList.length">
-                        {{ $t('buttons.continue') }}
-                        <v-icon medium class="ml-2 pb-1">
-                          icon-chevron-right1
-                        </v-icon>
-                      </span>
-                      <span v-else>
-                        <v-icon medium class="mr-2 pb-1">
-                          icon-check-square
-                        </v-icon>
-                        {{ $t('buttons.create') }}
-                      </span>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-footer>
             </v-stepper-content>
-
-
-
           </v-stepper-items>
-        </v-stepper>
 
+        </v-stepper>
       </v-container>
 
+      <!-- NAVIGATION STICKING TO BOTTOM -->
+      <v-bottom-navigation 
+        fixed
+        background-color="transparent"
+        class="px-5 pb-5 mb-5 no-shadow no-color"
+        elevation="0"
+        >
+
+        <v-btn
+          color="grey darken-1"
+          class="px-3 mb-5"
+          width="200"
+          large
+          tile
+          elevation="0"
+          @click="e1 === 0 ? dialog = false : backStep(e1)"
+          >
+          <span class="white--text text-body-2 font-weight-bold text-uppercase" v-if="e1 !== 0">
+            <v-icon
+              medium
+              class="mr-2 pb-1"
+              >
+              icon-chevron-left1
+            </v-icon>
+            {{ $t('buttons.back') }}
+          </span>
+          <span class="white--text text-body-2 font-weight-bold text-uppercase" v-else>
+            <v-icon medium class="mr-2 pb-1">
+              icon-x
+            </v-icon>
+            {{ $t('buttons.cancel') }}
+          </span>
+        </v-btn>
+        <v-spacer/>
+        <v-btn
+          color="primary darken-1"
+          class="px-3 white--text"
+          width="200"
+          large
+          tile
+          elevation="0"
+          @click="e1 + 1 === stepsList.length ? createItem() : nextStep(e1)"
+          >
+          <span class="white--text text-body-2 font-weight-bold text-uppercase" v-if="e1+1!== stepsList.length">
+            {{ $t('buttons.continue') }}
+            <v-icon
+              medium
+              class="ml-2 pb-1"
+              >
+              icon-chevron-right1
+            </v-icon>
+          </span>
+          <span class="white--text text-body-2 font-weight-bold text-uppercase" v-else>
+            {{ $t('buttons.create') }}
+            <v-icon medium class="ml-2 pb-1">
+              icon-chevron-right1
+            </v-icon>
+            <v-icon medium class="ml-2 pb-1">
+              icon-save
+            </v-icon>
+          </span>
+        </v-btn>
+
+      </v-bottom-navigation>
+
     </v-card>
-
-    <v-footer inset color="blue">
-      test
-    </v-footer>
-
   </v-dialog>
 
 </template>
@@ -238,7 +249,7 @@ export default {
     'itemType',
     'action',
     'apiUrl',
-    'noAvatar'
+    'presetCreate'
   ],
   watch: {
     item () {
@@ -252,20 +263,47 @@ export default {
     parentDialog () {
       this.dialog = true
     },
+    presetCreate(next) {
+      if (next) {
+        this.importType = next
+        this.nextStep(0)
+      }
+    }
   },
   data () {
     return {
       localItem: undefined,
       dialog: false,
+      
       e1: 0,
       tabsSpaces: [],
-      stepsList: [
-        { title: 'datasets.stepChoose', component: 'importType' },
-        { title: 'datasets.stepImport', component: 'fileImport' },
-        { title: 'datasets.stepMeta', component: 'datasetMeta' },
-        { title: 'datasets.stepCreateEnd', component: 'datasetCreate' },
-      ],
+      visited: [],
+
       importType: undefined,
+      dataImport: undefined,
+      datasetMeta: undefined,
+
+      stepsList: [
+        { 
+          title: 'datasets.stepChoose', 
+          component: 'importType',
+          rules: [() => this.visited.includes(0) ? !!this.importType : true ]
+        },
+        { 
+          title: 'datasets.stepImport', 
+          component: 'dataImport',
+          rules: [() => this.visited.includes(1) ? !!this.dataImport : true ]
+        },
+        { 
+          title: 'datasets.stepMeta', 
+          component: 'datasetMeta',
+        },
+        { 
+          title: 'datasets.stepCreateEnd', 
+          component: 'datasetCreate',
+          rules: [() => this.visited.includes(2) ? !!this.importType && !!this.dataImport : true ]
+        },
+      ],
     }
   },
   computed: {
@@ -276,14 +314,23 @@ export default {
   beforeMount () {
     this.localItem = { ...this.item }
     this.tabsSpaces = Object.keys(this.itemModel)
+    if (this.presetCreate) {
+      this.importType = this.presetCreate
+      this.nextStep(0)
+    }
   },
   methods: {
+    addToVisited (n) {
+      let inidicesvisited = [ ...this.visited, n]
+      this.visited = [ ...new Set(inidicesvisited) ]
+    },
     backStep (n) {
+      this.addToVisited(n)
       this.e1 = n - 1
     },
     nextStep (n) {
-      if (n === this.stepsList.length) {
-        this.e1 = 1
+      this.addToVisited(n)
+      if ( n + 1 === this.stepsList.length) {
       } else {
         this.e1 = n + 1
       }
