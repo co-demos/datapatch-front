@@ -9,6 +9,8 @@ export const initialsFromString = (str) => {
   return initials
 }
 
+// cf :  https://dmitripavlutin.com/javascript-classes-complete-guide/
+
 export class Dataset {
   constructor (
     owner_id=undefined,
@@ -85,5 +87,17 @@ export class Dataset {
       ...models.itemMetaModelUrl,
       ...models.itemMetaModel,
     ]
+  }
+
+  set randomBasics (value) {
+    let colorsList = models.itemPrefsModel.find(pref => pref.name === 'color').options.items
+    let iconsList = models.itemPrefsModel.find(pref => pref.name === 'icon').options.items
+
+    const randomColorIdx = Math.floor(Math.random() * colorsList.length);
+    const randomIconIdx = Math.floor(Math.random() * iconsList.length);
+
+    this.color = colorsList[randomColorIdx]
+    this.icon = iconsList[randomIconIdx]
+
   }
  }

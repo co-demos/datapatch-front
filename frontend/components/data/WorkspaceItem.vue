@@ -31,7 +31,7 @@
       flat
       >
       
-      <v-toolbar-title class="text-h6 px-0 font-weight-bold">
+      <v-toolbar-title class="text-h5 px-0 font-weight-black">
         <v-icon 
           v-if="ws.icon"
           :color="ws.color || 'black'"
@@ -40,7 +40,7 @@
           {{ ws.icon}}
         </v-icon>
         <span :class="`${ws.color || 'black'}--text`">
-          <!-- ws.id: {{ ws.id }} -  -->
+          ws.id: {{ ws.id }} - 
           {{ ws.title }}
         </span>
       </v-toolbar-title>
@@ -115,8 +115,9 @@
           <v-divider/>
 
           <v-list-item
-            @click.stop="deleteWorkspace()"
+            @click.stop="dialogDelete += 1"
             >
+            <!-- @click.stop="deleteWorkspace()" -->
             <v-list-item-action>
               <v-icon small>
                 icon-trash-2
@@ -143,6 +144,15 @@
         :itemType="itemType"
         :apiUrl="apiUrl"
         :action="'update'"
+      />
+
+      <!-- DIALOG FOR WROKSPACE DELETE -->
+      <ModalDelete
+        :parentDialog="dialogDelete"
+        :confirmDeleteTitle="$t('workspaces.deleteWorkspace')"
+        :confirmDeleteMsg="$t('workspaces.deleteWorkspaceConfirm')"
+        :itemToDelete="ws"
+        @confirmDelete="deleteWorkspace()"
       />
 
       <v-spacer/>
@@ -174,16 +184,15 @@
     </v-toolbar>
 
     <!-- DEBUGGING -->
-    <v-row class="">
-      datasets: <code>{{ datasets }}</code>
-    </v-row>
-    <v-row class="mb-8">
-      ws.datasets: <code>{{ ws.datasets }}</code>
-      <!-- <code>{{ hasDatasets }}</code> -->
-    </v-row>
+    <!-- <v-row class="pl-5 mb-8">
+      <v-col>
+        datasets: <code>{{ datasets }}</code>
+      </v-col>
+      <v-col>
+        ws.datasets: <code>{{ ws.datasets }}</code>
+      </v-col>
+    </v-row> -->
     
-    <!-- existing datasets / draggable datasets -->
-      
     <draggable
       v-model="datasets"
       v-bind="dragOptions"
@@ -193,6 +202,8 @@
       @start="drag=true"
       @end="drag=false"
       >
+
+      <!-- existing datasets / draggable datasets -->
       <v-col
         v-for="dsId in datasets"
         :key="`ds-${dsId}`"
@@ -209,6 +220,8 @@
           :action="'update'"
         />
       </v-col>
+      
+      <!-- add new dataset -->
       <v-col
         class="pt-0 pl-4 pb-2 new-item"
         cols="6"
@@ -221,32 +234,12 @@
           :fromWorkspace="ws.id"
           :emptyItem="emptyDataset"
           :action="'create'"
-          :isAlone="!hasDatasets"
+          :isAlone="!Boolean(datasets.length)"
+          @resetEmptyItem="resetEmptyDataset()"
         />
-          <!-- :isAlone="true" -->
       </v-col>
 
     </draggable>
-
-    <!-- create new dataset -->
-    <!-- <v-row wrap align-center>
-      <v-col
-        class="pb-0 pt-2 new-item"
-        cols="6"
-        sm="12"
-        md="6"
-        lg="4"
-        >
-        <DatasetItem 
-          :dataset="emptyDataset"
-          :fromWorkspace="ws.id"
-          :emptyItem="emptyDataset"
-          :action="'create'"
-          :isAlone="!hasDatasets"
-        />
-      </v-col> -->
-
-    </v-row>
 
   </v-card>
 </template>
@@ -273,19 +266,21 @@ export default {
   data () {
     return {
       dialog: 0,
+      dialogDelete: 0,
       hover: false,
       drag: false,
       itemType: 'workspaces',
 
       itemModel:  undefined,
       ws: this.workspace,
-      hasDatasets: false,
+      // hasDatasets: false,
       datasets: [],
 
       workspaceButtonsAfterTitle: [
         { 
           title: 'workspaces.prefsWorkspace', 
-          icon: 'icon-more-vertical', 
+          icon: 'icon-more-vertical',
+          // icon: 'icon-chevron-down1',
           menu: [] 
         },
       ],
@@ -302,13 +297,13 @@ export default {
   },
   watch: {
     workspace(next) {
-      this.log && console.log("C-WorkspaceItem > watch > workspace ...")
+      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > workspace ...`)
       this.ws = { ...next }
       this.getDatasets(next)
     },
     datasets(next, prev) {
-      this.log && console.log("C-WorkspaceItem > watch > datasets > next : ", next)
-      this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
+      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > next : `, next)
+      // this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
       this.ws.datasets = { ids: next }
       this.updateDatasetsPositions()
     }
@@ -350,24 +345,26 @@ export default {
   },
   methods: {
     getDatasets(ws) {
-      // this.log && console.log('C-WorkspaceItem > getDatasets > this.ws.datasets :' , this.ws.datasets)
-      this.hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
-      // this.log && console.log('C-WorkspaceItem > getDatasets > this.hasDatasets :' , this.hasDatasets)
-      let datasets = this.hasDatasets ? ws.datasets.ids : []
+      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
+      let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
+      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
+      let datasets = hasDatasets ? ws.datasets.ids : []
       // avoid duplicates
       datasets = [ ...new Set(datasets) ]
-      this.log && console.log('\nC-WorkspaceItem > getDatasets > datasets :' , datasets)
+      // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasets :` , datasets)
       // check if exists 
       let existingDatasets = this.userDatasets.map(dsIn => dsIn.id)
-      // this.log && console.log('C-WorkspaceItem > getDatasets > existingDatasets :' , existingDatasets)
+      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > existingDatasets :` , existingDatasets)
       
       let datasetsIn = datasets.filter( dsId => existingDatasets.includes(dsId) )
-      this.log && console.log('C-WorkspaceItem > getDatasets > datasetsIn :' , datasetsIn)
+      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasetsIn :` , datasetsIn)
 
       this.datasets = [ ...new Set(datasetsIn) ]
     },
     resetEmptyDataset() {
+      this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > resetEmptyDataset ...`)
       let emptyDataset = new Dataset(this.userId, this.$t('datasets.defaultTitle'), this.$t('datasets.defaultDescription'))
+      emptyDataset.randomBasics = true
       this.emptyDataset = emptyDataset.data
     },
     shareWorkspace() {
@@ -381,7 +378,7 @@ export default {
       //   })
     },
     updateDatasetsPositions() {
-      // this.log && console.log("\nC-WorkspaceItem > updateDatasetsPositions > this.datasets : ", this.datasets)
+      // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > updateDatasetsPositions > this.datasets : `, this.datasets)
       let payloadWs = { ...this.ws }
       payloadWs.datasets = {
         ids: [ ...new Set(this.datasets) ]
@@ -389,10 +386,10 @@ export default {
       // this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > payloadWs : ', payloadWs)
       this.$axios
         .put(`${this.api.workspaces}/${this.ws.id}`, payloadWs, this.headerUser)
-        .then( resp => {
-          this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
-          // this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
-        })
+        // .then( resp => {
+        //   this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
+        //   this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
+        // })
     },
     deleteWorkspace() {
       // this.log && console.log("C-WorkspaceItem > deleteWorkspace > this.headerUser :", this.headerUser)
@@ -402,6 +399,16 @@ export default {
           // this.log && console.log('C-WorkspaceItem > deleteWorkspace > resp.data : ', resp.data)
           this.$store.dispatch(`${this.itemType}/removeUserItem`, resp.data)
           
+          // delete every dataset in workspace
+          for (let dsId of this.datasets) {
+            this.$axios
+              .delete(`${this.api.datasets}/${dsId}`, this.headerUser)
+              .then(resp => {
+                // this.log && console.log(`C-WorkspaceItem > deleteWorkspace > ds ${dsId} > resp.data : `, resp.data)
+                this.$store.dispatch(`datasets/removeUserItem`, resp.data)
+              })
+          }
+
           // delete workspace from user's ux preferences
           let payloadUser = {
             ux_workspaces: {

@@ -20,6 +20,8 @@ export default {
     update: 'Mettre à jour',
     create: 'Créer',
     cancel: 'Annuler',
+    delete: 'Supprimer',
+    deleteConfirm: 'Oui, je supprime',
   },
   pages: {
     home: 'Accueil',
@@ -139,6 +141,7 @@ export default {
     addDataset: 'Ajouter une base de données',
     editWorkspace: "Editer les informations de l'espace de travail",
     deleteWorkspace: 'Supprimer cet espace de travail',
+    deleteWorkspaceConfirm: 'Etes-vous sûr.e de vouloir supprimer cet espace de travail ainsi que tous ses jeux de données associés ?',
   },
   datasets: {
     defaultTitle: 'Mon nouveau jeu de données',
@@ -153,5 +156,6 @@ export default {
     blankDataset: 'Créer un jeu de données vide',
     pasteDataset: 'Copier-coller une table',
     deleteDataset: 'Supprimer ce jeu de données',
+    deleteDatasetConfirm: 'Etes-vous sûr.e de vouloir supprimer ce jeu de données ?',
   },
 }

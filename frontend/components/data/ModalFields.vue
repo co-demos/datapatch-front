@@ -146,10 +146,10 @@
     methods: {
       updateItem() {
         if (this.action === 'update'){
-          this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
+          // this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
           let itemPayload = this.localItem
-          this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
-          this.log && console.log('C-ModalFields > updateItem > this.itemModel :' , this.itemModel)
+          // this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
+          // this.log && console.log('C-ModalFields > updateItem > this.itemModel :' , this.itemModel)
 
           // don't forget ux if update workspace
           if (this.itemType === 'workspaces') {

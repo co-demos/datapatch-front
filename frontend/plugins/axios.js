@@ -1,7 +1,7 @@
 export default function ({ $axios, store }) {
   $axios.onRequest(config => {
-    // console.log('PG-axios > Making request > config :', config)
-    console.log(`PG-axios > Making ${config.method} request to ${config.url}`)
+    // console.log('...PG-axios > Making request > config :', config)
+    console.log(`...PG-axios > Making -${config.method.toUpperCase()}- request to ${config.url}`)
     store.dispatch('dialogs/commitIsLoading', true)
     store.dispatch('dialogs/resetAxiosReponse')
   })

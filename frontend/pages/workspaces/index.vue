@@ -12,11 +12,11 @@
       class="justify-center align-top"
       >
 
-      <v-col cols="2" class="">
-        uxWorkspaces : <code><pre>{{ uxWorkspaces }}</pre></code><hr>
+      <!-- <v-col cols="2" class=""> -->
+        <!-- uxWorkspaces : <code><pre>{{ uxWorkspaces }}</pre></code><hr> -->
         <!-- myWorkspaces : <code><pre>{{ myWorkspaces }}</pre></code><hr> -->
-        userDatasets.map : <code><pre>{{ userDatasets.map(ds => ds.id) }}</pre></code><hr>
-      </v-col>
+        <!-- userDatasets.map : <code><pre>{{ userDatasets.map(ds => ds.id) }}</pre></code><hr> -->
+      <!-- </v-col> -->
 
       <!-- existing datasets -->
       <!-- <v-col 
@@ -102,6 +102,7 @@
             :itemType="itemType"
             :action="'create'"
             :apiUrl="apiUrl"
+            @resetEmptyItem="resetEmptyWorkspace()"
           />
 
         </v-card>
@@ -160,9 +161,10 @@ export default {
   },
   watch: {
     userWorkspaces (next) {
-      this.log && console.log("P-Workspaces > watch > userWorkspaces > next : ", next)
+      // this.log && console.log("P-Workspaces > watch > userWorkspaces > next : ", next)
       this.orderWorkspaces()
-      this.resetEmptyWorkspace()
+      // this.resetEmptyWorkspace()
+      this.updateWorkspacePositions()
     }
   },
   computed: {
@@ -206,6 +208,7 @@ export default {
     resetEmptyWorkspace() {
       let emptyWorkspace = new Workspace(this.userId, this.$t('workspaces.defaultTitle'), this.$t('workspaces.defaultDescription'))
       this.emptyWorkspace = emptyWorkspace.data
+      // emptyWorkspace.randomBasics = true
       this.newWorkspace = emptyWorkspace.data
       this.itemModel = {
         infos: emptyWorkspace.infos,

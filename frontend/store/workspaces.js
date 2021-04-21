@@ -5,7 +5,8 @@ export const state = () => ({
   uxWorkspaces: {},
 
   userWorkspaces: [],
-  sharedWorkspaces: []
+  sharedWorkspaces: [],
+
 })
 
 

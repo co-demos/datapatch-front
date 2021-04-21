@@ -10,8 +10,11 @@ const components = {
   BackRouter: () => import(/* webpackChunkName: "BackRouter" */ '@/components/buttons/BackRouter.vue'),
   Breadcrumbs: () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/navbars/Breadcrumbs.vue'),
 
+  ItemAvatar: () => import(/* webpackChunkName: "ItemAvatar" */ '@/components/graphics/ItemAvatar.vue'),
+
   ModalItem: () => import(/* webpackChunkName: "ModalItem" */ '@/components/data/ModalItem.vue'),
   ModalFields: () => import(/* webpackChunkName: "ModalFields" */ '@/components/data/ModalFields.vue'),
+  ModalDelete: () => import(/* webpackChunkName: "ModalDelete" */ '@/components/dialogs/ModalDelete.vue'),
 
 }
 

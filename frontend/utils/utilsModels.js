@@ -103,8 +103,9 @@ export const itemPrefsModel = [
       prependColor: true,
       items: [
         'black', 'grey',
+        'blue', 'green', 'red', 'purple', 'pink', 'orange',
+        'indigo', 'deep-purple', 'cyan', 'teal', 'lime', 'amber', 'brown', 'deep-orange',
         'primary', 'accent', 'secondary', 'info', 'warning', 'error', 'success',
-        'blue', 'green', 'red', 'yellow', 'purple', 'pink', 'orange'
       ]
     }
   },

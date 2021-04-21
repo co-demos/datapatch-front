@@ -20,6 +20,8 @@ export default {
     update: 'Update',
     create: 'Create',
     cancel: 'Cancel',
+    delete: 'Delete',
+    deleteConfirm: 'Yes, I delete',
   },
   pages: {
     home: 'Home',
@@ -139,6 +141,7 @@ export default {
     addDataset: 'Add a dataset',
     editWorkspace: 'Edit workspace infos',
     deleteWorkspace: 'Delete this workspace',
+    deleteWorkspaceConfirm: 'Are you sure you want to delete this workspace and all its related datasets ?',
   },
   datasets: {
     defaultTitle: 'My new dataset',
@@ -153,5 +156,6 @@ export default {
     blankDataset: 'Create a blank dataset',
     pasteDataset: 'Copy-paste a table',
     deleteDataset: 'Delete this dataset',
+    deleteDatasetConfirm: 'Are you sure you want to delete this dataset ?',
   },
 }

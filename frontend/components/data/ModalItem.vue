@@ -25,28 +25,13 @@
       <v-card-title class="headline pt-0 mb-2">
         <v-row class="align-center">
           <v-col cols="4" class="text-center">
-            <v-avatar
-              v-if="!noAvatar"
-              :color="localItem.color || 'primary'"
-              rounded
-              size="56"
-              >
-              <v-icon dark v-if="localItem.icon" class="mx-3">
-                {{ localItem.icon }}
-              </v-icon>
-              <span v-else class="white--text">
-                {{ getInitials(localItem.title) }}
-              </span>
-            </v-avatar>
 
-            <v-icon
-              v-if="noAvatar && localItem.icon"
-              dark
-              :color="localItem.color || 'black'"
-              class="mx-3"
-              >
-              {{ localItem.icon }}
-            </v-icon>
+            <ItemAvatar
+              :item="localItem"
+              :noAvatar="noAvatar"
+              :hover="false"
+              :heightAvatar="56"
+            />
 
           </v-col>
           <v-col cols="7">
@@ -143,7 +128,6 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import { initialsFromString } from '@/utils/utilsDatasets'
 
 export default {
 
@@ -160,6 +144,9 @@ export default {
     'noAvatar'
   ],
   watch: {
+    item () {
+      this.localItem = { ...this.item }
+    },
     parentDialog () {
       this.dialog = true
     },
@@ -188,9 +175,6 @@ export default {
     this.tabsSpaces = Object.keys(this.itemModel)
   },
   methods: {
-    getInitials(itemName) {
-      return initialsFromString(itemName)
-    },
     createItem() {
       // this.log && console.log('C-ModalItem > createItem > this.itemType :' , this.itemType)
       // this.log && console.log('C-ModalItem > createItem > this.apiUrl :' , this.apiUrl)
@@ -208,6 +192,7 @@ export default {
           this.localItem  = this.emptyItem
           this.tab = 0
           this.dialog = false
+          this.$emit('resetEmptyItem')
 
           // if action from workspace append dataset to workspace.datasets
           if (this.fromWorkspace) {
@@ -216,7 +201,7 @@ export default {
             let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
             let payloadWs = { ...currentWs }
             payloadWs.datasets = {
-                ids: [ ...wsPreviousDatasets, resp.data.id ]
+              ids: [ ...wsPreviousDatasets, resp.data.id ]
             }
             // this.log && console.log('C-ModalItem > createItem > payloadWs : ', payloadWs)
             this.$axios
