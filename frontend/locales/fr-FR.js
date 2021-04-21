@@ -23,6 +23,13 @@ export default {
     delete: 'Supprimer',
     deleteConfirm: 'Oui, je supprime',
   },
+  imports: {
+    copyPaste: 'copier-coller vos données',
+    csv: 'fichier .csv',
+    excel: 'fichier excel',
+    json: 'fichier json',
+    csvGithub: 'lien vers un fichier csv sur github',
+  },
   pages: {
     home: 'Accueil',
     me: 'Mes infos',
@@ -150,12 +157,18 @@ export default {
     inviteDataset: 'Inviter une personne ou un groupe',
     editDataset: 'Editer les informations du jeu de données',
     renameDataset: 'Renommer le jeu de données',
-    newDataset: 'Créer une nouveau jeu de données',
+    newDataset: 'Créer un nouveau jeu de données',
     copyDataset: 'Copier le jeu de données',
     importData: 'Importer un jeu de données',
     blankDataset: 'Créer un jeu de données vide',
     pasteDataset: 'Copier-coller une table',
     deleteDataset: 'Supprimer ce jeu de données',
     deleteDatasetConfirm: 'Etes-vous sûr.e de vouloir supprimer ce jeu de données ?',
+
+    stepChoose: "Choisir un format d'import",
+    stepImport: "Importer vos données",
+    stepMeta: "Métadonnées",
+    stepCreateEnd: "Créer votre jeu de données",
+
   },
 }

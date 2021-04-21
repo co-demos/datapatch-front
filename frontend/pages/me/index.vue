@@ -168,6 +168,7 @@
         <!-- delete user -->
         <v-btn
           block
+          diabled
           large
           elevation="0"
           text
@@ -224,9 +225,6 @@ export default {
       description: '',
     }
   },
-  beforeMount() {
-    this.apiUrl = this.api[this.itemType]
-  },
   computed: {
     ...mapState({
       log: (state) => state.log,
@@ -263,7 +261,7 @@ export default {
       userBasicInfos.surname = this.surname
       userBasicInfos.description = this.description
       this.$axios
-        .put(`${this.apiUrl}/me/`, userBasicInfos, this.headerUser)
+        .put(`${this.api.users}/me/`, userBasicInfos, this.headerUser)
         .then(resp => {
           this.log && console.log('P-Me > saveUserinfos > resp.data : ', resp.data)
           this.populateUserBasicInfos(resp.data)

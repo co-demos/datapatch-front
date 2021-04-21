@@ -1,8 +1,8 @@
 <template>
   <v-dialog
     v-model="dialog"
-    max-width="600"
     overflowed
+    max-width="800"
     >
     <!-- MODAL TITLE -->
     <v-card>
@@ -46,8 +46,15 @@
         </v-row>
       </v-card-title>
 
-      <!-- TABS -->
-      <v-toolbar
+      <ModalTabs
+        :tabsSpaces="tabsSpaces"
+        :localItem="localItem"
+        :itemType="itemType"
+        :itemModel="itemModel"
+        :apiUrl="apiUrl"
+        :action="action"
+      />
+      <!-- <v-toolbar
         flat dense
         class="mb-4"
         >
@@ -71,7 +78,6 @@
         </v-tabs>
       </v-toolbar>
 
-      <!-- TABS ITEMS -->
       <v-tabs-items v-model="tab" 
         :class="`${action === 'create' ? 'py-0 mb-5' : 'pt-0 pb-5'}`">
 
@@ -91,7 +97,7 @@
           </v-card-text>
         </v-tab-item>
 
-      </v-tabs-items>
+      </v-tabs-items> -->
 
 
       <!-- BTNS -->
@@ -127,7 +133,7 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
 
@@ -135,7 +141,6 @@ export default {
   props: [
     'item',
     'fromWorkspace',
-    'emptyItem',
     'itemModel',
     'parentDialog',
     'itemType',
@@ -162,13 +167,7 @@ export default {
   computed: {
     ...mapState({
       log: (state) => state.log,
-      api: (state) => state.api,
     }),
-    ...mapGetters({
-      userId: 'user/userId',
-      getUserWorkspaceById: 'workspaces/getUserItemById',
-      headerUser: 'user/headerUser'
-    })
   },
   beforeMount () {
     this.localItem = { ...this.item }
@@ -176,42 +175,10 @@ export default {
   },
   methods: {
     createItem() {
-      // this.log && console.log('C-ModalItem > createItem > this.itemType :' , this.itemType)
-      // this.log && console.log('C-ModalItem > createItem > this.apiUrl :' , this.apiUrl)
       let itemPayload = this.localItem
-      itemPayload.owner_id = this.userId
-      // itemPayload.from_workspace_id = this.fromWorkspace
-      // this.log && console.log('C-ModalItem > createItem > itemPayload :' , itemPayload)
-      this.$axios
-        .post(`${this.apiUrl}/`, itemPayload, this.headerUser)
-        .then(resp => {
-          // this.log && console.log('C-ModalItem > createItem > resp.data : ', resp.data)
-          this.$store.dispatch(`${this.itemType}/appendUserItem`, resp.data)
-          // this.log && console.log('C-ModalItem > createItem > this.localItem : ', this.localItem)
-          // this.log && console.log('C-ModalItem > createItem > this.emptyItem : ', this.emptyItem)
-          this.localItem  = this.emptyItem
-          this.tab = 0
-          this.dialog = false
-          this.$emit('resetEmptyItem')
-
-          // if action from workspace append dataset to workspace.datasets
-          if (this.fromWorkspace) {
-            let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
-            // this.log && console.log('C-ModalItem > createItem > currentWs : ', currentWs)
-            let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
-            let payloadWs = { ...currentWs }
-            payloadWs.datasets = {
-              ids: [ ...wsPreviousDatasets, resp.data.id ]
-            }
-            // this.log && console.log('C-ModalItem > createItem > payloadWs : ', payloadWs)
-            this.$axios
-              .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
-              .then( resp => {
-                this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
-              })
-          }
-
-        })
+      // this.tab = 0
+      this.dialog = false
+      this.$emit('createItem', itemPayload)
     },
   }
 }

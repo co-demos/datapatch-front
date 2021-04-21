@@ -1,16 +1,21 @@
 <style scoped>
-.no-decoration {
-  text-decoration: none !important;
-}
-.btn-dataset-title {
-  white-space: normal !important;
-}
-.ds-title{
-  /* display: flex;
-  flex: 1 0 auto; */
-  /* min-width: 100% !important; */
-  /* flex-grow: 1; */
-}
+  .no-decoration {
+    text-decoration: none !important;
+  }
+
+  .add-border {
+    border: thin solid lightGrey !important;
+  }
+
+  .btn-dataset-title {
+    white-space: normal !important;
+  }
+  .ds-title{
+    /* display: flex;
+    flex: 1 0 auto; */
+    /* min-width: 100% !important; */
+    /* flex-grow: 1; */
+  }
 </style>
 
 <template>
@@ -24,7 +29,6 @@
     <v-col
       v-if="action === 'create'"
       cols="4"
-      :class="``"
       >
       <v-menu
         open-on-hover
@@ -39,8 +43,9 @@
             :size="heightAvatar"
             v-bind="attrs"
             v-on="on"
-            @click.stop="dialog += 1"
+            @click.stop="dialogCreate += 1"
             >
+            <!-- @click.stop="dialog += 1" -->
             <v-icon dark>
               icon-plus
             </v-icon>
@@ -54,8 +59,9 @@
             {{ $t('buttons.options') }}
           </v-subheader>
 
+            <!-- @click.stop="dialog += 1" -->
           <v-list-item
-            @click.stop="dialog += 1"
+            @click.stop="dialogCreate += 1"
             >
             <v-list-item-action>
               <v-icon small>
@@ -130,10 +136,11 @@
         <v-card 
           v-if="action !== 'create'"
           flat
-          class="text-none pa-3"
+          outlined
+          :class="`text-none pa-3 ${hover ? 'add-border' : ''}`"
+          :color="`${hover ? 'white' : 'grey lighten-4'}`"
           @mouseover="hover = true"
           @mouseleave="hover = false"
-          :color="`${hover ? 'white' : 'grey lighten-4'}`"
           >
           <v-card-actions class="pa-0">
 
@@ -286,14 +293,25 @@
       :parentDialog="dialog"
       :item="ds"
       :fromWorkspace="fromWorkspace"
-      :emptyItem="emptyItem"
       :itemModel="itemModel"
       :itemType="itemType"
       :action="action"
       :apiUrl="apiUrl"
-      @resetEmptyItem="$emit('resetEmptyItem')"
+      @createItem="createDataset"
     />
   
+      <!-- DIALOG FOR DATASET INFOS -->
+    <ModalCreateDataset
+      :parentDialog="dialogCreate"
+      :item="ds"
+      :fromWorkspace="fromWorkspace"
+      :itemModel="itemModel"
+      :itemType="itemType"
+      :action="action"
+      :apiUrl="apiUrl"
+      @createItem="createDataset"
+    />
+
     <!-- DIALOG FOR DATASET DELETE -->
     <ModalDelete
       :parentDialog="dialogDelete"
@@ -315,17 +333,19 @@ import { Dataset } from '@/utils/utilsDatasets'
 export default {
 
   name: 'DatasetItem',
+  components: {
+    ModalCreateDataset: () => import(/* webpackChunkName: "ModalCreateDataset" */ '@/components/data/ModalCreateDataset.vue'),
+  },
   props: [
     'datasetId',
-    'dataset',
     'fromWorkspace',
-    'emptyItem',
     'action',
     'isAlone'
   ],
   data () {
     return {
       dialog: 0,
+      dialogCreate:0,
       dialogDelete: 0,
       heightAvatar: 50,
       hover: false,
@@ -361,13 +381,8 @@ export default {
   },
   watch: {
     datasetId(next) {
-      // this.log && console.log("C-DatasetItem > watch > datasetId ...")
+      // this.log && console.log("C-DatasetItem > watch > datasetId > next :", next)
       this.ds = next && { ...this.getUserDatasetById(next) }
-    },
-    dataset(next) {
-      this.log && console.log(`C-DatasetItem > watch > dataset ...`)
-      this.log && console.log(`C-DatasetItem > watch > ${this.action} > dataset > next :`, next)
-      this.ds = { ...next }
     },
     currentDataset(next) {
       // this.log && console.log("C-DatasetItem > watch > currentDataset ...")
@@ -379,6 +394,7 @@ export default {
     }
   },
   beforeMount () {
+    // this.log && console.log(`\nC-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
     let emptyDataset = new Dataset()
     this.itemModel = {
       infos: emptyDataset.infos,
@@ -386,14 +402,14 @@ export default {
       prefs: emptyDataset.prefs,
     }
     if (this.action === 'update') {
-      // this.log && console.log("\nC-DatasetItem > beforeMount > this.datasetId :", this.datasetId)
+      // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
       this.itemModel.meta = emptyDataset.meta
       this.ds = this.getUserDatasetById(this.datasetId)
     } else {
       // this.log && console.log("\nC-DatasetItem > beforeMount > this.dataset :", this.dataset)
-      this.ds = { ...this.dataset }
+      this.resetEmptyDataset()
     }
-    // this.log && console.log("C-DatasetItem > beforeMount > this.ds :", this.ds)
+    // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.ds :`, this.ds)
     this.apiUrl =  this.api[this.itemType]
   },
   computed: {
@@ -419,10 +435,45 @@ export default {
       this.log && console.log("C-DatasetItem > shareDataset > this.headerUser :", this.headerUser)
       // this.log && console.log("C-DatasetItem > shareDataset > this.ws :", this.ws)
       // this.$axios
-      //   .put(`${this.apiUrl}/${this.ws.id}/share`, this.ws, this.headerUser)
+      //   .put(`${this.api.datasets}/share`, this.ws, this.headerUser)
       //   .then(resp => {
-      //     this.log && console.log('C-DatasetItem > updateUserLoc > resp.data : ', resp.data)
+      //     this.log && console.log('C-DatasetItem > shareDataset > resp.data : ', resp.data)
       //   })
+    },
+    resetEmptyDataset() {
+      // this.log && console.log(`C-DatasetItem > fromWorkspace ${this.fromWorkspace} > resetEmptyDataset ...`)
+      let emptyDataset = new Dataset(this.userId, this.$t('datasets.defaultTitle'), this.$t('datasets.defaultDescription'))
+      emptyDataset.randomBasics = true
+      this.ds = emptyDataset.data
+    },
+    createDataset(itemPayload) {
+      // this.log && console.log('C-DatasetItem > createItem > itemPayload :' , itemPayload)
+      this.$axios
+        .post(`${this.api.datasets}/`, itemPayload, this.headerUser)
+        .then(resp => {
+          // this.log && console.log('C-DatasetItem > createItem > resp.data : ', resp.data)
+          this.$store.dispatch(`datasets/appendUserItem`, resp.data)
+          // this.log && console.log('C-DatasetItem > createItem > this.localItem : ', this.localItem)
+          // this.log && console.log('C-DatasetItem > createItem > this.emptyItem : ', this.emptyItem)
+          
+          this.resetEmptyDataset()
+
+          // action from workspace append dataset to workspace.datasets
+          let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
+          // this.log && console.log('C-DatasetItem > createItem > currentWs : ', currentWs)
+          let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
+          let payloadWs = { ...currentWs }
+          payloadWs.datasets = {
+            ids: [ ...wsPreviousDatasets, resp.data.id ]
+          }
+          // this.log && console.log('C-DatasetItem > createItem > payloadWs : ', payloadWs)
+          this.$axios
+            .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
+            .then( resp => {
+              this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
+            })
+
+        })
     },
     deleteDataset() {
       // this.log && console.log("C-DatasetItem > deleteDataset > this.headerUser :", this.headerUser)

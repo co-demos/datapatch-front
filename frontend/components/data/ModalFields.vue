@@ -10,21 +10,22 @@
       class="align-top"
       >
 
-      <v-col cols="4">
+      <v-col cols="3">
         <v-subheader>
           {{ $t(model.label) }} :
         </v-subheader>
       </v-col>
     
-      <v-col cols="8">
+      <v-col cols="9">
         <v-text-field
           filled
           hide-details="auto"
           :disabled="model.readonly"
+          :clearable="model.clearable"
           v-if="model.field === 'text'"
           v-model="localItem[model.name]"
           dense
-          @input="updateItem()"
+          @input="updateItemDebounced()"
         />
 
         <v-textarea
@@ -33,23 +34,24 @@
           class="mb-2"
           hide-details="auto"
           :disabled="model.readonly"
+          :clearable="model.clearable"
           v-if="model.field === 'textarea'"
           v-model="localItem[model.name]"
           dense
-          @input="updateItem()"
+          @input="updateItemDebounced()"
         />
         <v-select
           filled
           hide-details="auto"
           :disabled="model.readonly"
-          clearable
+          :clearable="model.clearable"
           v-if="model.field === 'select'"
           v-model="localItem[model.name]"
           :items="model.options.items"
           :item-text="model.options.text"
           :item-value="model.options.value"
           dense
-          @change="updateItem()"
+          @change="updateItemDebounced()"
           >
           <!-- custom items list -->
           <template 
@@ -144,8 +146,18 @@
       // this.log && console.log('C-ModalFields > beforeMount > this.localItem :' , this.localItem)
     },
     methods: {
+      updateItemDebounced() {
+        // cancel pending call
+        clearTimeout(this._timerId)
+
+        // delay new call 500ms
+        this._timerId = setTimeout(() => {
+          this.updateItem()
+        }, 500)
+      },
       updateItem() {
         if (this.action === 'update'){
+
           // this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
           let itemPayload = this.localItem
           // this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)

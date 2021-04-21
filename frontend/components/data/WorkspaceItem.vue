@@ -40,14 +40,12 @@
           {{ ws.icon}}
         </v-icon>
         <span :class="`${ws.color || 'black'}--text`">
-          ws.id: {{ ws.id }} - 
+          <!-- ws.id: {{ ws.id }} -  -->
           {{ ws.title }}
         </span>
       </v-toolbar-title>
 
       <v-menu
-        v-for="btn in workspaceButtonsAfterTitle"
-        :key="btn.icon"
         bottom
         open-on-hover
         >
@@ -61,7 +59,7 @@
             @click.stop="dialog += 1"
            >
             <v-icon small>
-              {{ btn.icon}}
+              icon-more-vertical
             </v-icon>
           </v-btn>
         </template>
@@ -158,12 +156,7 @@
       <v-spacer/>
 
       <v-tooltip 
-        v-for="btn in workspaceButtonsEnd"
-        :key="btn.icon"
-        :left="btn.left" 
-        :bottom="btn.bottom" 
-        :right="btn.right" 
-        :top="btn.top" 
+        left
         >
         <template v-slot:activator="{ on, attrs }">
           <v-btn 
@@ -174,11 +167,13 @@
             v-on="on"
             >
             <v-icon small>
-              {{ btn.icon}}
+              icon-search1
             </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t(btn.title) }}</span>
+        <span>
+          {{ $t('workspaces.searchDataset') }}
+        </span>
       </v-tooltip>
 
     </v-toolbar>
@@ -208,7 +203,7 @@
         v-for="dsId in datasets"
         :key="`ds-${dsId}`"
         class="pt-0 dataset"
-        cols="6"
+        cols="12"
         sm="12"
         md="6"
         lg="4"
@@ -224,18 +219,15 @@
       <!-- add new dataset -->
       <v-col
         class="pt-0 pl-4 pb-2 new-item"
-        cols="6"
+        cols="12"
         sm="12"
         md="6"
         lg="4"
         >
         <DatasetItem 
-          :dataset="emptyDataset"
           :fromWorkspace="ws.id"
-          :emptyItem="emptyDataset"
           :action="'create'"
           :isAlone="!Boolean(datasets.length)"
-          @resetEmptyItem="resetEmptyDataset()"
         />
       </v-col>
 
@@ -273,26 +265,8 @@ export default {
 
       itemModel:  undefined,
       ws: this.workspace,
-      // hasDatasets: false,
       datasets: [],
 
-      workspaceButtonsAfterTitle: [
-        { 
-          title: 'workspaces.prefsWorkspace', 
-          icon: 'icon-more-vertical',
-          // icon: 'icon-chevron-down1',
-          menu: [] 
-        },
-      ],
-      workspaceButtonsEnd: [
-        { 
-          title: 'workspaces.searchDataset', 
-          icon: 'icon-search1', 
-          left: true, menu: []
-        },
-      ],
-
-      emptyDataset: undefined,
     }
   },
   watch: {
@@ -321,7 +295,6 @@ export default {
       prefs: emptyWorkspace.prefs,
       meta: emptyWorkspace.meta
     }
-    this.resetEmptyDataset()
   },
   computed: {
     dragOptions() {
@@ -361,12 +334,6 @@ export default {
 
       this.datasets = [ ...new Set(datasetsIn) ]
     },
-    resetEmptyDataset() {
-      this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > resetEmptyDataset ...`)
-      let emptyDataset = new Dataset(this.userId, this.$t('datasets.defaultTitle'), this.$t('datasets.defaultDescription'))
-      emptyDataset.randomBasics = true
-      this.emptyDataset = emptyDataset.data
-    },
     shareWorkspace() {
       // TO DO
       this.log && console.log("C-WorkspaceItem > shareWorkspace > this.headerUser :", this.headerUser)
@@ -388,7 +355,6 @@ export default {
         .put(`${this.api.workspaces}/${this.ws.id}`, payloadWs, this.headerUser)
         // .then( resp => {
         //   this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
-        //   this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
         // })
     },
     deleteWorkspace() {

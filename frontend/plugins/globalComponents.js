@@ -13,6 +13,7 @@ const components = {
   ItemAvatar: () => import(/* webpackChunkName: "ItemAvatar" */ '@/components/graphics/ItemAvatar.vue'),
 
   ModalItem: () => import(/* webpackChunkName: "ModalItem" */ '@/components/data/ModalItem.vue'),
+  ModalTabs: () => import(/* webpackChunkName: "ModalTabs" */ '@/components/data/ModalTabs.vue'),
   ModalFields: () => import(/* webpackChunkName: "ModalFields" */ '@/components/data/ModalFields.vue'),
   ModalDelete: () => import(/* webpackChunkName: "ModalDelete" */ '@/components/dialogs/ModalDelete.vue'),
 

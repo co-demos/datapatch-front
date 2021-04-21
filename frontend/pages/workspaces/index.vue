@@ -95,15 +95,16 @@
           <!-- DIALOG FOR NEW WORKSPACE INFOS -->
           <ModalItem
             :item="newWorkspace"
-            :emptyItem="emptyWorkspace"
             :noAvatar="true"
             :itemModel="itemModel"
             :parentDialog="dialog"
             :itemType="itemType"
             :action="'create'"
             :apiUrl="apiUrl"
+            @createItem="createWorkspace"
             @resetEmptyItem="resetEmptyWorkspace()"
           />
+            <!-- :emptyItem="emptyWorkspace" -->
 
         </v-card>
 
@@ -207,8 +208,8 @@ export default {
     },
     resetEmptyWorkspace() {
       let emptyWorkspace = new Workspace(this.userId, this.$t('workspaces.defaultTitle'), this.$t('workspaces.defaultDescription'))
-      this.emptyWorkspace = emptyWorkspace.data
       // emptyWorkspace.randomBasics = true
+      this.emptyWorkspace = emptyWorkspace.data
       this.newWorkspace = emptyWorkspace.data
       this.itemModel = {
         infos: emptyWorkspace.infos,
@@ -216,6 +217,15 @@ export default {
         prefs: emptyWorkspace.prefs,
         // meta: emptyWorkspace.meta
       }
+    },
+    createWorkspace(itemPayload) {
+      // this.log && console.log("\nP-Workspaces > createWorkspace > itemPayload : ", itemPayload)
+      this.$axios
+        .post(`${this.api.workspaces}/`, itemPayload, this.headerUser)
+        .then(resp => {
+          this.$store.dispatch(`workspaces/appendUserItem`, resp.data)
+          this.resetEmptyWorkspace()
+        })
     },
     updateWorkspacePositions() {
       // this.log && console.log("\nP-Workspaces > updateWorkspacePositions > this.myWorkspaces : ", this.myWorkspaces)

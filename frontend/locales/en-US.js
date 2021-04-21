@@ -23,6 +23,13 @@ export default {
     delete: 'Delete',
     deleteConfirm: 'Yes, I delete',
   },
+  imports: {
+    copyPaste: 'copy-paste your data',
+    csv: 'csv file',
+    excel: 'excel file',
+    json: 'json file',
+    csvGithub: 'link to a csv file in github',
+  },
   pages: {
     home: 'Home',
     me: 'My infos',
@@ -157,5 +164,10 @@ export default {
     pasteDataset: 'Copy-paste a table',
     deleteDataset: 'Delete this dataset',
     deleteDatasetConfirm: 'Are you sure you want to delete this dataset ?',
+
+    stepChoose: "Choose an import format",
+    stepImport: "Import your data",
+    stepMeta: "Metadata",
+    stepCreateEnd: "Create your dataset",
   },
 }
