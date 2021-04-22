@@ -29,7 +29,7 @@
     </v-navigation-drawer>
 
     <v-app-bar
-      color="primary"
+      :color="navbarColor || 'primary'"
       class="px-4"
       clipped-left
       dark
@@ -89,7 +89,8 @@ export default {
   },
   props: [
     'noTitle',
-    'noBack'
+    'noBack',
+    'getDatasetColor'
   ],
   watch: {
     isAuthenticated(next) {
@@ -179,11 +180,16 @@ export default {
     }
   },
   computed: {
+    navbarColor() {
+      let color = this.getDatasetColor ? this.currentDataset.color : 'primary'
+      return color
+    },
     ...mapState({
       log: (state) =>  state.log
     }),
     ...mapGetters({
-      isAuthenticated: 'user/isAuthenticated'
+      isAuthenticated: 'user/isAuthenticated',
+      currentDataset: 'datasets/getCurrentItem',
     })
   }
 }

@@ -56,12 +56,12 @@ export default {
       if (this.isAuthenticated) {
         let userBasicInfos = this.userBasicInfos
         userBasicInfos.locale = loc
-        this.log && console.log("C-Languages > updateUserLoc > userBasicInfos :", userBasicInfos)
-        this.log && console.log("C-Languages > updateUserLoc > this.headerUser :", this.headerUser)
+        // this.log && console.log("C-Languages > updateUserLoc > userBasicInfos :", userBasicInfos)
+        // this.log && console.log("C-Languages > updateUserLoc > this.headerUser :", this.headerUser)
         this.$axios
           .put(`${this.api.users}/me/`, userBasicInfos, this.headerUser)
           .then(resp => {
-            this.log && console.log('C-Languages > updateUserLoc > resp.data : ', resp.data)
+            // this.log && console.log('C-Languages > updateUserLoc > resp.data : ', resp.data)
             this.populateUserLocale(resp.data)
           })
       }

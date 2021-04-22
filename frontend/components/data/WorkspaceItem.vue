@@ -204,9 +204,11 @@
         :key="`ds-${dsId}`"
         class="pt-0 dataset"
         cols="12"
-        sm="12"
+        xs="12"
+        sm="6"
         md="6"
         lg="4"
+        xl="3"
         >
         <!-- <code>{{ dsId }}</code> -->
         <DatasetItem 
@@ -220,9 +222,11 @@
       <v-col
         class="pt-0 pl-4 pb-2 new-item"
         cols="12"
-        sm="12"
+        xs="12"
+        sm="6"
         md="6"
         lg="4"
+        xl="3"
         >
         <DatasetItem 
           :fromWorkspace="ws.id"
@@ -239,157 +243,157 @@
 
 <script>
 
-import { mapState, mapGetters, mapActions } from 'vuex'
-import { configHeaders } from '@/utils/utilsAxios'
-import { Workspace } from '@/utils/utilsWorkspaces'
-import { Dataset } from '@/utils/utilsDatasets'
+  import { mapState, mapGetters } from 'vuex'
+  // import { configHeaders } from '@/utils/utilsAxios'
+  import { Workspace } from '@/utils/utilsWorkspaces'
+  // import { Dataset } from '@/utils/utilsDatasets'
 
-export default {
+  export default {
 
-  name: 'WorkspaceItem',
-  components: {
-    DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
-  },
-  props: [
-    'workspace',
-    'apiUrl',
-    'dragging'
-  ],
-  data () {
-    return {
-      dialog: 0,
-      dialogDelete: 0,
-      hover: false,
-      drag: false,
-      itemType: 'workspaces',
-
-      itemModel:  undefined,
-      ws: this.workspace,
-      datasets: [],
-
-    }
-  },
-  watch: {
-    workspace(next) {
-      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > workspace ...`)
-      this.ws = { ...next }
-      this.getDatasets(next)
+    name: 'WorkspaceItem',
+    components: {
+      DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
     },
-    datasets(next, prev) {
-      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > next : `, next)
-      // this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
-      this.ws.datasets = { ids: next }
-      this.updateDatasetsPositions()
-    }
-  },
-  beforeMount () {
-    // this.log && console.log('C-WorkspaceItem > beforeMount > this.apiUrl :' , this.apiUrl)
-    // this.log && console.log('C-WorkspaceItem > beforeMount > this.workspace :' , this.workspace)
-    this.ws = { ...this.workspace }
-    // this.log && console.log('\nC-WorkspaceItem > beforeMount > this.ws :' , this.ws)
-    this.getDatasets(this.workspace)
-    let emptyWorkspace = new Workspace()
-    this.itemModel = {
-      infos: emptyWorkspace.infos,
-      auth: emptyWorkspace.auth,
-      prefs: emptyWorkspace.prefs,
-      meta: emptyWorkspace.meta
-    }
-  },
-  computed: {
-    dragOptions() {
+    props: [
+      'workspace',
+      'apiUrl',
+      'dragging'
+    ],
+    data () {
       return {
-        animation: 200,
-        group: "datasets",
-        disabled: false,
-        ghostClass: "ghost"
+        dialog: 0,
+        dialogDelete: 0,
+        hover: false,
+        drag: false,
+        itemType: 'workspaces',
+
+        itemModel:  undefined,
+        ws: this.workspace,
+        datasets: [],
+
       }
     },
-    ...mapState({
-      log: (state) => state.log,
-      api: (state) => state.api,
-    }),
-    ...mapGetters({
-      userId: 'user/userId',
-      uxWorkspaces: 'workspaces/getUserUx',
-      userDatasets: 'datasets/getUserItems',
-      headerUser: 'user/headerUser'
-    })
-  },
-  methods: {
-    getDatasets(ws) {
-      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
-      let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
-      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
-      let datasets = hasDatasets ? ws.datasets.ids : []
-      // avoid duplicates
-      datasets = [ ...new Set(datasets) ]
-      // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasets :` , datasets)
-      // check if exists 
-      let existingDatasets = this.userDatasets.map(dsIn => dsIn.id)
-      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > existingDatasets :` , existingDatasets)
-      
-      let datasetsIn = datasets.filter( dsId => existingDatasets.includes(dsId) )
-      // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasetsIn :` , datasetsIn)
-
-      this.datasets = [ ...new Set(datasetsIn) ]
-    },
-    shareWorkspace() {
-      // TO DO
-      this.log && console.log("C-WorkspaceItem > shareWorkspace > this.headerUser :", this.headerUser)
-      this.log && console.log("C-WorkspaceItem > shareWorkspace > this.ws :", this.ws)
-      // this.$axios
-      //   .put(`${this.apiUrl}/${this.ws.id}/share`, this.ws, this.headerUser)
-      //   .then(resp => {
-      //     this.log && console.log('C-WorkspaceItem > updateUserLoc > resp.data : ', resp.data)
-      //   })
-    },
-    updateDatasetsPositions() {
-      // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > updateDatasetsPositions > this.datasets : `, this.datasets)
-      let payloadWs = { ...this.ws }
-      payloadWs.datasets = {
-        ids: [ ...new Set(this.datasets) ]
+    watch: {
+      workspace(next) {
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > workspace ...`)
+        this.ws = { ...next }
+        this.getDatasets(next)
+      },
+      datasets(next, prev) {
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > next : `, next)
+        // this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
+        this.ws.datasets = { ids: next }
+        this.updateDatasetsPositions()
       }
-      // this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > payloadWs : ', payloadWs)
-      this.$axios
-        .put(`${this.api.workspaces}/${this.ws.id}`, payloadWs, this.headerUser)
-        // .then( resp => {
-        //   this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
-        // })
     },
-    deleteWorkspace() {
-      // this.log && console.log("C-WorkspaceItem > deleteWorkspace > this.headerUser :", this.headerUser)
-      this.$axios
-        .delete(`${this.apiUrl}/${this.ws.id}`, this.headerUser)
-        .then(resp => {
-          // this.log && console.log('C-WorkspaceItem > deleteWorkspace > resp.data : ', resp.data)
-          this.$store.dispatch(`${this.itemType}/removeUserItem`, resp.data)
-          
-          // delete every dataset in workspace
-          for (let dsId of this.datasets) {
-            this.$axios
-              .delete(`${this.api.datasets}/${dsId}`, this.headerUser)
-              .then(resp => {
-                // this.log && console.log(`C-WorkspaceItem > deleteWorkspace > ds ${dsId} > resp.data : `, resp.data)
-                this.$store.dispatch(`datasets/removeUserItem`, resp.data)
-              })
-          }
+    beforeMount () {
+      // this.log && console.log('C-WorkspaceItem > beforeMount > this.apiUrl :' , this.apiUrl)
+      // this.log && console.log('C-WorkspaceItem > beforeMount > this.workspace :' , this.workspace)
+      this.ws = { ...this.workspace }
+      // this.log && console.log('\nC-WorkspaceItem > beforeMount > this.ws :' , this.ws)
+      this.getDatasets(this.workspace)
+      let emptyWorkspace = new Workspace()
+      this.itemModel = {
+        infos: emptyWorkspace.infos,
+        auth: emptyWorkspace.auth,
+        prefs: emptyWorkspace.prefs,
+        meta: emptyWorkspace.meta
+      }
+    },
+    computed: {
+      dragOptions() {
+        return {
+          animation: 200,
+          group: "datasets",
+          disabled: false,
+          ghostClass: "ghost"
+        }
+      },
+      ...mapState({
+        log: (state) => state.log,
+        api: (state) => state.api,
+      }),
+      ...mapGetters({
+        userId: 'user/userId',
+        uxWorkspaces: 'workspaces/getUserUx',
+        userDatasets: 'datasets/getUserItems',
+        headerUser: 'user/headerUser'
+      })
+    },
+    methods: {
+      getDatasets(ws) {
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
+        let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
+        let datasets = hasDatasets ? ws.datasets.ids : []
+        // avoid duplicates
+        datasets = [ ...new Set(datasets) ]
+        // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasets :` , datasets)
+        // check if exists 
+        let existingDatasets = this.userDatasets.map(dsIn => dsIn.id)
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > existingDatasets :` , existingDatasets)
+        
+        let datasetsIn = datasets.filter( dsId => existingDatasets.includes(dsId) )
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasetsIn :` , datasetsIn)
 
-          // delete workspace from user's ux preferences
-          let payloadUser = {
-            ux_workspaces: {
-              workspaces_order: this.uxWorkspaces.workspaces_order.filter(dsId => dsId !== this.ws.id)
+        this.datasets = [ ...new Set(datasetsIn) ]
+      },
+      shareWorkspace() {
+        // TO DO
+        this.log && console.log("C-WorkspaceItem > shareWorkspace > this.headerUser :", this.headerUser)
+        this.log && console.log("C-WorkspaceItem > shareWorkspace > this.ws :", this.ws)
+        // this.$axios
+        //   .put(`${this.apiUrl}/${this.ws.id}/share`, this.ws, this.headerUser)
+        //   .then(resp => {
+        //     this.log && console.log('C-WorkspaceItem > updateUserLoc > resp.data : ', resp.data)
+        //   })
+      },
+      updateDatasetsPositions() {
+        // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > updateDatasetsPositions > this.datasets : `, this.datasets)
+        let payloadWs = { ...this.ws }
+        payloadWs.datasets = {
+          ids: [ ...new Set(this.datasets) ]
+        }
+        // this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > payloadWs : ', payloadWs)
+        this.$axios
+          .put(`${this.api.workspaces}/${this.ws.id}`, payloadWs, this.headerUser)
+          // .then( resp => {
+          //   this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
+          // })
+      },
+      deleteWorkspace() {
+        // this.log && console.log("C-WorkspaceItem > deleteWorkspace > this.headerUser :", this.headerUser)
+        this.$axios
+          .delete(`${this.apiUrl}/${this.ws.id}`, this.headerUser)
+          .then(resp => {
+            // this.log && console.log('C-WorkspaceItem > deleteWorkspace > resp.data : ', resp.data)
+            this.$store.dispatch(`${this.itemType}/removeUserItem`, resp.data)
+            
+            // delete every dataset in workspace
+            for (let dsId of this.datasets) {
+              this.$axios
+                .delete(`${this.api.datasets}/${dsId}`, this.headerUser)
+                .then(resp => {
+                  // this.log && console.log(`C-WorkspaceItem > deleteWorkspace > ds ${dsId} > resp.data : `, resp.data)
+                  this.$store.dispatch(`datasets/removeUserItem`, resp.data)
+                })
             }
-          }
-          this.$axios
-            .put(`${this.api.users}/me/ux`, payloadUser, this.headerUser)
-            .then(resp => {
-              // this.log && console.log('C-WorkspaceItem > deleteWorkspace > resp.data : ', resp.data)
-              this.$store.dispatch('workspaces/populateUserUX', resp.data.ux_workspaces)
-            })
-        })
-    }
-  }
 
-}
+            // delete workspace from user's ux preferences
+            let payloadUser = {
+              ux_workspaces: {
+                workspaces_order: this.uxWorkspaces.workspaces_order.filter(dsId => dsId !== this.ws.id)
+              }
+            }
+            this.$axios
+              .put(`${this.api.users}/me/ux`, payloadUser, this.headerUser)
+              .then(resp => {
+                // this.log && console.log('C-WorkspaceItem > deleteWorkspace > resp.data : ', resp.data)
+                this.$store.dispatch('workspaces/populateUserUX', resp.data.ux_workspaces)
+              })
+          })
+      }
+    }
+
+  }
 </script>

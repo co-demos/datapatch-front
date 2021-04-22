@@ -11,6 +11,7 @@ export default function ({
     i18n 
   }) {
   // console.log("MW-checkToken > app : ", app)
+  const promisesArray = []
   const log = store.state.log
   const exceptionPaths = [
     '/',
@@ -49,7 +50,7 @@ export default function ({
       // log && console.log('MW-checkToken > B > me > isUserPopulated: ', isUserPopulated)
 
       // 1. check if access_token is still valid + get user data if isUserPopulated is empty
-      return $axios
+      const initUser = $axios
         .get(`${api.users}/${isUserPopulated ? 'verify-acces-token' : 'me'}/`, config.headers)
         .then(resp => {
           // log && console.log('MW-checkToken > B > me > resp.data : ', resp.data)
@@ -87,6 +88,11 @@ export default function ({
               return redirect('/login')
             })
         })
+      promisesArray.push(initUser)
+
+      // WAIT FOR ALL PROMISES TO RETURN
+      // log && console.log('\n')
+      return Promise.all(promisesArray)
     }
 
     else {

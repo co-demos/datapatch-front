@@ -1,8 +1,15 @@
 <template>
 
-  <v-container class="my-5">
+  <v-container class="my-5 px-0 mx-0">
 
-    dataset page for <code>{{ dsId }}</code>
+    <!-- dataset page for <code>{{ dsId }}</code><br> -->
+
+    <DataTable
+      :localItem="currentDataset"
+      :dataHeaders="dataHeaders"
+      :dataRows="dataRows"
+      :fulllWidth="true"
+    />
 
   </v-container>
 
@@ -17,8 +24,9 @@ import { configHeaders } from '@/utils/utilsAxios'
 export default {
   name: 'Dataset',
   layout: 'dataset',
-  components: {
-  },
+  middleware: [
+    'getDatasetById'
+  ],
   head() {
     return {
       title: `${this.appTitle} - ${this.$t('pages.dataset')}`,
@@ -30,7 +38,7 @@ export default {
   data () {
     return {
       dialog: 0,
-      dsId: this.$route.params.id,
+      dsId: undefined,
       pathItems: [
         { 
           text: 'pages.workspaces',
@@ -42,17 +50,32 @@ export default {
           disabled: true,
           to: '/dataset',
         },
-        { 
-          text: `${this.$route.params.id}`,
-          noTranslate: true,
-          disabled: true,
-          to: `/dataset/${this.$route.params.id}`,
-        }
+        // { 
+        //   text: `${this.currentDataset.title}`,
+        //   noTranslate: true,
+        //   disabled: true,
+        //   to: `/dataset/${this.$route.params.id}`,
+        // }
       ],
+      dataHeaders: undefined,
+      dataRows: undefined,
+
     }
   },
   beforeMount () {
+    // this.log && console.log(`P-Dataset _id > this.$route :`, this.$route)
+    this.dsId = this.$route.params.id
+    // this.log && console.log(`P-Dataset _id > this.dsId :`, this.dsId)
+    // this.log && console.log(`P-Dataset _id > this.currentDataset :`, this.currentDataset)
+    let pathData = {
+      text: `${this.currentDataset.title}`,
+      noTranslate: true,
+      disabled: true,
+      to: `/dataset/${this.dsId}`,
+    }
+    this.pathItems.push(pathData)
     this.updatePath(this.pathItems)
+    // this.LocalItem = this.currentDataset
   },
   computed: {
     ...mapState({
@@ -61,7 +84,8 @@ export default {
       api: (state) => state.api,
     }),
     ...mapGetters({
-      isAuthenticated: 'user/isAuthenticated'
+      isAuthenticated: 'user/isAuthenticated',
+      currentDataset: 'datasets/getCurrentItem',
     })
   },
   methods: {

@@ -42,6 +42,7 @@ class Auth {
 }
 
 export const state = () => ({
+  
   userData: {
     id: undefined,
     username: undefined,

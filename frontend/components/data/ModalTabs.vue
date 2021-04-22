@@ -15,7 +15,7 @@
             :heightAvatar="50"
           />
         </v-col>
-        <v-col cols="8">
+        <v-col cols="9" class="text-center">
           <span
             :class="`${localItem.color || 'black'}--text`"
             >

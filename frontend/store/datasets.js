@@ -2,6 +2,8 @@ import { dataset } from '@/utils/utilsDatasets.js'
 
 
 export const state = () => ({
+  currentDataset: undefined,
+
   userDatasets: [],
   shareddatasets: [],
 
@@ -9,6 +11,10 @@ export const state = () => ({
 
 
 export const getters = {
+  getCurrentItem: (state) => {
+    // console.log('S-datasets > updateItem > state.currentDataset : ', state.currentDataset)
+    return state.currentDataset
+  },
   getUserItems: (state) => {
     return state.userDatasets
   },
@@ -48,6 +54,10 @@ export const mutations = {
 }
 
 export const actions = {
+
+  setCurrentItem ({ commit }, dataset) {
+    commit('setItems', {space: 'currentDataset', items: dataset})
+  },
 
   populateUserItems ({ commit }, datasets) {
     commit('setItems', {space: 'userDatasets', items: datasets})

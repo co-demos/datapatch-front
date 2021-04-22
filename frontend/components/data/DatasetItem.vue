@@ -122,6 +122,19 @@
       </p>
     </v-col>
 
+    <!-- DIALOG FOR DATASET CREATION -->
+    <ModalCreateDataset
+      :parentDialog="dialogCreate"
+      :item="ds"
+      :fromWorkspace="fromWorkspace"
+      :itemModel="itemModel"
+      :itemType="itemType"
+      :action="action"
+      :apiUrl="apiUrl"
+      :presetCreate="presetCreate"
+      @createItem="createDataset"
+    />
+
 
     <!-- DATASET CARD -->
     <v-col
@@ -297,19 +310,6 @@
       :itemType="itemType"
       :action="action"
       :apiUrl="apiUrl"
-      @createItem="createDataset"
-    />
-  
-      <!-- DIALOG FOR DATASET INFOS -->
-    <ModalCreateDataset
-      :parentDialog="dialogCreate"
-      :item="ds"
-      :fromWorkspace="fromWorkspace"
-      :itemModel="itemModel"
-      :itemType="itemType"
-      :action="action"
-      :apiUrl="apiUrl"
-      :presetCreate="presetCreate"
       @createItem="createDataset"
     />
 

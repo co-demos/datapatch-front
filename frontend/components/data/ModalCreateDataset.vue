@@ -111,6 +111,7 @@
               v-for="(stepInfo, index) in stepsList"
               :key="`${index}-content`"
               :step="index"
+              class="px-0"
               >
 
               <!-- REAL STEPPER CONTENTS -->
@@ -122,8 +123,9 @@
                 elevation="0"
                 >
 
+                <!-- SET IMPORT OPTION -->
                 <template v-if="stepInfo.component === 'importType'">
-                  <div class="mt-5 mb-8">
+                  <div class="mt-8 mb-8">
                     <DatasetImportOptions
                       :presetCreate="presetCreate"
                       @setImportFormat="setImportFormat"
@@ -131,26 +133,43 @@
                   </div>
                 </template>
 
+                <!-- SET IMPORT DATA -->
                 <template v-if="stepInfo.component === 'dataImport'">
-                  {{ stepInfo.component }} <br>
-                  - importType : <code>{{ importType }}</code><br>
-                  - dataImport : <code>{{ dataImport }}</code><br>
+                  <div class="mt-5 mb-8">
+                    <DatasetImportData
+                      :localItem="localItem"
+                      :importType="importType"
+                      @setDataImport="setDataImport"
+                    />
+                  </div>
                 </template>
 
+                <!-- SET METADATA -->
                 <template v-if="stepInfo.component === 'datasetMeta'">
-                  <ModalTabs
-                    :appendTitle="true"
-                    :tabsSpaces="tabsSpaces"
-                    :localItem="localItem"
-                    :itemType="itemType"
-                    :itemModel="itemModel"
-                    :apiUrl="apiUrl"
-                    :action="action"
-                  />
+                  <v-row class="mt-8 mx-5 justify-center">
+                    <v-col cols="8">
+                      <ModalTabs
+                        :appendTitle="true"
+                        :tabsSpaces="tabsSpaces"
+                        :localItem="localItem"
+                        :itemType="itemType"
+                        :itemModel="itemModel"
+                        :apiUrl="apiUrl"
+                        :action="action"
+                      />
+                    </v-col>
+                  </v-row>
                 </template>
 
+                <!-- SET IMPORT OPTION -->
                 <template v-if="stepInfo.component === 'datasetCreate'">
-                  {{ stepInfo.component }} <br>
+                  <!-- {{ stepInfo.component }} <br> -->
+                  <div class="mt-5 mb-8">
+                    <DatasetImportResume
+                      :importType="importType"
+                      :localItem="localItem"
+                    />
+                  </div>
                 </template>
 
               </v-card>
@@ -239,7 +258,9 @@ import { mapState } from 'vuex'
 export default {
   name: 'ModalCreateDataset',
   components: {
-    DatasetImportOptions: () => import(/* webpackChunkName: "DatasetImportOptions" */ '@/components/buttons/DatasetImportOptions.vue'),
+    DatasetImportOptions: () => import(/* webpackChunkName: "DatasetImportOptions" */ '@/components/data/imports/DatasetImportOptions.vue'),
+    DatasetImportData: () => import(/* webpackChunkName: "DatasetImportData" */ '@/components/data/imports/DatasetImportData.vue'),
+    DatasetImportResume: () => import(/* webpackChunkName: "DatasetImportResume" */ '@/components/data/imports/DatasetImportResume.vue'),
   },
   props: [
     'item',
@@ -270,15 +291,23 @@ export default {
       }
     }
   },
+  beforeMount () {
+    this.localItem = { ...this.item }
+    this.tabsSpaces = Object.keys(this.itemModel)
+    if (this.presetCreate) {
+      this.importType = this.presetCreate
+      this.nextStep(0)
+    }
+  },
   data () {
     return {
-      localItem: undefined,
       dialog: false,
       
       e1: 0,
       tabsSpaces: [],
       visited: [],
 
+      localItem: undefined,
       importType: undefined,
       dataImport: undefined,
       datasetMeta: undefined,
@@ -311,14 +340,6 @@ export default {
       log: (state) => state.log,
     }),
   },
-  beforeMount () {
-    this.localItem = { ...this.item }
-    this.tabsSpaces = Object.keys(this.itemModel)
-    if (this.presetCreate) {
-      this.importType = this.presetCreate
-      this.nextStep(0)
-    }
-  },
   methods: {
     addToVisited (n) {
       let inidicesvisited = [ ...this.visited, n]
@@ -336,8 +357,13 @@ export default {
       }
     },
     setImportFormat(value) {
-      this.log && console.log(`C-ModalCreateDataset > setImportFormat :`, value)
+      // this.log && console.log(`C-ModalCreateDataset > setImportFormat :`, value)
       this.importType = value
+      this.e1 += 1
+    },
+    setDataImport(value) {
+      this.log && console.log(`C-ModalCreateDataset > setDataImport :`, value)
+      this.dataImport = value
       this.e1 += 1
     },
     createItem() {

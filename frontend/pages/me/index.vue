@@ -240,8 +240,8 @@ export default {
   },
   beforeMount() {
     this.updatePath(this.pathItems)
-    this.log && console.log("P-me/index > this.user :", this.user)
-    this.log && console.log("P-me/index > this.userBasicInfos :", this.userBasicInfos)
+    // this.log && console.log("P-me/index > this.user :", this.user)
+    // this.log && console.log("P-me/index > this.userBasicInfos :", this.userBasicInfos)
     this.name = this.user.name
     this.username = this.user.username
     this.surname = this.user.surname
@@ -263,7 +263,7 @@ export default {
       this.$axios
         .put(`${this.api.users}/me/`, userBasicInfos, this.headerUser)
         .then(resp => {
-          this.log && console.log('P-Me > saveUserinfos > resp.data : ', resp.data)
+          // this.log && console.log('P-Me > saveUserinfos > resp.data : ', resp.data)
           this.populateUserBasicInfos(resp.data)
         })
     },

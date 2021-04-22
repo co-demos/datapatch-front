@@ -1,13 +1,19 @@
+<style scoped>
+  .container {
+    max-width: 100%;
+  }
+</style>
 <template>
   <v-app dark>
 
     <DefaultNavbar 
       :noTitle="true"
+      :getDatasetColor="true"
     />
 
     <v-main class="pt-5">
 
-      <v-container>
+      <v-container class="my-0">
         <nuxt />
       </v-container>
     </v-main>
