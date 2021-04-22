@@ -116,7 +116,8 @@
       'itemModel',
       'itemType',
       'apiUrl',
-      'action'
+      'action',
+      'updateCurrentDataset'
     ],
     data () {
       return {
@@ -174,6 +175,11 @@
             .then(resp => {
               // this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
               this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
+
+              if (this.updateCurrentDataset) {
+                this.$store.dispatch(`${this.itemType}/setCurrentItem`, resp.data)
+              }
+
             })
         }
       },

@@ -13,7 +13,7 @@
 
     <v-main class="pt-5">
 
-      <v-container class="my-0">
+      <v-container class="my-0 px-0 pt-0">
         <nuxt />
       </v-container>
     </v-main>

@@ -53,6 +53,7 @@
         :itemModel="itemModel"
         :apiUrl="apiUrl"
         :action="action"
+        :updateCurrentDataset="updateCurrentDataset"
       />
       <!-- <v-toolbar
         flat dense
@@ -146,7 +147,8 @@ export default {
     'itemType',
     'action',
     'apiUrl',
-    'noAvatar'
+    'noAvatar',
+    'updateCurrentDataset'
   ],
   watch: {
     item () {

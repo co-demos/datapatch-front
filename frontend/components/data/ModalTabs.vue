@@ -76,6 +76,7 @@
             :itemType="itemType"
             :apiUrl="apiUrl"
             :action="action"
+            :updateCurrentDataset="updateCurrentDataset"
           />
         </v-card-text>
       </v-tab-item>
@@ -97,7 +98,8 @@ export default {
     'itemType',
     'itemModel',
     'apiUrl',
-    'action'
+    'action',
+    'updateCurrentDataset'
   ],
   data () {
     return {

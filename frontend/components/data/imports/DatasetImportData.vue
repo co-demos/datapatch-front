@@ -13,6 +13,7 @@
           :dataHeaders="dataHeaders"
           :dataRows="dataRows"
           :fulllWidth="false"
+          :noToolbar="true"
         />
       </v-col>
     </v-row>
