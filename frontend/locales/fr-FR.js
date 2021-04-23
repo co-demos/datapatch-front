@@ -125,6 +125,7 @@ export default {
     schemas: 'Schemas',
     field: 'Champ', 
     fields: 'Champs', 
+    fieldType: 'Champ de type :', 
     owner: 'Propriétaire',
     owner_id: 'ID propriétaire',
     id: 'Id',
@@ -177,6 +178,8 @@ export default {
 
   },
   fields: {
+    newField: 'champ',
+    newFieldTitle: 'titre du nouveau champ',
     str: 'texte',
     longStr: 'texte long',
     bool: 'booléen',
@@ -186,11 +189,14 @@ export default {
     json: 'json',
     tag: 'tag',
     rating: 'notation',
+    html: 'html',
     md: 'markdown',
     url: 'url',
     email: 'email',
     ref: 'référence',
     refs: 'liste de références',
     color: 'couleur',
+    curr: 'monnaie',
+    latlon: 'latitude-longitude',
   }
 }

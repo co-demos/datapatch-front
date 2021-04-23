@@ -21,10 +21,11 @@
         </v-btn>
       </v-card-actions>
 
-      <!-- TITLE MODAL -->
-      <v-card-title class="headline py-0 mb-0">
+      <v-card-title class="py-0 mb-0">
+
+        <!-- AVATAR -->
         <v-row class="align-center">
-          <v-col cols="4" class="text-center">
+          <v-col cols="4" class="headline text-center">
             <ItemAvatar
               :item="localItem"
               :itemType="itemType"
@@ -34,14 +35,19 @@
             />
           </v-col>
 
+          <!-- TITLE MODAL -->
           <v-col cols="8">
-            <span
-              :class="`${localItem.color || 'black'}--text`"
-              >
+
+            <span :class="`${localItem.color || 'black'}--text`">
               {{ localItem.title }}
               <!-- <br> wsId: {{ fromWorkspace }} -->
             </span>
-            <v-spacer/>
+            <!-- SUBTITLE MODAL -->
+            <span v-if="itemType === 'fields'" class="caption">
+              <br> 
+              {{ $t('dataPackage.fieldType')}} {{ $t(fieldText(localItem.type)) }}
+            </span>
+
           </v-col>
         </v-row>
       </v-card-title>
@@ -136,6 +142,7 @@
 <script>
 
 import { mapState } from 'vuex'
+  import { FindFieldText } from '@/utils/utilsFields'
 
 export default {
 
@@ -183,6 +190,9 @@ export default {
       // this.tab = 0
       this.dialog = false
       this.$emit('createItem', itemPayload)
+    },
+    fieldText (type) {
+      return FindFieldText(type)
     },
   }
 }

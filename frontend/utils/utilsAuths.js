@@ -36,7 +36,7 @@ export const AuthsModelsRead = [
       custom: true,
       text: 'label',
       value: 'name',
-      translateText: true,
+      translate: true,
       items: AuthsOptions
     },
   },
@@ -56,7 +56,7 @@ export const AuthsModelsComment = [
       custom: true,
       text: 'label',
       value: 'name',
-      translateText: true,
+      translate: true,
       items: AuthsOptions
     },
   },
@@ -77,7 +77,7 @@ export const AuthsModelsPatch = [
       custom: true,
       text: 'label',
       value: 'name',
-      translateText: true,
+      translate: true,
       items: AuthsOptions
     },
   },
@@ -97,7 +97,7 @@ export const AuthsModelsWrite = [
       custom: true,
       text: 'label',
       value: 'name',
-      translateText: true,
+      translate: true,
       items: AuthsOptions
     },
   },
@@ -115,7 +115,7 @@ export const AuthsModelsWrite = [
       custom: true,
       text: 'label',
       value: 'name',
-      translateText: true,
+      translate: true,
       items: AuthsOptions
     },
   },

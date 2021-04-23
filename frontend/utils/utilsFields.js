@@ -6,99 +6,122 @@ export const FieldTypes = [
   {
     type: 'str',
     name: 'string',
-    text: 'fields.string',
-    abrev: 'T'
+    text: 'fields.str',
+    icon: 'icon-typography'
   },
   {
     type: 'longStr',
     name: 'string',
-    text: 'fields.string',
-    abrev: 'TT'
-  },
-  {
-    type: 'bool',
-    name: 'boolean',
-    text: 'fields.bool',
-    abrev: 'B'
+    text: 'fields.longStr',
+    icon: 'icon-pilcrow'
   },
   {
     type: 'int',
     name: 'integer',
     text: 'fields.int',
-    abrev: 'I'
+    icon: '1'
   },
   {
     type: 'float',
     name: 'float',
     text: 'fields.float',
-    abrev: 'F'
+    icon: '0.1'
+  },
+  {
+    type: 'bool',
+    name: 'boolean',
+    text: 'fields.bool',
+    icon: 'icon-check-square'
   },
   {
     type: 'date',
     name: 'date',
     text: 'fields.date',
-    abrev: 'D'
-  },
-  {
-    type: 'json',
-    name: 'json',
-    text: 'fields.json',
-    abrev: 'J',
-    icon: 'icon-code'
+    icon: 'icon-calendar'
   },
   {
     type: 'tag',
     name: 'tag',
     text: 'fields.tag',
-    abrev: 'T',
     icon: 'icon-tag'
   },
   {
     type: 'rating',
     name: 'rating',
     text: 'fields.rating',
-    abrev: 'R',
     icon: 'icon-star'
-  },
-  {
-    type: 'md',
-    name: 'markdown',
-    text: 'fields.md',
-    abrev: 'M'
   },
   {
     type: 'url',
     name: 'url',
     text: 'fields.url',
-    abrev: 'U',
     icon: 'icon-link1'
   },
   {
     type: 'email',
     name: 'email',
     text: 'fields.email',
-    abrev: '@',
-    icon: 'icon-at'
+    icon: 'icon-at-sign'
+  },
+  {
+    type: 'latlon',
+    name: 'latlon',
+    text: 'fields.latlon',
+    icon: 'icon-map-pin1'
+  },
+  {
+    type: 'json',
+    name: 'json',
+    text: 'fields.json',
+    icon: 'icon-code'
+  },
+  {
+    type: 'html',
+    name: 'html',
+    text: 'fields.html',
+    icon: 'icon-code1'
+  },
+  {
+    type: 'md',
+    name: 'markdown',
+    text: 'fields.md',
+    icon: 'icon-terminal1'
+  },
+  {
+    type: 'curr',
+    name: 'currency',
+    text: 'fields.curr',
+    icon: 'icon-euro'
   },
   {
     type: 'ref',
     name: 'reference',
     text: 'fields.ref',
-    abrev: 'S'
+    icon: 'icon-link1'
   },
   {
     type: 'refs',
     name: 'references list',
-    text: 'fields.ref',
-    abrev: ''
+    text: 'fields.refs',
+    icon: 'icon-link-2'
   },
   {
     type: 'color',
     name: 'color',
     text: 'fields.color',
-    abrev: 'S'
+    icon: 'icon-paint-format'
   },
 ]
+
+export const FindFieldIcon = (type) => {
+  let fieldType = FieldTypes.find(f => f.type === type)
+  return fieldType.icon
+}
+
+export const FindFieldText = (type) => {
+  let fieldType = FieldTypes.find(f => f.type === type)
+  return fieldType.text
+}
 
 export const itemFieldModel = [
   {
@@ -113,7 +136,7 @@ export const itemFieldModel = [
 ]
 
 export const itemTypeModel = [
-    {
+  {
     name: 'type',
     field: 'select',
     label: 'dataPackage.type',
@@ -121,8 +144,11 @@ export const itemTypeModel = [
     visible: true,
     readonly: false,
     options: {
-      text: 'name',
+      custom: true,
+      text: 'text',
       value: 'type',
+      prependIcon: true,
+      translate: true,
       items: FieldTypes
     }
   },
@@ -196,88 +222,104 @@ export class Field {
 
 export const helpHeaders = [
   {
-    text: 'move',
+    field: 'move',
     icon: 'icon-move',
     fixed: true,
+    helpHeader: true,
+    position: 'start'
   },
   {
-    text: 'edit',
-    icon: 'icon-edit',
-    fixed: true,
-  },
-  {
-    text: 'delete',
+    field: 'delete',
     icon: 'icon-trash-2',
     fixed: true,
+    helpHeader: true,
+    position: 'start'
   },
   {
-    text: 'select',
+    field: 'edit',
     icon: 'icon-edit',
     fixed: true,
+    helpHeader: true,
+    position: 'start'
+  },
+  {
+    field: 'select',
+    icon: 'icon-edit',
+    fixed: true,
+    helpHeader: true,
+    position: 'start'
+  },
+]
+
+export const addColHeaders = [
+  {
+    field: 'addCol',
+    icon: 'icon-plus',
+    helpHeader: true,
+    position: 'end'
   },
 ]
 
 export const defaultHeaders = [
   {
     field: 'name',
-    title: 'name',
-    align: 'start',
+    title: 'Name',
     type: 'str',
-    fixed: true,
+    // fixed: true,
   },
   {
     field: 'surname',
-    title: 'surname',
+    title: 'Surname',
     type: 'str',
   },
   {
     field: 'bio',
-    title: 'biography',
+    title: 'Biography',
     type: 'longStr',
   },
   {
     field: 'age',
-    title: 'age',
+    title: 'Age',
     type: 'int',
   },
   {
     field: 'ratio',
-    title: 'ratio',
+    title: 'Ratio',
     type: 'float',
   },
   {
     field: 'birthDate',
-    title: 'birthDate',
+    title: 'BirthDate',
     type: 'date',
   },
   {
     field: 'jsonData',
-    title: 'json data',
+    title: 'Json data',
     type: 'json',
   },
   {
     field: 'tags',
-    title: 'tags',
+    title: 'Tags',
     type: 'tag',
   },
   {
     field: 'note',
-    title: 'note',
+    title: 'Note',
     type: 'rating',
   },
   {
     field: 'important',
-    title: 'important',
+    title: 'Important',
     type: 'bool',
   },
   {
     field: 'md',
-    title: 'markdown',
+    title: 'Markdown',
     type: 'md',
   },
   {
     field: 'wikipediaPage',
-    title: 'wikipedia page',
+    title: 'Wikipedia page',
     type: 'url',
   },
 ]

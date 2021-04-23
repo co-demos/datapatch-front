@@ -1,8 +1,6 @@
 <style scoped>
-.th-min-width {
-  border-left: thin solid lightGrey !important;
-}
 .th-custom {
+  border-left: thin solid lightGrey !important;
   min-width: 150px !important;
   min-height: 70px !important;
   height: none !important;
@@ -12,6 +10,10 @@
   border-bottom: thin solid lightGrey !important;
   background-color: ghostWhite !important;
 }
+/* .theader {
+  height: none !important;
+  min-height: 50px;
+} */
 .td-custom {
   border-left: thin solid rgba(0, 0, 0, 0.12) !important;
 }
@@ -23,13 +25,13 @@
   min-width: 80px !important;
 }
 .add-cell {
-  /* min-width: 150px !important; */
+  min-width: 150px !important;
 }
 .cell-ghost {
-  background-color: transparent !important;
+  background-color: lightGrey !important;
 }
 .cell-ghost-on {
-  background-color: lightGrey !important;
+  background-color: grey !important;
 }
 </style>
 <template>
@@ -80,7 +82,7 @@
           <template v-slot:header="{ props: { headers } }">
             <thead>
               <draggable
-                v-model="tableHeaders"
+                v-model="dTableHeaders"
                 v-bind="dragOptions"
                 draggable=".th-drag"
                 tag="tr"
@@ -89,44 +91,46 @@
                 @end="checkTableHeaders();drag=false"
                 >
 
-                <!-- FIELDS -->
                 <th
-                  v-for="(h, idx) in tableHeaders"
-                  :key="idx"
-                  :class="`th-color ${ h.helpHeader ? '' : 'th-custom th-drag' } ${ h.position === 'start' ? '' : 'th-min-width' } th-color`"
+                  v-for="helpHeader in tableHelpHeaders" 
+                  :key="`th-help-${helpHeader.field}`"
+                  class="th-color"
                   >
-
-                  <DataTableHeader
-                    v-if="!h.helpHeader"
-                    :header="h"
-                  />
-
-                  <!-- ADD COLUMN -->
-                  <span
-                    v-if="h.helpHeader && h.position === 'end'"
-                    class="text-center"
-                    >
-                    <v-btn
-                      dark
-                      small
-                      :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
-                      elevation="0"
-                      @mouseover="hoverAddCol = true"
-                      @mouseleave="hoverAddCol = false"
-                      @click="addColumn()"
-                      >
-                      <v-icon small>
-                        icon-plus
-                      </v-icon>
-                    </v-btn>
-                  </span>
-
+                  <!-- move column -->
+                  <!-- {{ headers }}  -->
+                  <!-- {{ tableHelpHeaders }} -->
+                  <!-- {{ helpHeader }} -->
                 </th>
 
-                <!-- <th 
+                <!-- FIELDS -->
+                <th
+                  v-for="(h, idx) in dTableHeaders"
+                  :key="idx"
+                  class="th-color th-custom th-drag"
+                  >
+                  <DataTableHeader
+                    :header="h"
+                  />
+                </th>
+
+                <!-- ADD COLUMN -->
+                <th 
                   :class="`text-center px-0 th-custom ${hoverAddCol ? 'cell-ghost-on' : 'th-color' }`"
                   >
-                </th> -->
+                  <v-btn
+                    dark
+                    small
+                    :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
+                    elevation="0"
+                    @mouseover="hoverAddCol = true"
+                    @mouseleave="hoverAddCol = false"
+                    @click="addColumn()"
+                    >
+                    <v-icon small>
+                      icon-plus
+                    </v-icon>
+                  </v-btn>
+                </th>
               </draggable>
             </thead>
           </template>
@@ -145,24 +149,17 @@
                 v-for="(rowData, index) in props.items"
                 :key="index"
                 >
-
-                <!-- ROW >>> FIELDS -->
-                <td 
-                  v-for="(h, hIdx) in tableHeaders"
-                  :key="hIdx"
-                  :class="`${ h.position === 'start' ? '' : 'td-custom' } ${ h.helpHeader ? '' : 'td-oneline'} text-${ getJustify(h) } ${ h.position === 'end' ? 'cell-ghost'+(hoverAddCol ? '-on' : '') :  ''}`"
-                  >
-
+                
+                <td class="text-center td-custom pl-4 pr-2">
                   <v-icon
-                    v-if="h.helpHeader && h.field === 'move'"
                     color="grey"
                     small
                     >
                     icon-more-vertical
                   </v-icon>
-
+                </td>
+                <td class="text-center px-2">
                   <v-btn
-                    v-if="h.helpHeader && h.field === 'edit'"
                     icon
                     small
                     color="black"
@@ -174,9 +171,9 @@
                       icon-edit-3
                     </v-icon>
                   </v-btn>
-
+                </td>
+                <td class="text-center px-2">
                   <v-btn
-                    v-if="h.helpHeader && h.field === 'delete'"
                     icon
                     small
                     color="grey"
@@ -188,9 +185,9 @@
                       icon-trash-2
                     </v-icon>
                   </v-btn>
-
+                </td>
+                <td class="text-center pl-2 pr-4">
                   <v-btn
-                    v-if="h.helpHeader && h.field === 'select'"
                     icon
                     small
                     :color="selectedRows.includes(rowData) ? 'black' : 'grey'"
@@ -208,29 +205,36 @@
                       {{ index + 1 }}
                     </span>
                   </v-btn>
+                </td>
 
-                  <div v-if="!h.helpHeader">
+                <!-- ROW >>> FIELDS -->
+                <td 
+                  v-for="(head, index) in dTableHeaders"
+                  :key="index"
+                  :class="`td-custom td-oneline text-${ getJustify(head) }`"
+                  >
+                  <!-- <v-row> -->
                     <v-simple-checkbox
-                      v-if="h.type === 'bool'"
-                      v-model="rowData[ h.field ]"
+                      v-if="head.type === 'bool'"
+                      v-model="rowData[ head.field ]"
                       disabled
                     />
-                    <span v-else-if="h.type === 'str'">
-                      {{ rowData[ h.field ] }}
+                    <span v-else-if="head.type === 'str'">
+                      {{ rowData[ head.field ] }}
                     </span>
-                    <span v-else-if="h.type === 'tag'">
+                    <span v-else-if="head.type === 'tag'">
                       <v-chip
-                        v-for="(val, i) in rowData[ h.field ]"
+                        v-for="(v,i) in rowData[ head.field ]"
                         :key="i"
                         label
                         class="ma-1 py-0"
                         >
-                        {{ val }}
+                        {{ v }}
                       </v-chip>
                     </span>
-                    <span v-else-if="h.type === 'rating'">
+                    <span v-else-if="head.type === 'rating'">
                       <v-icon
-                        v-for="(v,i) in rowData[ h.field ]"
+                        v-for="(v,i) in rowData[ head.field ]"
                         :key="i"
                         class="ma-1 py-0"
                         small
@@ -239,41 +243,51 @@
                       </v-icon>
                     </span>
                     <span v-else>
-                      {{ rowData[ h.field ] }}
+                      {{ rowData[ head.field ] }}
                     </span>
-                  </div>
+                  <!-- </v-row> -->
+                </td>
 
+                <!-- add column -->
+                <td 
+                  :class="`add-col cell-ghost${ hoverAddCol ? '-on' : ''}`"
+                  >
                 </td>
               </tr>
 
-              <!-- ghost row -->
-              <!-- add last row (ghost cells) -->
+              <!-- add row (ghost cells) -->
               <tr>
+                <td :class="`td-custom ${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
+                <td :class="`${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
+                <td :class="`${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
                 <td 
-                  v-for="(h, hIdx) in tableHeaders"
-                  :key="`ghost-${hIdx}`"
-                  :class="`${ h.position === 'start' ? '' : 'td-custom' } cell-ghost${hoverAddRow ? '-on' : '' }`"
+                  :class="`text-center pa-3 ${ hoverAddRow ? 'cell-ghost-on' : ''}`"
                   >
-                  <!-- ADD ROW -->
-                  <span
-                    v-if="h.helpHeader && h.field === 'select'"
-                    class="text-center"
+                  <v-btn
+                    small
+                    :color="`${ hoverAddRow ? 'primary' : 'grey lighten-1'}`"
+                    dark
+                    elevation="0"
+                    class="px-1"
+                    @mouseover="hoverAddRow = true"
+                    @mouseleave="hoverAddRow = false"
+                    @click="addRow()"
                     >
-                    <v-btn
-                      dark
+                    <v-icon
                       small
-                      :color="`${ hoverAddRow  ? 'primary' : 'grey lighten-1'}`"
-                      elevation="0"
-                      @mouseover="hoverAddRow = true"
-                      @mouseleave="hoverAddRow = false"
-                      @click="addRow()"
                       >
-                      <v-icon small>
-                        icon-plus
-                      </v-icon>
-                    </v-btn>
-                  </span>
+                      icon-plus
+                    </v-icon>
+                  </v-btn>
                 </td>
+                <td 
+                  v-for="(head, index) in dTableHeaders"
+                  :key="`ghost-${index}`"
+                  :class="`add-cell td-custom cell-ghost${hoverAddRow ? '-on' : '' }`"
+                  >
+                  <!-- ghost row -->
+                </td>
+                <td :class="`${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
               </tr>
 
             </draggable>
@@ -281,6 +295,26 @@
 
         </v-data-table>
 
+      </v-col>
+
+      <v-col cols="2">
+        - tableHeaders :<br>
+        <code><pre>{{ tableHeaders }}</pre></code>
+      </v-col>
+
+      <v-col cols="2">
+        - tableHeaders (field):<br>
+        <code><pre>{{ tableHeaders && tableHeaders.map(h => h && h.field) }}</pre></code>
+      </v-col>
+
+      <v-col cols="2">
+        - tableRows (name):<br>
+        <code><pre>{{ tableRows && tableRows.map(r => r && r.name) }}</pre></code>
+      </v-col>
+
+      <v-col cols="6">
+        - localItem:<br>
+        <code><pre>{{ localItem }}</pre></code>
       </v-col>
 
     </v-row>
@@ -331,6 +365,7 @@
         tableAddColHeaders: addColHeaders,
 
         tableHeaders: [],
+        dTableHeaders: [],
 
         tableRows: [
           {
@@ -351,11 +386,11 @@
           { name: 'test 3' },
           { name: 'test 4' },
           { name: 'test 5' },
-          { name: 'test 6' },
-          { name: 'test 7' },
-          { name: 'test 8' },
-          { name: 'test 9' },
-          { name: 'test 10' },
+          // { name: 'test 6' },
+          // { name: 'test 7' },
+          // { name: 'test 8' },
+          // { name: 'test 9' },
+          // { name: 'test 10' },
           // { name: 'test 11' },
           // { name: 'test 12' },
           // { name: 'test 13' },
@@ -379,8 +414,9 @@
         )
         defaultHs.push(fieldClass.data)
       }
+      this.log && console.log(`\nC-DataTable > beforeMount > defaultHs : `, defaultHs)
+      this.dTableHeaders = defaultHs
       this.tableHeaders = [...helpHeaders, ...defaultHs, ...addColHeaders]
-      this.log && console.log(`\nC-DataTable > beforeMount > this.dTableHeaders : `, this.dTableHeaders)
     },
     computed: {
       dragOptions() {
@@ -408,7 +444,7 @@
       },
       getJustify(head) {
         // this.log && head.type === 'int' && console.log(`C-DataTable > cleanTableHeaders > head : `, head)
-        let justify = head.helpHeader ? 'center px-0' : 'left'
+        let justify = 'left'
         let centers = ['bool', 'rating', 'date']
         let rights = ['float', 'int']
         justify = centers.includes(head.type) ? 'center' : rights.includes(head.type) ? 'right' : justify
@@ -452,7 +488,7 @@
           now.toISOString()
         )
         this.log && console.log(`\nC-DataTable > addColumn > newHeader.data :`, newHeader.data)
-        this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
+        this.tableHeaders.push(newHeader.data)
       },
       deleteColumn(headerData) {
         this.log && console.log(`\nC-DataTable > deleteColumn ...`)

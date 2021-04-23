@@ -14,6 +14,14 @@
         <v-subheader class="text-right">
           {{ $t(model.label) }} :
         </v-subheader>
+
+        <!-- DEBUGGING -->
+        <!-- <pre>
+          {{ model.field === 'select' ? model.options : '' }}
+        </pre> -->
+        <!-- <pre>
+          {{ model.field === 'select' ? model.options.items : '' }}
+        </pre> -->
       </v-col>
     
       <v-col cols="8">
@@ -59,17 +67,19 @@
             v-slot:item="{ item: selectItem }"
             >
             <v-icon v-if="model.options.prependIcon" small class="mr-3">
-              {{ selectItem }}
+              {{ model.options.valueIsIcon ? selectItem : selectItem.icon }}
+              <!-- {{ selectItem }} -->
             </v-icon>
 
             <v-icon v-if="model.options.prependColor" small class="mr-3" :color="selectItem">
               icon-square1
             </v-icon>
 
-            <span v-if="model.options.translateText">
+            <span v-if="model.options.translate">
               {{ $t(selectItem[model.options.text]) }}
+              <!-- {{ selectItem }} - {{ model }} -->
             </span>
-            <span v-if="!model.options.translateText">
+            <span v-if="!model.options.translate">
               {{ selectItem }}
             </span>
 
@@ -81,17 +91,18 @@
             v-slot:selection="{ item: selectedItem }"
             >
             <v-icon v-if="model.options.prependIcon" small class="mr-3">
-              {{ selectedItem }}
+              {{ model.options.valueIsIcon ? selectedItem : selectedItem.icon }}
+              <!-- {{ selectedItem }} -->
             </v-icon>
 
             <v-icon v-if="model.options.prependColor" small class="mr-3" :color="selectedItem">
               icon-square1
             </v-icon>
 
-            <span v-if="model.options.translateText">
+            <span v-if="model.options.translate">
               {{ $t(selectedItem[model.options.text]) }}
             </span>
-            <span v-if="!model.options.translateText">
+            <span v-if="!model.options.translate">
               {{ selectedItem }}
             </span>
 
@@ -107,7 +118,7 @@
 
 <script>
 
-  import { mapState, mapGetters, mapActions } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     name: 'ModalFields',

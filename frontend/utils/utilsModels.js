@@ -129,6 +129,7 @@ export const itemPrefsModel = [
     options: {
       custom: true,
       prependIcon: true,
+      valueIsIcon: true,
       items: [
         '',
         'icon-table',

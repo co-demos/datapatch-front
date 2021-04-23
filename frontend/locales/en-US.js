@@ -123,8 +123,9 @@ export default {
     tables: 'Tables', 
     schema: 'Schema', 
     schemas: 'Schemas',
-    field: 'Field', 
-    fields: 'Fields', 
+    field: 'Field',
+    fields: 'Fields',
+    fieldType: 'Field type :',
     owner: 'Owner',
     owner_id: 'Owner ID',
     id: 'Id',
@@ -177,6 +178,8 @@ export default {
 
   },
   fields: {
+    newField: 'field',
+    newFieldTitle: "new field's title",
     str: 'string',
     longStr: 'long string',
     bool: 'boolean',
@@ -186,11 +189,14 @@ export default {
     json: 'json',
     tag: 'tag',
     rating: 'rating',
+    html: 'html',
     md: 'markdown',
     url: 'url',
     email: 'email',
     ref: 'reference',
     refs: 'references list',
     color: 'color',
+    curr: 'currency',
+    latlon: 'latitude-longitude',
   }
 }

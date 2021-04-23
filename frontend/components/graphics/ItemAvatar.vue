@@ -27,33 +27,38 @@
       {{ item.icon }}
     </v-icon>
 
-    <div
+    <v-card
       v-if="itemType === 'fields'"
+      class="mx-6 py-2"
+      outlined
       >
-      <span class="text-body-1">
-        {{ $t('dataPackage.field')}}
-      </span>
-      <br>
-      <v-icon
-        dark
-        small
-        :color="'black'"
-        class="pt-1"
-        >
-        icon-chevron-left1
-      </v-icon>
-      <span class="text-body-1">
-        {{ $t(`fields.${item.type}`) }}
-      </span>
-      <v-icon
-        dark
-        small
-        :color="'black'"
-        class="pt-1"
-        >
-        icon-chevron-right1
-      </v-icon>
-    </div>
+      <v-card-text class="">
+        <v-icon>
+          {{ fieldIcon(item.type) }}
+        </v-icon>
+      </v-card-text>
+      <v-card-text class="pt-0">
+        <v-icon
+          dark
+          small
+          :color="'black'"
+          class=""
+          >
+          icon-chevron-left1
+        </v-icon>
+        <span class="text-body-1">
+          {{ item.type }}
+        </span>
+        <v-icon
+          dark
+          small
+          :color="'black'"
+          class=""
+          >
+          icon-chevron-right1
+        </v-icon>
+      </v-card-text>
+    </v-card>
 
   </div>
 
@@ -62,6 +67,7 @@
 <script>
 
 import { initialsFromString } from '@/utils/utilsDatasets'
+import { FieldTypes, FindFieldIcon } from '@/utils/utilsFields'
 
 export default {
   name: 'DatasetAvatar',
@@ -81,6 +87,9 @@ export default {
   methods: {
     getInitials(itemName) {
       return initialsFromString(itemName)
+    },
+    fieldIcon (type) {
+      return FindFieldIcon(type)
     },
   }
 
