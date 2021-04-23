@@ -26,7 +26,35 @@
       >
       {{ item.icon }}
     </v-icon>
-  
+
+    <div
+      v-if="itemType === 'fields'"
+      >
+      <span class="text-body-1">
+        {{ $t('dataPackage.field')}}
+      </span>
+      <br>
+      <v-icon
+        dark
+        small
+        :color="'black'"
+        class="pt-1"
+        >
+        icon-chevron-left1
+      </v-icon>
+      <span class="text-body-1">
+        {{ $t(`fields.${item.type}`) }}
+      </span>
+      <v-icon
+        dark
+        small
+        :color="'black'"
+        class="pt-1"
+        >
+        icon-chevron-right1
+      </v-icon>
+    </div>
+
   </div>
 
 </template>
@@ -39,6 +67,7 @@ export default {
   name: 'DatasetAvatar',
   props: [
     'item',
+    'itemType',
     'heightAvatar',
     'hover',
     'colorHover',

@@ -1,7 +1,8 @@
 import * as authsModels from '@/utils/utilsAuths.js'
 import { Licences } from '@/utils/utilsLicences.js'
 
-export const itemInfosModel = [ 
+
+export const itemTitleModel = [ 
   {
     name: 'title',
     field: 'text',
@@ -11,7 +12,10 @@ export const itemInfosModel = [
     readonly: false,
     options: undefined
   },
-  {
+]
+
+export const itemDescriptionModel = [ 
+    {
     name: 'description',
     field: 'textarea',
     label: 'dataPackage.description',
@@ -20,6 +24,11 @@ export const itemInfosModel = [
     readonly: false,
     options: undefined
   },
+]
+
+export const itemInfosModel = [ 
+  ...itemTitleModel,
+  ...itemDescriptionModel,
 ]
 
 export const itemLicenceModel = [
@@ -37,6 +46,7 @@ export const itemLicenceModel = [
     }
   },
 ]
+
 
 export const itemAuthModelAll = [
   ...authsModels.AuthsModelsRead,

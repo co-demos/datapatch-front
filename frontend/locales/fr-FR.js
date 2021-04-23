@@ -135,7 +135,8 @@ export default {
     description: 'Description', 
     creationDate: 'Date de création',
     icon: 'Icône', 
-    licence: 'License', 
+    licence: 'License',
+    type: 'Type',
   },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
@@ -171,6 +172,25 @@ export default {
     stepImport: "Importer vos données",
     stepMeta: "Métadonnées",
     stepCreateEnd: "Créer votre jeu de données",
+  },
+  tables: {
 
   },
+  fields: {
+    str: 'texte',
+    longStr: 'texte long',
+    bool: 'booléen',
+    int: 'nombre entier',
+    float: 'nombre décimal',
+    date: 'date',
+    json: 'json',
+    tag: 'tag',
+    rating: 'notation',
+    md: 'markdown',
+    url: 'url',
+    email: 'email',
+    ref: 'référence',
+    refs: 'liste de références',
+    color: 'couleur',
+  }
 }

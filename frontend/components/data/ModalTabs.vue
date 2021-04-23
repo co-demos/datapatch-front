@@ -1,5 +1,5 @@
 <template>
-  <v-container class="">
+  <v-container class="pt-0 mt-2">
 
     <!-- TITLE  -->
     <v-card-title
@@ -7,15 +7,14 @@
       class="headline pt-0"
       >
       <v-row class="align-center">
-        <v-col cols="3" class="text-center">
+        <v-col cols="4" class="text-center">
           <ItemAvatar
             :item="localItem"
-            :noAvatar="false"
-            :hover="false"
+            :itemType="itemType"
             :heightAvatar="50"
           />
         </v-col>
-        <v-col cols="9" class="text-center">
+        <v-col cols="8" class="text-center">
           <span
             :class="`${localItem.color || 'black'}--text`"
             >
@@ -77,6 +76,7 @@
             :apiUrl="apiUrl"
             :action="action"
             :updateCurrentDataset="updateCurrentDataset"
+            :onlyLocalUpdate="onlyLocalUpdate"
           />
         </v-card-text>
       </v-tab-item>
@@ -99,7 +99,8 @@ export default {
     'itemModel',
     'apiUrl',
     'action',
-    'updateCurrentDataset'
+    'updateCurrentDataset',
+    'onlyLocalUpdate'
   ],
   data () {
     return {

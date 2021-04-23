@@ -10,13 +10,13 @@
       class="align-top"
       >
 
-      <v-col cols="3">
-        <v-subheader>
+      <v-col cols="4">
+        <v-subheader class="text-right">
           {{ $t(model.label) }} :
         </v-subheader>
       </v-col>
     
-      <v-col cols="9">
+      <v-col cols="8">
         <v-text-field
           filled
           hide-details="auto"
@@ -117,7 +117,8 @@
       'itemType',
       'apiUrl',
       'action',
-      'updateCurrentDataset'
+      'updateCurrentDataset',
+      'onlyLocalUpdate',
     ],
     data () {
       return {
@@ -170,17 +171,18 @@
             itemPayload.datasets = currentWs.datasets
           }
 
-          this.$axios
-            .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
-            .then(resp => {
-              // this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
-              this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
-
-              if (this.updateCurrentDataset) {
-                this.$store.dispatch(`${this.itemType}/setCurrentItem`, resp.data)
-              }
-
-            })
+          if (!this.onlyLocalUpdate) {
+            this.$axios
+              .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
+              .then(resp => {
+                // this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
+                this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
+  
+                if (this.updateCurrentDataset) {
+                  this.$store.dispatch(`${this.itemType}/setCurrentItem`, resp.data)
+                }
+              })
+          }
         }
       },
     }

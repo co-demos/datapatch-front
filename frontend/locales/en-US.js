@@ -136,6 +136,7 @@ export default {
     creationDate: 'Creation date',
     icon: 'Icon', 
     licence: 'Licence',
+    type: 'Type',
   },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',
@@ -172,4 +173,24 @@ export default {
     stepMeta: "Metadata",
     stepCreateEnd: "Create your dataset",
   },
+  tables: {
+
+  },
+  fields: {
+    str: 'string',
+    longStr: 'long string',
+    bool: 'boolean',
+    int: 'integer',
+    float: 'float',
+    date: 'date',
+    json: 'json',
+    tag: 'tag',
+    rating: 'rating',
+    md: 'markdown',
+    url: 'url',
+    email: 'email',
+    ref: 'reference',
+    refs: 'references list',
+    color: 'color',
+  }
 }

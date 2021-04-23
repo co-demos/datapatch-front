@@ -18,6 +18,7 @@ const components = {
   ModalDelete: () => import(/* webpackChunkName: "ModalDelete" */ '@/components/dialogs/ModalDelete.vue'),
 
   DataTable: () => import(/* webpackChunkName: "DataTable" */ '@/components/data/DataTable.vue'),
+  DataTableHeader: () => import(/* webpackChunkName: "DataTableHeader" */ '@/components/data/DataTableHeader.vue'),
 }
 
 Object.entries(components).forEach(([name, component]) => {

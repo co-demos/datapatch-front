@@ -253,124 +253,124 @@
 
 <script>
 
-import { mapState } from 'vuex'
+  import { mapState } from 'vuex'
 
-export default {
-  name: 'ModalCreateDataset',
-  components: {
-    DatasetImportOptions: () => import(/* webpackChunkName: "DatasetImportOptions" */ '@/components/data/imports/DatasetImportOptions.vue'),
-    DatasetImportData: () => import(/* webpackChunkName: "DatasetImportData" */ '@/components/data/imports/DatasetImportData.vue'),
-    DatasetImportResume: () => import(/* webpackChunkName: "DatasetImportResume" */ '@/components/data/imports/DatasetImportResume.vue'),
-  },
-  props: [
-    'item',
-    'fromWorkspace',
-    'itemModel',
-    'parentDialog',
-    'itemType',
-    'action',
-    'apiUrl',
-    'presetCreate'
-  ],
-  watch: {
-    item () {
-      this.localItem = { ...this.item }
+  export default {
+    name: 'ModalCreateDataset',
+    components: {
+      DatasetImportOptions: () => import(/* webpackChunkName: "DatasetImportOptions" */ '@/components/data/imports/DatasetImportOptions.vue'),
+      DatasetImportData: () => import(/* webpackChunkName: "DatasetImportData" */ '@/components/data/imports/DatasetImportData.vue'),
+      DatasetImportResume: () => import(/* webpackChunkName: "DatasetImportResume" */ '@/components/data/imports/DatasetImportResume.vue'),
     },
-    steps (val) {
-      if (this.e1 > val) {
-        this.e1 = val
+    props: [
+      'item',
+      'fromWorkspace',
+      'itemModel',
+      'parentDialog',
+      'itemType',
+      'action',
+      'apiUrl',
+      'presetCreate'
+    ],
+    watch: {
+      item () {
+        this.localItem = { ...this.item }
+      },
+      steps (val) {
+        if (this.e1 > val) {
+          this.e1 = val
+        }
+      },
+      parentDialog () {
+        this.dialog = true
+      },
+      presetCreate(next) {
+        if (next) {
+          this.importType = next
+          this.nextStep(0)
+        }
       }
     },
-    parentDialog () {
-      this.dialog = true
-    },
-    presetCreate(next) {
-      if (next) {
-        this.importType = next
+    beforeMount () {
+      this.localItem = { ...this.item }
+      this.tabsSpaces = Object.keys(this.itemModel)
+      if (this.presetCreate) {
+        this.importType = this.presetCreate
         this.nextStep(0)
       }
-    }
-  },
-  beforeMount () {
-    this.localItem = { ...this.item }
-    this.tabsSpaces = Object.keys(this.itemModel)
-    if (this.presetCreate) {
-      this.importType = this.presetCreate
-      this.nextStep(0)
-    }
-  },
-  data () {
-    return {
-      dialog: false,
-      
-      e1: 0,
-      tabsSpaces: [],
-      visited: [],
-
-      localItem: undefined,
-      importType: undefined,
-      dataImport: undefined,
-      datasetMeta: undefined,
-
-      stepsList: [
-        { 
-          title: 'datasets.stepChoose', 
-          component: 'importType',
-          rules: [() => this.visited.includes(0) ? !!this.importType : true ]
-        },
-        { 
-          title: 'datasets.stepImport', 
-          component: 'dataImport',
-          rules: [() => this.visited.includes(1) ? !!this.dataImport : true ]
-        },
-        { 
-          title: 'datasets.stepMeta', 
-          component: 'datasetMeta',
-        },
-        { 
-          title: 'datasets.stepCreateEnd', 
-          component: 'datasetCreate',
-          rules: [() => this.visited.includes(2) ? !!this.importType && !!this.dataImport : true ]
-        },
-      ],
-    }
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-    }),
-  },
-  methods: {
-    addToVisited (n) {
-      let inidicesvisited = [ ...this.visited, n]
-      this.visited = [ ...new Set(inidicesvisited) ]
     },
-    backStep (n) {
-      this.addToVisited(n)
-      this.e1 = n - 1
-    },
-    nextStep (n) {
-      this.addToVisited(n)
-      if ( n + 1 === this.stepsList.length) {
-      } else {
-        this.e1 = n + 1
+    data () {
+      return {
+        dialog: false,
+        
+        e1: 0,
+        tabsSpaces: [],
+        visited: [],
+
+        localItem: undefined,
+        importType: undefined,
+        dataImport: undefined,
+        datasetMeta: undefined,
+
+        stepsList: [
+          { 
+            title: 'datasets.stepChoose', 
+            component: 'importType',
+            rules: [() => this.visited.includes(0) ? !!this.importType : true ]
+          },
+          { 
+            title: 'datasets.stepImport', 
+            component: 'dataImport',
+            rules: [() => this.visited.includes(1) ? !!this.dataImport : true ]
+          },
+          { 
+            title: 'datasets.stepMeta', 
+            component: 'datasetMeta',
+          },
+          { 
+            title: 'datasets.stepCreateEnd', 
+            component: 'datasetCreate',
+            rules: [() => this.visited.includes(2) ? !!this.importType && !!this.dataImport : true ]
+          },
+        ],
       }
     },
-    setImportFormat(value) {
-      // this.log && console.log(`C-ModalCreateDataset > setImportFormat :`, value)
-      this.importType = value
-      this.e1 += 1
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+      }),
     },
-    setDataImport(value) {
-      this.log && console.log(`C-ModalCreateDataset > setDataImport :`, value)
-      this.dataImport = value
-      this.e1 += 1
-    },
-    createItem() {
-      this.log && console.log(`C-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)
-      this.dialog = false
-      this.$emit('createItem', this.localItem)
-    },
+    methods: {
+      addToVisited (n) {
+        let inidicesvisited = [ ...this.visited, n]
+        this.visited = [ ...new Set(inidicesvisited) ]
+      },
+      backStep (n) {
+        this.addToVisited(n)
+        this.e1 = n - 1
+      },
+      nextStep (n) {
+        this.addToVisited(n)
+        if ( n + 1 === this.stepsList.length) {
+        } else {
+          this.e1 = n + 1
+        }
+      },
+      setImportFormat(value) {
+        // this.log && console.log(`C-ModalCreateDataset > setImportFormat :`, value)
+        this.importType = value
+        this.e1 += 1
+      },
+      setDataImport(value) {
+        this.log && console.log(`C-ModalCreateDataset > setDataImport :`, value)
+        this.dataImport = value
+        this.e1 += 1
+      },
+      createItem() {
+        this.log && console.log(`C-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)
+        this.dialog = false
+        this.$emit('createItem', this.localItem)
+      },
+    }
   }
-}
 </script>

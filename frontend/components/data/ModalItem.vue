@@ -22,19 +22,19 @@
       </v-card-actions>
 
       <!-- TITLE MODAL -->
-      <v-card-title class="headline pt-0 mb-2">
+      <v-card-title class="headline py-0 mb-0">
         <v-row class="align-center">
           <v-col cols="4" class="text-center">
-
             <ItemAvatar
               :item="localItem"
+              :itemType="itemType"
               :noAvatar="noAvatar"
               :hover="false"
               :heightAvatar="56"
             />
-
           </v-col>
-          <v-col cols="7">
+
+          <v-col cols="8">
             <span
               :class="`${localItem.color || 'black'}--text`"
               >
@@ -54,6 +54,7 @@
         :apiUrl="apiUrl"
         :action="action"
         :updateCurrentDataset="updateCurrentDataset"
+        :onlyLocalUpdate="onlyLocalUpdate"
       />
       <!-- <v-toolbar
         flat dense
@@ -148,7 +149,8 @@ export default {
     'action',
     'apiUrl',
     'noAvatar',
-    'updateCurrentDataset'
+    'updateCurrentDataset',
+    'onlyLocalUpdate'
   ],
   watch: {
     item () {
