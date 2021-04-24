@@ -159,20 +159,6 @@
                   </v-icon>
 
                   <v-btn
-                    v-if="h.helpHeader && h.field === 'edit'"
-                    icon
-                    small
-                    color="black"
-                    elevation="0"
-                    class="px-1"
-                    @click="editRow(rowData)"
-                    >
-                    <v-icon small>
-                      icon-edit-3
-                    </v-icon>
-                  </v-btn>
-
-                  <v-btn
                     v-if="h.helpHeader && h.field === 'delete'"
                     icon
                     small
@@ -183,6 +169,20 @@
                     >
                     <v-icon small>
                       icon-trash-2
+                    </v-icon>
+                  </v-btn>
+
+                  <v-btn
+                    v-if="h.helpHeader && h.field === 'edit'"
+                    icon
+                    small
+                    color="black"
+                    elevation="0"
+                    class="px-1"
+                    @click="editRow(rowData)"
+                    >
+                    <v-icon small>
+                      icon-edit-3
                     </v-icon>
                   </v-btn>
 
@@ -256,7 +256,7 @@
                   >
                   <!-- ADD ROW -->
                   <span
-                    v-if="h.helpHeader && h.field === 'select'"
+                    v-if="h.helpHeader && h.field === 'edit'"
                     class="text-center"
                     >
                     <v-btn
@@ -264,6 +264,7 @@
                       small
                       :color="`${ hoverAddRow  ? 'primary' : 'grey lighten-1'}`"
                       elevation="0"
+                      class="px-0"
                       @mouseover="hoverAddRow = true"
                       @mouseleave="hoverAddRow = false"
                       @click="addRow()"
@@ -311,7 +312,8 @@
       'dataHeaders',
       'dataRows',
       'fulllWidth',
-      'noToolbar'
+      'noToolbar',
+      'table'
     ],
     components: {
       DataTableTools: () => import(/* webpackChunkName: "DataTableTools" */ '@/components/data/DataTableTools.vue'),

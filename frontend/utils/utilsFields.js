@@ -222,15 +222,15 @@ export class Field {
 
 export const helpHeaders = [
   {
-    field: 'move',
-    icon: 'icon-move',
+    field: 'delete',
+    icon: 'icon-trash-2',
     fixed: true,
     helpHeader: true,
     position: 'start'
   },
   {
-    field: 'delete',
-    icon: 'icon-trash-2',
+    field: 'select',
+    icon: 'icon-edit',
     fixed: true,
     helpHeader: true,
     position: 'start'
@@ -243,8 +243,8 @@ export const helpHeaders = [
     position: 'start'
   },
   {
-    field: 'select',
-    icon: 'icon-edit',
+    field: 'move',
+    icon: 'icon-move',
     fixed: true,
     helpHeader: true,
     position: 'start'

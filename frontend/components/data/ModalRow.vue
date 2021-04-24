@@ -2,7 +2,7 @@
   <v-dialog
     v-model="dialog"
     overflowed
-    max-width="600"
+    max-width="700"
     >
     <!-- MODAL TITLE -->
     <v-card>

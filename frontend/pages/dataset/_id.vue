@@ -51,17 +51,17 @@
     <v-row 
       :class="`align-center ${currentDataset.color} mb-n4 pl-12 pt-3`"
       >
-      <v-col class="pl-5">
+      <v-col cols="11" class="pl-5">
             <!-- :dark="datasetTables.indexOf(table) === tab" -->
             <!-- :class="`${datasetTables.indexOf(table) === tab ? 'white' : currentDataset.color}`" -->
         <v-btn
           v-for="table in datasetTables"
+          :key="table.id"
           tile
           :outlined="tab !== table.id"
-          :key="table"
           :class="`mx-2`"
           :color="`white`"
-          @click="tab = table.id"
+          @click="currentTable = table, tab = table.id"
           >
           <span
             :class="`px-3 text-none font-weight-bold ${tab === table.id ? currentDataset.color : 'white' }--text`"
@@ -83,6 +83,23 @@
         </v-btn>
 
       </v-col>
+
+      <v-spacer/>
+
+      <v-col class="pr-5">
+        <v-btn
+          icon
+          small
+          color="white"
+          class="mb-2"
+          >
+          <v-icon class="">
+            icon-message-square
+          </v-icon>
+        </v-btn>
+
+      </v-col>
+
     </v-row>
 
     <!-- DIALOG FOR DATASET INFOS -->
@@ -102,7 +119,7 @@
       :dataHeaders="dataHeaders"
       :dataRows="dataRows"
       :fulllWidth="true"
-      :table="table"
+      :table="currentTable"
     />
 
   </v-container>
@@ -162,6 +179,7 @@
         dataHeaders: undefined,
         dataRows: undefined,
         itemModel: undefined,
+        currentTable: undefined,
 
       }
     },
@@ -186,7 +204,8 @@
         prefs: emptyDataset.prefs,
       }
       // this.LocalItem = this.currentDataset
-      this.tab = this.datasetTables[0].id
+      this.currentTable = this.datasetTables[0]
+      this.tab = this.currentTable.id
     },
     computed: {
       ...mapState({
@@ -210,6 +229,7 @@
           id: newId
         }
         this.datasetTables.push(newTable)
+        this.currentTable = newTable
         this.tab = newTable.id
       }
     }

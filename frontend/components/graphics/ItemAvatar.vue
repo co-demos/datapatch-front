@@ -29,7 +29,9 @@
 
     <v-card
       v-if="itemType === 'fields'"
-      class="mx-6 py-2"
+      class="mx-12 pt-1 pb-0"
+      color="grey"
+      dark
       outlined
       >
       <v-card-text class="">
@@ -41,7 +43,6 @@
         <v-icon
           dark
           small
-          :color="'black'"
           class=""
           >
           icon-chevron-left1
@@ -52,7 +53,6 @@
         <v-icon
           dark
           small
-          :color="'black'"
           class=""
           >
           icon-chevron-right1

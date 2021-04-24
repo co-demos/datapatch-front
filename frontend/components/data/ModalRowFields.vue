@@ -9,26 +9,11 @@
       v-for="(model, index) in itemModel"
       :key="`rowModel-${index}`"
       dense
-      class="align-left mb-2"
+      class="align-center mb-2"
       >
 
-      <v-col cols="2" class="text-center">
-        <v-btn
-          small
-          plain
-          color="grey darken-2"
-          class="px-0 pb-1"
-          >
-          <v-icon
-            x-small
-            >
-            {{ fieldIcon(model.type) }}
-          </v-icon>
-        </v-btn>
-      </v-col>
-
-      <v-col cols="4">
-        <span class="text-left">
+      <v-col cols="3" class="text-right pr-3">
+        <span>
           {{ model.title }} :
         </span>
       </v-col>
@@ -77,6 +62,24 @@
           @input="updateItemDebounced()"
         />
 
+      </v-col>
+
+      <v-col cols="3" class="text-left">
+        <v-btn
+          small
+          plain
+          color="grey darken-2"
+          class="px-0"
+          >
+          <v-icon
+            x-small
+            >
+            {{ fieldIcon(model.type) }}
+          </v-icon>
+        </v-btn>
+        <span  class="text-caption">
+          {{ $t(fieldText(model.type)) }}
+        </span>
       </v-col>
 
     </v-row>
@@ -131,6 +134,9 @@
     methods: {
       fieldIcon (type) {
         return FindFieldIcon(type)
+      },
+      fieldText(type) {
+        return FindFieldText(type)
       },
       updateItemDebounced() {
         // cancel pending call

@@ -45,7 +45,8 @@
             <!-- SUBTITLE MODAL -->
             <span v-if="itemType === 'fields'" class="caption">
               <br> 
-              {{ $t('dataPackage.fieldType')}} {{ $t(fieldText(localItem.type)) }}
+              {{ $t('dataPackage.fieldType')}} 
+              {{ $t(fieldText(localItem.type)) }}
             </span>
 
           </v-col>
