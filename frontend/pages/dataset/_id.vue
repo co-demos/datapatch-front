@@ -1,3 +1,10 @@
+<style scoped>
+  .table-btn {
+    border-style: solid;
+    border-color: white !important;
+  }
+</style>
+
 <template>
 
   <v-container class="mb-5 px-0 pt-0 mx-0">
@@ -15,6 +22,7 @@
       :color="currentDataset.color"
       class="mb-0"
       >
+
       <v-spacer></v-spacer>
       <v-toolbar-title>
         <v-icon class="mr-4 pb-1">
@@ -38,23 +46,44 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <template v-slot:extension>
-        <v-tabs
-          dense
-          v-model="tab"
-          align-with-title
-          >
-          <v-tabs-slider></v-tabs-slider>
-          <v-tab
-            v-for="table in datasetTables"
-            :key="table"
-            >
-            {{ table }}
-          </v-tab>
-        </v-tabs>
-      </template>
-
     </v-toolbar>
+
+    <v-row 
+      :class="`align-center ${currentDataset.color} mb-n4 pl-12 pt-3`"
+      >
+      <v-col class="pl-5">
+            <!-- :dark="datasetTables.indexOf(table) === tab" -->
+            <!-- :class="`${datasetTables.indexOf(table) === tab ? 'white' : currentDataset.color}`" -->
+        <v-btn
+          v-for="table in datasetTables"
+          tile
+          :outlined="tab !== table.id"
+          :key="table"
+          :class="`mx-2`"
+          :color="`white`"
+          @click="tab = table.id"
+          >
+          <span
+            :class="`px-3 text-none font-weight-bold ${tab === table.id ? currentDataset.color : 'white' }--text`"
+            >
+            {{ table.title }}
+          </span>
+        </v-btn>
+
+        <v-btn
+          icon
+          small
+          color="white"
+          class="mb-1"
+          @click="addTable()"
+          >
+          <v-icon class="font-weight-bold">
+            icon-plus
+          </v-icon>
+        </v-btn>
+
+      </v-col>
+    </v-row>
 
     <!-- DIALOG FOR DATASET INFOS -->
     <ModalItem
@@ -67,22 +96,14 @@
       :updateCurrentDataset="true"
     />
 
-    <v-tabs-items v-model="tab">
-      <v-tab-item
-        v-for="table in datasetTables"
-        :key="table"
-        >
-        <DataTable
-          :localItem="currentDataset"
-          :dataHeaders="dataHeaders"
-          :dataRows="dataRows"
-          :fulllWidth="true"
-        />
-      </v-tab-item>
-    </v-tabs-items>
 
-
-
+    <DataTable
+      :localItem="currentDataset"
+      :dataHeaders="dataHeaders"
+      :dataRows="dataRows"
+      :fulllWidth="true"
+      :table="table"
+    />
 
   </v-container>
 
@@ -112,8 +133,12 @@
     data () {
       return {
         dialog: 0,
-        tab: null,
-        datasetTables: [ 'table 1', 'table 2', 'table 3' ],
+        tab: undefined,
+        datasetTables: [ 
+          { title: 'table 1', id: 0 },
+          { title: 'table 2', id: 1 },
+          { title: 'table 3', id: 2 },
+        ],
         dsId: undefined,
         pathItems: [
           { 
@@ -161,6 +186,7 @@
         prefs: emptyDataset.prefs,
       }
       // this.LocalItem = this.currentDataset
+      this.tab = this.datasetTables[0].id
     },
     computed: {
       ...mapState({
@@ -177,6 +203,15 @@
       ...mapActions({
         updatePath: 'updateCrumbsPath',
       }),
+      addTable() {
+        let newId = this.datasetTables.length + 1
+        let newTable = {
+          title: `new table ${newId}`,
+          id: newId
+        }
+        this.datasetTables.push(newTable)
+        this.tab = newTable.id
+      }
     }
 
   }

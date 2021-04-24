@@ -198,5 +198,9 @@ export default {
     color: 'color',
     curr: 'currency',
     latlon: 'latitude-longitude',
+  },
+
+  row: {
+    edit: 'Edit the row',
   }
 }

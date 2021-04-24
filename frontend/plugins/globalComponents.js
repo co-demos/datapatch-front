@@ -17,6 +17,9 @@ const components = {
   ModalFields: () => import(/* webpackChunkName: "ModalFields" */ '@/components/data/ModalFields.vue'),
   ModalDelete: () => import(/* webpackChunkName: "ModalDelete" */ '@/components/dialogs/ModalDelete.vue'),
 
+  ModalRow: () => import(/* webpackChunkName: "ModalRow" */ '@/components/data/ModalRow.vue'),
+  ModalRowFields: () => import(/* webpackChunkName: "ModalRowFields" */ '@/components/data/ModalRowFields.vue'),
+
   DataTable: () => import(/* webpackChunkName: "DataTable" */ '@/components/data/DataTable.vue'),
   DataTableHeader: () => import(/* webpackChunkName: "DataTableHeader" */ '@/components/data/DataTableHeader.vue'),
 }

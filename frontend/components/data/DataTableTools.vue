@@ -3,7 +3,7 @@
   <v-toolbar
     dense
     flat
-    color="grey lighten-4"
+    color="white"
     >
 
     <v-btn

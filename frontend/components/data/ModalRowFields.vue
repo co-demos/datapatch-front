@@ -1,116 +1,82 @@
 <template>
 
   <v-container fluid pb-0>
+
     <!-- <pre>{{ itemModel }}</pre> -->
+    <!-- <pre>{{ localItem }}</pre> -->
+
     <v-row
-      v-for="model in itemModel"
-      :key="model.name"
-      v-if="model.inModal"
+      v-for="(model, index) in itemModel"
+      :key="`rowModel-${index}`"
       dense
-      class="align-top"
+      class="align-left mb-2"
       >
 
-      <!-- <pre>{{ model }}</pre> -->
+      <v-col cols="2" class="text-center">
+        <v-btn
+          small
+          plain
+          color="grey darken-2"
+          class="px-0 pb-1"
+          >
+          <v-icon
+            x-small
+            >
+            {{ fieldIcon(model.type) }}
+          </v-icon>
+        </v-btn>
+      </v-col>
 
       <v-col cols="4">
-        <v-subheader class="text-right">
-          {{ $t(model.label) }} :
-        </v-subheader>
-
-        <!-- DEBUGGING -->
-        <!-- <pre>
-          {{ model.field === 'select' ? model.options : '' }}
-        </pre> -->
-        <!-- <pre>
-          {{ model.field === 'select' ? model.options.items : '' }}
-        </pre> -->
+        <span class="text-left">
+          {{ model.title }} :
+        </span>
       </v-col>
     
-      <v-col cols="8">
+      <v-col cols="6">
+
+        <!-- <pre>{{ model }}</pre> -->
+
         <v-text-field
+          v-if="model.type === 'str'"
           filled
           hide-details="auto"
-          :disabled="model.readonly"
-          :clearable="model.clearable"
-          v-if="model.field === 'text'"
-          v-model="localItem[model.name]"
+          clearable
+          v-model="localItem[model.field]"
           dense
           @input="updateItemDebounced()"
         />
 
         <v-textarea
+          v-else-if="model.type === 'longStr'"
           filled
           rows="3"
-          class="mb-2"
           hide-details="auto"
-          :disabled="model.readonly"
-          :clearable="model.clearable"
-          v-if="model.field === 'textarea'"
-          v-model="localItem[model.name]"
+          v-model="localItem[model.field]"
           dense
           @input="updateItemDebounced()"
         />
-        <v-select
+
+        <v-textarea
+          v-else-if="model.type === 'json'"
+          filled
+          rows="3"
+          hide-details="auto"
+          v-model="localItem[model.field]"
+          dense
+          @input="updateItemDebounced()"
+        />
+
+        <v-text-field
+          v-else
           filled
           hide-details="auto"
-          :disabled="model.readonly"
-          :clearable="model.clearable"
-          v-if="model.field === 'select'"
-          v-model="localItem[model.name]"
-          :items="model.options.items"
-          :item-text="model.options.text"
-          :item-value="model.options.value"
+          clearable
+          v-model="localItem[model.field]"
           dense
-          @change="updateItemDebounced()"
-          >
-          <!-- custom items list -->
-          <template 
-            v-if="model.options.custom"
-            v-slot:item="{ item: selectItem }"
-            >
-            <v-icon v-if="model.options.prependIcon" small class="mr-3">
-              {{ model.options.valueIsIcon ? selectItem : selectItem.icon }}
-              <!-- {{ selectItem }} -->
-            </v-icon>
+          @input="updateItemDebounced()"
+        />
 
-            <v-icon v-if="model.options.prependColor" small class="mr-3" :color="selectItem">
-              icon-square1
-            </v-icon>
-
-            <span v-if="model.options.translate">
-              {{ $t(selectItem[model.options.text]) }}
-              <!-- {{ selectItem }} - {{ model }} -->
-            </span>
-            <span v-if="!model.options.translate">
-              {{ selectItem }}
-            </span>
-
-          </template>
-
-          <!-- custom selected item -->
-          <template 
-            v-if="model.options.custom"
-            v-slot:selection="{ item: selectedItem }"
-            >
-            <v-icon v-if="model.options.prependIcon" small class="mr-3">
-              {{ model.options.valueIsIcon ? selectedItem : selectedItem.icon }}
-              <!-- {{ selectedItem }} -->
-            </v-icon>
-
-            <v-icon v-if="model.options.prependColor" small class="mr-3" :color="selectedItem">
-              icon-square1
-            </v-icon>
-
-            <span v-if="model.options.translate">
-              {{ $t(selectedItem[model.options.text]) }}
-            </span>
-            <span v-if="!model.options.translate">
-              {{ selectedItem }}
-            </span>
-
-          </template>
-
-        </v-select>
       </v-col>
 
     </v-row>
@@ -121,6 +87,7 @@
 <script>
 
   import { mapState, mapGetters } from 'vuex'
+  import { FindFieldIcon, FindFieldText } from '@/utils/utilsFields'
 
   export default {
     name: 'ModalFields',
@@ -138,6 +105,7 @@
         localItem: undefined,
         dialog: false,
         tab: null,
+
       }
     },
     watch: {
@@ -161,6 +129,9 @@
       // this.log && console.log('C-ModalFields > beforeMount > this.localItem :' , this.localItem)
     },
     methods: {
+      fieldIcon (type) {
+        return FindFieldIcon(type)
+      },
       updateItemDebounced() {
         // cancel pending call
         clearTimeout(this._timerId)

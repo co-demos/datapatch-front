@@ -86,7 +86,7 @@
                 tag="tr"
                 group="columns"
                 @start="drag=true"
-                @end="checkTableHeaders();drag=false"
+                @end="drag=false"
                 >
 
                 <!-- FIELDS -->
@@ -123,10 +123,6 @@
 
                 </th>
 
-                <!-- <th 
-                  :class="`text-center px-0 th-custom ${hoverAddCol ? 'cell-ghost-on' : 'th-color' }`"
-                  >
-                </th> -->
               </draggable>
             </thead>
           </template>
@@ -150,6 +146,7 @@
                 <td 
                   v-for="(h, hIdx) in tableHeaders"
                   :key="hIdx"
+                  :fixed="h.fixed"
                   :class="`${ h.position === 'start' ? '' : 'td-custom' } ${ h.helpHeader ? '' : 'td-oneline'} text-${ getJustify(h) } ${ h.position === 'end' ? 'cell-ghost'+(hoverAddCol ? '-on' : '') :  ''}`"
                   >
 
@@ -168,7 +165,7 @@
                     color="black"
                     elevation="0"
                     class="px-1"
-                    @click="editRow(rowData, props)"
+                    @click="editRow(rowData)"
                     >
                     <v-icon small>
                       icon-edit-3
@@ -209,7 +206,9 @@
                     </span>
                   </v-btn>
 
+                  <!-- CELL VALUE -->
                   <div v-if="!h.helpHeader">
+
                     <v-simple-checkbox
                       v-if="h.type === 'bool'"
                       v-model="rowData[ h.field ]"
@@ -241,6 +240,7 @@
                     <span v-else>
                       {{ rowData[ h.field ] }}
                     </span>
+
                   </div>
 
                 </td>
@@ -284,6 +284,16 @@
       </v-col>
 
     </v-row>
+
+    <ModalRow
+      :item="rowToEdit"
+      :itemModel="tableHeaders"
+      :itemType="'row'"
+      :parentDialog="dialogEditRow"
+      :action="'update'"
+      :onlyLocalUpdate="true"
+    />
+
   </div>
 
 </template>
@@ -307,12 +317,6 @@
       DataTableTools: () => import(/* webpackChunkName: "DataTableTools" */ '@/components/data/DataTableTools.vue'),
     },
     watch: {
-      tableHeaders(next) {
-        this.log && console.log(`\nC-DataTable > watch > tableHeaders > next : `, next)
-      },
-      tableRows(next) {
-        this.log && console.log(`\nC-DataTable > watch > tableRows > next : `, next)
-      }
     },
     data () {
       return {
@@ -331,6 +335,9 @@
         tableAddColHeaders: addColHeaders,
 
         tableHeaders: [],
+
+        dialogEditRow: 0,
+        rowToEdit: undefined,
 
         tableRows: [
           {
@@ -380,7 +387,7 @@
         defaultHs.push(fieldClass.data)
       }
       this.tableHeaders = [...helpHeaders, ...defaultHs, ...addColHeaders]
-      this.log && console.log(`\nC-DataTable > beforeMount > this.dTableHeaders : `, this.dTableHeaders)
+      // this.log && console.log(`\nC-DataTable > beforeMount > this.tableHeaders : `, this.tableHeaders)
     },
     computed: {
       dragOptions() {
@@ -393,6 +400,7 @@
       },
       ...mapState({
         log: (state) => state.log,
+        api: (state) => state.api,
       }),
       ...mapGetters({
         userId: 'user/userId',
@@ -400,12 +408,6 @@
       }),
     },
     methods: {
-      checkTableHeaders() {
-        this.log && console.log(`C-DataTable > checkTableHeaders > this.tableHeaders : `, this.tableHeaders)
-      },
-      cleanHeaders() {
-        return this.tableHeaders.filter(h => h !== undefined)
-      },
       getJustify(head) {
         // this.log && head.type === 'int' && console.log(`C-DataTable > cleanTableHeaders > head : `, head)
         let justify = head.helpHeader ? 'center px-0' : 'left'
@@ -422,10 +424,11 @@
         this.log && console.log(`C-DataTable > addRow > newRow :`, newRow)
         this.tableRows.push(newRow)
       },
-      editRow(rowData, props) {
+      editRow(rowData) {
         this.log && console.log(`\nC-DataTable > editRow > rowData : `, rowData)
-        this.log && console.log(`C-DataTable > editRow > props : `, props)
-        // this.tableRows = this.tableRows.filter(r => r !== rowData )
+        this.log && console.log(`C-DataTable > editRow > this.tableHeaders : `, this.tableHeaders)
+        this.rowToEdit = rowData
+        this.dialogEditRow += 1
       },
       selectRow(rowData) {
         this.log && console.log(`\nC-DataTable > selectRow > rowData : `, rowData)
