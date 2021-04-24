@@ -1,37 +1,23 @@
 <template>
-  <div>
+  <span>
 
-    <v-row
-      class="align-center"
+    <v-btn
+      text
+      plain
+      small
+      class="text-none black--text ma-0"
+      @click="dialog += 1"
       >
-
-      <v-col cols="2" class="pa-0 text-left">
-        <v-icon x-small class="ml-1">
-          {{ fieldIcon(header.type) }}
-        </v-icon>
-      </v-col>
-
-      <v-col cols="8" class="pa-0 text-center">
-        <v-btn
-          text
-          plain
-          small
-          class="text-none black--text"
-          @click="dialog += 1"
-          >
-          <span class="text-body-1 font-weight-bold">
-            {{ header.title }}
-          </span>
-        </v-btn>
-      </v-col>
-
-      <v-col cols="1" class="pa-0 text-right">
-          <v-icon small class="grey--text">
-            icon-more-vertical
-          </v-icon>
-      </v-col>
-
-    </v-row>
+      <v-icon x-small class="grey--text">
+        {{ fieldIcon(header.type) }}
+      </v-icon>
+      <span class="mx-5 text-body-1 font-weight-bold">
+        {{ header.text }}
+      </span>
+      <v-icon small class="grey--text">
+        icon-more-vertical
+      </v-icon>
+    </v-btn>
 
     <ModalItem
       :parentDialog="dialog"
@@ -44,7 +30,7 @@
       :onlyLocalUpdate="true"
     />
 
-  </div>
+  </span>
 </template>
 
 <script>

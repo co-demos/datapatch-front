@@ -38,9 +38,16 @@
           <!-- TITLE MODAL -->
           <v-col cols="8">
 
-            <span :class="`${localItem.color || 'black'}--text`">
+            <span v-if="itemType !== 'fields'"
+              :class="`${localItem.color || 'black'}--text`"
+              >
               {{ localItem.title }}
               <!-- <br> wsId: {{ fromWorkspace }} -->
+            </span>
+            <span v-if="itemType === 'fields'"
+              :class="`'black--text`"
+              >
+              {{ localItem.text }}
             </span>
             <!-- SUBTITLE MODAL -->
             <span v-if="itemType === 'fields'" class="caption">

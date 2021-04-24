@@ -96,7 +96,8 @@ export default {
     '~/plugins/globalComponents',
     { src: '~/plugins/axios', mode: 'client' },
     { src: '~/plugins/draggable.js', mode: 'client' },
-    // { src: '~/plugins/debounce.js', mode: 'client' }
+    // { src: '~/plugins/columns-resizable.js', mode: 'client' },
+    { src: '~/plugins/table-resizable.js', mode: 'client' },
   ],
 
   /*

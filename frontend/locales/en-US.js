@@ -124,6 +124,8 @@ export default {
     schema: 'Schema', 
     schemas: 'Schemas',
     field: 'Field',
+    fieldValue: 'Field key', 
+    fieldName: 'Field name', 
     fields: 'Fields',
     fieldType: 'Field type :',
     owner: 'Owner',

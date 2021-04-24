@@ -125,9 +125,18 @@ export const FindFieldText = (type) => {
 
 export const itemFieldModel = [
   {
-    name: 'field',
+    name: 'value',
     field: 'text',
-    label: 'dataPackage.field',
+    label: 'dataPackage.fieldValue',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined
+  },
+  {
+    name: 'text',
+    field: 'text',
+    label: 'dataPackage.fieldName',
     inModal: true,
     visible: true,
     readonly: false,
@@ -155,10 +164,11 @@ export const itemTypeModel = [
 ]
 
 export class Field {
+
   constructor (
     owner_id=undefined,
-    field=undefined,
-    title='My new field',
+    value=undefined,
+    text='My new field',
     type='str',
     
     description='My field description',
@@ -170,8 +180,8 @@ export class Field {
     ) {
     this.owner_id = owner_id
     
-    this.field = field
-    this.title = title
+    this.value = value
+    this.text = text
     this.type = type
     
     this.description = description
@@ -182,14 +192,32 @@ export class Field {
     this.id = id
   }
 
+  set divider (val) {
+    this.hDivider = val
+  }
+  set position (val) {
+    this.hPosition = val
+  }
+  set helpHeader (bool) {
+    this.isHelpHeader = bool
+  }
+  set addCol (bool) {
+    this.isAddCol = bool
+  }
+
   get data () {
     return { 
       owner_id: this.owner_id,
       
-      field: this.field,
-      title: this.title,
+      value: this.value,
+      text: this.text,
       type: this.type,
+
+      sortable: false,
+      divider: this.divider,
       
+      helpHeader: this.helpHeader,
+
       description: this.description, 
       creationDate: this.creationDate,
       read: this.read,
@@ -199,10 +227,22 @@ export class Field {
     }
   }
 
+  get divider () {
+    return this.hDivider
+  }
+  get position () {
+    return this.hPosition
+  }
+  get helpHeader () {
+    return this.isHelpHeader
+  }
+  get addCol () {
+    return this.isAddCol
+  }
+
   get infos () {
     return [
       ...itemFieldModel,
-      ...models.itemTitleModel,
       ...itemTypeModel,
       ...models.itemDescriptionModel,
     ]
@@ -222,104 +262,183 @@ export class Field {
 
 export const helpHeaders = [
   {
-    field: 'delete',
+    value: 'delete',
+    text: '',
     icon: 'icon-trash-2',
     fixed: true,
     helpHeader: true,
     position: 'start'
   },
   {
-    field: 'select',
+    value: 'select',
+    text: '',
     icon: 'icon-edit',
     fixed: true,
     helpHeader: true,
     position: 'start'
   },
   {
-    field: 'edit',
+    value: 'edit',
+    text: '',
     icon: 'icon-edit',
     fixed: true,
     helpHeader: true,
     position: 'start'
   },
   {
-    field: 'move',
+    value: 'move',
+    text: '',
     icon: 'icon-move',
     fixed: true,
     helpHeader: true,
-    position: 'start'
+    position: 'start',
+    divider: true,
   },
 ]
+export const helpHeadersFields = helpHeaders.map(h => {
+  let helperField = new Field(
+    undefined,
+    h.value,
+    h.text,
+    h.type,
+  )
+  helperField.helpHeader = true
+  helperField.position = h.position
+  helperField.divider = h.divider
+  return helperField
+})
 
 export const addColHeaders = [
   {
-    field: 'addCol',
+    value: 'addCol',
+    text: '',
     icon: 'icon-plus',
     helpHeader: true,
     position: 'end'
   },
 ]
+export const endHeadersFields = addColHeaders.map(h => {
+  let helperEndField = new Field(
+    undefined,
+    h.value,
+    h.text,
+    h.type,
+  )
+  helperEndField.helpHeader = true
+  helperEndField.position = h.position
+  helperEndField.addCol = true
+  return helperEndField
+})
 
 export const defaultHeaders = [
   {
-    field: 'name',
-    title: 'Name',
+    value: 'name',
+    text: 'Name',
     type: 'str',
-    // fixed: true,
+    // text: 'name', // TO DELETE
+    // value: 'name', // TO DELETE
+    sortable: false,
+    align: 'start',
+    fixed: true,
+    divider: true,
   },
   {
-    field: 'surname',
-    title: 'Surname',
+    value: 'surname',
+    text: 'Surname',
     type: 'str',
+    // text: 'surname', // TO DELETE
+    // value: 'surname', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'bio',
-    title: 'Biography',
+    value: 'bio',
+    text: 'Biography',
     type: 'longStr',
-  },
+    // text: 'bio', // TO DELETE
+    // value: 'bio', // TO DELETE
+    sortable: false,
+    align: 'start',
+    },
   {
-    field: 'age',
-    title: 'Age',
+    value: 'age',
+    text: 'Age',
     type: 'int',
+    // text: 'age', // TO DELETE
+    // value: 'age', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'ratio',
-    title: 'Ratio',
+    value: 'ratio',
+    text: 'Ratio',
     type: 'float',
+    // text: 'ratio', // TO DELETE
+    // value: 'ratio', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'birthDate',
-    title: 'BirthDate',
+    value: 'birthDate',
+    text: 'BirthDate',
     type: 'date',
+    // text: 'birthDate', // TO DELETE
+    // value: 'birthDate', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'jsonData',
-    title: 'Json data',
+    value: 'jsonData',
+    text: 'Json data',
     type: 'json',
+    // text: 'jsonData', // TO DELETE
+    // value: 'jsonData', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'tags',
-    title: 'Tags',
+    value: 'tags',
+    text: 'Tags',
     type: 'tag',
+    // text: 'tags', // TO DELETE
+    // value: 'tags', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'note',
-    title: 'Note',
+    value: 'note',
+    text: 'Note',
     type: 'rating',
+    // text: 'note', // TO DELETE
+    // value: 'note', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'important',
-    title: 'Important',
+    value: 'important',
+    text: 'Important',
     type: 'bool',
+    // text: 'important', // TO DELETE
+    // value: 'important', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'md',
-    title: 'Markdown',
+    value: 'md',
+    text: 'Markdown',
     type: 'md',
+    // text: 'md', // TO DELETE
+    // value: 'md', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
   {
-    field: 'wikipediaPage',
-    title: 'Wikipedia page',
+    value: 'wikipediaPage',
+    text: 'Wikipedia page',
     type: 'url',
+    // text: 'wikipediaPage', // TO DELETE
+    // value: 'wikipediaPage', // TO DELETE
+    sortable: false,
+    align: 'start',
   },
 ]

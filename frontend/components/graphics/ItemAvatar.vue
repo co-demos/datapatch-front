@@ -29,8 +29,8 @@
 
     <v-card
       v-if="itemType === 'fields'"
-      class="mx-12 pt-1 pb-0"
-      color="grey"
+      class="mx-6 pt-1 pb-0"
+      color="grey ligthen-1"
       dark
       outlined
       >

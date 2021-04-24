@@ -124,6 +124,8 @@ export default {
     schema: 'Schema', 
     schemas: 'Schemas',
     field: 'Champ', 
+    fieldValue: 'Clé du champ', 
+    fieldName: 'Nom du champ', 
     fields: 'Champs', 
     fieldType: 'Champ de type :', 
     owner: 'Propriétaire',

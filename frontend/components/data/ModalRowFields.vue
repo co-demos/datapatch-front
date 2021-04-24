@@ -14,7 +14,7 @@
 
       <v-col cols="3" class="text-right pr-3">
         <span>
-          {{ model.title }} :
+          {{ model.text }} :
         </span>
       </v-col>
     
@@ -27,7 +27,7 @@
           filled
           hide-details="auto"
           clearable
-          v-model="localItem[model.field]"
+          v-model="localItem[model.value]"
           dense
           @input="updateItemDebounced()"
         />
@@ -37,7 +37,7 @@
           filled
           rows="3"
           hide-details="auto"
-          v-model="localItem[model.field]"
+          v-model="localItem[model.value]"
           dense
           @input="updateItemDebounced()"
         />
@@ -47,7 +47,7 @@
           filled
           rows="3"
           hide-details="auto"
-          v-model="localItem[model.field]"
+          v-model="localItem[model.value]"
           dense
           @input="updateItemDebounced()"
         />
@@ -57,7 +57,7 @@
           filled
           hide-details="auto"
           clearable
-          v-model="localItem[model.field]"
+          v-model="localItem[model.value]"
           dense
           @input="updateItemDebounced()"
         />
