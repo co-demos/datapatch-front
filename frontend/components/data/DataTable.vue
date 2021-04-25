@@ -1,14 +1,46 @@
 <style scoped>
+
+.hidden-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.hidden-scrollbar::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
+.fill-width {
+  width: 100%;
+  overflow-x: scroll;
+  flex-wrap: nowrap;
+}
+
+.th-color {
+  height: 40px;
+  border-top: thin solid lightGrey !important;
+  border-bottom: thin solid lightGrey !important;
+  background-color: ghostWhite !important;
+}
+.th-data {
+  border-left: thin solid lightGrey !important;
+}
+.th-end {
+  border-right: thin solid lightGrey !important;
+}
+
+
+
 .table {
   /* min-width: 100%; */
   /* table-layout: fixed; */
-  /* overflow-x: scroll; */
+  overflow-x: auto;
   /* border-collapse: collapse; */
 }
 /* th, td {
-  min-width: 100px;
+  min-width: 75px;
 } */
-
+th {
+  min-width: 75px;
+}
 .th-min-width {
   /* border-left: thin solid lightGrey !important; */
 }
@@ -20,11 +52,7 @@
   /* width: 100%; */
   height: none !important;
 }
-.th-color {
-  border-top: thin solid lightGrey !important;
-  border-bottom: thin solid lightGrey !important;
-  background-color: ghostWhite !important;
-}
+
 .td-custom {
   /* border-left: thin solid rgba(0, 0, 0, 0.12) !important; */
   /* min-width: 150px !important; */
@@ -58,9 +86,84 @@
       v-if="!noToolbar"
     />
 
-    <!-- <v-container> -->
-      <!-- v-if="false" -->
+    <!-- <v-row class="my-5">
+      tableHeaders : <code>{{ tableHeaders.map(f => f) }}</code>
+    </v-row> -->
+
+    <!-- helpersHs -->
+    <!-- addColHs -->
+    <!-- dataFields -->
+
     <v-row
+      class="ml-0 my-3 fill-width align-center"
+      >
+
+      <!-- FIXED COLUMNS -->
+      <v-col
+        v-for="(h, idx) in helpersHs"
+        :key="`h-start-${idx}`"
+        :class="`py-1 th-color px-2 text-center`"
+        >
+        <v-icon small color="grey">
+          {{ h.icon }}
+        </v-icon>
+      </v-col>
+
+      <!-- UNFIXED COLUMNS -->
+      <draggable
+        :list="dataFields"
+        v-bind="dragOptions"
+        group="headers"
+        tag="div"
+        class="row fill-width hidden-scrollbar"
+        draggable=".th-drag"
+        @start="drag=true"
+        @end="drag=false"
+        >
+
+        <!-- FIELDS COLUMNS -->
+        <v-col
+          v-for="(h, idx) in dataFields"
+          :key="`h-${idx}`"
+          :class="`py-1 th-color px-1 th-data th-drag text-center`"
+          >
+          <DataTableHeader
+            :header="h"
+          />
+        </v-col>
+
+        <!-- ADD COLUMN -->
+        <v-col
+          v-for="(h, idx) in addColHs"
+          :key="`h-end-${idx}`"
+          :class="`py-1 th-color px-2 text-center th-data th-end`"
+          >
+          <v-btn
+            v-if="h.position === 'end'"
+            dark
+            x-small
+            class="mt-1"
+            :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
+            elevation="0"
+            @mouseover="hoverAddCol = true"
+            @mouseleave="hoverAddCol = false"
+            @click="addColumn()"
+            >
+            <v-icon small>
+              icon-plus
+            </v-icon>
+          </v-btn>
+        </v-col>
+
+      </draggable>
+
+    </v-row>
+
+
+
+    <!-- <v-container> -->
+    <v-row
+      v-if="false"
       >
       <v-col
         cols="12"
@@ -68,15 +171,15 @@
         >
           <!-- v-if="tableHeaders" -->
           <!-- :headers="[ ...tableHelpHeaders, ...tableHeaders, ...tableAddColHeaders]" -->
+          <!-- v-table-resizable -->
         <v-data-table
-          v-table-resizable
           :headers="tableHeaders"
           :items="tableRows"
           :search="search"
           :options="tableOptions"
           hide-default-header
           :items-per-page="5"
-          class="elevation-0 table-resize"
+          class="elevation-0"
           v-model="selectedRows"
           >
 
@@ -192,11 +295,15 @@
     </v-row>
     <!-- </v-container> -->
 
+
+
+
+
     <!-- DEBUGGIING -->
     <v-divider/>
     <!-- <v-row>
       <v-col> -->
-        <v-data-table
+        <!-- <v-data-table
           v-table-resizable
           :headers="tableHeaders"
           :items="tableRows"
@@ -204,10 +311,9 @@
           class="elevation-0 table-resize"
           v-model="selectedRows"
           >
-        </v-data-table>
+        </v-data-table> -->
       <!-- </v-col>
     </v-row> -->
-
 
     <v-row>
       <v-col cols="3">
@@ -267,8 +373,8 @@
         },
         selectedRows: [],
 
-        helpersHs: helpHeadersFields.map( h => h.data ),
-        addColHs: endHeadersFields.map( h => h.data ),
+        helpersHs: helpHeadersFields.map( h => h.dataHelper ),
+        addColHs: endHeadersFields.map( h => h.dataHelper ),
 
         dataFields: [],
         tableHeaders: [],
@@ -325,8 +431,8 @@
     beforeMount () {
 
       let dataHs = []
-      // for (let defaultHeader of defaultHeaders) {
-      for (let defaultHeader of defaultHeaders.filter((h,idx) => idx < 4)) {
+      for (let defaultHeader of defaultHeaders) {
+      // for (let defaultHeader of defaultHeaders.filter((h,idx) => idx < 4)) {
         this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
         let now = new Date(Date.now())
         let fieldClass = new Field(
@@ -342,6 +448,7 @@
       }
       this.dataFields = dataHs
       this.tableHeaders = [...this.helpersHs, ...dataHs.map(h => h.data), ...this.addColHs]
+      // this.tableHeaders = dataHs.map(h => h.data)
       // this.log && console.log(`\nC-DataTable > beforeMount > this.tableHeaders : `, this.tableHeaders)
     },
     computed: {

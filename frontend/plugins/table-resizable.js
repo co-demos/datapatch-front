@@ -19,7 +19,7 @@ Vue.directive('table-resizable', {
       const ths = thead.querySelectorAll('th')
       // console.log(`PL-table-resizable > ths : `, ths)
       if (!ths) return
-      table.style.overflow = 'scroll'
+      // table.style.overflow = 'scroll'
       let tableHeight = table.offsetHeight
       for (const th of ths){
         // console.log(`PL-table-resizable > th : `, th)
@@ -71,6 +71,7 @@ Vue.directive('table-resizable', {
       div.style.right = 0
       div.style.width = '5px'
       div.style.position = 'absolute'
+      // div.style.position = 'relative'
       div.style.cursor = 'col-resize'
       div.style.userSelect = 'none'
       div.style.height = height + 'px'

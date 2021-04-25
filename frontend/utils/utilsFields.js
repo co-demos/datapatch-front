@@ -192,6 +192,9 @@ export class Field {
     this.id = id
   }
 
+  set icon (val) {
+    this.hIcon = val
+  }
   set divider (val) {
     this.hDivider = val
   }
@@ -213,6 +216,7 @@ export class Field {
       text: this.text,
       type: this.type,
 
+      icon: this.icon,
       sortable: false,
       divider: this.divider,
       
@@ -227,6 +231,32 @@ export class Field {
     }
   }
 
+  get dataHelper () {
+    return { 
+      // owner_id: this.owner_id,
+      
+      value: this.value,
+      text: this.text,
+      type: this.type,
+
+      icon: this.icon,
+      position: this.position,
+      divider: this.divider,
+      
+      helpHeader: this.helpHeader,
+
+      // description: this.description, 
+      // creationDate: this.creationDate,
+      // read: this.read,
+      // write: this.write,
+      // manage: this.manage,
+      // id: this.id,
+    }
+  }
+
+  get icon () {
+    return this.hIcon
+  }
   get divider () {
     return this.hDivider
   }
@@ -272,7 +302,7 @@ export const helpHeaders = [
   {
     value: 'select',
     text: '',
-    icon: 'icon-edit',
+    icon: 'icon-square',
     fixed: true,
     helpHeader: true,
     position: 'start'
@@ -280,7 +310,7 @@ export const helpHeaders = [
   {
     value: 'edit',
     text: '',
-    icon: 'icon-edit',
+    icon: 'icon-edit-3',
     fixed: true,
     helpHeader: true,
     position: 'start'
@@ -288,7 +318,7 @@ export const helpHeaders = [
   {
     value: 'move',
     text: '',
-    icon: 'icon-move',
+    icon: 'icon-more-vertical',
     fixed: true,
     helpHeader: true,
     position: 'start',
@@ -304,6 +334,7 @@ export const helpHeadersFields = helpHeaders.map(h => {
   )
   helperField.helpHeader = true
   helperField.position = h.position
+  helperField.icon = h.icon
   helperField.divider = h.divider
   return helperField
 })
@@ -326,6 +357,7 @@ export const endHeadersFields = addColHeaders.map(h => {
   )
   helperEndField.helpHeader = true
   helperEndField.position = h.position
+  helperEndField.icon = h.icon
   helperEndField.addCol = true
   return helperEndField
 })

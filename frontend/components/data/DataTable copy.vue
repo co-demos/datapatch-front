@@ -1,8 +1,25 @@
 <style scoped>
+.table {
+  /* min-width: 100%; */
+  /* table-layout: fixed; */
+  overflow-x: auto;
+  /* border-collapse: collapse; */
+}
+/* th, td {
+  min-width: 75px;
+} */
+th {
+  min-width: 75px;
+}
+.th-min-width {
+  /* border-left: thin solid lightGrey !important; */
+}
 .th-custom {
-  border-left: thin solid lightGrey !important;
-  min-width: 150px !important;
-  min-height: 70px !important;
+  /* overflow: hidden; 
+  white-space: nowrap; */
+  /* min-width: 150px !important; */
+  /* min-height: 70px !important; */
+  /* width: 100%; */
   height: none !important;
 }
 .th-color {
@@ -10,12 +27,9 @@
   border-bottom: thin solid lightGrey !important;
   background-color: ghostWhite !important;
 }
-/* .theader {
-  height: none !important;
-  min-height: 50px;
-} */
 .td-custom {
-  border-left: thin solid rgba(0, 0, 0, 0.12) !important;
+  /* border-left: thin solid rgba(0, 0, 0, 0.12) !important; */
+  /* min-width: 150px !important; */
 }
 .td-oneline {
   overflow: hidden; 
@@ -25,13 +39,13 @@
   min-width: 80px !important;
 }
 .add-cell {
-  min-width: 150px !important;
+  /* min-width: 150px !important; */
 }
 .cell-ghost {
-  background-color: lightGrey !important;
+  background-color: transparent !important;
 }
 .cell-ghost-on {
-  background-color: grey !important;
+  background-color: lightGrey !important;
 }
 </style>
 <template>
@@ -42,36 +56,26 @@
     <!-- :outlined="!fulllWidth" -->
     <!-- :flat="fulllWidth" -->
 
-    <!-- <v-card-title class="mb-3">
-      {{ localItem.title }} -->
-      <!-- <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="icon-search1"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field> -->
-    <!-- </v-card-title> -->
-
     <DataTableTools
       v-if="!noToolbar"
     />
 
-    <v-row>
+    <!-- <v-container> -->
+      <!-- v-if="false" -->
+    <v-row
+      >
       <v-col
         cols="12"
         class="mr-2"
         >
-
           <!-- v-if="tableHeaders" -->
           <!-- :headers="[ ...tableHelpHeaders, ...tableHeaders, ...tableAddColHeaders]" -->
         <v-data-table
+          v-table-resizable
           :headers="tableHeaders"
           :items="tableRows"
           :search="search"
           :options="tableOptions"
-          item-key="field"
           hide-default-header
           :items-per-page="5"
           class="elevation-0"
@@ -80,56 +84,51 @@
 
           <!-- HEADERS -->
           <template v-slot:header="{ props: { headers } }">
-            <thead>
+            <thead
+              >
+              <!-- border="1" -->
               <draggable
-                v-model="dTableHeaders"
+                v-model="tableHeaders"
                 v-bind="dragOptions"
                 draggable=".th-drag"
                 tag="tr"
                 group="columns"
                 @start="drag=true"
-                @end="checkTableHeaders();drag=false"
+                @end="drag=false"
                 >
-
-                <th
-                  v-for="helpHeader in tableHelpHeaders" 
-                  :key="`th-help-${helpHeader.field}`"
-                  class="th-color"
-                  >
-                  <!-- move column -->
-                  <!-- {{ headers }}  -->
-                  <!-- {{ tableHelpHeaders }} -->
-                  <!-- {{ helpHeader }} -->
-                </th>
-
                 <!-- FIELDS -->
                 <th
-                  v-for="(h, idx) in dTableHeaders"
+                  v-for="(h, idx) in tableHeaders"
                   :key="idx"
-                  class="th-color th-custom th-drag"
+                  role="columnheader"
+                  scope="col"
+                  :class="`th-color ${ h.helpHeader ? '' : 'th-drag' } text-center`"
                   >
+
                   <DataTableHeader
+                    v-if="!h.helpHeader"
                     :header="h"
                   />
-                </th>
 
-                <!-- ADD COLUMN -->
-                <th 
-                  :class="`text-center px-0 th-custom ${hoverAddCol ? 'cell-ghost-on' : 'th-color' }`"
-                  >
-                  <v-btn
-                    dark
-                    small
-                    :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
-                    elevation="0"
-                    @mouseover="hoverAddCol = true"
-                    @mouseleave="hoverAddCol = false"
-                    @click="addColumn()"
+                  <!-- ADD COLUMN -->
+                  <span
+                    v-if="h.helpHeader && h.position === 'end'"
                     >
-                    <v-icon small>
-                      icon-plus
-                    </v-icon>
-                  </v-btn>
+                    <v-btn
+                      dark
+                      small
+                      :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
+                      elevation="0"
+                      @mouseover="hoverAddCol = true"
+                      @mouseleave="hoverAddCol = false"
+                      @click="addColumn()"
+                      >
+                      <v-icon small>
+                        icon-plus
+                      </v-icon>
+                    </v-btn>
+                  </span>
+
                 </th>
               </draggable>
             </thead>
@@ -145,149 +144,45 @@
               @start="drag=true"
               @end="drag=false"
               >
-              <tr
+              <DataTableRow
                 v-for="(rowData, index) in props.items"
                 :key="index"
-                >
-                
-                <td class="text-center td-custom pl-4 pr-2">
-                  <v-icon
-                    color="grey"
-                    small
-                    >
-                    icon-more-vertical
-                  </v-icon>
-                </td>
-                <td class="text-center px-2">
-                  <v-btn
-                    icon
-                    small
-                    color="black"
-                    elevation="0"
-                    class="px-1"
-                    @click="editRow(rowData, props)"
-                    >
-                    <v-icon small>
-                      icon-edit-3
-                    </v-icon>
-                  </v-btn>
-                </td>
-                <td class="text-center px-2">
-                  <v-btn
-                    icon
-                    small
-                    color="grey"
-                    elevation="0"
-                    class="px-1"
-                    @click="deleteRow(rowData)"
-                    >
-                    <v-icon small>
-                      icon-trash-2
-                    </v-icon>
-                  </v-btn>
-                </td>
-                <td class="text-center pl-2 pr-4">
-                  <v-btn
-                    icon
-                    small
-                    :color="selectedRows.includes(rowData) ? 'black' : 'grey'"
-                    elevation="0"
-                    class="px-1"
-                    @click="selectRow(rowData)"
-                    >
-                    <v-icon
-                      small
-                      v-if="selectedRows.includes(rowData)"
-                      >
-                      icon-check-square
-                    </v-icon>
-                    <span v-else>
-                      {{ index + 1 }}
-                    </span>
-                  </v-btn>
-                </td>
+                :rowIndex="index"
+                :rowData="rowData"
+                :tableHeaders="tableHeaders"
+                :selectedRows="selectedRows"
+              />
 
-                <!-- ROW >>> FIELDS -->
-                <td 
-                  v-for="(head, index) in dTableHeaders"
-                  :key="index"
-                  :class="`td-custom td-oneline text-${ getJustify(head) }`"
-                  >
-                  <!-- <v-row> -->
-                    <v-simple-checkbox
-                      v-if="head.type === 'bool'"
-                      v-model="rowData[ head.field ]"
-                      disabled
-                    />
-                    <span v-else-if="head.type === 'str'">
-                      {{ rowData[ head.field ] }}
-                    </span>
-                    <span v-else-if="head.type === 'tag'">
-                      <v-chip
-                        v-for="(v,i) in rowData[ head.field ]"
-                        :key="i"
-                        label
-                        class="ma-1 py-0"
-                        >
-                        {{ v }}
-                      </v-chip>
-                    </span>
-                    <span v-else-if="head.type === 'rating'">
-                      <v-icon
-                        v-for="(v,i) in rowData[ head.field ]"
-                        :key="i"
-                        class="ma-1 py-0"
-                        small
-                        >
-                        icon-star
-                      </v-icon>
-                    </span>
-                    <span v-else>
-                      {{ rowData[ head.field ] }}
-                    </span>
-                  <!-- </v-row> -->
-                </td>
 
-                <!-- add column -->
-                <td 
-                  :class="`add-col cell-ghost${ hoverAddCol ? '-on' : ''}`"
-                  >
-                </td>
-              </tr>
-
-              <!-- add row (ghost cells) -->
+              <!-- ghost row -->
+              <!-- add last row (ghost cells) -->
               <tr>
-                <td :class="`td-custom ${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
-                <td :class="`${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
-                <td :class="`${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
                 <td 
-                  :class="`text-center pa-3 ${ hoverAddRow ? 'cell-ghost-on' : ''}`"
+                  v-for="(h, hIdx) in tableHeaders"
+                  :key="`ghost-${hIdx}`"
+                  :class="`${ h.position === 'start' ? '' : 'td-custom' } cell-ghost${hoverAddRow ? '-on' : '' }`"
                   >
-                  <v-btn
-                    small
-                    :color="`${ hoverAddRow ? 'primary' : 'grey lighten-1'}`"
-                    dark
-                    elevation="0"
-                    class="px-1"
-                    @mouseover="hoverAddRow = true"
-                    @mouseleave="hoverAddRow = false"
-                    @click="addRow()"
+                  <!-- ADD ROW -->
+                  <span
+                    v-if="h.helpHeader && h.field === 'edit'"
+                    class="text-center"
                     >
-                    <v-icon
+                    <v-btn
+                      dark
                       small
+                      :color="`${ hoverAddRow  ? 'primary' : 'grey lighten-1'}`"
+                      elevation="0"
+                      class="px-0"
+                      @mouseover="hoverAddRow = true"
+                      @mouseleave="hoverAddRow = false"
+                      @click="addRow()"
                       >
-                      icon-plus
-                    </v-icon>
-                  </v-btn>
+                      <v-icon small>
+                        icon-plus
+                      </v-icon>
+                    </v-btn>
+                  </span>
                 </td>
-                <td 
-                  v-for="(head, index) in dTableHeaders"
-                  :key="`ghost-${index}`"
-                  :class="`add-cell td-custom cell-ghost${hoverAddRow ? '-on' : '' }`"
-                  >
-                  <!-- ghost row -->
-                </td>
-                <td :class="`${ hoverAddRow ? 'cell-ghost-on' : ''}`"/>
               </tr>
 
             </draggable>
@@ -296,28 +191,45 @@
         </v-data-table>
 
       </v-col>
+    </v-row>
+    <!-- </v-container> -->
 
-      <v-col cols="2">
-        - tableHeaders :<br>
+    <!-- DEBUGGIING -->
+    <v-divider/>
+    <!-- <v-row>
+      <v-col> -->
+        <v-data-table
+          v-table-resizable
+          :headers="tableHeaders"
+          :items="tableRows"
+          :options="tableOptions"
+          class="elevation-0 table-resize"
+          v-model="selectedRows"
+          >
+        </v-data-table>
+      <!-- </v-col>
+    </v-row> -->
+
+
+    <v-row>
+      <v-col cols="3">
+        dataFields: <br>
+        <code><pre>{{ dataFields }}</pre></code>
+      </v-col>
+      <v-col cols="3">
+        tableHeaders: <br>
         <code><pre>{{ tableHeaders }}</pre></code>
       </v-col>
-
-      <v-col cols="2">
-        - tableHeaders (field):<br>
-        <code><pre>{{ tableHeaders && tableHeaders.map(h => h && h.field) }}</pre></code>
+      <v-col cols="3">
+        tableRows: <br>
+        <code><pre>{{ tableRows }}</pre></code>
       </v-col>
-
-      <v-col cols="2">
-        - tableRows (name):<br>
-        <code><pre>{{ tableRows && tableRows.map(r => r && r.name) }}</pre></code>
-      </v-col>
-
-      <v-col cols="6">
-        - localItem:<br>
+      <v-col cols="3">
+        localItem: <br>
         <code><pre>{{ localItem }}</pre></code>
       </v-col>
-
     </v-row>
+
   </div>
 
 </template>
@@ -325,7 +237,7 @@
 <script>
 
   import { mapState, mapGetters } from 'vuex'
-  import { Field, helpHeaders, addColHeaders, defaultHeaders } from '@/utils/utilsFields'
+  import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
 
   export default {
 
@@ -335,18 +247,14 @@
       'dataHeaders',
       'dataRows',
       'fulllWidth',
-      'noToolbar'
+      'noToolbar',
+      'table'
     ],
     components: {
       DataTableTools: () => import(/* webpackChunkName: "DataTableTools" */ '@/components/data/DataTableTools.vue'),
+      DataTableRow: () => import(/* webpackChunkName: "DataTableRow" */ '@/components/data/DataTableRow.vue'),
     },
     watch: {
-      tableHeaders(next) {
-        this.log && console.log(`\nC-DataTable > watch > tableHeaders > next : `, next)
-      },
-      tableRows(next) {
-        this.log && console.log(`\nC-DataTable > watch > tableRows > next : `, next)
-      }
     },
     data () {
       return {
@@ -361,11 +269,14 @@
         },
         selectedRows: [],
 
-        tableHelpHeaders: helpHeaders,
-        tableAddColHeaders: addColHeaders,
+        helpersHs: helpHeadersFields.map( h => h.data ),
+        addColHs: endHeadersFields.map( h => h.data ),
 
+        dataFields: [],
         tableHeaders: [],
-        dTableHeaders: [],
+
+        dialogEditRow: 0,
+        rowToEdit: undefined,
 
         tableRows: [
           {
@@ -382,41 +293,58 @@
             md: 'A _markdown_ example',              // markdown text example
             wikipediaPage: 'https://en.wikipedia.org/wiki/Elinor_Ostrom',   // url example
           },
+          {
+            name: 'Ghibli',                          // string example
+            surname: 'Le chien',                     // long string example
+            bio: 'waf waf waf',                      // long text example
+            age: 10,                                 // int example
+            ratio: 0.9,                              // float example
+            birthDate: '',                           // date example
+            jsonData : {},                           // json example
+            tags : ['manger', 'dormir'],             // tags list example
+            note : 5,                                // notation / star example
+            important : true,                        // boolean example
+            md: 'A _markdown_ example',              // markdown text example
+            wikipediaPage: 'https://en.wikipedia.org/wiki/Elinor_Ostrom',   // url example
+          },
           { name: 'test 2' },
           { name: 'test 3' },
           { name: 'test 4' },
           { name: 'test 5' },
-          // { name: 'test 6' },
-          // { name: 'test 7' },
-          // { name: 'test 8' },
-          // { name: 'test 9' },
-          // { name: 'test 10' },
+          { name: 'test 6' },
+          { name: 'test 7' },
+          { name: 'test 8' },
+          { name: 'test 9' },
+          { name: 'test 10' },
           // { name: 'test 11' },
           // { name: 'test 12' },
           // { name: 'test 13' },
           // { name: 'test 14' },
           // { name: 'test 15' },
-        ]
+        ],
       }
     },
     beforeMount () {
-      let defaultHs = [ ]
-      let now = new Date(Date.now())
-      for (let defaultHeader of defaultHeaders) {
-        // this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
+
+      let dataHs = []
+      // for (let defaultHeader of defaultHeaders) {
+      for (let defaultHeader of defaultHeaders.filter((h,idx) => idx < 4)) {
+        this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
+        let now = new Date(Date.now())
         let fieldClass = new Field(
           this.userId,
-          defaultHeader.field,
-          defaultHeader.title,
+          defaultHeader.value,
+          defaultHeader.text,
           defaultHeader.type,
           `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
           now.toISOString()
         )
-        defaultHs.push(fieldClass.data)
+        fieldClass.divider = true
+        dataHs.push(fieldClass)
       }
-      this.log && console.log(`\nC-DataTable > beforeMount > defaultHs : `, defaultHs)
-      this.dTableHeaders = defaultHs
-      this.tableHeaders = [...helpHeaders, ...defaultHs, ...addColHeaders]
+      this.dataFields = dataHs
+      this.tableHeaders = [...this.helpersHs, ...dataHs.map(h => h.data), ...this.addColHs]
+      // this.log && console.log(`\nC-DataTable > beforeMount > this.tableHeaders : `, this.tableHeaders)
     },
     computed: {
       dragOptions() {
@@ -429,6 +357,7 @@
       },
       ...mapState({
         log: (state) => state.log,
+        api: (state) => state.api,
       }),
       ...mapGetters({
         userId: 'user/userId',
@@ -436,21 +365,7 @@
       }),
     },
     methods: {
-      checkTableHeaders() {
-        this.log && console.log(`C-DataTable > checkTableHeaders > this.tableHeaders : `, this.tableHeaders)
-      },
-      cleanHeaders() {
-        return this.tableHeaders.filter(h => h !== undefined)
-      },
-      getJustify(head) {
-        // this.log && head.type === 'int' && console.log(`C-DataTable > cleanTableHeaders > head : `, head)
-        let justify = 'left'
-        let centers = ['bool', 'rating', 'date']
-        let rights = ['float', 'int']
-        justify = centers.includes(head.type) ? 'center' : rights.includes(head.type) ? 'right' : justify
-        // this.log && head.type === 'int' && console.log(`C-DataTable > cleanTableHeaders > justify : `, justify)
-        return justify
-      },
+
       addRow() {
         this.log && console.log(`\nC-DataTable > addRow ...`)
         this.log && console.log(`C-DataTable > addRow > this.tableHeaders : `, this.tableHeaders)
@@ -458,24 +373,17 @@
         this.log && console.log(`C-DataTable > addRow > newRow :`, newRow)
         this.tableRows.push(newRow)
       },
-      editRow(rowData, props) {
-        this.log && console.log(`\nC-DataTable > editRow > rowData : `, rowData)
-        this.log && console.log(`C-DataTable > editRow > props : `, props)
-        // this.tableRows = this.tableRows.filter(r => r !== rowData )
-      },
-      selectRow(rowData) {
-        this.log && console.log(`\nC-DataTable > selectRow > rowData : `, rowData)
-        if (this.selectedRows.includes(rowData) ) {
-          this.selectedRows = this.selectedRows.filter( r => r !== rowData)
-        } else {
-          this.selectedRows.push(rowData)
-        }
-        this.log && console.log(`C-DataTable > selectRow : this.selectedRows :`, this.selectedRows)
-      },
-      deleteRow(rowData) {
-        this.log && console.log(`\nC-DataTable > deleteRow > rowData : `, rowData)
-        // this.tableRows = this.tableRows.filter(r => r !== rowData )
-      },
+
+      // selectRow(rowData) {
+      //   this.log && console.log(`\nC-DataTable > selectRow > rowData : `, rowData)
+      //   if (this.selectedRows.includes(rowData) ) {
+      //     this.selectedRows = this.selectedRows.filter( r => r !== rowData)
+      //   } else {
+      //     this.selectedRows.push(rowData)
+      //   }
+      //   this.log && console.log(`C-DataTable > selectRow : this.selectedRows :`, this.selectedRows)
+      // },
+
       addColumn(type='str') {
         // this.log && console.log(`\nC-DataTable > addColumn ...`)
         let now = new Date(Date.now())
@@ -488,7 +396,7 @@
           now.toISOString()
         )
         this.log && console.log(`\nC-DataTable > addColumn > newHeader.data :`, newHeader.data)
-        this.tableHeaders.push(newHeader.data)
+        this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
       },
       deleteColumn(headerData) {
         this.log && console.log(`\nC-DataTable > deleteColumn ...`)
