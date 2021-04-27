@@ -1,46 +1,44 @@
 <style scoped>
 
-/* .t-data {
-  border-top: thin solid lightGrey !important;
-  border-bottom: thin solid lightGrey !important;
-} */
 
-.td-oneline {
-  overflow: hidden; 
-  white-space: nowrap;
+.data-help {
+  min-height: 35px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.data-cell {
+  min-height: 35px;
+  position: relative;
+  display: flex; 
+  align-items: center;
   padding-left: 20px;
-}
-
-.td-drag {
-  border-right: thin solid lightGrey !important;
-}
-
-.th-help {
-  width: 40px !important;
 }
 
 </style>
 
 <template>
 
-  <tr class="t-data">
+  <!-- ROW >>> FIELDS -->
+  <div
+    :class="`px-${header.helpHeader ? 0 : 2} td-oneline`"
+    :style="`min-width: ${header.width ? header.width + 'px' : 'auto'}!important;`"
+    >
 
-    <!-- ROW >>> FIELDS -->
-    <td 
-      v-for="(h, hIdx) in helpersHs"
-      :key="`data-helper-${hIdx}`"
-      :class="`pa-0 th-help ${ h.value === 'move' ? 'td-drag' : '' } text-center`"
-      :style="`min-width: ${h.width}px!important;`"
+    <div
+      v-if="header.helpHeader"
+      :class="`data-help text-${ getJustify(header) }`"
       >
-
       <v-btn
-        v-if="h.value === 'delete'"
+        v-if="header.value === 'delete'"
         plain
         icon
         small
-        class="ml-0"
+        class="ma-0"
         color="grey"
-        @click="deleteRow(rowData)"
+        @click="deleteRow()"
         >
         <v-icon small>
           icon-trash-2
@@ -48,17 +46,17 @@
       </v-btn>
 
       <v-btn
-        v-if="h.value === 'select'"
+        v-if="header.value === 'select'"
         plain
         icon
         small
-        class="ml-0"
-        :color="selectedRows.includes(rowData) ? 'black' : 'grey'"
-        @click="selectRow(rowData)"
+        class="ma-0"
+        @click="selectRow()"
         >
+        <!-- :color="selectedRows.includes(cellData) ? 'black' : 'grey'" -->
         <v-icon
           small
-          v-if="selectedRows.includes(rowData)"
+          v-if="selectedRows.includes(cellData)"
           >
           icon-check-square
         </v-icon>
@@ -68,13 +66,13 @@
       </v-btn>
 
       <v-btn
-        v-if="h.value === 'edit'"
+        v-if="header.value === 'edit'"
         plain
         icon
         small
-        class="ml-0"
+        class="ma-0"
         color="black"
-        @click="editRow(rowData)"
+        @click="editRow(cellData)"
         >
         <v-icon small>
           icon-edit-3
@@ -82,36 +80,43 @@
       </v-btn>
 
       <v-icon
-        v-if="h.value === 'move'"
+        v-if="header.value === 'move'"
         color="grey"
         small
         >
         icon-more-vertical
       </v-icon>
+    </div>
 
-    </td>
 
-    <!-- CELL VALUE -->
-    <td 
-      v-for="(h, hIdx) in dataFields"
-      :key="`data-${hIdx}`"
-      :class="`td-drag td-oneline text-${ getJustify(h) }`"
-      :style="`min-width: ${h.width ? h.width + 2 + 'px' : 'auto' }!important;`"
+  <!-- CELL VALUE -->
+  <!-- <td 
+    v-for="(h, hIdx) in dataFields"
+    :key="`data-${hIdx}`"
+    :class="`td-drag td-oneline text-${ getJustify(h) }`"
+    :style="`min-width: ${header.width ? header.width + 2 + 'px' : 'auto' }!important;`"
+    > -->
+
+    <!-- {{ h }} -->
+
+    <div
+      v-else
+      :class="`data-cell text-${ getJustify(header) }`"
       >
 
-      <!-- {{ h }} -->
-
       <v-simple-checkbox
-        v-if="h.type === 'bool'"
-        v-model="rowData[ h.value ]"
+        v-if="header.type === 'bool'"
+        v-model="cellData"
         disabled
       />
-      <span v-else-if="h.type === 'str'">
-        {{ rowData[ h.value ] }}
+
+      <span v-else-if="header.type === 'str'">
+        {{ cellData }}
       </span>
-      <span v-else-if="h.type === 'tag'">
+
+      <span v-else-if="header.type === 'tag'">
         <v-chip
-          v-for="(val, i) in rowData[ h.value ]"
+          v-for="(val, i) in cellData"
           :key="i"
           label
           small
@@ -120,9 +125,10 @@
           {{ val }}
         </v-chip>
       </span>
-      <span v-else-if="h.type === 'rating'">
+
+      <span v-else-if="header.type === 'rating'">
         <v-icon
-          v-for="(v,i) in rowData[ h.value ]"
+          v-for="(v,i) in cellData"
           :key="i"
           class=""
           small
@@ -130,24 +136,24 @@
           icon-star
         </v-icon>
       </span>
-      <span v-else>
-        {{ rowData[ h.value ] }}
-      </span>
-  
-    </td>
 
-  </tr>
+      <span v-else>
+        {{ cellData }}
+      </span>
+
+    </div>
+
+  </div>
 </template>
 
 <script>
   import { mapState, mapGetters } from 'vuex'
 
   export default {
-    name: 'DataTableRow',
+    name: 'DataPatchCell',
     props: [
-      'dataFields',
-      'helpersHs',
-      'rowData',
+      'header',
+      'cellData',
       'rowIndex',
       'selectedRows'
     ],

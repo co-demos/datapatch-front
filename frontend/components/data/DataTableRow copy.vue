@@ -1,45 +1,29 @@
-<style scoped>
-
-/* .t-data {
-  border-top: thin solid lightGrey !important;
-  border-bottom: thin solid lightGrey !important;
-} */
-
-.td-oneline {
-  overflow: hidden; 
-  white-space: nowrap;
-  padding-left: 20px;
-}
-
-.td-drag {
-  border-right: thin solid lightGrey !important;
-}
-
-.th-help {
-  width: 40px !important;
-}
-
-</style>
-
 <template>
 
-  <tr class="t-data">
+  <tr>
 
     <!-- ROW >>> FIELDS -->
     <td 
-      v-for="(h, hIdx) in helpersHs"
-      :key="`data-helper-${hIdx}`"
-      :class="`pa-0 th-help ${ h.value === 'move' ? 'td-drag' : '' } text-center`"
-      :style="`min-width: ${h.width}px!important;`"
+      v-for="(h, hIdx) in tableHeaders"
+      :key="hIdx"
+      :class="`${ h.helpHeader && h.value === 'move' ? 'td-drag' : '' } ${ h.helpHeader ? '' : 'td-oneline'} text-${ getJustify(h) } ${ h.position === 'end' ? 'cell-ghost'+(hoverAddCol ? '-on' : '') :  ''}`"
       >
 
+      <v-icon
+        v-if="h.helpHeader && h.value === 'move'"
+        color="grey"
+        small
+        >
+        icon-more-vertical
+      </v-icon>
+
       <v-btn
-        v-if="h.value === 'delete'"
-        plain
+        v-if="h.helpHeader && h.value === 'delete'"
         icon
         small
-        class="ml-0"
         color="grey"
+        elevation="0"
+        class="px-1"
         @click="deleteRow(rowData)"
         >
         <v-icon small>
@@ -48,12 +32,26 @@
       </v-btn>
 
       <v-btn
-        v-if="h.value === 'select'"
-        plain
+        v-if="h.helpHeader && h.value === 'edit'"
         icon
         small
-        class="ml-0"
+        color="black"
+        elevation="0"
+        class="px-1"
+        @click="editRow(rowData)"
+        >
+        <v-icon small>
+          icon-edit-3
+        </v-icon>
+      </v-btn>
+
+      <v-btn
+        v-if="h.helpHeader && h.value === 'select'"
+        icon
+        small
         :color="selectedRows.includes(rowData) ? 'black' : 'grey'"
+        elevation="0"
+        class="px-1"
         @click="selectRow(rowData)"
         >
         <v-icon
@@ -67,75 +65,51 @@
         </span>
       </v-btn>
 
-      <v-btn
-        v-if="h.value === 'edit'"
-        plain
-        icon
-        small
-        class="ml-0"
-        color="black"
-        @click="editRow(rowData)"
-        >
-        <v-icon small>
-          icon-edit-3
-        </v-icon>
-      </v-btn>
+      <!-- CELL VALUE -->
+      <div v-if="!h.helpHeader">
 
-      <v-icon
-        v-if="h.value === 'move'"
-        color="grey"
-        small
-        >
-        icon-more-vertical
-      </v-icon>
+        <v-simple-checkbox
+          v-if="h.type === 'bool'"
+          v-model="rowData[ h.value ]"
+          disabled
+        />
+        <span v-else-if="h.type === 'str'">
+          {{ rowData[ h.value ] }}
+        </span>
+        <span v-else-if="h.type === 'tag'">
+          <v-chip
+            v-for="(val, i) in rowData[ h.value ]"
+            :key="i"
+            label
+            class="ma-1 py-0"
+            >
+            {{ val }}
+          </v-chip>
+        </span>
+        <span v-else-if="h.type === 'rating'">
+          <v-icon
+            v-for="(v,i) in rowData[ h.value ]"
+            :key="i"
+            class="ma-1 py-0"
+            small
+            >
+            icon-star
+          </v-icon>
+        </span>
+        <span v-else>
+          {{ rowData[ h.value ] }}
+        </span>
 
+      </div>
     </td>
-
-    <!-- CELL VALUE -->
-    <td 
-      v-for="(h, hIdx) in dataFields"
-      :key="`data-${hIdx}`"
-      :class="`td-drag td-oneline text-${ getJustify(h) }`"
-      :style="`min-width: ${h.width ? h.width + 2 + 'px' : 'auto' }!important;`"
-      >
-
-      <!-- {{ h }} -->
-
-      <v-simple-checkbox
-        v-if="h.type === 'bool'"
-        v-model="rowData[ h.value ]"
-        disabled
-      />
-      <span v-else-if="h.type === 'str'">
-        {{ rowData[ h.value ] }}
-      </span>
-      <span v-else-if="h.type === 'tag'">
-        <v-chip
-          v-for="(val, i) in rowData[ h.value ]"
-          :key="i"
-          label
-          small
-          class=""
-          >
-          {{ val }}
-        </v-chip>
-      </span>
-      <span v-else-if="h.type === 'rating'">
-        <v-icon
-          v-for="(v,i) in rowData[ h.value ]"
-          :key="i"
-          class=""
-          small
-          >
-          icon-star
-        </v-icon>
-      </span>
-      <span v-else>
-        {{ rowData[ h.value ] }}
-      </span>
-  
-    </td>
-
+    <ModalRow
+      :item="rowData"
+      :itemModel="tableHeaders"
+      :itemType="'row'"
+      :parentDialog="dialogEditRow"
+      :action="'update'"
+      :onlyLocalUpdate="true"
+    />
   </tr>
 </template>
 
@@ -145,8 +119,7 @@
   export default {
     name: 'DataTableRow',
     props: [
-      'dataFields',
-      'helpersHs',
+      'tableHeaders',
       'rowData',
       'rowIndex',
       'selectedRows'
@@ -179,7 +152,7 @@
       },
       editRow(rowData) {
         this.log && console.log(`\nC-DataTableRow > editRow > rowData : `, rowData)
-        this.log && console.log(`C-DataTableRow > editRow > this.dataFields : `, this.dataFields)
+        this.log && console.log(`C-DataTableRow > editRow > this.tableHeaders : `, this.tableHeaders)
         // this.rowToEdit = rowData
         this.dialogEditRow += 1
       },

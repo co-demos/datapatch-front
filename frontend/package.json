@@ -19,6 +19,7 @@
     "nuxt": "^2.0.0",
     "nuxt-i18n": "^6.23.0",
     "standard": "^16.0.3",
+    "vue-draggable-resizable": "^2.3.0",
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {

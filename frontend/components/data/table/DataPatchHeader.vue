@@ -1,6 +1,6 @@
 <style>
 .cell-container {
-  min-height: 30px;
+  min-height: 40px;
   position: relative;
   /* border: 1px solid red; */
   /* display:inline-block; */
@@ -13,16 +13,16 @@
   border: none;
 }
 .handle-class {
-    position: absolute;
-    border: 1px solid black;
-    /* border-radius: 50%; */
-    background-color: black;
-    height: 32px;
-    width: 4px;
-    box-model: border-box;
-    -webkit-transition: all 300ms linear;
-    -ms-transition: all 300ms linear;
-    transition: all 300ms linear;
+  position: absolute;
+  border: 1px solid black;
+  /* border-radius: 50%; */
+  background-color: black;
+  height: 32px;
+  width: 4px;
+  box-model: border-box;
+  -webkit-transition: all 300ms linear;
+  -ms-transition: all 300ms linear;
+  transition: all 300ms linear;
 }
 .handle-class-mr {
   top: 50%;
@@ -38,16 +38,27 @@
 
 <template>
 
-  <v-container
+  <div
     ref="headerElement"
     class="cell-container pa-0 justify-end"
     :style="`width: ${width === 'auto' ? 'auto' : parentWidth + 'px;' }; `"
     @mouseover="activeResize = true"
     @mouseleave="activeResize = false"   
     >
-    <!-- :style="`width: auto;`" -->
+
+    <div
+      v-if="header.helpHeader"
+      :class="`px-3 data-row th-color ${header.value === 'move' ? 'th-end': ''} th-help`"
+      >
+      <span class="text-center">
+        <v-icon small color="grey">
+          {{ header.icon }}
+        </v-icon>
+      </span>
+    </div>
+
     <v-btn
-      v-if="width === 'auto'"
+      v-if="!header.helpHeader && width === 'auto'"
       text
       block
       plain
@@ -55,7 +66,6 @@
       class="text-none black--text my-0 mr-3"
       @click="dialog += 1"
       >
-      <!-- {{ parseInt(width) || width }} -->
       <v-icon x-small class="grey--text">
         {{ fieldIcon(header.type) }}
       </v-icon>
@@ -68,7 +78,7 @@
     </v-btn>
 
     <vue-draggable-resizable
-      v-if="width !== 'auto'"
+      v-if="!header.helpHeader && width !== 'auto'"
       ref="headerElement"
       :w="width"
       :h="'auto'"
@@ -117,7 +127,7 @@
       :onlyLocalUpdate="true"
     />
 
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -127,7 +137,7 @@
   import { configHeaders } from '@/utils/utilsAxios'
 
   export default {
-    name: 'DataTableHeader',
+    name: 'DataPatchHeader',
     props: [
       'header',
       'itemModel'
@@ -149,7 +159,9 @@
       }
     },
     mounted () {
-      this.getHeaderWidth()
+      if (!this.header.helpHeader) {
+        this.getHeaderWidth()
+      }
     },
     computed: {
       ...mapState({
@@ -165,6 +177,7 @@
       updateItemDebounced(width) {
         clearTimeout(this._timerId)
         this._timerId = setTimeout(() => {
+          // this.log && console.log(`\nC-DataTableHeader > this.header :`, this.header)
           let headerUpdated = { ...this.header }
           headerUpdated.width = width
           this.$emit('resizeHeader', headerUpdated)

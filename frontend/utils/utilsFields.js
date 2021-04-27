@@ -177,6 +177,7 @@ export class Field {
     write='owner+groups',
     manage='owner-only',
     id=undefined,
+    width='auto',
     ) {
     this.owner_id = owner_id
     
@@ -207,6 +208,12 @@ export class Field {
   set addCol (bool) {
     this.isAddCol = bool
   }
+  set width (val) {
+    this.hWidth = val
+  }
+  set fixed (val) {
+    this.hFixed = val
+  }
 
   get data () {
     return { 
@@ -228,6 +235,9 @@ export class Field {
       write: this.write,
       manage: this.manage,
       id: this.id,
+
+      width: this.hWidth,
+      fixed: this.hFixed,
     }
   }
 
@@ -242,15 +252,11 @@ export class Field {
       icon: this.icon,
       position: this.position,
       divider: this.divider,
+
+      width: this.hWidth,
+      fixed: this.hFixed,
       
       helpHeader: this.helpHeader,
-
-      // description: this.description, 
-      // creationDate: this.creationDate,
-      // read: this.read,
-      // write: this.write,
-      // manage: this.manage,
-      // id: this.id,
     }
   }
 
@@ -268,6 +274,12 @@ export class Field {
   }
   get addCol () {
     return this.isAddCol
+  }
+  get width () {
+    return this.hWidth
+  }
+  get fixed () {
+    return this.hFixed
   }
 
   get infos () {
@@ -333,8 +345,10 @@ export const helpHeadersFields = helpHeaders.map(h => {
     h.type,
   )
   helperField.helpHeader = true
+  helperField.fixed = true
   helperField.position = h.position
   helperField.icon = h.icon
+  helperField.width = 40
   helperField.divider = h.divider
   return helperField
 })
@@ -358,6 +372,7 @@ export const endHeadersFields = addColHeaders.map(h => {
   helperEndField.helpHeader = true
   helperEndField.position = h.position
   helperEndField.icon = h.icon
+  helperEndField.width = 80
   helperEndField.addCol = true
   return helperEndField
 })

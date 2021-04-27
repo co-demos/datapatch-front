@@ -1,328 +1,34 @@
 <style scoped>
 
-.hidden-scrollbar {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-.hidden-scrollbar::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
-}
-
-.fill-width {
-  width: 100%;
-  overflow-x: scroll;
-  flex-wrap: nowrap;
-}
-
-.th-color {
-  height: 40px;
-  border-top: thin solid lightGrey !important;
-  border-bottom: thin solid lightGrey !important;
-  background-color: ghostWhite !important;
-}
-.th-data {
-  border-left: thin solid lightGrey !important;
-}
-.th-end {
-  border-right: thin solid lightGrey !important;
-}
-
-
-
-.table {
-  /* min-width: 100%; */
-  /* table-layout: fixed; */
-  overflow-x: auto;
-  /* border-collapse: collapse; */
-}
-/* th, td {
-  min-width: 75px;
-} */
-th {
-  min-width: 75px;
-}
-.th-min-width {
-  /* border-left: thin solid lightGrey !important; */
-}
-.th-custom {
-  /* overflow: hidden; 
-  white-space: nowrap; */
-  /* min-width: 150px !important; */
-  /* min-height: 70px !important; */
-  /* width: 100%; */
-  height: none !important;
-}
-
-.td-custom {
-  /* border-left: thin solid rgba(0, 0, 0, 0.12) !important; */
-  /* min-width: 150px !important; */
-}
-.td-oneline {
-  overflow: hidden; 
-  white-space: nowrap;
-}
-.add-col {
-  min-width: 80px !important;
-}
-.add-cell {
-  /* min-width: 150px !important; */
-}
-.cell-ghost {
-  background-color: transparent !important;
-}
-.cell-ghost-on {
-  background-color: lightGrey !important;
-}
 </style>
+
 <template>
 
   <div
     :class="`${fulllWidth ? 'px-0 ml-0 mr-0' : 'px-5'}`"
     >
-    <!-- :outlined="!fulllWidth" -->
-    <!-- :flat="fulllWidth" -->
 
     <DataTableTools
       v-if="!noToolbar"
     />
 
-    <!-- <v-row class="my-5">
-      tableHeaders : <code>{{ tableHeaders.map(f => f) }}</code>
-    </v-row> -->
 
-    <!-- helpersHs -->
-    <!-- addColHs -->
-    <!-- dataFields -->
+    <!-- CUSTOM TABLE FOR DATA PATCH -->
+    <DataPatchTable
+      :dataFields="dataFields"
+      :dataRows="tableRows"
+    />
 
-    <v-row
-      class="ml-0 my-3 fill-width align-center"
-      >
-
-      <!-- FIXED COLUMNS -->
-      <v-col
-        v-for="(h, idx) in helpersHs"
-        :key="`h-start-${idx}`"
-        :class="`py-1 th-color px-2 text-center`"
-        >
-        <v-icon small color="grey">
-          {{ h.icon }}
-        </v-icon>
-      </v-col>
-
-      <!-- UNFIXED COLUMNS -->
-      <draggable
-        :list="dataFields"
-        v-bind="dragOptions"
-        group="headers"
-        tag="div"
-        class="row fill-width hidden-scrollbar"
-        draggable=".th-drag"
-        @start="drag=true"
-        @end="drag=false"
-        >
-
-        <!-- FIELDS COLUMNS -->
-        <v-col
-          v-for="(h, idx) in dataFields"
-          :key="`h-${idx}`"
-          :class="`py-1 th-color px-1 th-data th-drag text-center`"
-          >
-          <DataTableHeader
-            :header="h"
-          />
-        </v-col>
-
-        <!-- ADD COLUMN -->
-        <v-col
-          v-for="(h, idx) in addColHs"
-          :key="`h-end-${idx}`"
-          :class="`py-1 th-color px-2 text-center th-data th-end`"
-          >
-          <v-btn
-            v-if="h.position === 'end'"
-            dark
-            x-small
-            class="mt-1"
-            :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
-            elevation="0"
-            @mouseover="hoverAddCol = true"
-            @mouseleave="hoverAddCol = false"
-            @click="addColumn()"
-            >
-            <v-icon small>
-              icon-plus
-            </v-icon>
-          </v-btn>
-        </v-col>
-
-      </draggable>
-
-    </v-row>
-
-
-
-    <!-- <v-container> -->
-    <v-row
-      v-if="false"
-      >
-      <v-col
-        cols="12"
-        class="mr-2"
-        >
-          <!-- v-if="tableHeaders" -->
-          <!-- :headers="[ ...tableHelpHeaders, ...tableHeaders, ...tableAddColHeaders]" -->
-          <!-- v-table-resizable -->
-        <v-data-table
-          :headers="tableHeaders"
-          :items="tableRows"
-          :search="search"
-          :options="tableOptions"
-          hide-default-header
-          :items-per-page="5"
-          class="elevation-0"
-          v-model="selectedRows"
-          >
-
-          <!-- HEADERS -->
-          <template v-slot:header="{ props: { headers } }">
-            <thead
-              >
-              <!-- border="1" -->
-              <draggable
-                v-model="tableHeaders"
-                v-bind="dragOptions"
-                draggable=".th-drag"
-                tag="tr"
-                group="columns"
-                @start="drag=true"
-                @end="drag=false"
-                >
-                <!-- FIELDS -->
-                <th
-                  v-for="(h, idx) in tableHeaders"
-                  :key="idx"
-                  role="columnheader"
-                  scope="col"
-                  :class="`th-color ${ h.helpHeader ? '' : 'th-drag' } text-center`"
-                  >
-
-                  <DataTableHeader
-                    v-if="!h.helpHeader"
-                    :header="h"
-                  />
-
-                  <!-- ADD COLUMN -->
-                  <span
-                    v-if="h.helpHeader && h.position === 'end'"
-                    >
-                    <v-btn
-                      dark
-                      small
-                      :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
-                      elevation="0"
-                      @mouseover="hoverAddCol = true"
-                      @mouseleave="hoverAddCol = false"
-                      @click="addColumn()"
-                      >
-                      <v-icon small>
-                        icon-plus
-                      </v-icon>
-                    </v-btn>
-                  </span>
-
-                </th>
-              </draggable>
-            </thead>
-          </template>
-
-          <!-- ROWS -->
-          <template v-slot:body="props">
-            <draggable
-              v-model="tableRows"
-              v-bind="dragOptions"
-              tag="tbody"
-              group="rows"
-              @start="drag=true"
-              @end="drag=false"
-              >
-              <DataTableRow
-                v-for="(rowData, index) in props.items"
-                :key="index"
-                :rowIndex="index"
-                :rowData="rowData"
-                :tableHeaders="tableHeaders"
-                :selectedRows="selectedRows"
-              />
-
-
-              <!-- ghost row -->
-              <!-- add last row (ghost cells) -->
-              <tr>
-                <td 
-                  v-for="(h, hIdx) in tableHeaders"
-                  :key="`ghost-${hIdx}`"
-                  :class="`${ h.position === 'start' ? '' : 'td-custom' } cell-ghost${hoverAddRow ? '-on' : '' }`"
-                  >
-                  <!-- ADD ROW -->
-                  <span
-                    v-if="h.helpHeader && h.field === 'edit'"
-                    class="text-center"
-                    >
-                    <v-btn
-                      dark
-                      small
-                      :color="`${ hoverAddRow  ? 'primary' : 'grey lighten-1'}`"
-                      elevation="0"
-                      class="px-0"
-                      @mouseover="hoverAddRow = true"
-                      @mouseleave="hoverAddRow = false"
-                      @click="addRow()"
-                      >
-                      <v-icon small>
-                        icon-plus
-                      </v-icon>
-                    </v-btn>
-                  </span>
-                </td>
-              </tr>
-
-            </draggable>
-          </template> 
-
-        </v-data-table>
-
-      </v-col>
-    </v-row>
-    <!-- </v-container> -->
-
-
-
-
-
-    <!-- DEBUGGIING -->
     <v-divider/>
-    <!-- <v-row>
-      <v-col> -->
-        <!-- <v-data-table
-          v-table-resizable
-          :headers="tableHeaders"
-          :items="tableRows"
-          :options="tableOptions"
-          class="elevation-0 table-resize"
-          v-model="selectedRows"
-          >
-        </v-data-table> -->
-      <!-- </v-col>
-    </v-row> -->
 
-    <v-row>
+    <!-- <v-row class="text-caption">
       <v-col cols="3">
         dataFields: <br>
         <code><pre>{{ dataFields }}</pre></code>
       </v-col>
       <v-col cols="3">
-        tableHeaders: <br>
-        <code><pre>{{ tableHeaders }}</pre></code>
+        dataFields: <br>
+        <code><pre>{{ dataFields }}</pre></code>
       </v-col>
       <v-col cols="3">
         tableRows: <br>
@@ -332,7 +38,7 @@ th {
         localItem: <br>
         <code><pre>{{ localItem }}</pre></code>
       </v-col>
-    </v-row>
+    </v-row> -->
 
   </div>
 
@@ -356,31 +62,12 @@ th {
     ],
     components: {
       DataTableTools: () => import(/* webpackChunkName: "DataTableTools" */ '@/components/data/DataTableTools.vue'),
-      DataTableRow: () => import(/* webpackChunkName: "DataTableRow" */ '@/components/data/DataTableRow.vue'),
     },
     watch: {
     },
     data () {
       return {
-        drag: false,
-        hoverAddCol: false,
-        hoverAddRow: false,
-
-        search: '',
-        tableOptions: {
-          page: 1,
-          itemsPerPage: -1,
-        },
-        selectedRows: [],
-
-        helpersHs: helpHeadersFields.map( h => h.dataHelper ),
-        addColHs: endHeadersFields.map( h => h.dataHelper ),
-
         dataFields: [],
-        tableHeaders: [],
-
-        dialogEditRow: 0,
-        rowToEdit: undefined,
 
         tableRows: [
           {
@@ -431,9 +118,8 @@ th {
     beforeMount () {
 
       let dataHs = []
-      for (let defaultHeader of defaultHeaders) {
-      // for (let defaultHeader of defaultHeaders.filter((h,idx) => idx < 4)) {
-        this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
+      for (let [i, defaultHeader] of defaultHeaders.entries()) {
+        // this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
         let now = new Date(Date.now())
         let fieldClass = new Field(
           this.userId,
@@ -443,23 +129,13 @@ th {
           `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
           now.toISOString()
         )
+        fieldClass.fixed = i === 0
         fieldClass.divider = true
         dataHs.push(fieldClass)
       }
       this.dataFields = dataHs
-      this.tableHeaders = [...this.helpersHs, ...dataHs.map(h => h.data), ...this.addColHs]
-      // this.tableHeaders = dataHs.map(h => h.data)
-      // this.log && console.log(`\nC-DataTable > beforeMount > this.tableHeaders : `, this.tableHeaders)
     },
     computed: {
-      dragOptions() {
-        return {
-          animation: 200,
-          group: "datasets",
-          disabled: false,
-          ghostClass: "ghost"
-        }
-      },
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
@@ -470,43 +146,6 @@ th {
       }),
     },
     methods: {
-
-      addRow() {
-        this.log && console.log(`\nC-DataTable > addRow ...`)
-        this.log && console.log(`C-DataTable > addRow > this.tableHeaders : `, this.tableHeaders)
-        let newRow = this.tableHeaders.reduce((obj, item) => (obj[item.field] = undefined, obj) ,{})
-        this.log && console.log(`C-DataTable > addRow > newRow :`, newRow)
-        this.tableRows.push(newRow)
-      },
-
-      // selectRow(rowData) {
-      //   this.log && console.log(`\nC-DataTable > selectRow > rowData : `, rowData)
-      //   if (this.selectedRows.includes(rowData) ) {
-      //     this.selectedRows = this.selectedRows.filter( r => r !== rowData)
-      //   } else {
-      //     this.selectedRows.push(rowData)
-      //   }
-      //   this.log && console.log(`C-DataTable > selectRow : this.selectedRows :`, this.selectedRows)
-      // },
-
-      addColumn(type='str') {
-        // this.log && console.log(`\nC-DataTable > addColumn ...`)
-        let now = new Date(Date.now())
-        let newHeader = new Field(
-          this.userId,
-          this.$t('fields.newField'),// defaultHeader.field,
-          this.$t('fields.newFieldTitle'),// defaultHeader.title,
-          type,// defaultHeader.type,
-          undefined,// `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
-          now.toISOString()
-        )
-        this.log && console.log(`\nC-DataTable > addColumn > newHeader.data :`, newHeader.data)
-        this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
-      },
-      deleteColumn(headerData) {
-        this.log && console.log(`\nC-DataTable > deleteColumn ...`)
-        this.tableHeaders = this.tableHeaders && this.tableHeaders.filter(h => h !== headerData)
-      }
     },
   }
 
