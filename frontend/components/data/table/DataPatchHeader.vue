@@ -1,6 +1,6 @@
 <style>
 .cell-container {
-  min-height: 40px;
+  /* min-height: 40px; */
   position: relative;
   /* border: 1px solid red; */
   /* display:inline-block; */
@@ -40,15 +40,15 @@
 
   <div
     ref="headerElement"
-    class="cell-container pa-0 justify-end"
+    :class="`cell-container pa-0 justify-${ header.helpHeader ? 'center' : 'end'} ${header.value === 'move' ? 'th-end': ''}`"
     :style="`width: ${width === 'auto' ? 'auto' : parentWidth + 'px;' }; `"
     @mouseover="activeResize = true"
     @mouseleave="activeResize = false"   
     >
 
     <div
-      v-if="header.helpHeader"
-      :class="`px-3 data-row th-color ${header.value === 'move' ? 'th-end': ''} th-help`"
+      v-if="header.helpHeader && header.value !== 'addCol'"
+      :class="`px-3 th-help`"
       >
       <span class="text-center">
         <v-icon small color="grey">
@@ -116,6 +116,24 @@
       </v-btn>
     </vue-draggable-resizable>
 
+    <v-btn
+      v-if="header.helpHeader && header.value === 'addCol'"
+      :class="``"
+      icon
+      small
+      tile
+      :color="`${ hoverAddCol  ? 'primary' : 'grey lighten-1'}`"
+      @mouseover="hoverAddCol = true"
+      @mouseleave="hoverAddCol = false"
+      @click="addColumn()"
+      >
+      <v-icon small color="grey">
+        {{ header.icon }}
+      </v-icon>
+    </v-btn>
+
+
+    <!-- MODAL HEADER -->
     <ModalItem
       :parentDialog="dialog"
       :item="header"
@@ -140,12 +158,22 @@
     name: 'DataPatchHeader',
     props: [
       'header',
-      'itemModel'
+      'itemModel',
+      'redraw',
       // 'hidden'
     ],
     // model: {
     //   prop: 'hidden',
     //   event: 'blur'
+    // },
+    // watch: {
+    //   header(next, prev) {
+    //     this.log && console.log(`\nC-DataPatchHeader > watch > header > next.value :`, next.value)
+    //     this.log && console.log(`C-DataPatchHeader > watch > header > prev.value :`, prev.value)
+    //     if (next.value !== prev.value) {
+    //       this.getHeaderWidth(next)
+    //     }
+    //   }
     // },
     data () {
       return {
@@ -156,12 +184,12 @@
         margin: 10,
         activeResize: false,
         defaultWidth: undefined,
+        hoverAddCol: false,
       }
     },
     mounted () {
-      if (!this.header.helpHeader) {
-        this.getHeaderWidth()
-      }
+      // this.log && console.log(`\nC-DataPatchHeader > mounted > this.header.value :`, this.header.value)
+      this.getHeaderWidth(this.header)
     },
     computed: {
       ...mapState({
@@ -177,7 +205,7 @@
       updateItemDebounced(width) {
         clearTimeout(this._timerId)
         this._timerId = setTimeout(() => {
-          // this.log && console.log(`\nC-DataTableHeader > this.header :`, this.header)
+          // this.log && console.log(`\nC-DataPatchHeader > updateItemDebounced > this.header :`, this.header)
           let headerUpdated = { ...this.header }
           headerUpdated.width = width
           this.$emit('resizeHeader', headerUpdated)
@@ -187,19 +215,25 @@
       fieldIcon (type) {
         return FindFieldIcon(type)
       },
-      getHeaderWidth() {
-        // this.log && console.log(`\nC-DataTableHeader > this.header.value :`, this.header.value)
-        this.defaultWidth = this.$refs.headerElement.clientWidth
-        // this.log && console.log(`C-DataTableHeader > this.defaultWidth :`, this.defaultWidth)
-        this.width = parseInt(this.defaultWidth) + this.margin 
-        this.parentWidth = this.width + this.margin
-        this.updateItemDebounced(this.parentWidth)
+      getHeaderWidth(header) {
+        // this.log && console.log(`\nC-DataPatchHeader > getHeaderWidth > header :`, header)
+        if (!header.helpHeader) {
+          this.defaultWidth = this.$refs.headerElement.clientWidth
+          // this.log && console.log(`C-DataPatchHeader > getHeaderWidth > this.defaultWidth :`, this.defaultWidth)
+          this.width = parseInt(this.defaultWidth) + this.margin 
+          this.parentWidth = this.width + this.margin
+          this.updateItemDebounced(this.parentWidth)
+        }
       },
       onResize (x, y, width, height) {
         this.width = parseInt(width) 
         this.parentWidth = parseInt(width)
         this.updateItemDebounced(width)
       },
+      addColumn(type='str') {
+        this.$emit('addColumn', type)
+      }
+
     }
   }
 

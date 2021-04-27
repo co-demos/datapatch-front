@@ -22,7 +22,6 @@
       :color="currentDataset.color"
       class="mb-0"
       >
-
       <v-spacer></v-spacer>
       <v-toolbar-title>
         <v-icon class="mr-4 pb-1">
@@ -45,15 +44,15 @@
         </v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-
     </v-toolbar>
+
 
     <v-row 
       :class="`align-center ${currentDataset.color} mb-n4 pl-12 pt-3`"
       >
       <v-col cols="11" class="pl-5">
-            <!-- :dark="datasetTables.indexOf(table) === tab" -->
-            <!-- :class="`${datasetTables.indexOf(table) === tab ? 'white' : currentDataset.color}`" -->
+        <!-- :dark="datasetTables.indexOf(table) === tab" -->
+        <!-- :class="`${datasetTables.indexOf(table) === tab ? 'white' : currentDataset.color}`" -->
         <v-btn
           v-for="table in datasetTables"
           :key="table.id"
@@ -115,11 +114,11 @@
 
 
     <DataTable
-      :localItem="currentDataset"
+      :datasetItem="currentDataset"
+      :tableItem="currentTable"
       :dataHeaders="dataHeaders"
       :dataRows="dataRows"
       :fulllWidth="true"
-      :table="currentTable"
     />
 
   </v-container>
@@ -153,8 +152,8 @@
         tab: undefined,
         datasetTables: [ 
           { title: 'table 1', id: 0 },
-          { title: 'table 2', id: 1 },
-          { title: 'table 3', id: 2 },
+          // { title: 'table 2', id: 1 },
+          // { title: 'table 3', id: 2 },
         ],
         dsId: undefined,
         pathItems: [
@@ -176,10 +175,11 @@
           // }
         ],
         itemType: 'datasets',
+        itemModel: undefined,
+
+        currentTable: undefined,
         dataHeaders: undefined,
         dataRows: undefined,
-        itemModel: undefined,
-        currentTable: undefined,
 
       }
     },

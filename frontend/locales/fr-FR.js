@@ -26,9 +26,9 @@ export default {
   imports: {
     blank: "Commencer à partir d'un tableau vide",
     copyPaste: 'Copier-coller vos données',
-    csv: 'Fichier .csv',
-    excel: 'Fichier excel',
-    json: 'Fichier json',
+    csv: 'Fichiers .csv',
+    excel: 'Fichiers excel',
+    json: 'Fichiers json',
     csvGithub: 'Lien vers un fichier csv sur github',
     gSheet: 'Lien vers un fichier Google Sheet',
   },
@@ -97,6 +97,8 @@ export default {
     pwdConfirmType: 'Confirmer le mot de passe',
     pwdConfirmMatch: 'Les mots de passe ne correspondent pas',
     checkAgree: 'Vous devez accepter pour continuer',
+    urlRequired: 'Une url est obligatoire',
+    urlValid: "L'url n'est pas valide",
   },
   tabs: {
     infos: 'Infos',

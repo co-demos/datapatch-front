@@ -121,7 +121,7 @@ export default {
     this.localItem = { ...this.item }
   },
   methods: {
-    saveIitem() {
+    saveItem() {
       let itemPayload = this.localItem
       this.dialog = false
       this.$emit('saveItem', itemPayload)

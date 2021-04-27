@@ -191,6 +191,8 @@ export class Field {
     this.write = write
     this.manage = manage
     this.id = id
+
+    this.hWidth = width
   }
 
   set icon (val) {
@@ -227,7 +229,7 @@ export class Field {
       sortable: false,
       divider: this.divider,
       
-      helpHeader: this.helpHeader,
+      helpHeader: this.isHelpHeader,
 
       description: this.description, 
       creationDate: this.creationDate,
@@ -256,7 +258,7 @@ export class Field {
       width: this.hWidth,
       fixed: this.hFixed,
       
-      helpHeader: this.helpHeader,
+      helpHeader: this.isHelpHeader,
     }
   }
 
@@ -307,32 +309,24 @@ export const helpHeaders = [
     value: 'delete',
     text: '',
     icon: 'icon-trash-2',
-    fixed: true,
-    helpHeader: true,
     position: 'start'
   },
   {
     value: 'select',
     text: '',
     icon: 'icon-square',
-    fixed: true,
-    helpHeader: true,
     position: 'start'
   },
   {
     value: 'edit',
     text: '',
     icon: 'icon-edit-3',
-    fixed: true,
-    helpHeader: true,
     position: 'start'
   },
   {
     value: 'move',
     text: '',
     icon: 'icon-more-vertical',
-    fixed: true,
-    helpHeader: true,
     position: 'start',
     divider: true,
   },
@@ -345,7 +339,7 @@ export const helpHeadersFields = helpHeaders.map(h => {
     h.type,
   )
   helperField.helpHeader = true
-  helperField.fixed = true
+  // helperField.fixed = true
   helperField.position = h.position
   helperField.icon = h.icon
   helperField.width = 40

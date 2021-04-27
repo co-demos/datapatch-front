@@ -13,6 +13,13 @@ export const rules = {
     ]
   },
 
+  urlRules: (reqMsg, validMsg) => {
+    return [
+      (value) => !!value || reqMsg,
+      (value) => /^(ftp|http|https):\/\/[^ "]+$/.test(value) || validMsg,
+    ]
+  },
+
   passwordLoginRules: (typeMsg) => {
     return [
       (value) => !!value || typeMsg,

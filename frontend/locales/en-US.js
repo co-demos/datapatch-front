@@ -26,9 +26,9 @@ export default {
   imports: {
     blank: 'Start from an empty table',
     copyPaste: 'Copy-paste your data',
-    csv: 'Csv file',
-    excel: 'Excel file',
-    json: 'Json file',
+    csv: 'Csv files',
+    excel: 'Excel files',
+    json: 'Json files',
     csvGithub: 'Link to a csv file in github',
     gSheet: 'Link to Google Sheet file',
   },
@@ -97,6 +97,8 @@ export default {
     pwdConfirmType: 'Type confirm password',
     pwdConfirmMatch: 'The password confirmation does not match.',
     checkAgree: 'You must agree to continue',
+    urlRequired: 'An url is mandatory',
+    urlValid: "The url is not valid",
   },
   tabs: {
     infos: 'Infos',

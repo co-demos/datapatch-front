@@ -137,7 +137,7 @@
                 <template v-if="stepInfo.component === 'dataImport'">
                   <div class="mt-5 mb-8">
                     <DatasetImportData
-                      :localItem="localItem"
+                      :datasetItem="localItem"
                       :importType="importType"
                       @setDataImport="setDataImport"
                     />

@@ -21,16 +21,14 @@ const components = {
   ModalRowFields: () => import(/* webpackChunkName: "ModalRowFields" */ '@/components/data/ModalRowFields.vue'),
 
 
-
   DataPatchTable: () => import(/* webpackChunkName: "DataPatchTable" */ '@/components/data/table/DataPatchTable.vue'),
-  // DataPatchHeadersRow: () => import(/* webpackChunkName: "DataPatchHeadersRow" */ '@/components/data/table/DataPatchHeadersRow.vue'),
+  DataPatchTools: () => import(/* webpackChunkName: "DataPatchTools" */ '@/components/data/table/DataPatchTools.vue'),
   DataPatchHeader: () => import(/* webpackChunkName: "DataPatchHeader" */ '@/components/data/table/DataPatchHeader.vue'),
   DataPatchCell: () => import(/* webpackChunkName: "DataPatchCell" */ '@/components/data/table/DataPatchCell.vue'),
 
 
-
   DataTable: () => import(/* webpackChunkName: "DataTable" */ '@/components/data/DataTable.vue'),
-  DataTableHeader: () => import(/* webpackChunkName: "DataTableHeader" */ '@/components/data/DataTableHeader.vue'),
+  // DataTableHeader: () => import(/* webpackChunkName: "DataTableHeader" */ '@/components/data/DataTableHeader.vue'),
 }
 
 Object.entries(components).forEach(([name, component]) => {

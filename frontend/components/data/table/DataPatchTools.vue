@@ -36,7 +36,7 @@
 
   export default {
 
-    name: 'DataTableTools',
+    name: 'DataPatchTools',
     props: [
       'table',
     ],

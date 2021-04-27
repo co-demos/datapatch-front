@@ -2,7 +2,7 @@
 
 
 .data-help {
-  min-height: 35px;
+  /* min-height: 35px!important; */
   position: relative;
   display: flex;
   align-items: center;
@@ -10,11 +10,24 @@
 }
 
 .data-cell {
-  min-height: 35px;
+  /* min-height: 35px!important; */
   position: relative;
   display: flex; 
   align-items: center;
+  align-content: center;
   padding-left: 20px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/* .dialog-cell {
+  align-self: flex-end;
+} */
+
+.v-dialog__content { 
+  position: absolute; 
 }
 
 </style>
@@ -23,13 +36,14 @@
 
   <!-- ROW >>> FIELDS -->
   <div
-    :class="`px-${header.helpHeader ? 0 : 2} td-oneline`"
+    ref="cell"
+    :class="`px-${header.helpHeader || editMode ? 0 : 2} td-oneline`"
     :style="`min-width: ${header.width ? header.width + 'px' : 'auto'}!important;`"
     >
 
     <div
       v-if="header.helpHeader"
-      :class="`data-help text-${ getJustify(header) }`"
+      :class="`data-help`"
       >
       <v-btn
         v-if="header.value === 'delete'"
@@ -56,12 +70,12 @@
         <!-- :color="selectedRows.includes(cellData) ? 'black' : 'grey'" -->
         <v-icon
           small
-          v-if="selectedRows.includes(cellData)"
+          v-if="selectedRows.includes(rowId)"
           >
           icon-check-square
         </v-icon>
         <span v-else>
-          {{ rowIndex + 1 }}
+          {{ rowId }}
         </span>
       </v-btn>
 
@@ -72,7 +86,7 @@
         small
         class="ma-0"
         color="black"
-        @click="editRow(cellData)"
+        @click="editRow()"
         >
         <v-icon small>
           icon-edit-3
@@ -89,19 +103,13 @@
     </div>
 
 
-  <!-- CELL VALUE -->
-  <!-- <td 
-    v-for="(h, hIdx) in dataFields"
-    :key="`data-${hIdx}`"
-    :class="`td-drag td-oneline text-${ getJustify(h) }`"
-    :style="`min-width: ${header.width ? header.width + 2 + 'px' : 'auto' }!important;`"
-    > -->
-
-    <!-- {{ h }} -->
-
+    <!-- CELL VALUE -->
     <div
-      v-else
-      :class="`data-cell text-${ getJustify(header) }`"
+      v-if="!editMode && !header.helpHeader"
+      v-click-outside="onClickOutside"
+      :class="`data-cell clickable`"
+      :style="`justify-content: ${ getJustify(header) }`"
+      @click.stop="editCell"
       >
 
       <v-simple-checkbox
@@ -111,7 +119,7 @@
       />
 
       <span v-else-if="header.type === 'str'">
-        {{ cellData }}
+        {{ cellData || '-' }}
       </span>
 
       <span v-else-if="header.type === 'tag'">
@@ -120,9 +128,9 @@
           :key="i"
           label
           small
-          class=""
+          class="mr-1"
           >
-          {{ val }}
+          {{ val || '-' }}
         </v-chip>
       </span>
 
@@ -138,10 +146,76 @@
       </span>
 
       <span v-else>
-        {{ cellData }}
+        {{ cellData || '-' }}
       </span>
 
     </div>
+
+    <!-- EDIT CELL -->
+    <v-card 
+      v-if="editMode && !header.helpHeader"
+      v-click-outside="onClickOutside"
+      :class="`clickable text-center`"
+      tile
+      >
+      <!-- <v-card-text class="pa-0 mb-2 justify-center text-headline">
+        {{ header.text }}
+      </v-card-text> -->
+      <v-card-text class="pa-0">
+        <v-checkbox
+          v-if="header.type === 'bool'"
+          v-model="cellData"
+          filled
+          dense
+          hide-details
+          />
+
+        <v-textarea
+          v-else-if="header.type === 'longStr'"
+          v-model="cellData"
+          filled
+          dense
+          hide-details
+          />
+
+        <v-combobox
+          v-else-if="header.type === 'tag'"
+          v-model="cellData"
+          multiple
+          smalll-chips
+          filled
+          dense
+          hide-details
+          />
+
+        <v-text-field
+          v-else-if="header.type === 'int' || header.type === 'float'"
+          v-model="cellData"
+          type="number"
+          filled
+          dense
+          hide-details
+          />
+
+        <v-select
+          v-else-if="header.type === 'rating'"
+          v-model="cellData"
+          :items="[0,1,2,3,4,5]"
+          filled
+          dense
+          hide-details
+          />
+
+        <v-text-field
+          v-else
+          v-model="cellData"
+          filled
+          dense
+          hide-details
+        />
+
+      </v-card-text>
+    </v-card>
 
   </div>
 </template>
@@ -154,14 +228,19 @@
     props: [
       'header',
       'cellData',
-      'rowIndex',
+      'rowId',
       'selectedRows'
     ],
     data () {
       return {
-        dialogEditRow: 0,
-        rowToEdit: undefined,
+        editMode: false,
+        localData: undefined,
+        x: 0,
+        y: 0,
       }
+    },
+    beforeMount () {
+      // this.localData = this.cellData
     },
     computed: {
       ...mapState({
@@ -176,31 +255,41 @@
     methods: {
       getJustify(head) {
         // this.log && head.type === 'int' && console.log(`C-DataTableRow > cleanTableHeaders > head : `, head)
-        let justify = head.helpHeader ? 'center px-0' : 'left'
+        let justify = 'start'
         let centers = ['bool', 'rating', 'date']
-        let rights = ['float', 'int']
-        justify = centers.includes(head.type) ? 'center' : rights.includes(head.type) ? 'right' : justify
+        let ends = ['float', 'int']
+        justify = centers.includes(head.type) ? 'center' : ends.includes(head.type) ? 'end' : justify
         // this.log && head.type === 'int' && console.log(`C-DataTableRow > cleanTableHeaders > justify : `, justify)
         return justify
       },
-      editRow(rowData) {
-        this.log && console.log(`\nC-DataTableRow > editRow > rowData : `, rowData)
-        this.log && console.log(`C-DataTableRow > editRow > this.dataFields : `, this.dataFields)
-        // this.rowToEdit = rowData
-        this.dialogEditRow += 1
+      onClickOutside() {
+        this.editMode = false
       },
-      selectRow(rowData) {
-        this.log && console.log(`\nC-DataTableRow > selectRow > rowData : `, rowData)
-        if (this.selectedRows.includes(rowData) ) {
-          // this.selectedRows = this.selectedRows.filter( r => r !== rowData)
-        } else {
-          // this.selectedRows.push(rowData)
-        }
-        this.log && console.log(`C-DataTableRow > selectRow : this.selectedRows :`, this.selectedRows)
+      editCell(e) {
+        this.log && console.log(`\C-DataTableRow > editCell > this.rowId : `, this.rowId)
+        e.preventDefault()
+        // let cell = this.$refs.cell
+        // // this.log && console.log(`\C-DataTableRow > editCell > cell : `, cell)
+        // let cellX = this.$refs.cell.getBoundingClientRect().left
+        // let cellY = this.$refs.cell.getBoundingClientRect().top
+        // this.editMode = false
+        // this.x = cellX + 1 //e.clientX
+        // this.y = cellY - 1 //e.clientY
+        this.$nextTick(() => {
+          this.editMode = true
+        })
       },
-      deleteRow(rowData) {
-        this.log && console.log(`\nC-DataTableRow > deleteRow > rowData : `, rowData)
-        // this.tableRows = this.tableRows.filter(r => r !== rowData )
+      editRow() {
+        // this.log && console.log(`C-DataTableRow > editRow > this.rowId : `, this.rowId)
+        this.$emit('editRow', this.rowId)
+      },
+      selectRow() {
+        // this.log && console.log(`\nC-DataTableRow > selectRow > this.rowId : `, this.rowId)
+        this.$emit('selectRow', this.rowId)
+      },
+      deleteRow() {
+        // this.log && console.log(`\nC-DataTableRow > deleteRow > this.rowId : `, this.rowId)
+        this.$emit('deleteRow', this.rowId)
       },
     }
   }

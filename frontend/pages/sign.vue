@@ -187,81 +187,81 @@
 
 <script>
 
-import { mapState, mapActions } from 'vuex'
-import { rules } from '@/utils/utilsRules.js'
+  import { mapState, mapActions } from 'vuex'
+  import { rules } from '@/utils/utilsRules.js'
 
-export default {
+  export default {
 
-  name: 'Sign',
-  data () {
-    return {
-      pathItems: [
-        { 
-          text: 'login.sign',
-          disabled: true,
-          to: '/sign',
-        }
-      ],
+    name: 'Sign',
+    data () {
+      return {
+        pathItems: [
+          { 
+            text: 'login.sign',
+            disabled: true,
+            to: '/sign',
+          }
+        ],
 
-      checkEmail: false,
-      showPwd: false,
+        checkEmail: false,
+        showPwd: false,
 
-      username: '',
-      name: '',
-      surname: '',
-      email: '',
-      password: '',
-      checkbox: false,
+        username: '',
+        name: '',
+        surname: '',
+        email: '',
+        password: '',
+        checkbox: false,
 
-      valueRules: rules.valueRules( this.$t('rules.valEnter') ),
-      emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
-      passwordRules: rules.passwordRules( this.$t('rules.pwdType'), this.$t('rules.pwdChars') ),
-      checkboxRules: rules.checkboxRules( this.$t('rules.checkAgree') ),
+        valueRules: rules.valueRules( this.$t('rules.valEnter') ),
+        emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
+        passwordRules: rules.passwordRules( this.$t('rules.pwdType'), this.$t('rules.pwdChars') ),
+        checkboxRules: rules.checkboxRules( this.$t('rules.checkAgree') ),
 
-    }
-  },
-  beforeMount () {
-    this.updatePath(this.pathItems)
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-      api: (state) => state.api,
-      isLoading: (state) => state.dialogs.isLoading,
-   })
-  },
-  methods: {
-    ...mapActions({
-      updatePath: 'updateCrumbsPath',
-      populateUser: 'user/populateUser',
-    }),
-    submit () {
-
-      if ( this.$refs.form.validate() ) {
-        this.alert = false
-        let newUser = {
-          username: this.username,
-          name: this.name,
-          surname: this.surname,
-          email: this.email,
-          locale: this.$i18n.locale,
-          password: this.password,
-        }
-        this.log && console.log('P-Sign > submit > newUser : ', newUser)
-  
-        this.$axios
-          .post(`${this.api.users}/`, newUser)
-          .then(resp => {
-            this.log && console.log('P-Sign > submit > resp.data : ', resp.data)
-            const userData = resp.data
-            this.populateUser(userData)
-            // this.$router.push('/login')
-            this.checkEmail = true
-          })
       }
-      
+    },
+    beforeMount () {
+      this.updatePath(this.pathItems)
+    },
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+        api: (state) => state.api,
+        isLoading: (state) => state.dialogs.isLoading,
+    })
+    },
+    methods: {
+      ...mapActions({
+        updatePath: 'updateCrumbsPath',
+        populateUser: 'user/populateUser',
+      }),
+      submit () {
+
+        if ( this.$refs.form.validate() ) {
+          this.alert = false
+          let newUser = {
+            username: this.username,
+            name: this.name,
+            surname: this.surname,
+            email: this.email,
+            locale: this.$i18n.locale,
+            password: this.password,
+          }
+          this.log && console.log('P-Sign > submit > newUser : ', newUser)
+    
+          this.$axios
+            .post(`${this.api.users}/`, newUser)
+            .then(resp => {
+              this.log && console.log('P-Sign > submit > resp.data : ', resp.data)
+              const userData = resp.data
+              this.populateUser(userData)
+              // this.$router.push('/login')
+              this.checkEmail = true
+            })
+        }
+        
+      }
     }
   }
-}
 
 </script>

@@ -1,9 +1,19 @@
 <style>
-table {
-  border-collapse: collapse;
-            border-style: hidden;
+.table-root {
+  border-top: thin solid lightGrey !important;
+  /* border-bottom: thin solid lightGrey !important; */
+  border-right: thin solid lightGrey !important;
+  border-left: thin solid lightGrey !important;
 }
-tr, td {
+table {
+  border-collapse: none;
+  border-style: none;
+}
+tbody {
+  /* border-bottom: thin solid lightGrey !important; */
+}
+
+th, td {
   border-bottom: thin solid lightGrey !important;
 }
 
@@ -23,17 +33,20 @@ tr, td {
   display: flex;
   align-items: center;
 }
-
-.th {
-  /* border-top: thin solid lightGrey !important; */
-  /* border-bottom: thin solid lightGrey !important; */
-  /* min-height: 40px!important; */
+.fixed-field {
+  border-right: thin solid lightGrey !important;
+  padding-bottom: 1px;
 }
 .th-color {
   background-color: ghostWhite !important;
 }
+.th-color-fixed {
+  /* background-color: floralwhite !important; */
+  background-color: ghostWhite !important;
+  border-bottom: thin solid lightGrey !important;
+}
 .th-help {
-  /* width: 40px !important; */
+  width: 40px !important;
 }
 .th-data {
   border-right: thin solid lightGrey !important;
@@ -42,9 +55,13 @@ tr, td {
   border-right: thin solid lightGrey !important;
 }
 
-.td {
+th {
   /* border-bottom: thin solid lightGrey !important; */
-  min-height: 35px!important;
+  height: 40px!important;
+}
+td {
+  /* border-bottom: thin solid lightGrey !important; */
+  height: 35px!important;
 }
 .td-oneline {
   overflow: hidden; 
@@ -56,8 +73,8 @@ tr, td {
   border-right: thin solid lightGrey !important;
 }
 
-.th-help {
-  width: 40px !important;
+.row-selected {
+  background-color: gainsboro !important;
 }
 
 </style>
@@ -82,9 +99,8 @@ tr, td {
 
           <!-- UNFIXED COLUMNS -->
           <draggable
-            v-model="tableHeaders"
-            v-bind="dragOptions"
-            group="headers"
+            :list="tableHeaders"
+            v-bind="dragOptionsHeaders"
             tag="tr"
             draggable=".th-drag"
             @start="drag=true"
@@ -93,7 +109,7 @@ tr, td {
             <th
               v-for="(h, hIdx) in tableHeaders"
               :key="`h-${hIdx}`"
-              :class="`th th-color ${h.helpHeader || h.fixed ? '' : 'th-data th-drag'} ${h.fixed ? 'fixed-column' : ''}`"
+              :class="`${h.helpHeader || h.fixed ? 'th-color-fixed' : 'th-color th-data th-drag'} ${h.fixed ? 'fixed-column' : ''} ${h.fixed && !h.helpHeader ? 'fixed-field' : ''}`"
               :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
               >
               <!-- {{ h.value }} - {{ h.fixed }} - {{ h.width }} -->
@@ -101,6 +117,7 @@ tr, td {
                 :header="h"
                 :itemModel="itemModel"
                 @resizeHeader="updateHeader"
+                @addColumn="addColumn"
               />
             </th>
           </draggable>
@@ -108,29 +125,54 @@ tr, td {
 
         <!-- VALUES / ROWS -->
         <draggable
-          v-model="tableRows"
-          v-bind="dragOptions"
-          group="rows"
+          :list="tableRows"
+          v-bind="dragOptionsRows"
           tag="tbody"
           @start="drag=true"
           @end="drag=false"
           >
           <tr
-            v-for="(rowData, rIdx) in tableRows"
-            :key="`r-${rIdx}`"
+            v-for="(rowData, rowIdx) in tableRows"
+            :key="`r-${rowIdx}`"
             >
             <td
               v-for="(h, hIdx) in tableHeaders"
               :key="`r-h-${hIdx}`"
-              :class="`td ${!h.helpHeader || h.divider? 'td-drag' : 'td-help'} ${h.fixed ? 'fixed-column' : ''}`"
+              :class="`td ${!h.helpHeader || h.divider ? 'td-drag' : 'td-help'} ${h.fixed ? 'fixed-column' : ''} ${selectedRows.includes(rowData.id) ? 'row-selected' : ''}`"
               :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
               >
+              <!-- {{ rowData[ h.value ] }} -->
               <DataPatchCell
                 :cellData="rowData[ h.value ]"
                 :header="h"
-                :rowIndex="rIdx"
+                :rowId="rowData.id"
                 :selectedRows="selectedRows"
+                @editRow="editRow"
+                @deleteRow="deleteRow"
+                @selectRow="toggleSelectRow"
               />
+            </td>
+          </tr>
+
+          <!-- ADD ROW -->
+          <tr>
+            <td
+              v-for="(h, hIdx) in tableHeaders"
+              :key="`r-h-${hIdx}`"
+              :class="`${h.fixed ? 'fixed-column' : ''} justify-center`"
+              :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
+              >
+              <v-btn 
+                v-if="hIdx === 3"
+                x-small
+                plain
+                :class="`px-1`"
+                @click="addRow()"
+                >
+                <v-icon small>
+                 icon-plus
+                </v-icon>
+              </v-btn>
             </td>
           </tr>
         </draggable>
@@ -139,19 +181,30 @@ tr, td {
 
     </div>
 
+    <ModalRow
+      :item="rowDataToEdit"
+      :itemModel="dataFields"
+      :itemType="'row'"
+      :parentDialog="dialogEditRow"
+      :action="'update'"
+      :onlyLocalUpdate="true"
+      @saveItem="saveItem"
+    />
+
+
     <v-row class="text-caption">
       <v-col cols="4">
         tableHeaders: <br>
         <code><pre>{{ tableHeaders }}</pre></code>
       </v-col>
-      <!-- <v-col cols="3">
+      <v-col cols="3">
         dataFields: <br>
         <code><pre>{{ dataFields }}</pre></code>
-      </v-col> -->
-      <!-- <v-col cols="4">
+      </v-col>
+      <v-col cols="4">
         tableRows: <br>
         <code><pre>{{ tableRows }}</pre></code>
-      </v-col> -->
+      </v-col>
     </v-row>
 
   </div>
@@ -161,7 +214,7 @@ tr, td {
 <script>
 
   import { mapState, mapGetters } from 'vuex'
-  import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
+  import { Field, helpHeadersFields, endHeadersFields } from '@/utils/utilsFields'
 
   export default {
     name: 'DataPatchTable',
@@ -173,13 +226,16 @@ tr, td {
       return {
 
         drag: false,
+        dialogEditRow: 0,
+
+        itemModel: undefined,
 
         helpersHs: helpHeadersFields.map( h => h.dataHelper ),
         addColHs: endHeadersFields.map( h => h.dataHelper ),
         tableHeaders: [],
-        itemModel: undefined,
 
         tableRows: [],
+        rowDataToEdit: undefined,
 
         search: '',
         tableOptions: {
@@ -199,13 +255,21 @@ tr, td {
         auth: emptyField.auth,
         meta: emptyField.meta,
       }
-      this.tableRows = this.dataRows
+      this.tableRows = [...this.dataRows]
     },
     computed: {
-      dragOptions() {
+      dragOptionsHeaders() {
         return {
           animation: 200,
-          group: "datasets",
+          group: "headers",
+          disabled: false,
+          ghostClass: "ghost"
+        }
+      },
+      dragOptionsRows() {
+        return {
+          animation: 200,
+          group: "rows",
           disabled: false,
           ghostClass: "ghost"
         }
@@ -244,7 +308,56 @@ tr, td {
             return LeftPx
           }
         }
-      }
+      },
+      addColumn(type='str') {
+        this.log && console.log(`\nC-DataPatchTable > addColumn ...`)
+        let now = new Date(Date.now())
+        let newHeader = new Field(
+          this.userId,
+          this.$t('fields.newField') + Math.floor(Math.random() * 1000) ,// defaultHeader.field,
+          this.$t('fields.newFieldTitle'),// defaultHeader.title,
+          type,// defaultHeader.type,
+          undefined,// `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
+          now.toISOString()
+        )
+        newHeader.helpHeader = false
+        this.log && console.log(`C-DataPatchTable > addColumn > newHeader.data :`, newHeader.data)
+        this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
+        this.log && console.log(`C-DataPatchTable > addColumn > this.tableHeaders :`, this.tableHeaders)
+      },
+      deleteColumn(headerData) {
+        this.log && console.log(`\nC-DataPatchTable > deleteColumn ...`)
+        this.tableHeaders = this.tableHeaders && this.tableHeaders.filter(h => h !== headerData)
+      },
+      addRow() {
+        this.log && console.log(`\nC-DataPatchTable > addRow ...`)
+        this.log && console.log(`C-DataPatchTable > addRow > this.tableHeaders : `, this.tableHeaders)
+        let newRow = {}
+        this.tableHeaders.forEach( h => {if( !h.helpHeader) {newRow[h.value] = ''}} )
+        newRow.id = this.tableRows.length + 1
+        this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
+        this.tableRows.push(newRow)
+      },
+      toggleSelectRow(rowId) {
+        if (!this.selectedRows.includes(rowId)) {
+          this.selectedRows.push(rowId)
+        } else {
+          this.selectedRows = this.selectedRows.filter( r => r !== rowId)
+        }
+      },
+      editRow(rowId) {
+        this.log && console.log(`\nC-DataPatchTable > editRow ...`)
+        let rowToEdit = this.tableRows.find( r => r.id === rowId )
+        this.rowDataToEdit = rowToEdit
+        this.dialogEditRow += 1
+      },
+      saveItem(rowData) {
+        this.tableRows = this.tableRows.map( r => r.id === rowData.id ? rowData : r )
+      },
+      deleteRow(rowId) {
+        this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
+        this.tableRows = this.tableRows && this.tableRows.filter(r => r.id !== rowId)
+      },
     }
   }
 
