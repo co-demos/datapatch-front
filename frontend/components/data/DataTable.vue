@@ -27,10 +27,6 @@
         <code><pre>{{ dataFields }}</pre></code>
       </v-col>
       <v-col cols="3">
-        dataFields: <br>
-        <code><pre>{{ dataFields }}</pre></code>
-      </v-col>
-      <v-col cols="3">
         tableRows: <br>
         <code><pre>{{ tableRows }}</pre></code>
       </v-col>

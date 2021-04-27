@@ -1,6 +1,7 @@
 <style>
 table {
   border-collapse: collapse;
+            border-style: hidden;
 }
 tr, td {
   border-bottom: thin solid lightGrey !important;
