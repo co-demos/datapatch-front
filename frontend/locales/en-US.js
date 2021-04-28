@@ -145,6 +145,7 @@ export default {
     icon: 'Icon', 
     licence: 'Licence',
     type: 'Type',
+    hide: 'Hide',
   },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',
@@ -218,6 +219,8 @@ export default {
     color: 'color',
     curr: 'currency',
     latlon: 'latitude-longitude',
+    shownField: 'field is shown',
+    hiddenField: 'field is hidden',
   },
 
   row: {

@@ -145,6 +145,7 @@ export default {
     icon: 'Icône', 
     licence: 'License',
     type: 'Type',
+    hide: 'Cacher',
   },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
@@ -218,6 +219,8 @@ export default {
     color: 'couleur',
     curr: 'monnaie',
     latlon: 'latitude-longitude',
+    shownField: 'le champ est affiché',
+    hiddenField: 'le champ est caché',
   },
 
   row: {

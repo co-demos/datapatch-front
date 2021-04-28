@@ -24,7 +24,7 @@
     transition="dialog-bottom-transition"
     >
     <!-- MODAL TITLE -->
-    <v-card class="fill-height">
+    <v-card class="">
       
       <!-- CLOSE MODAL -->
       <v-card-actions class="mr-5 pt-5 pb-0 px-0">
@@ -283,7 +283,7 @@
 
 <script>
 
-  import { mapState } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'ModalCreateDataset',
@@ -339,6 +339,7 @@
 
         localItem: undefined,
         importType: undefined,
+        
         dataImport: [],
         datasetMeta: undefined,
 
@@ -369,8 +370,16 @@
       ...mapState({
         log: (state) => state.log,
       }),
+      ...mapGetters({
+        userId: 'user/userId',
+        headerUser: 'user/headerUser',
+        getCurrentTables: 'tables/getCurrentTables',
+      })
     },
     methods: {
+      ...mapActions({
+        setCurrentTables: 'tables/setCurrentTables'
+      }),
       addToVisited (n) {
         let inidicesvisited = [ ...this.visited, n]
         this.visited = [ ...new Set(inidicesvisited) ]
@@ -391,14 +400,20 @@
         this.importType = value
         this.e1 += 1
       },
-      setDataImport(value) {
-        this.log && console.log(`C-ModalCreateDataset > setDataImport :`, value)
-        this.dataImport = value
+      setDataImport(tables) {
+        this.log && console.log(`C-ModalCreateDataset > setDataImport > tables :`, tables)
+        this.dataImport = tables
+        this.setCurrentTables(tables)
         // this.e1 += 1
       },
       createItem() {
         this.log && console.log(`C-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)
         this.dialog = false
+        let datasetPayload = {
+          dataset: this.localItem,
+          tables: this.dataImport
+        }
+        this.log && console.log(`C-ModalCreateDataset > createDataset > datasetPayload :`, datasetPayload)
         this.$emit('createItem', this.localItem)
       },
     }

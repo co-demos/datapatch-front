@@ -71,7 +71,7 @@
     props: [
       'tab',
       'currentDataset',
-      'table',
+      'tableId',
       'itemModel',
       'itemType',
       'fromCreate',
@@ -79,11 +79,17 @@
     data () {
       return {
         dialog: 0,
+        table: undefined,
       }
+    },
+    beforeMount () {
+      // this.log && console.log(`\nC-TableItem > beforeMount > this.tableId : `, this.tableId )
+      // this.log && console.log(`C-TableItem > beforeMount > this.getTableMetadataById(this.tableId) : `, this.getTableMetadataById(this.tableId) )
+      this.table = this.getTableMetadataById(this.tableId)
     },
     computed: {
       getDatasetColor() {
-        let color = this.fromCreate ? 'grey darken-1' : this.currentDataset.color
+        let color = this.fromCreate ? 'primary' : this.currentDataset.color
         return color
       },
       ...mapState({
@@ -92,6 +98,7 @@
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
+        getTableMetadataById: 'tables/getTableMetadataById',
       })
     },
     methods: {

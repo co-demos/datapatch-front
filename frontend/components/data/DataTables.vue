@@ -1,32 +1,59 @@
+<style scoped>
+.hide-x-scroll-parent{
+  display: flex;
+  flex-wrap: nowrap !important;
+  overflow: scroll;
+  overflow-x: auto !important;
+  margin-bottom: -1px;
+}
+::-webkit-scrollbar {
+  height: 0;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
+</style>
+
 <template>
 
   <div>
 
     <!-- DEBUGGING -->
-    <!-- <v-row class="text-caption"> -->
-      <!-- <v-col cols="12">
+    <v-row class="text-caption mb-3" v-if="false">
+      <v-col cols="12">
         <h5>
           <hr> DEBUG FROM : DataTables
         </h5>
       </v-col>
-      <v-col cols="4">
+
+      <v-col cols="4" v-if="false">
         currentDataset (prop): <br>
         <code><pre>{{ currentDataset }}</pre></code>
-      </v-col> -->
-      <!-- <v-col cols="4">
-        datasetTables (local): <br>
-        <code><pre>{{ datasetTables.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
-      </v-col> -->
-      <!-- <v-col cols="4">
-        currentTable (local): <br>
-        <code><pre>{{ { 
-              id: currentTable.id, 
-              title: currentTable.title, 
-              tableDataLength: currentTable.tableData.length, 
-              tableFieldsLength: currentTable.tableFields.length 
-          } }}</pre></code>
-      </v-col> -->
-    <!-- </v-row> -->
+      </v-col>
+
+      <v-col cols="4" v-if="true">
+        getCurrentTables (getter): <br>
+        <code>{{ getCurrentTables && getCurrentTables.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+      </v-col>
+
+      <v-col cols="4" v-if="true">
+        getCurrentTableId (getter): <br>
+        <code>{{ getCurrentTableId }}</code>
+      </v-col>
+
+      <v-col cols="4" v-if="true">
+        getCurrentTable (local): <br>
+        <code><pre>{{ getCurrentTable && { 
+          id: getCurrentTable.id, 
+          title: getCurrentTable.title, 
+          tableDataLength: getCurrentTable.tableData.length, 
+          tableFieldsLength: getCurrentTable.tableFields.length 
+        } }}</pre></code>
+      </v-col>
+
+    </v-row>
     <!-- <hr> -->
 
     <!-- TABS TABLES -->
@@ -34,20 +61,21 @@
       :class="`align-center ${fromCreate ? '' : getDatasetColor} mb-n4 pl-12 pt-3`"
       >
       <v-col cols="11" class="pl-5 pb-0">
-        <v-row class="align-center">
+        <div class="align-center hide-x-scroll-parent">
 
           <!-- TABLE TAB -->
           <TableItem
-            v-for="table in datasetTables"
+            v-for="table in getCurrentTables"
             :key="`table-tab-${table.id}`"
             :tab="tab"
             :currentDataset="currentDataset"
-            :table="table"
+            :tableId="table.id"
             :itemModel="itemModel"
             :itemType="itemType"
             :fromCreate="fromCreate"
             @changeTab="changeTab"
           />
+            <!-- :table="table" -->
 
           <v-btn
             v-if="!fromCreate"
@@ -62,7 +90,7 @@
             </v-icon>
           </v-btn>
 
-        </v-row>
+        </div>
 
       </v-col>
 
@@ -83,22 +111,20 @@
 
       </v-col>
 
-    </v-row>    
+    </v-row>
 
     <!-- TABLES -->
     <v-row
-      v-for="table in datasetTables"
-      :key="`table-${table.id}`"
-      v-show="tab === table.id"
+      v-if="getCurrentTable"
+      class="mt-1"
       >
       <v-col 
         cols="12"
         class="ma-0"
         >
         <DataTable
-          v-if="tab === table.id"
           :datasetItem="currentDataset"
-          :tableItem="table"
+          :tableId="getCurrentTableId"
           :noToolbar="noToolbar"
           :fromCreate="fromCreate"
           :fulllWidth="true"
@@ -113,14 +139,17 @@
 
 <script>
 
-  import { TableMetaData, defaultTableData } from '@/utils/utilsTables'
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
+
+  import { TableMetaData, defaultTableData, CreateBlankTable } from '@/utils/utilsTables'
 
   export default {
     name: 'DataTables',
     props: [
       'currentDataset',
-      'currrentDatasetTables',
+
+      'currrentDatasetTables', // <-- ? to delete and replace by store getter
+
       'noToolbar',
       'fromCreate'
     ],
@@ -131,11 +160,12 @@
 
         tab: undefined,
 
-        datasetTables: [],
+        // datasetTables: [],
 
       }
     },
     beforeMount () {
+
       // create model
       let emptyTable = new TableMetaData()
       this.itemModel = {
@@ -144,20 +174,10 @@
       }
       this.log && console.log(`\nC-DataTables > beforeMount > emptyTable : `, emptyTable)
 
-      // populate tables array
-      if (this.currrentDataset && !this.currrentDatasetTables) {
-        this.log && console.log(`C-DataTables > beforeMount > this.currrentDataset : `, this.currrentDataset)
-        this.datasetTables = [ ...this.currrentDatasetTables.tables ]
-      }
-      if (this.currrentDatasetTables) {
-        this.log && console.log(`C-DataTables > beforeMount > this.currrentDatasetTables : `, this.currrentDatasetTables)
-        this.datasetTables = [ ...this.currrentDatasetTables ]
-      }
-      this.log && console.log(`C-DataTables > beforeMount > this.datasetTables : `, this.datasetTables)
-
       // set default tab
-      this.tab = this.datasetTables[0].id
-    },
+      this.tab = this.currrentDatasetTables[0].id
+      this.setCurrentTableById(this.tab)
+   },
     computed: {
       getDatasetColor() {
         let color = this.fromCreate ? 'grey darken-1' : this.currentDataset.color
@@ -168,39 +188,37 @@
         api: (state) => state.api,
       }),
       ...mapGetters({
+        userId: 'user/userId',
         isAuthenticated: 'user/isAuthenticated',
+        getCurrentTables: 'tables/getCurrentTables',
+        getCurrentTable: 'tables/getCurrentTable',
+        getCurrentTableId: 'tables/getCurrentTableId',
+        getTableById: 'tables/getTableById',
       })
     },
     methods: {
-      // getTextColor(tableId) {
-      //   let color = this.getDatasetColor
-      //   let txtColor = this.tab !== tableId ? 'white' : color
-      //   if (this.fromCreate) {
-      //     txtColor = this.tab !== tableId ? color : 'white'
-      //   }
-      //   return txtColor
-      // },
-      // getTabBackgroundColor(tableId) {
-      //   let color = this.getDatasetColor
-      //   let bgColor = this.tab !== tableId ? color : 'white'
-      //   if (this.fromCreate) {
-      //     bgColor = this.tab !== tableId ? 'white' : color
-      //   }
-      //   return bgColor
-      // },
+      ...mapActions({
+        setCurrentTables: 'tables/setCurrentTables',
+        setCurrentTable: 'tables/setCurrentTable',
+        setCurrentTableById: 'tables/setCurrentTableById',
+        appendTable: 'tables/appendTable',
+      }),
       changeTab(tableId) {
         this.tab = tableId
+        this.setCurrentTableById(tableId)
       },
       addTable() {
-        let newId = this.datasetTables.length + 1
-        // let emptyTable = new TableMetaData()
-        let newTable = {
-          title: `new table ${newId}`,
-          id: newId
-        }
-        this.datasetTables.push(newTable)
-        this.currentTable = newTable
-        this.tab = newTable.id
+        let newId = this.getCurrentTables.length + 1
+        let newTable = CreateBlankTable(
+          this.userId,
+          `${this.$t('tables.defaultTitle')} - ${newId}`,
+          this.$t('tables.defaultDescription'),
+          newId,
+          false
+        )[0]
+        this.log && console.log(`\nC-DataTables > newTable : `, newTable)
+        this.appendTable(newTable)
+        this.changeTab(newTable.id)
       }
     }
 

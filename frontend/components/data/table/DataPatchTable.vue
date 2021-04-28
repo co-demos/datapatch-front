@@ -114,8 +114,9 @@ td {
               >
               <!-- {{ h.value }} - {{ h.fixed }} - {{ h.width }} -->
               <DataPatchHeader
+                :tableId="tableId"
                 :header="h"
-                :itemModel="itemModel"
+                :itemModel="fieldModel"
                 @resizeHeader="updateHeader"
                 @addColumn="addColumn"
               />
@@ -150,6 +151,7 @@ td {
               >
               <!-- {{ rowData[ h.value ] }} -->
               <DataPatchCell
+                :tableId="tableId"
                 :cellData="rowData[ h.value ]"
                 :header="h"
                 :rowId="rowData.id"
@@ -203,7 +205,7 @@ td {
 
 
     <!-- DEBUGGING -->
-    <v-row class="text-caption">
+    <v-row class="text-caption" v-if="false">
       <v-col cols="12">
         <h5>
           <hr> DEBUG FROM : DataPatchTable
@@ -213,7 +215,7 @@ td {
         tableHeaders: <br>
         <code><pre>{{ tableHeaders }}</pre></code>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="4">
         dataFields: <br>
         <code><pre>{{ dataFields }}</pre></code>
       </v-col>
@@ -236,24 +238,41 @@ td {
   export default {
     name: 'DataPatchTable',
     props: [
-      'dataFields',
-      'dataRows',
+      'tableId',
+      // 'dataFields',
+      // 'dataRows',
     ],
+    watch: {
+      tableId(next) {
+        let currentTable = this.getCurrentTable
+
+        let dataFields = currentTable.tableFields
+        this.dataFields = dataFields.map( h => h.data )
+        this.tableHeaders = [ ...this.helpersHs, ...dataFields, ...this.addColHs ]
+
+        this.tableRows =  currentTable.tableData
+      }
+    },
     data () {
       return {
 
         drag: false,
         dialogEditRow: 0,
 
-        itemModel: undefined,
+        // field models
+        fieldModel: undefined,
+        dataFields: undefined,
 
+        // headers - fields
         helpersHs: helpHeadersFields.map( h => h.dataHelper ),
-        addColHs: endHeadersFields.map( h => h.dataHelper ),
         tableHeaders: [],
+        addColHs: endHeadersFields.map( h => h.dataHelper ),
 
+        // rows
         tableRows: [],
         rowDataToEdit: undefined,
 
+        // ux - pagination - search
         search: '',
         tableOptions: {
           page: 1,
@@ -264,16 +283,22 @@ td {
       }
     },
     beforeMount () {
-      let dataFields = this.dataFields.map( h => h.data )
-      this.tableHeaders = [...this.helpersHs, ...dataFields, ...this.addColHs]
+
       let emptyField = new Field()
-      this.itemModel = {
+      this.fieldModel = {
         infos: emptyField.infos,
         auth: emptyField.auth,
         meta: emptyField.meta,
       }
-      this.tableRows = [...this.dataRows]
+
+      let currentTable = this.getCurrentTable
+      let dataFields = currentTable.tableFields
+      this.dataFields = dataFields.map( h => h.data )
+      this.tableHeaders = [ ...this.helpersHs, ...dataFields, ...this.addColHs ]
+      this.tableRows =  currentTable.tableData
+
     },
+
     computed: {
       dragOptionsHeaders() {
         return {
@@ -297,7 +322,9 @@ td {
       }),
       ...mapGetters({
         userId: 'user/userId',
-        headerUser: 'user/headerUser'
+        headerUser: 'user/headerUser',
+        getCurrentTable: 'tables/getCurrentTable',
+        getTableById: 'tables/getTableById',
       }),
     },
     methods: {

@@ -1,4 +1,5 @@
 import * as models from '@/utils/utilsModels.js'
+import { Field, defaultHeaders } from '@/utils/utilsFields.js'
 
 // cf :  https://dmitripavlutin.com/javascript-classes-complete-guide/
 
@@ -130,3 +131,57 @@ export class TableMetaData {
   { id: 10, name: 'test 10' },
 
 ]
+
+export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescription, newId=false, addSecondTable=true) => {
+
+  // SET HEADERS FOR BLANK
+  let tableBlankHeaders = []
+  for (let [i, defaultHeader] of defaultHeaders.entries()) {
+    let now = new Date(Date.now())
+    let fieldClass = new Field(
+      userId,
+      defaultHeader.value,
+      defaultHeader.text,
+      defaultHeader.type,
+      defaultHeader.title,
+      now.toISOString(),
+      i + 1, 
+    )
+    // fieldClass.fixed = i === 0
+    fieldClass.divider = true
+    tableBlankHeaders.push(fieldClass)
+  }
+
+  // SET ROWS FOR BLANK
+  let tableBlankRows = defaultTableData
+
+  // WRAP UP AND SET TABLE FOR BLANK DATA AND DEFAULT FIELDS
+  let now = new Date(Date.now())
+  let tableBlank = new TableMetaData(
+    userId,
+    defaulTableTitle,
+    defaulTableDescription,
+    newId || 1,
+    now.toISOString(),
+    tableBlankHeaders,
+    tableBlankRows
+  )
+  let tableBlankData = tableBlank.data
+
+  let tables = [ tableBlankData ]
+
+  if (addSecondTable) {
+    let tableBlankDataCopy = { 
+      ...tableBlankData,
+      id: 2,
+      title: `${defaulTableTitle} - 2`,
+      description: `${defaulTableDescription} - 2`,
+      tableFields: tableBlankData.tableFields.slice(0, 4),
+      tableData: tableBlankData.tableData.slice(0, 5),
+    }
+    tables.push(tableBlankDataCopy)
+  }
+
+  return tables
+
+}

@@ -226,6 +226,7 @@
   export default {
     name: 'DataPatchCell',
     props: [
+      'tableId',
       'header',
       'cellData',
       'rowId',

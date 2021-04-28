@@ -1,7 +1,6 @@
 import * as authsModels from '@/utils/utilsAuths.js'
 import { Licences } from '@/utils/utilsLicences.js'
 
-
 export const itemTitleModel = [ 
   {
     name: 'title',

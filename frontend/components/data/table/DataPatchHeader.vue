@@ -157,6 +157,7 @@
   export default {
     name: 'DataPatchHeader',
     props: [
+      'tableId',
       'header',
       'itemModel',
       'redraw',

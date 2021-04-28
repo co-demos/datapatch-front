@@ -113,6 +113,19 @@ export const FieldTypes = [
   },
 ]
 
+export const HideChoices = [
+  {
+    value: 'false',
+    text: 'fields.shownField',
+    icon: 'icon-eye'
+  },
+  {
+    value: 'true',
+    text: 'fields.hiddenField',
+    icon: 'icon-eye-off'
+  },
+]
+
 export const FindFieldIcon = (type) => {
   let fieldType = FieldTypes.find(f => f.type === type)
   return fieldType.icon
@@ -163,6 +176,25 @@ export const itemTypeModel = [
   },
 ]
 
+export const itemHideModel = [
+  {
+    name: 'hide',
+    field: 'checkbox',
+    label: 'dataPackage.hide',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: {
+      custom: true,
+      text: 'text',
+      value: 'value',
+      prependIcon: true,
+      translate: true,
+      items: HideChoices
+    }
+  },
+]
+
 export class Field {
 
   constructor (
@@ -195,7 +227,7 @@ export class Field {
     this.manage = manage
     this.id = id
 
-    this.hHide = hide
+    this.hide = hide
     this.hWidth = width
   }
 
@@ -247,6 +279,7 @@ export class Field {
 
       width: this.hWidth,
       fixed: this.hFixed,
+      hide: this.hHide,
     }
   }
 
@@ -299,6 +332,7 @@ export class Field {
       ...itemFieldModel,
       ...itemTypeModel,
       ...models.itemDescriptionModel,
+      ...itemHideModel,
     ]
   }
   get auth () {

@@ -1,4 +1,4 @@
-import { dataset } from '@/utils/utilsDatasets.js' 
+import { Dataset } from '@/utils/utilsDatasets.js' 
 
 
 export const state = () => ({
@@ -12,7 +12,7 @@ export const state = () => ({
 
 export const getters = {
   getCurrentItem: (state) => {
-    // console.log('S-datasets > updateItem > state.currentDataset : ', state.currentDataset)
+    // console.log('S-datasets > getCurrentItem > state.currentDataset : ', state.currentDataset)
     return state.currentDataset
   },
   getUserItems: (state) => {
@@ -31,12 +31,12 @@ export const getters = {
 
 export const mutations = {
   setItems (state, {space, items}) {
-    // console.log('S-datasets > setUserItems > items : ', items)
-    // console.log('S-datasets > setUserItems > items : ', items)
+    // console.log('S-datasets > setItems > items : ', items)
+    // console.log('S-datasets > setItems > items : ', items)
     state[space] = items
   },
   addItem (state, {space, item}) {
-    // console.log('S-datasets > addUserItem > item : ', item)
+    // console.log('S-datasets > addItem > item : ', item)
     state[space].push(item)
   },
   updateItem (state, {space, item}) {

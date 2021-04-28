@@ -18,44 +18,69 @@
         </v-subheader>
 
         <!-- DEBUGGING -->
-        <!-- <pre>
-          {{ model.field === 'select' ? model.options : '' }}
-        </pre> -->
-        <!-- <pre>
-          {{ model.field === 'select' ? model.options.items : '' }}
-        </pre> -->
+        <!-- <p class="text-caption"> -->
+          <!-- <pre>
+            {{ model.field === 'select' ? model.options : '' }}
+          </pre> -->
+          <!-- <pre>
+            {{ model.field === 'select' ? model.options.items : '' }}
+          </pre> -->
+
+          <!-- <code v-if="model.field === 'checkbox'">
+            - {{ findPreprendIcon(localItem[model.name], model) }}<br><br>
+            - {{ localItem }}<br><br>
+            - {{ model }}
+          </code> -->
+        <!-- </p> -->
+
       </v-col>
     
       <v-col cols="8">
+
+
+        <v-checkbox
+          v-if="model.field === 'checkbox'"
+          hide-details="auto"
+          :disabled="model.readonly"
+          :clearable="model.clearable"
+          :label="findText(localItem[model.name], model)"
+          :off-icon="findPreprendIcon(false, model)"
+          :on-icon="findPreprendIcon(true, model)"
+          v-model="localItem[model.name]"
+          dense
+          @input="updateItemDebounced()"
+        />
+
         <v-text-field
+          v-if="model.field === 'text'"
           filled
           hide-details="auto"
           :disabled="model.readonly"
           :clearable="model.clearable"
-          v-if="model.field === 'text'"
           v-model="localItem[model.name]"
           dense
           @input="updateItemDebounced()"
         />
 
         <v-textarea
+          v-if="model.field === 'textarea'"
           filled
           rows="3"
           class="mb-2"
           hide-details="auto"
           :disabled="model.readonly"
           :clearable="model.clearable"
-          v-if="model.field === 'textarea'"
           v-model="localItem[model.name]"
           dense
           @input="updateItemDebounced()"
         />
+
         <v-select
+          v-if="model.field === 'select'"
           filled
           hide-details="auto"
           :disabled="model.readonly"
           :clearable="model.clearable"
-          v-if="model.field === 'select'"
           v-model="localItem[model.name]"
           :items="model.options.items"
           :item-text="model.options.text"
@@ -161,6 +186,18 @@
       // this.log && console.log('C-ModalFields > beforeMount > this.localItem :' , this.localItem)
     },
     methods: {
+      findText(value, model) {
+        let needTranslation = model.options.translate
+        let item = model.options.items.find( i => i.value === value.toString())
+        return needTranslation ? this.$t(item.text) : item.text
+      },
+      findPreprendIcon(value, model) {
+        let needPrependIcon = model.options.prependIcon
+        if (needPrependIcon) {
+          let item = model.options.items.find( i => i.value === value.toString())
+          return item.icon
+        }
+      },
       updateItemDebounced() {
         // cancel pending call
         clearTimeout(this._timerId)

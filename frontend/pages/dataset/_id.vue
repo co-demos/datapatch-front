@@ -67,7 +67,7 @@
   import { configHeaders } from '@/utils/utilsAxios'
 
   import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
-  import { TableMetaData, defaultTableData } from '@/utils/utilsTables'
+  import { TableMetaData, defaultTableData, CreateBlankTable } from '@/utils/utilsTables'
 
   export default {
     name: 'Dataset',
@@ -99,12 +99,6 @@
             disabled: true,
             to: '/dataset',
           },
-          // { 
-          //   text: `${this.currentDataset.title}`,
-          //   noTranslate: true,
-          //   disabled: true,
-          //   to: `/dataset/${this.$route.params.id}`,
-          // }
         ],
         itemType: 'datasets',
         itemModel: undefined,
@@ -134,51 +128,12 @@
         prefs: emptyDataset.prefs,
       }
 
-
-
-      let tableBlankHeaders = []
-      for (let [i, defaultHeader] of defaultHeaders.entries()) {
-        // this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
-        let now = new Date(Date.now())
-        let fieldClass = new Field(
-          this.userId,
-          defaultHeader.value,
-          defaultHeader.text,
-          defaultHeader.type,
-          `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
-          now.toISOString(),
-          i + 1, 
-        )
-        // fieldClass.fixed = i === 0
-        fieldClass.divider = true
-        tableBlankHeaders.push(fieldClass)
-      }
-
-      // SET ROWS FOR BLANK
-      let tableBlankRows = defaultTableData
-
-      // SET TABLE FOR BLANK
-     let now = new Date(Date.now())
-     let tableBlank = new TableMetaData(
+      this.tablesBlank = CreateBlankTable(
         this.userId,
         this.$t('tables.defaultTitle'),
-        this.$t('tables.defaultDescription'),
-        1,
-        now.toISOString(),
-        tableBlankHeaders,
-        tableBlankRows
+        this.$t('tables.defaultDescription')
       )
-      let tableBlankData = tableBlank.data
-      let tableBlankDataCopy = { 
-        ...tableBlankData,
-        id: 2,
-        title: this.$t('tables.defaultTitle') + '-2',
-        tableFields: tableBlankData.tableFields.slice(0, 4),
-        tableData: tableBlankData.tableData.slice(0, 5),
-      }
-      this.log && console.log(`\nC-DatasetImportData > beforeMount > tableItem : `, tableBlank)
-      this.tablesBlank = [ tableBlankData, tableBlankDataCopy ]
-
+      this.setCurrentTables(this.tablesBlank)
 
     },
     computed: {
@@ -188,6 +143,7 @@
         api: (state) => state.api,
       }),
       ...mapGetters({
+        userId: 'user/userId',
         isAuthenticated: 'user/isAuthenticated',
         currentDataset: 'datasets/getCurrentItem',
       })
@@ -195,6 +151,7 @@
     methods: {
       ...mapActions({
         updatePath: 'updateCrumbsPath',
+        setCurrentTables: 'tables/setCurrentTables'
       }),
     }
 

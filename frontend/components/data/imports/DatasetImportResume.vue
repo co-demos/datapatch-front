@@ -14,24 +14,24 @@
     <!-- RESUME DATASET -->
     <v-row class="justify-left mx-0">
 
-      <v-col cols="3" class="text-body-2 font-weight-bold ">
+      <v-col cols="3" class="pa-1 text-body-2 font-weight-bold ">
         {{ $t('dataPackage.dataset') }} :
       </v-col>
-      <v-col cols="9" class="">
+      <v-col cols="9" class="pa-1 ">
         {{ localItem.title }}
       </v-col>
 
-      <v-col cols="3" class="text-body-2 font-weight-bold ">
+      <v-col cols="3" class="pa-1 text-body-2 font-weight-bold ">
         {{ $t('dataPackage.description') }} :
       </v-col>
-      <v-col cols="9" class="">
+      <v-col cols="9" class="pa-1 ">
         {{ localItem.description }}
       </v-col>
   
-      <v-col cols="3" class="text-body-2 font-weight-bold ">
+      <v-col cols="3" class="pa-1 text-body-2 font-weight-bold ">
         {{ $t('dataPackage.licence') }} :
       </v-col>
-      <v-col cols="9" class="">
+      <v-col cols="9" class="pa-1 ">
         {{ localItem.licence }}
       </v-col>
     </v-row>
@@ -40,11 +40,11 @@
 
     <!-- RESUME TABLES -->
     <v-row class="justify-left mx-0">
-      <v-col cols="3" class="text-body-2 font-weight-bold ">
+      <v-col cols="3" class="pa-1 text-body-2 font-weight-bold ">
         {{ $t('dataPackage.tables') }} 
         ({{ dataImport.length }}) :
       </v-col>
-      <v-col cols="9" class="">
+      <v-col cols="9" class="pa-1 ">
         <v-list-item
           v-for="table in dataImport"
           :key="table.id"
