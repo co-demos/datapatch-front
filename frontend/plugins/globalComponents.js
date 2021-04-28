@@ -20,6 +20,9 @@ const components = {
   ModalRow: () => import(/* webpackChunkName: "ModalRow" */ '@/components/data/ModalRow.vue'),
   ModalRowFields: () => import(/* webpackChunkName: "ModalRowFields" */ '@/components/data/ModalRowFields.vue'),
 
+  TableItem: () => import(/* webpackChunkName: "TableItem" */ '@/components/data/TableItem.vue'),
+  DataTables: () => import(/* webpackChunkName: "DataTables" */ '@/components/data/DataTables.vue'),
+  DataTables: () => import(/* webpackChunkName: "DataTables" */ '@/components/data/DataTables.vue'),
 
   DataPatchTable: () => import(/* webpackChunkName: "DataPatchTable" */ '@/components/data/table/DataPatchTable.vue'),
   DataPatchTools: () => import(/* webpackChunkName: "DataPatchTools" */ '@/components/data/table/DataPatchTools.vue'),

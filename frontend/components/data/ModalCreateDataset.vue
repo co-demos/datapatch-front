@@ -48,17 +48,46 @@
       </v-card-title>
 
       <!-- DEBUGGING -->
-      <!-- <v-row class="mx-10">
-        <v-col>
-          e1: <code>{{ e1 }}</code>
+      <!-- <v-row class="text-caption">
+        <v-col cols="12">
+          <h5>
+            <hr> DEBUG FROM : ModalCreateDataset
+          </h5>
         </v-col>
-        <v-col>
-          visited includes e1: <code>{{ visited.includes(e1) }}</code>
+        <v-col cols="3">
+          fromWorkspace: <code>{{ fromWorkspace }}</code><br>
+          itemType: <code>{{ itemType }}</code><br>
+          action: <code>{{ action }}</code><br>
+          apiUrl: <code>{{ apiUrl }}</code><br>
+          presetCreate: <code>{{ presetCreate }}</code><br>
         </v-col>
-        <v-col>
-          visited entries: <code>{{ visited }}</code>
+        <v-col cols="3">
+          item (prop): <br>
+          <code><pre>{{ item }}</pre></code>
         </v-col>
-      </v-row> -->
+        <v-col cols="3">
+          localItem (copy of item): <br>
+          <code><pre>{{ localItem }}</pre></code>
+        </v-col>
+        <v-col cols="3">
+          importType: <code>{{ importType }}</code><br>
+          dataImport: <br>
+          <code><pre>{{ 
+            dataImport && dataImport.length > 0 && dataImport.map( d => {
+              return {
+                title: d.title,
+                tableFieldsLlength: d.tableFields.length,
+                tableDataLlength: d.tableData.length,
+                // tableFields: d.tableFields.map( tf => { return { value : tf.value } } ),
+                // tableData: d.tableData.map( td => { return { name : td.name } } ),
+              }
+            })
+          }}
+          </pre></code><br>
+          datasetMeta: <code>{{ datasetMeta }}</code><br>
+        </v-col>
+      </v-row>
+      <hr> -->
 
 
       <!-- STEPPER -->
@@ -124,17 +153,17 @@
                 >
 
                 <!-- SET IMPORT OPTION -->
-                <template v-if="stepInfo.component === 'importType'">
+                <div v-if="stepInfo.component === 'importType'">
                   <div class="mt-8 mb-8">
                     <DatasetImportOptions
                       :presetCreate="presetCreate"
                       @setImportFormat="setImportFormat"
                     />
                   </div>
-                </template>
+                </div>
 
                 <!-- SET IMPORT DATA -->
-                <template v-if="stepInfo.component === 'dataImport'">
+                <div v-if="stepInfo.component === 'dataImport'">
                   <div class="mt-5 mb-8">
                     <DatasetImportData
                       :datasetItem="localItem"
@@ -142,10 +171,10 @@
                       @setDataImport="setDataImport"
                     />
                   </div>
-                </template>
+                </div>
 
                 <!-- SET METADATA -->
-                <template v-if="stepInfo.component === 'datasetMeta'">
+                <div v-if="stepInfo.component === 'datasetMeta'">
                   <v-row class="mt-8 mx-5 justify-center">
                     <v-col cols="8">
                       <ModalTabs
@@ -159,18 +188,19 @@
                       />
                     </v-col>
                   </v-row>
-                </template>
+                </div>
 
                 <!-- SET IMPORT OPTION -->
-                <template v-if="stepInfo.component === 'datasetCreate'">
+                <div v-if="stepInfo.component === 'datasetCreate'">
                   <!-- {{ stepInfo.component }} <br> -->
                   <div class="mt-5 mb-8">
                     <DatasetImportResume
                       :importType="importType"
                       :localItem="localItem"
+                      :dataImport="dataImport"
                     />
                   </div>
-                </template>
+                </div>
 
               </v-card>
 
@@ -309,7 +339,7 @@
 
         localItem: undefined,
         importType: undefined,
-        dataImport: undefined,
+        dataImport: [],
         datasetMeta: undefined,
 
         stepsList: [
@@ -364,7 +394,7 @@
       setDataImport(value) {
         this.log && console.log(`C-ModalCreateDataset > setDataImport :`, value)
         this.dataImport = value
-        this.e1 += 1
+        // this.e1 += 1
       },
       createItem() {
         this.log && console.log(`C-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)

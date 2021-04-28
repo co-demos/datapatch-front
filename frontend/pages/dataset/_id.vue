@@ -1,10 +1,3 @@
-<style scoped>
-  .table-btn {
-    border-style: solid;
-    border-color: white !important;
-  }
-</style>
-
 <template>
 
   <v-container class="mb-5 px-0 pt-0 mx-0">
@@ -46,60 +39,10 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-
-    <v-row 
-      :class="`align-center ${currentDataset.color} mb-n4 pl-12 pt-3`"
-      >
-      <v-col cols="11" class="pl-5">
-        <!-- :dark="datasetTables.indexOf(table) === tab" -->
-        <!-- :class="`${datasetTables.indexOf(table) === tab ? 'white' : currentDataset.color}`" -->
-        <v-btn
-          v-for="table in datasetTables"
-          :key="table.id"
-          tile
-          :outlined="tab !== table.id"
-          :class="`mx-2`"
-          :color="`white`"
-          @click="currentTable = table, tab = table.id"
-          >
-          <span
-            :class="`px-3 text-none font-weight-bold ${tab === table.id ? currentDataset.color : 'white' }--text`"
-            >
-            {{ table.title }}
-          </span>
-        </v-btn>
-
-        <v-btn
-          icon
-          small
-          color="white"
-          class="mb-1"
-          @click="addTable()"
-          >
-          <v-icon class="font-weight-bold">
-            icon-plus
-          </v-icon>
-        </v-btn>
-
-      </v-col>
-
-      <v-spacer/>
-
-      <v-col class="pr-5">
-        <v-btn
-          icon
-          small
-          color="white"
-          class="mb-2"
-          >
-          <v-icon class="">
-            icon-message-square
-          </v-icon>
-        </v-btn>
-
-      </v-col>
-
-    </v-row>
+    <DataTables
+      :currentDataset="currentDataset"
+      :currrentDatasetTables="tablesBlank"
+    />
 
     <!-- DIALOG FOR DATASET INFOS -->
     <ModalItem
@@ -112,15 +55,6 @@
       :updateCurrentDataset="true"
     />
 
-
-    <DataTable
-      :datasetItem="currentDataset"
-      :tableItem="currentTable"
-      :dataHeaders="dataHeaders"
-      :dataRows="dataRows"
-      :fulllWidth="true"
-    />
-
   </v-container>
 
 </template>
@@ -131,6 +65,9 @@
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { Dataset } from '@/utils/utilsDatasets'
   import { configHeaders } from '@/utils/utilsAxios'
+
+  import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
+  import { TableMetaData, defaultTableData } from '@/utils/utilsTables'
 
   export default {
     name: 'Dataset',
@@ -149,12 +86,7 @@
     data () {
       return {
         dialog: 0,
-        tab: undefined,
-        datasetTables: [ 
-          { title: 'table 1', id: 0 },
-          // { title: 'table 2', id: 1 },
-          // { title: 'table 3', id: 2 },
-        ],
+ 
         dsId: undefined,
         pathItems: [
           { 
@@ -177,9 +109,7 @@
         itemType: 'datasets',
         itemModel: undefined,
 
-        currentTable: undefined,
-        dataHeaders: undefined,
-        dataRows: undefined,
+        tablesBlank: [],
 
       }
     },
@@ -203,9 +133,53 @@
         auth: emptyDataset.auth,
         prefs: emptyDataset.prefs,
       }
-      // this.LocalItem = this.currentDataset
-      this.currentTable = this.datasetTables[0]
-      this.tab = this.currentTable.id
+
+
+
+      let tableBlankHeaders = []
+      for (let [i, defaultHeader] of defaultHeaders.entries()) {
+        // this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
+        let now = new Date(Date.now())
+        let fieldClass = new Field(
+          this.userId,
+          defaultHeader.value,
+          defaultHeader.text,
+          defaultHeader.type,
+          `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
+          now.toISOString(),
+          i + 1, 
+        )
+        // fieldClass.fixed = i === 0
+        fieldClass.divider = true
+        tableBlankHeaders.push(fieldClass)
+      }
+
+      // SET ROWS FOR BLANK
+      let tableBlankRows = defaultTableData
+
+      // SET TABLE FOR BLANK
+     let now = new Date(Date.now())
+     let tableBlank = new TableMetaData(
+        this.userId,
+        this.$t('tables.defaultTitle'),
+        this.$t('tables.defaultDescription'),
+        1,
+        now.toISOString(),
+        tableBlankHeaders,
+        tableBlankRows
+      )
+      let tableBlankData = tableBlank.data
+      let tableBlankDataCopy = { 
+        ...tableBlankData,
+        id: 2,
+        title: this.$t('tables.defaultTitle') + '-2',
+        tableFields: tableBlankData.tableFields.slice(0, 4),
+        tableData: tableBlankData.tableData.slice(0, 5),
+      }
+      this.log && console.log(`\nC-DatasetImportData > beforeMount > tableItem : `, tableBlank)
+      this.tablesBlank = [ tableBlankData, tableBlankDataCopy ]
+
+
     },
     computed: {
       ...mapState({
@@ -222,16 +196,6 @@
       ...mapActions({
         updatePath: 'updateCrumbsPath',
       }),
-      addTable() {
-        let newId = this.datasetTables.length + 1
-        let newTable = {
-          title: `new table ${newId}`,
-          id: newId
-        }
-        this.datasetTables.push(newTable)
-        this.currentTable = newTable
-        this.tab = newTable.id
-      }
     }
 
   }

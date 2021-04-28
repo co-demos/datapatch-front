@@ -1,7 +1,6 @@
 <template>
 
   <div>
-
     <v-avatar
       v-if="!noAvatar"
       :class="`${customClass ? customClass : 'ml-0'}`"
@@ -12,6 +11,9 @@
       >
       <v-icon v-if="item.icon" dark class="white--text">
         {{ item.icon }}
+      </v-icon>
+      <v-icon v-else-if="itemType === 'tables'" dark class="black--text">
+        icon-table
       </v-icon>
       <span v-else class="white--text headline no-decoration">
         {{ getInitials(item.title) }}

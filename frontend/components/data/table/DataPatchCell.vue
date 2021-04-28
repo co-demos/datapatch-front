@@ -96,9 +96,9 @@
       <v-icon
         v-if="header.value === 'move'"
         color="grey"
-        small
+        x-small
         >
-        icon-more-vertical
+        icon-move
       </v-icon>
     </div>
 

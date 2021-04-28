@@ -195,7 +195,10 @@
                   this.$store.dispatch(`${this.itemType}/setCurrentItem`, resp.data)
                 }
               })
+          } else {
+            this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
           }
+
         }
       },
     }

@@ -9,24 +9,25 @@ export class TableMetaData {
     title='My new table',
     description='My table description',
     id=undefined,
-    url=undefined,
     creationDate=undefined,
-    licence='ODbL',
 
-    tableData=[],
     tableFields=[],
+    tableData=[],
+
+    licence='ODbL',
 
     read='public',
     comment='owner-only',
     patch='public',
     write='owner+groups',
     manage='owner-only',
+
+    url=undefined,
     ) {
     this.owner_id = owner_id
-    this.id = id
-    this.url = url
     this.title = title
     this.description = description
+    this.id = id
     this.creationDate = creationDate
     this.licence=licence
 
@@ -38,6 +39,7 @@ export class TableMetaData {
     this.patch = patch
     this.write = write
     this.manage = manage
+    this.url = url
   }
 
   get data () {

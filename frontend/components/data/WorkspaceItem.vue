@@ -133,7 +133,7 @@
       </v-menu>
 
 
-      <!-- DIALOG FOR WORKSPACE INFOS -->
+      <!-- DIALOG FOR WORKSPACE INFOS UPDATE -->
       <ModalItem
         :item="ws"
         :noAvatar="true"
@@ -144,7 +144,7 @@
         :action="'update'"
       />
 
-      <!-- DIALOG FOR WROKSPACE DELETE -->
+      <!-- DIALOG FOR WORKSPACE DELETE -->
       <ModalDelete
         :parentDialog="dialogDelete"
         :confirmDeleteTitle="$t('workspaces.deleteWorkspace')"

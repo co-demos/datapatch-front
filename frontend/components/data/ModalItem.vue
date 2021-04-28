@@ -149,60 +149,69 @@
 
 <script>
 
-import { mapState } from 'vuex'
+  import { mapState } from 'vuex'
   import { FindFieldText } from '@/utils/utilsFields'
 
-export default {
+  export default {
 
-  name: 'ModalItem',
-  props: [
-    'item',
-    'fromWorkspace',
-    'itemModel',
-    'parentDialog',
-    'itemType',
-    'action',
-    'apiUrl',
-    'noAvatar',
-    'updateCurrentDataset',
-    'onlyLocalUpdate'
-  ],
-  watch: {
-    item () {
-      this.localItem = { ...this.item }
+    name: 'ModalItem',
+    props: [
+      'item',
+      'fromWorkspace',
+      'itemModel',
+      'parentDialog',
+      'itemType',
+      'action',
+      'apiUrl',
+      'noAvatar',
+      'updateCurrentDataset',
+      'onlyLocalUpdate'
+    ],
+    watch: {
+      item () {
+        if (!this.onlyLocalUpdate) {
+          this.localItem = { ...this.item }
+        } else {
+          this.localItem = this.item
+        } 
+      },
+      parentDialog () {
+        this.dialog = true
+      },
     },
-    parentDialog () {
-      this.dialog = true
+    data () {
+      return {
+        localItem: undefined,
+        dialog: false,
+        tab: null,
+        tabsSpaces: []
+      }
     },
-  },
-  data () {
-    return {
-      localItem: undefined,
-      dialog: false,
-      tab: null,
-      tabsSpaces: []
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+      }),
+    },
+    beforeMount () {
+      // this.localItem = { ...this.item }
+      if (!this.onlyLocalUpdate) {
+        this.localItem = { ...this.item }
+      } else {
+        this.localItem = this.item
+      } 
+      this.tabsSpaces = Object.keys(this.itemModel)
+    },
+    methods: {
+      createItem() {
+        let itemPayload = this.localItem
+        // this.tab = 0
+        this.dialog = false
+        this.$emit('createItem', itemPayload)
+      },
+      fieldText (type) {
+        return FindFieldText(type)
+      },
     }
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-    }),
-  },
-  beforeMount () {
-    this.localItem = { ...this.item }
-    this.tabsSpaces = Object.keys(this.itemModel)
-  },
-  methods: {
-    createItem() {
-      let itemPayload = this.localItem
-      // this.tab = 0
-      this.dialog = false
-      this.$emit('createItem', itemPayload)
-    },
-    fieldText (type) {
-      return FindFieldText(type)
-    },
   }
-}
 
 </script>

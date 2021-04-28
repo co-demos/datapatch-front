@@ -173,10 +173,13 @@ export class Field {
     
     description='My field description',
     creationDate=undefined,
+    id=undefined,
+
+    hide=false,
+
     read='public',
     write='owner+groups',
     manage='owner-only',
-    id=undefined,
     width='auto',
     ) {
     this.owner_id = owner_id
@@ -192,6 +195,7 @@ export class Field {
     this.manage = manage
     this.id = id
 
+    this.hHide = hide
     this.hWidth = width
   }
 
@@ -215,6 +219,9 @@ export class Field {
   }
   set fixed (val) {
     this.hFixed = val
+  }
+  set hide (val) {
+    this.hHide = val
   }
 
   get data () {
@@ -283,6 +290,9 @@ export class Field {
   get fixed () {
     return this.hFixed
   }
+  get hide () {
+    return this.hHide
+  }
 
   get infos () {
     return [
@@ -326,7 +336,8 @@ export const helpHeaders = [
   {
     value: 'move',
     text: '',
-    icon: 'icon-more-vertical',
+    // icon: 'icon-more-vertical',
+    icon: 'icon-move',
     position: 'start',
     divider: true,
   },

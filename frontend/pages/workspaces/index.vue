@@ -207,7 +207,11 @@ export default {
       }
     },
     resetEmptyWorkspace() {
-      let emptyWorkspace = new Workspace(this.userId, this.$t('workspaces.defaultTitle'), this.$t('workspaces.defaultDescription'))
+      let emptyWorkspace = new Workspace(
+        this.userId,
+        this.$t('workspaces.defaultTitle'),
+        this.$t('workspaces.defaultDescription'),
+      )
       // emptyWorkspace.randomBasics = true
       this.emptyWorkspace = emptyWorkspace.data
       this.newWorkspace = emptyWorkspace.data
@@ -220,6 +224,7 @@ export default {
     },
     createWorkspace(itemPayload) {
       // this.log && console.log("\nP-Workspaces > createWorkspace > itemPayload : ", itemPayload)
+      // let now = new Date(Date.now())
       this.$axios
         .post(`${this.api.workspaces}/`, itemPayload, this.headerUser)
         .then(resp => {

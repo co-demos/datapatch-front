@@ -3,9 +3,6 @@
     class="mt-5 pa-0"
     >
 
-    <!-- DatasetImportData<br> -->
-    <!-- <br>- importType: <code>{{ importType }}</code> -->
-
     <v-lazy
       v-model="isActive"
       :options="{ threshold: .5}"
@@ -13,180 +10,212 @@
       transition="fade-transition"
       >
 
-      <!-- BLANK -->
-      <div v-if="importType === 'blank'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('blank') ) }}
-        </p>
-        <DataTable
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersBlank"
-          :dataRows="dataRowsBlank"
-          :fulllWidth="true"
-          :noToolbar="true"
-        />
-      </div>
+      <div>
 
-      <div v-if="importType === 'copyPaste'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('copyPaste') ) }}
-        </p>
-        <v-textarea
-          v-model="copyPasteData"
-          background-color="grey lighten-3"
-          outlined
-        />
-        <v-spacer/>
-        <DataTable
-          v-if="copyPasteData"
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersCopyPaste"
-          :dataRows="dataRowsCopyPaste"
-          :fulllWidth="true"
-          :noToolbar="true"
-        />
-      </div>
+        <!-- DEBUGGING -->
+        <!-- <v-row class="text-caption">
+          <v-col cols="12">
+            <h5>
+              <hr> DEBUG FROM : DatasetImportData
+            </h5>
+          </v-col>
+          <v-col cols="5">
+            datasetItem (prop): <br>
+            <code><pre>{{ datasetItem }}</pre></code>
+          </v-col>
 
-      <!-- CSV FILES -->
-      <div v-if="importType === 'csv'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('csv') ) }}
-        </p>
-        <v-file-input
-          v-model="csvFiles"
-          counter
-          multiple
-          show-size
-          small-chips
-          truncate-length="15"
-          accept=".csv"
-        />
-        <v-spacer/>
-        {{ csvFiles }}
-        <!-- <DataTable
-          v-if="csvFiles"
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersCsv"
-          :dataRows="dataRowsCsv"
-          :fulllWidth="true"
-          :noToolbar="true"
-        /> -->
-      </div>
+          <v-col cols="2">
+            importType: <code>{{ importType }}</code><br>
+          </v-col>
 
-      <!-- EXCEL FILES -->
-      <div v-if="importType === 'excel'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('excel') ) }}
-        </p>
-        <v-file-input
-          counter
-          multiple
-          show-size
-          small-chips
-          truncate-length="15"
-          accept=".xls,.xlsx"
-       />
-        <v-spacer/>
-        <DataTable
-          v-if="xlsFiles"
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersXls"
-          :dataRows="dataRowsXls"
-          :fulllWidth="true"
-          :noToolbar="true"
-        />
-      </div>
+          <v-col cols="5" v-if="importType === 'blank' ">
+            tablesBlank (local): <br>
+            <code><pre>{{ tablesBlank.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
+          <v-col cols="5" v-if="importType === 'copyPaste' ">
+            tablesCopyPaste (local): <br>
+            <code><pre>{{ tablesCopyPaste.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
+          <v-col cols="5" v-if="importType === 'csv' ">
+            tablesCsvFiles (local): <br>
+            <code><pre>{{ tablesCsvFiles.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
+          <v-col cols="5" v-if="importType === 'excel' ">
+            tablesXlsFile (local): <br>
+            <code><pre>{{ tablesXlsFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
+          <v-col cols="5" v-if="importType === 'json' ">
+            tablesJsonFile (local): <br>
+            <code><pre>{{ tablesJsonFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
+          <v-col cols="5" v-if="importType === 'csvGithub' ">
+            tablesCsvGithub (local): <br>
+            <code><pre>{{ tablesCsvGithub.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
+          <v-col cols="5" v-if="importType === 'gSheet' ">
+            tablesGsheetUrl (local): <br>
+            <code><pre>{{ tablesGsheetUrl.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+          </v-col>
 
-      <!-- JSON FILES -->
-      <div v-if="importType === 'json'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('json') ) }}
-        </p>
-        <v-file-input
-          counter
-          multiple
-          show-size
-          small-chips
-          truncate-length="15"
-          accept=".json"
-        />
-        <v-spacer/>
-        <DataTable
-          v-if="jsonFiles"
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersJson"
-          :dataRows="dataRowsJson"
-          :fulllWidth="true"
-          :noToolbar="true"
-        />
-      </div>
+        </v-row>
+        <hr> -->
 
-      <!-- CSV URL RAW -->
-      <div v-if="importType === 'csvGithub'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('csvGithub') ) }}
+        <p class="text-h5 mb-5">
+          {{ $t(getImportOptions(importType) ) }}
         </p>
-        <v-text-field
-          id="csvRaw"
-          v-model="csvGithubUrl"
-          outlined
-          single-line
-          dense
-          clearable
-          prepend-inner-icon="icon-link"
-          :rules="urlRules"
-        />
-        <v-spacer/>
-        <DataTable
-          v-if="csvGithubUrl"
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersCsvGithub"
-          :dataRows="dataRowsCsvGithub"
-          :fulllWidth="true"
-          :noToolbar="true"
-        />
-      </div>
 
-      <!-- GSHEET URL RAW -->
-      <div v-if="importType === 'gSheet'">
-        <p class="text-h5">
-          {{ $t(getImportOptions('gSheet') ) }}
-        </p>
-        <v-text-field
-          id="gsheet"
-          v-model="tableGsheetUrl"
-          outlined
-          single-line
-          dense
-          clearable
-          prepend-inner-icon="icon-link"
-          :rules="urlRules"
-        />
-        <v-spacer/>
-        <DataTable
-          v-if="tableGsheetUrl"
-          :datasetItem="datasetItem"
-          :tableItem="tableItem"
-          :dataHeaders="dataHeadersGsheet"
-          :dataRows="dataRowsGsheet"
-          :fulllWidth="true"
-          :noToolbar="true"
-        />
-      </div>
+        <!-- BLANK -->
+        <div v-if="importType === 'blank'">
+          <DataTables
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesBlank"
+            :fromCreate="true"
+            :noToolbar="true"
+          />
+        </div>
 
+        <!-- COPY PASTE FILES -->
+        <div v-if="importType === 'copyPaste'">
+          <v-textarea
+            v-model="copyPasteData"
+            background-color="grey lighten-3"
+            outlined
+          />
+          <v-spacer/>
+          <DataTables
+            v-if="copyPasteData"
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesCopyPaste"
+            :fromCreate="true"
+            :noToolbar="true"
+          />
+        </div>
+
+        <!-- CSV FILES -->
+        <div v-if="importType === 'csv'">
+          <v-file-input
+            v-model="csvFiles"
+            counter
+            multiple
+            show-size
+            small-chips
+            truncate-length="15"
+            accept=".csv"
+            @change="readCsvFiles"
+          />
+          <v-spacer/>
+          <v-row>
+            <v-btn @click="readCsvFiles">
+              Read Files
+            </v-btn>
+          </v-row>
+          <v-spacer/>
+          <DataTables
+            v-if="csvFiles"
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesCsvFiles"
+            :fromCreate="true"
+            :noToolbar="true"
+          />
+        </div>
+
+        <!-- EXCEL FILES -->
+        <div v-if="importType === 'excel'">
+            <!-- multiple -->
+          <v-file-input
+            v-model="xlsFiles"
+            counter
+            show-size
+            small-chips
+            truncate-length="15"
+            accept=".xls,.xlsx"
+            @change="onFileChange"
+          />
+          <v-spacer/>
+          <!-- <DataTables
+            v-if="xlsFiles"
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesXlsFiles"
+            :fromCreate="true"
+            :noToolbar="true"
+          /> -->
+        </div>
+
+        <!-- JSON FILES -->
+        <div v-if="importType === 'json'">
+          <v-file-input
+            counter
+            multiple
+            show-size
+            small-chips
+            truncate-length="15"
+            accept=".json"
+            @change="onFileChange"
+          />
+          <v-spacer/>
+          <!-- <DataTables
+            v-if="jsonFiles"
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesJsonFile"
+            :fromCreate="true"
+            :noToolbar="true"
+          /> -->
+        </div>
+
+        <!-- CSV URL RAW -->
+        <div v-if="importType === 'csvGithub'">
+          <v-text-field
+            id="csvRaw"
+            v-model="csvGithubUrl"
+            outlined
+            single-line
+            dense
+            clearable
+            prepend-inner-icon="icon-link"
+            :rules="urlRules"
+          />
+          <v-spacer/>
+          <!-- <DataTables
+            v-if="csvGithubUrl"
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesCsvGithub"
+            :fromCreate="true"
+            :noToolbar="true"
+          /> -->
+        </div>
+
+        <!-- GSHEET URL RAW -->
+        <div v-if="importType === 'gSheet'">
+          <v-text-field
+            id="gsheet"
+            v-model="tableGsheetUrl"
+            outlined
+            single-line
+            dense
+            clearable
+            prepend-inner-icon="icon-link"
+            :rules="urlRules"
+          />
+          <v-spacer/>
+          <!-- <DataTables
+            v-if="tableGsheetUrl"
+            :currentDataset="datasetItem"
+            :currrentDatasetTables="tablesGsheetUrl"
+            :fromCreate="true"
+            :noToolbar="true"
+          /> -->
+        </div>
+
+      </div>
     </v-lazy>
   </v-container>
 </template>
 
 <script>
 
-  import { importOptionsInfos } from '@/utils/utilsImports.js'
+  import { mapState, mapGetters } from 'vuex'
+
+  import { importOptionsInfos, convertCSVToJSON } from '@/utils/utilsImports.js'
   import { rules } from '@/utils/utilsRules.js'
   import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
   import { TableMetaData, defaultTableData } from '@/utils/utilsTables'
@@ -197,55 +226,54 @@
     props: [
       'datasetItem',
       'importType',
+      'dataImport'
     ],
+    watch: {
+      importType(next) {
+        this.sendTables()
+      },
+      canSaveTables(next) {
+        if (next) {
+          this.sendTables()
+        }
+      }
+    },
     data () {
       return {
         importOptions: importOptionsInfos,
         isActive: false,
         urlRules: rules.urlRules( this.$t('rules.urlRequired'), this.$t('rules.urlValid') ),
 
-        tableItem: undefined,
+        canSaveTables: false,
 
-        dataHeadersBlank: undefined,
-        dataRowsBlank: undefined,
+        tablesBlank: [],
 
         copyPasteData: undefined,
-        dataHeadersCopyPaste: undefined,
-        dataRowsCopyPaste: undefined,
+        tablesCopyPaste: [],
 
         csvFiles: undefined,
-        dataHeadersCsv: undefined,
-        dataRowsCsv: undefined,
+        tablesCsvFiles: [],
 
-        xlsFiles: undefined,
-        dataHeadersXls: undefined,
-        dataRowsXls: undefined,
+        xlsFile: undefined,
+        tablesXlsFile: [],
 
-        jsonFiles: undefined,
-        dataHeadersJson: undefined,
-        dataRowsJson: undefined,
+        jsonFile: undefined,
+        tablesJsonFile: [],
 
         csvGithubUrl: undefined,
-        dataHeadersCsvGithub: undefined,
-        dataRowsCsvGithub: undefined,
+        tablesCsvGithub: [],
 
         tableGsheetUrl: undefined,
-        dataHeadersGsheet: undefined,
-        dataRowsGsheet: undefined,
+        tablesGsheetUrl: [],
 
       }
     },
     beforeMount () {
 
-      // SET TABLE FOR BLANK
-      let tableItem = new TableMetaData()
-      this.log && console.log(`\nC-DatasetImportData > beforeMount > tableItem : `, tableItem)
-      this.tableItem = tableItem
-
       // SET HEADERS FOR BLANK
-      let dataHs = []
+      let tableBlankHeaders = []
       for (let [i, defaultHeader] of defaultHeaders.entries()) {
-        // this.log && console.log(`\nC-DatasetImportData > beforeMount > defaultHeader : `, defaultHeader)
+        // this.log && console.log(`\nC-DataTable > beforeMount > defaultHeader : `, defaultHeader)
         let now = new Date(Date.now())
         let fieldClass = new Field(
           this.userId,
@@ -253,24 +281,107 @@
           defaultHeader.text,
           defaultHeader.type,
           `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
-          now.toISOString()
+          now.toISOString(),
+          i + 1, 
         )
         // fieldClass.fixed = i === 0
         fieldClass.divider = true
-        dataHs.push(fieldClass)
+        tableBlankHeaders.push(fieldClass)
       }
-      this.dataHeadersBlank = dataHs
 
       // SET ROWS FOR BLANK
-      this.dataRowsBlank = defaultTableData
-      
+      let tableBlankRows = defaultTableData
+
+      // SET TABLE FOR BLANK
+     let now = new Date(Date.now())
+     let tableBlank = new TableMetaData(
+        this.userId,
+        this.$t('tables.defaultTitle'),
+        this.$t('tables.defaultDescription'),
+        1,
+        now.toISOString(),
+        tableBlankHeaders,
+        tableBlankRows
+      )
+      let tableBlankData = tableBlank.data
+      let tableBlankDataCopy = { 
+        ...tableBlankData,
+        id: 2,
+        title: this.$t('tables.defaultTitle') + '-2',
+        tableFields: tableBlankData.tableFields.slice(0, 4),
+        tableData: tableBlankData.tableData.slice(0, 5),
+      }
+      this.log && console.log(`\nC-DatasetImportData > beforeMount > tableItem : `, tableBlank)
+      this.tablesBlank = [ tableBlankData, tableBlankDataCopy ]
+
+    },
+    created () {
+      this.log && console.log(`\nC-DatasetImportData > created > this.importType :`, this.importType)
+      if (this.importType && this.importType === 'blank') {
+        this.sendTables()
+      }
+    },
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+        api: (state) => state.api,
+      }),
+      ...mapGetters({
+        userId: 'user/userId',
+        headerUser: 'user/headerUser'
+      }),
     },
     methods: {
       getImportOptions (type) {
-        return this.importOptions.find(o => o.value === type).title
+        let importOptionType = this.importOptions.find(o => o.value === type)
+        return importOptionType && importOptionType.type
       },
-      sendValue(val) {
-        this.$emit('setDataImport', val)
+      readCsvFiles() {
+        // this.log && console.log(`\nC-DatasetImportData > readFiles > e :`, e)
+        this.log && console.log(`\nC-DatasetImportData > readFiles > this.csvFiles :`, this.csvFiles)
+        if ( this.csvFiles && this.csvFiles.length > 0 ) {
+          this.csvFiles.forEach( (file, f) => {
+            this.log && console.log(`C-DatasetImportData > readFiles > f :`, f)
+            this.log && console.log(`C-DatasetImportData > readFiles > file :`, file)
+            let reader = new FileReader()
+            reader.readAsText(file)
+            this.log && console.log(`C-DatasetImportData > readFiles > reader :`, reader)
+            reader.onload = () => {
+              let data = reader.result
+              // this.log && console.log(`C-DatasetImportData > readFiles > data :`, data)
+              let dataObj = convertCSVToJSON(data)
+              this.log && console.log(`C-DatasetImportData > readFiles > dataObj :`, dataObj)
+            }
+          })
+        }
+      },
+      sendTables() {
+        let tables = undefined
+        switch (this.importType) {
+          case 'blank' :
+            tables = this.tablesBlank
+            break
+          case 'copyPaste' :
+            tables = this.tablesCopyPaste
+            break
+          case 'csv' :
+            tables = this.tablesCsvFiles
+            break
+          case 'excel' :
+            tables = this.tablesXlsFile
+            break
+          case 'json' :
+            tables = this.tablesJsonFile
+            break
+          case 'csvGithub' :
+            tables = this.tablesCsvGithub
+            break
+          case 'gSheet' :
+            tables = this.tablesGsheetUrl
+            break
+        }
+        this.log && console.log(`C-DatasetImportData > sendValue > tables :`, tables)
+        this.$emit('setDataImport', tables)
       }
     }
   }

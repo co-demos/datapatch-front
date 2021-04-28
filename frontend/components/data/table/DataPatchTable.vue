@@ -8,15 +8,14 @@
 table {
   border-collapse: none;
   border-style: none;
+  border-right: thin solid lightGrey !important;
 }
 tbody {
   /* border-bottom: thin solid lightGrey !important; */
 }
-
 th, td {
   border-bottom: thin solid lightGrey !important;
 }
-
 .table-root {
   position: relative;
 }
@@ -54,7 +53,6 @@ th, td {
 .th-end {
   border-right: thin solid lightGrey !important;
 }
-
 th {
   /* border-bottom: thin solid lightGrey !important; */
   height: 40px!important;
@@ -68,11 +66,9 @@ td {
   white-space: nowrap;
   padding-left: 20px;
 }
-
 .td-drag {
   border-right: thin solid lightGrey !important;
 }
-
 .row-selected {
   background-color: gainsboro !important;
 }
@@ -109,7 +105,11 @@ td {
             <th
               v-for="(h, hIdx) in tableHeaders"
               :key="`h-${hIdx}`"
-              :class="`${h.helpHeader || h.fixed ? 'th-color-fixed' : 'th-color th-data th-drag'} ${h.fixed ? 'fixed-column' : ''} ${h.fixed && !h.helpHeader ? 'fixed-field' : ''}`"
+              :class="`
+                ${h.helpHeader || h.fixed ? 'th-color-fixed' : 'th-color th-data th-drag'} 
+                ${h.fixed ? 'fixed-column' : ''} 
+                ${h.fixed && !h.helpHeader ? 'fixed-field' : ''}
+              `"
               :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
               >
               <!-- {{ h.value }} - {{ h.fixed }} - {{ h.width }} -->
@@ -138,8 +138,15 @@ td {
             <td
               v-for="(h, hIdx) in tableHeaders"
               :key="`r-h-${hIdx}`"
-              :class="`td ${!h.helpHeader || h.divider ? 'td-drag' : 'td-help'} ${h.fixed ? 'fixed-column' : ''} ${selectedRows.includes(rowData.id) ? 'row-selected' : ''}`"
-              :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
+              :class="`td 
+                ${!h.helpHeader || h.divider ? 'td-drag' : 'td-help'} 
+                ${h.fixed ? 'fixed-column' : ''} 
+                ${selectedRows.includes(rowData.id) ? 'row-selected' : ''}
+              `"
+              :style="`
+                min-width: ${h.width ? h.width + 'px' : 'auto'}; 
+                ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
+              `"
               >
               <!-- {{ rowData[ h.value ] }} -->
               <DataPatchCell
@@ -160,7 +167,10 @@ td {
               v-for="(h, hIdx) in tableHeaders"
               :key="`r-h-${hIdx}`"
               :class="`${h.fixed ? 'fixed-column' : ''} justify-center`"
-              :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
+              :style="`
+                min-width: ${h.width ? h.width + 'px' : 'auto'}; 
+                ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
+              `"
               >
               <v-btn 
                 v-if="hIdx === 3"
@@ -192,7 +202,13 @@ td {
     />
 
 
+    <!-- DEBUGGING -->
     <v-row class="text-caption">
+      <v-col cols="12">
+        <h5>
+          <hr> DEBUG FROM : DataPatchTable
+        </h5>
+      </v-col>
       <v-col cols="4">
         tableHeaders: <br>
         <code><pre>{{ tableHeaders }}</pre></code>
@@ -206,6 +222,7 @@ td {
         <code><pre>{{ tableRows }}</pre></code>
       </v-col>
     </v-row>
+    <hr>
 
   </div>
 </template>
@@ -310,7 +327,7 @@ td {
         }
       },
       addColumn(type='str') {
-        this.log && console.log(`\nC-DataPatchTable > addColumn ...`)
+        // this.log && console.log(`\nC-DataPatchTable > addColumn ...`)
         let now = new Date(Date.now())
         let newHeader = new Field(
           this.userId,
@@ -321,21 +338,21 @@ td {
           now.toISOString()
         )
         newHeader.helpHeader = false
-        this.log && console.log(`C-DataPatchTable > addColumn > newHeader.data :`, newHeader.data)
+        // this.log && console.log(`C-DataPatchTable > addColumn > newHeader.data :`, newHeader.data)
         this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
-        this.log && console.log(`C-DataPatchTable > addColumn > this.tableHeaders :`, this.tableHeaders)
+        // this.log && console.log(`C-DataPatchTable > addColumn > this.tableHeaders :`, this.tableHeaders)
       },
       deleteColumn(headerData) {
-        this.log && console.log(`\nC-DataPatchTable > deleteColumn ...`)
+        // this.log && console.log(`\nC-DataPatchTable > deleteColumn ...`)
         this.tableHeaders = this.tableHeaders && this.tableHeaders.filter(h => h !== headerData)
       },
       addRow() {
-        this.log && console.log(`\nC-DataPatchTable > addRow ...`)
-        this.log && console.log(`C-DataPatchTable > addRow > this.tableHeaders : `, this.tableHeaders)
+        // this.log && console.log(`\nC-DataPatchTable > addRow ...`)
+        // this.log && console.log(`C-DataPatchTable > addRow > this.tableHeaders : `, this.tableHeaders)
         let newRow = {}
         this.tableHeaders.forEach( h => {if( !h.helpHeader) {newRow[h.value] = ''}} )
         newRow.id = this.tableRows.length + 1
-        this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
+        // this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
         this.tableRows.push(newRow)
       },
       toggleSelectRow(rowId) {
@@ -346,7 +363,7 @@ td {
         }
       },
       editRow(rowId) {
-        this.log && console.log(`\nC-DataPatchTable > editRow ...`)
+        // this.log && console.log(`\nC-DataPatchTable > editRow ...`)
         let rowToEdit = this.tableRows.find( r => r.id === rowId )
         this.rowDataToEdit = rowToEdit
         this.dialogEditRow += 1
@@ -355,7 +372,7 @@ td {
         this.tableRows = this.tableRows.map( r => r.id === rowData.id ? rowData : r )
       },
       deleteRow(rowId) {
-        this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
+        // this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
         this.tableRows = this.tableRows && this.tableRows.filter(r => r.id !== rowId)
       },
     }

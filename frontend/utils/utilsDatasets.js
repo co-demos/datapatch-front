@@ -16,10 +16,9 @@ export class Dataset {
     owner_id=undefined,
     title='My new dataset',
     description='My dataset description',
-    id=undefined,
-    url=undefined,
-    color='primary',
     creationDate=undefined,
+    id=undefined,
+    color='primary',
     icon='icon-table',
     licence='ODbL',
     tables=[],
@@ -28,6 +27,7 @@ export class Dataset {
     patch='public',
     write='owner+groups',
     manage='owner-only',
+    url=undefined,
     ) {
     this.owner_id = owner_id
     this.id = id

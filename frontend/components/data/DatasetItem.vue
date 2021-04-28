@@ -451,7 +451,13 @@ export default {
     },
     resetEmptyDataset() {
       // this.log && console.log(`C-DatasetItem > fromWorkspace ${this.fromWorkspace} > resetEmptyDataset ...`)
-      let emptyDataset = new Dataset(this.userId, this.$t('datasets.defaultTitle'), this.$t('datasets.defaultDescription'))
+      let now = new Date(Date.now())
+      let emptyDataset = new Dataset(
+        this.userId,
+        this.$t('datasets.defaultTitle'),
+        this.$t('datasets.defaultDescription'),
+        now.toISOString()
+      )
       emptyDataset.randomBasics = true
       this.ds = emptyDataset.data
     },
