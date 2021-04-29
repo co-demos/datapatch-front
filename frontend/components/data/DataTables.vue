@@ -29,9 +29,9 @@
         </h5>
       </v-col>
 
-      <v-col cols="4" v-if="false">
-        currentDataset (prop): <br>
-        <code><pre>{{ currentDataset }}</pre></code>
+      <v-col cols="4" v-if="true">
+        tab (getter): <code>{{ tab }}</pre></code> <br>
+        getTablesNeedReload (getter): <code>{{ getTablesNeedReload }}</pre></code> <br>
       </v-col>
 
       <v-col cols="4" v-if="true">
@@ -59,7 +59,7 @@
 
     <!-- TABS TABLES -->
     <v-row 
-      v-if="tab && getCurrentTables"
+      v-if="tab"
       :class="`align-center ${fromCreate ? '' : getDatasetColor} my-0 pl-12 pt-3`"
       >
       <v-col cols="11" class="pl-5 pb-0 pt-0 pr-12">
@@ -129,7 +129,7 @@
 
     <!-- TABLES -->
     <v-row
-      v-if="tab && getCurrentTables"
+      v-if="tab"
       class="mt-n1"
       >
       <v-col 
@@ -163,13 +163,17 @@
       'currentDataset',
       'noToolbar',
       'fromCreate',
-      'needReload',
     ],
     watch: {
-      needReload(next) {
-        if (next) {
-          this.tab = this.getCurrentTables && this.getCurrentTables.length && this.getCurrentTables[0].id
+      getCurrentTables(next, prev) {
+        this.log && console.log(`C-DataTables > watch > getCurrentTables > next :`, next)
+        if (next && !prev) {
+          this.tab = next && next.length && next[0].id
           this.setCurrentTableId(this.tab)
+        } else if (next && prev) {
+          this.tab = this.tab
+        } else {
+          this.tab = undefined
         }
       },
     },

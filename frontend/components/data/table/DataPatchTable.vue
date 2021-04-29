@@ -219,14 +219,14 @@ td {
           <hr> DEBUG FROM : DataPatchTable
         </h5>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="1">
         tableId: <code>{{ tableId }}</code>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="3">
         tableHeaders: <br>
         <code><pre>{{ tableHeaders }}</pre></code>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="8">
         tableRows: <br>
         <code><pre>{{ tableRows }}</pre></code>
       </v-col>
@@ -248,14 +248,18 @@ td {
       'tableId',
     ],
     watch: {
-      needReload(next, prev) {
-        if (next && !prev) {
-          this.resetDisplayedTables()
+      getTablesNeedReload(next) {
+        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
+        if (next) {
           this.toggleTablesNeedReload(false)
+          this.resetDisplayedTables()
         }
       },
       tableId(next) {
-        this.resetDisplayedTables()
+        this.log && console.log(`C-DataPatchTable > watch > tableId > next :`, next)
+        if (next) {
+          this.resetDisplayedTables()
+        }
       }
     },
     data () {
@@ -292,8 +296,9 @@ td {
         auth: emptyField.auth,
         meta: emptyField.meta,
       }
-
-      this.resetDisplayedTables()
+      if (this.tableId) {
+        this.resetDisplayedTables()
+      }
     },
 
     computed: {

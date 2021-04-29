@@ -6,7 +6,7 @@ export default {
     pitch: 'Data Patch is (almost) an open source alternative to airtable.',
     infos: 'For more information on Data Patch, check out the ',
     repo: "Github repository",
-    codemos: "an open source project by co-demos",
+    codemos: "an original and open source project by co-demos",
   },
   buttons: {
     prev: 'Previous',

@@ -59,7 +59,7 @@
           </v-col>
 
         </v-row>
-        <hr>
+        <!-- <hr> -->
 
         <p class="text-h5 mb-5">
           {{ $t(getImportOptions(importType) ) }}
@@ -193,14 +193,13 @@
     ],
     watch: {
       importType(next) {
+        this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
+        this.resetCurrentTables()
         if ( next && next === 'blank') {
           this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
           this.setCurrentTables(this.tablesBlank)
-          this.toggleTablesNeedReload(true)
-        } else {
-          this.resetCurrentTables()
-          this.toggleTablesNeedReload(true)
-       }
+        }
+        this.toggleTablesNeedReload(true)
       },
     },
     data () {
@@ -226,11 +225,12 @@
       let tablesBlank = CreateBlankTable(this.userId, this.$t('tables.defaultTitle'), this.$t('tables.defaultDescription'))
       this.tablesBlank = tablesBlank
       this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
+      this.resetCurrentTables()
       if (this.importType && this.importType === 'blank') {
         this.setCurrentTables(this.tablesBlank)
-        this.toggleTablesNeedReload(true)
         // this.sendTables(this.tablesBlank)
       }
+      this.toggleTablesNeedReload(true)
     },
     created () {
       this.log && console.log(`\nC-DatasetImportData > created > this.importType :`, this.importType)
@@ -281,7 +281,7 @@
         this.log && console.log(`\nC-DatasetImportData > rawDataToTables > tableMetadata :`, tableMetadata)
         this.log && console.log(`C-DatasetImportData > rawDataToTables > dataObj :`, dataObj)
         const rawFields = dataObj.headers
-        const rawRows = dataObj.values
+        const rawRows = dataObj.values.map( (r,i) => { return {id: i + 1, ...r}} )
 
         // convert rawFields to Field objects
         const tableHeaders = this.rawDataToFields(rawFields)
@@ -301,6 +301,7 @@
         return table
       },
       async readCsvFiles() {
+        this.resetCurrentTables()
         this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
         try {
           const tables = await this.readCsvFilesAsync()

@@ -35,7 +35,7 @@ export const getters = {
   getCurrentTable: (state) => {
     // console.log('S-tables > getCurrentTable > state.currentTables : ', state.currentTables)
     // console.log('S-tables > getCurrentTable > state.currentTableId : ', state.currentTableId)
-    return state.currentTables.find(t => t.id === state.currentTableId)
+    return state.currentTables && state.currentTables.find(t => t.id === state.currentTableId)
   },
   getTableById: (state) => (tableId) => {
     // console.log('S-tables > getCurrentTableById > state.currentTables : ', state.currentTables)
@@ -62,7 +62,7 @@ export const getters = {
   getCurrentTableFieldsData: (state, getters) => {
     // console.log('S-tables > getCurrentTableFieldsData > state.currentTable.tableFields : ', state.currentTable.tableFields)
     let currentTable = getters.getCurrentTable
-    let dataFields = currentTable.tableFields.map( h => (h instanceof Field ? h.data : h) )
+    let dataFields = currentTable && currentTable.tableFields.map( h => (h instanceof Field ? h.data : h) )
     // console.log('S-tables > getCurrentTableFieldsData > dataFields : ', dataFields)
     return dataFields
   },
@@ -72,17 +72,17 @@ export const getters = {
     let addColHs = state.addColHs.map( h => h.dataHelper )
     let dataFields = getters.getCurrentTableFieldsData
     // console.log('S-tables > getCurrentTableFields > dataFields : ', dataFields)
-    let tableHeaders = [ ...helpersHs, ...dataFields, ...addColHs ]
+    let tableHeaders = dataFields && [ ...helpersHs, ...dataFields, ...addColHs ]
     // console.log('S-tables > getCurrentTableFields > tableHeaders : ', tableHeaders)
     return tableHeaders
   },
   getCurrentTableRowsLength: (state, getters) => {
     let currentTable = getters.getCurrentTable
-    return currentTable.tableData.length
+    return currentTable && currentTable.tableData.length
   },
   getCurrentTableRows: (state, getters) => {
     let currentTable = getters.getCurrentTable
-    return currentTable.tableData
+    return currentTable && currentTable.tableData
   },
 }
 
@@ -160,6 +160,9 @@ export const actions = {
 
   toggleTablesNeedReload ({ commit }, bool) {
     commit('setTablesNeedReload', bool)
+    if (bool) {
+      commit('setCurrentTableId', undefined)
+    }
   },
 
   // CURRENT TABLES

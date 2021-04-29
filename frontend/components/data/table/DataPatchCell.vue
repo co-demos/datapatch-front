@@ -117,10 +117,22 @@
         v-model="localData"
         disabled
       />
-
-      <span v-else-if="header.type === 'str'">
-        {{ localData || '-' }}
+      
+      <!-- <v-text-field
+        v-else-if="header.type === 'str'"
+        readonly
+        hide-details
+        :value="JSON.stringify(localData) || '-' "
+        class="pa-0 ma-0"
+        >
+      </v-text-field> -->
+      <span
+        v-else-if="header.type === 'str'"
+        v-html="localData || '-'"
+        >
+        <!-- {{ localData || '-' }}</code> -->
       </span>
+
 
       <span v-else-if="header.type === 'tag'">
         <v-chip
