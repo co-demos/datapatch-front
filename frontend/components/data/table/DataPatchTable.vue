@@ -248,17 +248,14 @@ td {
       'tableId',
     ],
     watch: {
+      needReload(next, prev) {
+        if (next && !prev) {
+          this.resetDisplayedTables()
+          this.toggleTablesNeedReload(false)
+        }
+      },
       tableId(next) {
-        // this.log && console.log(`\nC-DataPatchTable > watch > tableId > next : `, next)
-
-        this.tableHeaders = [ ...this.getCurrentTableFields ]
-
-        // this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 1 : `, this.tableRows)
-        this.tableRows = [ ...this.getCurrentTableRows ]
-        // this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 2 : `, this.tableRows)
-
-        this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
-
+        this.resetDisplayedTables()
       }
     },
     data () {
@@ -281,7 +278,7 @@ td {
         search: '',
         tableOptions: {
           page: 1,
-          itemsPerPage: -1,
+          itemsPerPage: 20,
         },
         selectedRows: [],
 
@@ -296,9 +293,7 @@ td {
         meta: emptyField.meta,
       }
 
-      this.tableHeaders = [...this.getCurrentTableFields]
-      this.tableRows = [...this.getCurrentTableRows]
-      this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
+      this.resetDisplayedTables()
     },
 
     computed: {
@@ -325,7 +320,8 @@ td {
       ...mapGetters({
         userId: 'user/userId',
         headerUser: 'user/headerUser',
-
+        
+        getTablesNeedReload: 'tables/getTablesNeedReload',
         getCurrentTable: 'tables/getCurrentTable',
         getTableById: 'tables/getTableById',
 
@@ -338,6 +334,7 @@ td {
     },
     methods: {
       ...mapActions({
+        toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
         appendColumnToCurrentTableFields: 'tables/appendColumnToCurrentTableFields',
         updateColumnInCurrentTableFields: 'tables/updateColumnInCurrentTableFields',
         deleteColumnInCurrentTableFields: 'tables/deleteColumnInCurrentTableFields',
@@ -348,6 +345,15 @@ td {
         updateColumnsOrderInTableData: 'tables/updateColumnsOrderInTableData',
         updateRowsOrderInTableData: 'tables/updateRowsOrderInTableData',
       }),
+      resetDisplayedTables() {
+        this.tableHeaders = [ ...this.getCurrentTableFields ]
+        let paginer = {
+          start: (this.tableOptions.page - 1) * this.tableOptions.itemsPerPage,
+          end: this.tableOptions.itemsPerPage
+        }
+        this.tableRows = [ ...this.getCurrentTableRows ].splice(paginer.start, paginer.end)
+        this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
+      },
       hoverResize(headerId) {
         this.headerResizingId = headerId
       },

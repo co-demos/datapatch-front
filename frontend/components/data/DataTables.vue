@@ -59,6 +59,7 @@
 
     <!-- TABS TABLES -->
     <v-row 
+      v-if="tab && getCurrentTables"
       :class="`align-center ${fromCreate ? '' : getDatasetColor} my-0 pl-12 pt-3`"
       >
       <v-col cols="11" class="pl-5 pb-0 pt-0 pr-12">
@@ -128,7 +129,7 @@
 
     <!-- TABLES -->
     <v-row
-      v-if="getCurrentTable"
+      v-if="tab && getCurrentTables"
       class="mt-n1"
       >
       <v-col 
@@ -160,12 +161,18 @@
     name: 'DataTables',
     props: [
       'currentDataset',
-
-      'currrentDatasetTables', // <-- ? to delete and replace by store getter
-
       'noToolbar',
-      'fromCreate'
+      'fromCreate',
+      'needReload',
     ],
+    watch: {
+      needReload(next) {
+        if (next) {
+          this.tab = this.getCurrentTables && this.getCurrentTables.length && this.getCurrentTables[0].id
+          this.setCurrentTableId(this.tab)
+        }
+      },
+    },
     data () {
       return {
         itemType: 'tables',
@@ -173,8 +180,6 @@
 
         tab: undefined,
         hoverPlus: true,
-
-        // datasetTables: [],
 
       }
     },
@@ -189,7 +194,9 @@
       // this.log && console.log(`\nC-DataTables > beforeMount > emptyTable : `, emptyTable)
 
       // set default tab
-      this.tab = this.currrentDatasetTables[0].id
+      this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
+      this.tab = this.getCurrentTables && this.getCurrentTables.length && this.getCurrentTables[0].id
+      // this.tab = this.currrentDatasetTables[0].id
       this.setCurrentTableId(this.tab)
    },
     computed: {
@@ -204,6 +211,7 @@
       ...mapGetters({
         userId: 'user/userId',
         isAuthenticated: 'user/isAuthenticated',
+        getTablesNeedReload: 'tables/getTablesNeedReload',
         getCurrentTables: 'tables/getCurrentTables',
         getCurrentTable: 'tables/getCurrentTable',
         getCurrentTableId: 'tables/getCurrentTableId',
@@ -213,7 +221,6 @@
     methods: {
       ...mapActions({
         setCurrentTables: 'tables/setCurrentTables',
-        // setCurrentTable: 'tables/setCurrentTable',
         setCurrentTableId: 'tables/setCurrentTableId',
         appendTable: 'tables/appendTable',
         removeTable: 'tables/removeTable',

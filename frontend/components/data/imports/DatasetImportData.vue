@@ -13,7 +13,7 @@
       <div>
 
         <!-- DEBUGGING -->
-        <!-- <v-row class="text-caption">
+        <v-row class="text-caption" v-if="false">
           <v-col cols="12">
             <h5>
               <hr> DEBUG FROM : DatasetImportData
@@ -30,35 +30,36 @@
 
           <v-col cols="5" v-if="importType === 'blank' ">
             tablesBlank (local): <br>
-            <code><pre>{{ tablesBlank.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
-          </v-col>
-          <v-col cols="5" v-if="importType === 'copyPaste' ">
-            tablesCopyPaste (local): <br>
-            <code><pre>{{ tablesCopyPaste.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+            <code><pre>{{ tablesBlank && tablesBlank.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
           </v-col>
           <v-col cols="5" v-if="importType === 'csv' ">
             tablesCsvFiles (local): <br>
-            <code><pre>{{ tablesCsvFiles.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+            <code><pre>{{ tablesCsvFiles }}</pre></code>
+            <!-- <code><pre>{{ tablesCsvFiles && tablesCsvFiles.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code> -->
+          </v-col>
+          <v-col cols="5" v-if="importType === 'copyPaste' ">
+            tablesCopyPaste (local): <br>
+            <code><pre>{{ tablesCopyPaste && tablesCopyPaste.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
           </v-col>
           <v-col cols="5" v-if="importType === 'excel' ">
             tablesXlsFile (local): <br>
-            <code><pre>{{ tablesXlsFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+            <code><pre>{{ tablesXlsFile && tablesXlsFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
           </v-col>
           <v-col cols="5" v-if="importType === 'json' ">
             tablesJsonFile (local): <br>
-            <code><pre>{{ tablesJsonFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+            <code><pre>{{ tablesJsonFile && tablesJsonFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
           </v-col>
           <v-col cols="5" v-if="importType === 'csvGithub' ">
             tablesCsvGithub (local): <br>
-            <code><pre>{{ tablesCsvGithub.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+            <code><pre>{{ tablesCsvGithub && tablesCsvGithub.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
           </v-col>
           <v-col cols="5" v-if="importType === 'gSheet' ">
             tablesGsheetUrl (local): <br>
-            <code><pre>{{ tablesGsheetUrl.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+            <code><pre>{{ tablesGsheetUrl && tablesGsheetUrl.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
           </v-col>
 
         </v-row>
-        <hr> -->
+        <hr>
 
         <p class="text-h5 mb-5">
           {{ $t(getImportOptions(importType) ) }}
@@ -66,33 +67,17 @@
 
         <!-- BLANK -->
         <div v-if="importType === 'blank'">
-          <DataTables
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesBlank" 
-            :fromCreate="true"
-            :noToolbar="true"
-          />
-        </div>
-
-        <!-- COPY PASTE FILES -->
-        <div v-if="importType === 'copyPaste'">
-          <v-textarea
-            v-model="copyPasteData"
-            background-color="grey lighten-3"
-            outlined
-          />
-          <v-spacer/>
-          <DataTables
-            v-if="tablesCopyPaste.length"
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesCopyPaste"
-            :fromCreate="true"
-            :noToolbar="true"
-          />
         </div>
 
         <!-- CSV FILES -->
         <div v-if="importType === 'csv'">
+          <v-row>
+            <v-btn @click="readCsvFiles">
+              Read Files
+            </v-btn>
+          </v-row>
+          <v-spacer/>
+          <!-- help text -->
           <v-file-input
             v-model="csvFiles"
             counter
@@ -104,19 +89,18 @@
             @change="readCsvFiles"
           />
           <v-spacer/>
-          <v-row>
-            <v-btn @click="readCsvFiles">
-              Read Files
-            </v-btn>
-          </v-row>
-          <v-spacer/>
-          <DataTables
-            v-if="tablesCsvFiles.length"
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesCsvFiles"
-            :fromCreate="true"
-            :noToolbar="true"
+        </div>
+            <!-- :currrentDatasetTables="currentDataset" -->
+
+        <!-- COPY PASTE FILES -->
+        <div v-if="importType === 'copyPaste'">
+          <!-- help text -->
+          <v-textarea
+            v-model="copyPasteData"
+            background-color="grey lighten-3"
+            outlined
           />
+          <v-spacer/>
         </div>
 
         <!-- EXCEL FILES -->
@@ -132,13 +116,6 @@
             @change="onFileChange"
           />
           <v-spacer/>
-          <!-- <DataTables
-            v-if="xlsFiles"
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesXlsFiles"
-            :fromCreate="true"
-            :noToolbar="true"
-          /> -->
         </div>
 
         <!-- JSON FILES -->
@@ -153,13 +130,6 @@
             @change="onFileChange"
           />
           <v-spacer/>
-          <!-- <DataTables
-            v-if="jsonFiles"
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesJsonFile"
-            :fromCreate="true"
-            :noToolbar="true"
-          /> -->
         </div>
 
         <!-- CSV URL RAW -->
@@ -175,13 +145,6 @@
             :rules="urlRules"
           />
           <v-spacer/>
-          <!-- <DataTables
-            v-if="csvGithubUrl"
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesCsvGithub"
-            :fromCreate="true"
-            :noToolbar="true"
-          /> -->
         </div>
 
         <!-- GSHEET URL RAW -->
@@ -197,14 +160,13 @@
             :rules="urlRules"
           />
           <v-spacer/>
-          <!-- <DataTables
-            v-if="tableGsheetUrl"
-            :currentDataset="datasetItem"
-            :currrentDatasetTables="tablesGsheetUrl"
-            :fromCreate="true"
-            :noToolbar="true"
-          /> -->
         </div>
+
+        <DataTables
+          :currentDataset="datasetItem"
+          :fromCreate="true"
+          :noToolbar="true"
+        />
 
       </div>
     </v-lazy>
@@ -213,12 +175,13 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   import { importOptionsInfos, convertCSVToJSON } from '@/utils/utilsImports.js'
   import { rules } from '@/utils/utilsRules.js'
-  import { Field, defaultHeaders } from '@/utils/utilsFields'
-  import { TableMetaData, defaultTableData, CreateBlankTable } from '@/utils/utilsTables'
+  import { Field } from '@/utils/utilsFields'
+  import { TableMetaData, CreateBlankTable } from '@/utils/utilsTables'
+  import { processFile } from '@/utils/utilsFiles'
 
   export default {
 
@@ -230,13 +193,15 @@
     ],
     watch: {
       importType(next) {
-        this.sendTables()
+        if ( next && next === 'blank') {
+          this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
+          this.setCurrentTables(this.tablesBlank)
+          this.toggleTablesNeedReload(true)
+        } else {
+          this.resetCurrentTables()
+          this.toggleTablesNeedReload(true)
+       }
       },
-      canSaveTables(next) {
-        if (next) {
-          this.sendTables()
-        }
-      }
     },
     data () {
       return {
@@ -248,36 +213,28 @@
 
         tablesBlank: [],
 
-        copyPasteData: undefined,
-        tablesCopyPaste: [],
-
         csvFiles: undefined,
-        tablesCsvFiles: [],
-
+        copyPasteData: undefined,
         xlsFile: undefined,
-        tablesXlsFile: [],
-
         jsonFile: undefined,
-        tablesJsonFile: [],
-
         csvGithubUrl: undefined,
-        tablesCsvGithub: [],
-
         tableGsheetUrl: undefined,
-        tablesGsheetUrl: [],
 
       }
     },
     beforeMount () {
-
-      this.tablesBlank = CreateBlankTable(this.userId, this.$t('tables.defaultTitle'), this.$t('tables.defaultDescription'))
-
+      let tablesBlank = CreateBlankTable(this.userId, this.$t('tables.defaultTitle'), this.$t('tables.defaultDescription'))
+      this.tablesBlank = tablesBlank
+      this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
+      if (this.importType && this.importType === 'blank') {
+        this.setCurrentTables(this.tablesBlank)
+        this.toggleTablesNeedReload(true)
+        // this.sendTables(this.tablesBlank)
+      }
     },
     created () {
       this.log && console.log(`\nC-DatasetImportData > created > this.importType :`, this.importType)
-      if (this.importType && this.importType === 'blank') {
-        this.sendTables()
-      }
+      this.log && console.log(`C-DatasetImportData > created > this.tablesBlank :`, this.tablesBlank)
     },
     computed: {
       ...mapState({
@@ -286,64 +243,136 @@
       }),
       ...mapGetters({
         userId: 'user/userId',
-        headerUser: 'user/headerUser'
+        headerUser: 'user/headerUser',
+        currentDataset: 'datasets/getCurrentItem',
       }),
     },
     methods: {
+      ...mapActions({
+        toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
+        setCurrentTables: 'tables/setCurrentTables',
+        resetCurrentTables: 'tables/resetCurrentTables',
+      }),
       getImportOptions (type) {
         let importOptionType = this.importOptions.find(o => o.value === type)
         return importOptionType && importOptionType.type
       },
-      readCsvFiles() {
-        // this.log && console.log(`\nC-DatasetImportData > readFiles > e :`, e)
-        this.log && console.log(`\nC-DatasetImportData > readFiles > this.csvFiles :`, this.csvFiles)
+      rawDataToFields(rawFields) {
+        let newHeaders = []
+        rawFields.forEach( (rf, rfIdx) => {
+          let now = new Date(Date.now())
+          let fieldClass = new Field(
+            this.userId,
+            rf.value || rf,
+            rf.text || rf,
+            rf.type || 'str',
+            rf.title || rf,
+            now.toISOString(),
+            rfIdx + 1, 
+          )
+          // fieldClass.fixed = i === 0
+          fieldClass.divider = true
+          newHeaders.push(fieldClass)
+        })
+        return newHeaders
+      },
+      rawDataToTable(tableMetadata, dataObj) {
+        // read data and convert to table data
+        this.log && console.log(`\nC-DatasetImportData > rawDataToTables > tableMetadata :`, tableMetadata)
+        this.log && console.log(`C-DatasetImportData > rawDataToTables > dataObj :`, dataObj)
+        const rawFields = dataObj.headers
+        const rawRows = dataObj.values
+
+        // convert rawFields to Field objects
+        const tableHeaders = this.rawDataToFields(rawFields)
+
+        // convert all infos to a Table object
+        let now = new Date(Date.now())
+        let newTable = new TableMetaData(
+          this.userId,
+          tableMetadata.title,
+          tableMetadata.description || '',
+          tableMetadata.index || 1,
+          now.toISOString(),
+          tableHeaders,
+          rawRows
+        )
+        const table = newTable.data
+        return table
+      },
+      async readCsvFiles() {
+        this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
+        try {
+          const tables = await this.readCsvFilesAsync()
+          this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
+          // this.tablesCsvFiles = tables
+          // this.sendTables(tables)
+          this.setCurrentTables(tables)
+          this.toggleTablesNeedReload(true)
+        } catch (ex) {
+          this.log && console.log(ex)
+        }
+      },
+      async readCsvFilesAsync() {
+        // this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > e :`, e)
+        let promisesArray = []
+        this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > this.csvFiles :`, this.csvFiles)
         if ( this.csvFiles && this.csvFiles.length > 0 ) {
-          this.csvFiles.forEach( (file, f) => {
-            this.log && console.log(`C-DatasetImportData > readFiles > f :`, f)
-            this.log && console.log(`C-DatasetImportData > readFiles > file :`, file)
-            let reader = new FileReader()
-            reader.readAsText(file)
-            this.log && console.log(`C-DatasetImportData > readFiles > reader :`, reader)
-            reader.onload = () => {
-              let data = reader.result
-              // this.log && console.log(`C-DatasetImportData > readFiles > data :`, data)
-              let dataObj = convertCSVToJSON(data)
-              this.log && console.log(`C-DatasetImportData > readFiles > dataObj :`, dataObj)
+          this.csvFiles.forEach( (file, i) => {
+            this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > i :`, i)
+            this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > file :`, file)
+            let tableMetadata = {
+              title: file.name,
+              importType: 'csv',
+              index: i + 1,
             }
+            this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > tableMetadata :`, tableMetadata)
+            
+            const promise = processFile(file)
+              .then( data => {
+                // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > data :`, data)
+                let dataObj = convertCSVToJSON(data)
+                const table = this.rawDataToTable(tableMetadata, dataObj)
+                this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > table :`, table)
+                return table
+              })
+            promisesArray.push(promise)
           })
+          return Promise.all(promisesArray)
         }
       },
-      rawDataToFields() {
+      readCsvFromUrl() {
 
       },
-      rawDataToRows() {
+      readFromCopyPaste() {
 
       },
-      sendTables() {
-        let tables = undefined
-        switch (this.importType) {
-          case 'blank' :
-            tables = this.tablesBlank
-            break
-          case 'copyPaste' :
-            tables = this.tablesCopyPaste
-            break
-          case 'csv' :
-            tables = this.tablesCsvFiles
-            break
-          case 'excel' :
-            tables = this.tablesXlsFile
-            break
-          case 'json' :
-            tables = this.tablesJsonFile
-            break
-          case 'csvGithub' :
-            tables = this.tablesCsvGithub
-            break
-          case 'gSheet' :
-            tables = this.tablesGsheetUrl
-            break
-        }
+
+      sendTables(tables) {
+        // let tables = undefined
+        // switch (this.importType) {
+        //   case 'blank' :
+        //     tables = this.tablesBlank
+        //     break
+        //   case 'copyPaste' :
+        //     tables = this.tablesCopyPaste
+        //     break
+        //   case 'csv' :
+        //     tables = this.tablesCsvFiles
+        //     break
+        //   case 'excel' :
+        //     tables = this.tablesXlsFile
+        //     break
+        //   case 'json' :
+        //     tables = this.tablesJsonFile
+        //     break
+        //   case 'csvGithub' :
+        //     tables = this.tablesCsvGithub
+        //     break
+        //   case 'gSheet' :
+        //     tables = this.tablesGsheetUrl
+        //     break
+        // }
         this.log && console.log(`C-DatasetImportData > sendValue > tables :`, tables)
         this.$emit('setDataImport', tables)
       }

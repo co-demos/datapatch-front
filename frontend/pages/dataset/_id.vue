@@ -41,8 +41,8 @@
 
     <DataTables
       :currentDataset="currentDataset"
-      :currrentDatasetTables="tablesBlank"
     />
+      <!-- :currrentDatasetTables="tablesBlank" -->
 
     <!-- DIALOG FOR DATASET INFOS -->
     <ModalItem

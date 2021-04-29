@@ -6,13 +6,19 @@ export const state = () => ({
   helpersHs: helpHeadersFields, //.map( h => h.dataHelper ),
   addColHs: endHeadersFields, //.map( h => h.dataHelper ),
 
-  currentTableId: undefined,
+  needReload: false,
 
+  currentTableId: undefined,
   currentTables: undefined,
   selectedRows: {},
 })
 
 export const getters = {
+
+  getTablesNeedReload: (state) => {
+    return state.needReload
+  },
+
   getSelectedRowsForCurrentTable: (state) => {
     const tableId = state.currentTableId
     return state.selectedRows[tableId] || []
@@ -23,7 +29,7 @@ export const getters = {
     return state.currentTableId
   },
   getCurrentTables: (state) => {
-    // console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
+    console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
     return state.currentTables
   },
   getCurrentTable: (state) => {
@@ -81,6 +87,11 @@ export const getters = {
 }
 
 export const mutations = {
+
+  setTablesNeedReload (state, bool) {
+    state.needReload = bool
+  },
+
   setCurrentTableId (state, tableId) {
     state.currentTableId = tableId
   },
@@ -89,9 +100,9 @@ export const mutations = {
     state.selectedRows[tableId] = rowIds
   },
 
-  setItems (state, {space, items}) {
-    // console.log('S-tables > setItems > items : ', items)
-    state[space] = items
+  setCurrentTables (state, items) {
+    console.log('S-tables > setCurrentTables > items : ', items)
+    state.currentTables = items
   },
 
   addItem (state, {space, item}) {
@@ -147,9 +158,13 @@ export const mutations = {
 
 export const actions = {
 
-  // CURRENT TABLE
+  toggleTablesNeedReload ({ commit }, bool) {
+    commit('setTablesNeedReload', bool)
+  },
+
+  // CURRENT TABLES
   setCurrentTables ({ commit }, tables) {
-    commit('setItems', {space: 'currentTables', items: tables})
+    commit('setCurrentTables', tables)
   },
   setCurrentTableId ({ commit }, tableId) {
     commit('setCurrentTableId', tableId)

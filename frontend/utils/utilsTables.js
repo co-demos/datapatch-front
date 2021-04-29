@@ -176,7 +176,6 @@ export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescriptio
     tableBlankRows
   )
   let tableBlankData = tableBlank.data
-
   let tables = [ tableBlankData ]
 
   if (addSecondTable) {
