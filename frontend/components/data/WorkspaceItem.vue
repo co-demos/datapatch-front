@@ -115,7 +115,6 @@
           <v-list-item
             @click.stop="dialogDelete += 1"
             >
-            <!-- @click.stop="deleteWorkspace()" -->
             <v-list-item-action>
               <v-icon small>
                 icon-trash-2

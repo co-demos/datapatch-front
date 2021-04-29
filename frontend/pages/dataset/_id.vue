@@ -25,7 +25,7 @@
         </span>
         <v-btn
           icon
-          small
+          x-small
           class="ml-2"
           @click="dialog += 1"
           >

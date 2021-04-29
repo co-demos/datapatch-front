@@ -28,19 +28,30 @@
         <code>{{ getCurrentTables && getCurrentTables.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
       </v-col>
 
-
       <v-col cols="2" v-if="true">
         getCurrentTableId (getter): <code>{{ getCurrentTableId }}</code>
       </v-col>
       <v-col cols="3" v-if="true">
+        getTableById(1).tableFields (getter): <br>
+        <code>{{ getTableById(1).tableFields && getTableById(1).tableFields.map(h => h.value) }}</code>
+      </v-col>
+      <v-col cols="3" v-if="true">
+        getTableById(2).tableFields (getter): <br>
+        <code>{{ getTableById(2).tableFields && getTableById(2).tableFields.map(h => h.value) }}</code>
+      </v-col>
+
+      <v-col cols="2" v-if="false">
+        getCurrentTableId (getter): <code>{{ getCurrentTableId }}</code>
+      </v-col>
+      <v-col cols="3" v-if="false">
         getTableById(1).tableData (getter): <br>
         <code>{{ getTableById(1).tableData[0] }}</code>
       </v-col>
-      <v-col cols="3" v-if="true">
+      <v-col cols="3" v-if="false">
         getTableById(2).tableData (getter): <br>
         <code>{{ getTableById(2).tableData[0] }}</code>
       </v-col>
-      <v-col cols="3" v-if="true">
+      <v-col cols="3" v-if="false">
         getTableById(3).tableData (getter): <br>
         <code>{{ getTableById(3) && getTableById(3).tableData[0] }}</code>
       </v-col>

@@ -70,7 +70,8 @@ td {
   border-right: thin solid lightGrey !important;
 }
 .row-selected {
-  background-color: gainsboro !important;
+  /* background-color: gainsboro !important; */
+  background-color: whitesmoke !important;
 }
 .row-resizing {
   border-right: 2px solid black !important;
@@ -103,7 +104,7 @@ td {
             tag="tr"
             draggable=".th-drag"
             @start="drag=true"
-            @end="drag=false"
+            @end="drag=false; updateColumnsOrder()"
             >
             <th
               v-for="(h, hIdx) in tableHeaders"
@@ -134,7 +135,7 @@ td {
           v-bind="dragOptionsRows"
           tag="tbody"
           @start="drag=true"
-          @end="drag=false"
+          @end="drag=false; updateRowsOrder()"
           >
           <tr
             v-for="(rowData, rowIdx) in tableRows"
@@ -212,7 +213,7 @@ td {
 
 
     <!-- DEBUGGING -->
-    <v-row class="text-caption" v-if="true">
+    <v-row class="text-caption" v-if="false">
       <v-col cols="12">
         <h5>
           <hr> DEBUG FROM : DataPatchTable
@@ -230,7 +231,7 @@ td {
         <code><pre>{{ tableRows }}</pre></code>
       </v-col>
     </v-row>
-    <hr>
+    <!-- <hr> -->
 
   </div>
 </template>
@@ -248,18 +249,20 @@ td {
     ],
     watch: {
       tableId(next) {
-        this.log && console.log(`\nC-DataPatchTable > watch > tableId > next : `, next)
+        // this.log && console.log(`\nC-DataPatchTable > watch > tableId > next : `, next)
 
         this.tableHeaders = [ ...this.getCurrentTableFields ]
 
-        this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 1 : `, this.tableRows)
+        // this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 1 : `, this.tableRows)
         this.tableRows = [ ...this.getCurrentTableRows ]
-        this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 2 : `, this.tableRows)
+        // this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 2 : `, this.tableRows)
+
+        this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
+
       }
     },
     data () {
       return {
-
         drag: false,
         dialogEditRow: 0,
         headerResizingId: undefined,
@@ -295,6 +298,7 @@ td {
 
       this.tableHeaders = [...this.getCurrentTableFields]
       this.tableRows = [...this.getCurrentTableRows]
+      this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
     },
 
     computed: {
@@ -325,6 +329,7 @@ td {
         getCurrentTable: 'tables/getCurrentTable',
         getTableById: 'tables/getTableById',
 
+        getSelectedRowsForCurrentTable: 'tables/getSelectedRowsForCurrentTable',
         getCurrentTableFieldsDataLength: 'tables/getCurrentTableFieldsDataLength',
         getCurrentTableFields: 'tables/getCurrentTableFields',
         getCurrentTableRowsLength: 'tables/getCurrentTableRowsLength',
@@ -336,9 +341,12 @@ td {
         appendColumnToCurrentTableFields: 'tables/appendColumnToCurrentTableFields',
         updateColumnInCurrentTableFields: 'tables/updateColumnInCurrentTableFields',
         deleteColumnInCurrentTableFields: 'tables/deleteColumnInCurrentTableFields',
+        setSelectedRows: 'tables/setSelectedRows',
         appendRowToCurrentTableData: 'tables/appendRowToCurrentTableData',
         updateRowInCurrentTableData: 'tables/updateRowInCurrentTableData',
         deleteRowInCurrentTableData: 'tables/deleteRowInCurrentTableData',
+        updateColumnsOrderInTableData: 'tables/updateColumnsOrderInTableData',
+        updateRowsOrderInTableData: 'tables/updateRowsOrderInTableData',
       }),
       hoverResize(headerId) {
         this.headerResizingId = headerId
@@ -372,6 +380,15 @@ td {
         //   }
         // }
         return LeftPx
+      },
+      updateColumnsOrder() {
+        // this.log && console.log(`\nC-DataPatchTable > this.tableHeaders :`, this.tableHeaders)
+        let filteredHeaders = this.tableHeaders.filter( h => !h.helpHeader  )
+        // this.log && console.log(`C-DataPatchTable > filteredHeaders :`, filteredHeaders)
+        this.updateColumnsOrderInTableData(filteredHeaders)
+      },
+      updateRowsOrder() {
+        this.updateRowsOrderInTableData(this.tableRows)
       },
       addColumn(type='str') {
         // this.log && console.log(`\nC-DataPatchTable > addColumn ...`)
@@ -411,6 +428,7 @@ td {
         } else {
           this.selectedRows = this.selectedRows.filter( r => r !== rowId)
         }
+        this.setSelectedRows({ tableId: this.tableId, rowIds: this.selectedRows})
       },
       editRow(rowId) {
         this.log && console.log(`\nC-DataPatchTable > editRow ...`)

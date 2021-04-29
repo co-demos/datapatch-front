@@ -9,10 +9,15 @@ export const state = () => ({
   currentTableId: undefined,
 
   currentTables: undefined,
-  // currentTable: undefined,
+  selectedRows: {},
 })
 
 export const getters = {
+  getSelectedRowsForCurrentTable: (state) => {
+    const tableId = state.currentTableId
+    return state.selectedRows[tableId] || []
+  },
+
   getCurrentTableId: (state) => {
     // console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
     return state.currentTableId
@@ -22,8 +27,8 @@ export const getters = {
     return state.currentTables
   },
   getCurrentTable: (state) => {
-    console.log('S-tables > getCurrentTable > state.currentTables : ', state.currentTables)
-    console.log('S-tables > getCurrentTable > state.currentTableId : ', state.currentTableId)
+    // console.log('S-tables > getCurrentTable > state.currentTables : ', state.currentTables)
+    // console.log('S-tables > getCurrentTable > state.currentTableId : ', state.currentTableId)
     return state.currentTables.find(t => t.id === state.currentTableId)
   },
   getTableById: (state) => (tableId) => {
@@ -79,6 +84,11 @@ export const mutations = {
   setCurrentTableId (state, tableId) {
     state.currentTableId = tableId
   },
+
+  setSelectedRows (state, {tableId, rowIds}) {
+    state.selectedRows[tableId] = rowIds
+  },
+
   setItems (state, {space, items}) {
     // console.log('S-tables > setItems > items : ', items)
     state[space] = items
@@ -95,7 +105,7 @@ export const mutations = {
   removeItem (state, {space, item}) {
     // console.log('S-tables > removeItem > space : ', space)
     // console.log('S-tables > removeItem > item : ', item)
-    let removeIndex = state[space].findIndex(ws => ws.id == item.id)
+    let removeIndex = state[space].findIndex(obj => obj.id == item.id)
     // console.log('S-tables > removeItem > removeIndex : ', removeIndex)
     state[space].splice(removeIndex, 1)
     // console.log('S-datasets > removeItem > state[space] : ', state[space])
@@ -109,6 +119,13 @@ export const mutations = {
   appendToCurrentTable (state, {space, item}) {
     let table = state.currentTables.find( t => t.id === state.currentTableId)
     table[space].push(item)
+  },
+  updateSpaceInCurrentTable (state, {space, items}) {
+    // console.log('\nS-tables > updateInCurrentTable > space : ', space)
+    // console.log('S-tables > updateInCurrentTable > items : ', items)
+    let table = state.currentTables.find( t => t.id === state.currentTableId)
+    // console.log('S-tables > updateInCurrentTable > table : ', table)
+    table[space] = items
   },
   updateInCurrentTable (state, {space, item}) {
     // console.log('S-tables > updateInCurrentTable > space : ', space)
@@ -153,6 +170,11 @@ export const actions = {
     commit('resetItems', {space: 'currentTables'})
   },
 
+  // SELECTED ROWS 
+  setSelectedRows({commit}, data) {
+    commit('setSelectedRows', { tableId: data.tableId, rowIds: data.rowIds } )
+  },
+
   // FIELDS - currrent table actions
   appendColumnToCurrentTableFields ({ commit }, newCol) {
     commit('appendToCurrentTable', {space: 'tableFields', item: newCol})
@@ -162,6 +184,9 @@ export const actions = {
   },
   deleteColumnInCurrentTableFields ({ commit }, colId) {
     commit('deleteInCurrentTable', {space: 'tableFields', item: colId})
+  },
+  updateColumnsOrderInTableData ({ commit, getters }, columns) {
+    commit('updateSpaceInCurrentTable', {space: 'tableFields', items: columns} )
   },
 
   // DATA - currrent table actions
@@ -176,6 +201,9 @@ export const actions = {
     let row = { ...table.tableData.find( r => r.id === cellData.rowId) }
     row[cellData.headerValue] = cellData.value
     commit('updateInCurrentTable', {space: 'tableData', item: row} )
+  },
+  updateRowsOrderInTableData ({ commit, getters }, rows) {
+    commit('updateSpaceInCurrentTable', {space: 'tableData', items: rows} )
   },
   deleteRowInCurrentTableData ({ commit, getters }, rowId) {
     commit('deleteInCurrentTable', {space: 'tableData', itemId: rowId})

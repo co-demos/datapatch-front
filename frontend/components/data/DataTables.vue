@@ -5,6 +5,7 @@
   overflow: scroll;
   overflow-x: auto !important;
   margin-bottom: -1px;
+  padding-right: 100px;
 }
 ::-webkit-scrollbar {
   height: 0;  /* Remove scrollbar space */
@@ -58,9 +59,9 @@
 
     <!-- TABS TABLES -->
     <v-row 
-      :class="`align-center ${fromCreate ? '' : getDatasetColor} mb-n4 pl-12 pt-3`"
+      :class="`align-center ${fromCreate ? '' : getDatasetColor} my-0 pl-12 pt-3`"
       >
-      <v-col cols="11" class="pl-5 pb-0">
+      <v-col cols="11" class="pl-5 pb-0 pt-0 pr-12">
         <div class="align-center hide-x-scroll-parent">
 
           <!-- TABLE TAB -->
@@ -74,29 +75,41 @@
             :itemType="itemType"
             :fromCreate="fromCreate"
             @changeTab="changeTab"
+            @removeTable="deleteTable"
           />
-            <!-- :table="table" -->
+          <!-- :table="table" -->
 
+          <!-- v-if="!fromCreate" -->
           <v-btn
-            v-if="!fromCreate"
-            icon
-            small
-            :color="`${ this.fromCreate ? getDatasetColor : 'white' }`"
-            class="mb-1 ml-2"
+            text
+            x-small
+            :color="`${ this.fromCreate ? 'primary' : 'white' }`"
+            :class="`mb-2 ml-0`"
+            @mouseover="hoverPlus=true"
+            @mouseleave="hoverPlus=false"
             @click="addTable()"
             >
-            <v-icon class="font-weight-bold">
+            <v-icon
+              small
+              :class="`font-weight-bold`"
+              >
               icon-plus
             </v-icon>
+            <span
+              v-show="hoverPlus" 
+              :class="`ml-1 text-none`"
+              >
+              {{ $t('tables.addTable') }}
+            </span>
           </v-btn>
-
+            
         </div>
 
       </v-col>
 
       <v-spacer/>
 
-      <v-col class="pr-5 pb-0 mb-2">
+      <v-col class="pr-5 pt-0 pb-1 ma-0">
         <v-btn
           v-if="!fromCreate"
           icon
@@ -116,11 +129,11 @@
     <!-- TABLES -->
     <v-row
       v-if="getCurrentTable"
-      class="mt-1"
+      class="mt-n1"
       >
       <v-col 
         cols="12"
-        class="ma-0"
+        class="ma-0 pt-0"
         >
         <DataTable
           :datasetItem="currentDataset"
@@ -159,6 +172,7 @@
         itemModel: undefined,
 
         tab: undefined,
+        hoverPlus: true,
 
         // datasetTables: [],
 
@@ -202,13 +216,16 @@
         // setCurrentTable: 'tables/setCurrentTable',
         setCurrentTableId: 'tables/setCurrentTableId',
         appendTable: 'tables/appendTable',
+        removeTable: 'tables/removeTable',
       }),
       changeTab(tableId) {
         this.tab = tableId
         this.setCurrentTableId(tableId)
       },
       addTable() {
+        let existingIds = this.getCurrentTables.map(t => t.id)
         let newId = this.getCurrentTables.length + 1
+        newId = existingIds.includes(newId) ? newId + 1 : newId
         let newTable = CreateEmptyBlankTable(
           this.userId,
           `${this.$t('tables.defaultTitle')} - ${newId}`,
@@ -219,6 +236,19 @@
         this.log && console.log(`\nC-DataTables > newTable : `, newTable)
         this.appendTable(newTable)
         this.changeTab(newTable.id)
+      },
+      deleteTable(table) {
+        this.log && console.log(`\nC-DataTables > deleteTable > table : `, table )
+        // avoid deleting table if this is the only one
+        let canDeleteTable = this.getCurrentTables.length > 1
+        if (canDeleteTable) {
+          this.removeTable(table)
+          if (this.tab === table.id) {
+            let newTab = this.getCurrentTables[0].id
+            this.tab = newTab
+            this.changeTab(newTab)
+          }
+        }
       }
     }
 

@@ -190,6 +190,7 @@ export default {
     inviteTable: 'Invite people or group',
     editTable: 'Edit table infos',
     renameTable: 'Rename the table',
+    addTable: 'Add a new table',
     newTable: 'Create a new table',
     copyTable: 'Copy the table',
     importDataCsv: 'Importer une table au format csv',

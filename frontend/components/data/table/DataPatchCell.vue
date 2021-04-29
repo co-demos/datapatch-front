@@ -245,8 +245,8 @@
         this.localData = this.cellData
       },
       cellData(next) {
-        this.log && console.log(`\nC-DataTableRow > watch > cellData > this.tableId : `, this.tableId)
-        this.log && console.log(`C-DataTableRow > watch > cellData > next : `, next)
+        // this.log && console.log(`\nC-DataTableRow > watch > cellData > this.tableId : `, this.tableId)
+        // this.log && console.log(`C-DataTableRow > watch > cellData > next : `, next)
         this.localData = next
       }
     },
