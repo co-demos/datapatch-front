@@ -153,7 +153,7 @@
                 >
 
                 <!-- SET IMPORT OPTION -->
-                <div v-if="stepInfo.component === 'importType'">
+                <div v-show="stepInfo.component === 'importType'">
                   <div class="mt-8 mb-8">
                     <DatasetImportOptions
                       :presetCreate="presetCreate"
@@ -163,7 +163,7 @@
                 </div>
 
                 <!-- SET IMPORT DATA -->
-                <div v-if="stepInfo.component === 'dataImport'">
+                <div v-show="stepInfo.component === 'dataImport'">
                   <div class="mt-5 mb-8">
                     <DatasetImportData
                       :datasetItem="localItem"
@@ -174,7 +174,7 @@
                 </div>
 
                 <!-- SET METADATA -->
-                <div v-if="stepInfo.component === 'datasetMeta'">
+                <div v-show="stepInfo.component === 'datasetMeta'">
                   <v-row class="mt-8 mx-5 justify-center">
                     <v-col cols="8">
                       <ModalTabs
@@ -191,7 +191,7 @@
                 </div>
 
                 <!-- SET IMPORT OPTION -->
-                <div v-if="stepInfo.component === 'datasetCreate'">
+                <div v-show="stepInfo.component === 'datasetCreate'">
                   <!-- {{ stepInfo.component }} <br> -->
                   <div class="mt-5 mb-8">
                     <DatasetImportResume
@@ -314,8 +314,8 @@
       parentDialog () {
         this.dialog = true
       },
-      presetCreate(next) {
-        if (next) {
+      presetCreate(next, prev) {
+        if (next !== prev) {
           this.importType = next
           this.nextStep(0)
         }
