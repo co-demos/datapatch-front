@@ -13,6 +13,10 @@ export const state = () => ({
 })
 
 export const getters = {
+  getCurrentTableId: (state) => {
+    // console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
+    return state.currentTableId
+  },
   getCurrentTables: (state) => {
     // console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
     return state.currentTables
@@ -21,11 +25,6 @@ export const getters = {
     console.log('S-tables > getCurrentTable > state.currentTables : ', state.currentTables)
     console.log('S-tables > getCurrentTable > state.currentTableId : ', state.currentTableId)
     return state.currentTables.find(t => t.id === state.currentTableId)
-  },
-  getCurrentTableId: (state) => {
-    // console.log('S-tables > getCurrentTableId > state.currentTable : ', state.currentTable)
-    // return state.currentTable.id
-    return state.currentTableId
   },
   getTableById: (state) => (tableId) => {
     // console.log('S-tables > getCurrentTableById > state.currentTables : ', state.currentTables)
@@ -114,25 +113,14 @@ export const mutations = {
   updateInCurrentTable (state, {space, item}) {
     // console.log('S-tables > updateInCurrentTable > space : ', space)
     // console.log('S-tables > updateInCurrentTable > item : ', item)
+    // console.log('S-tables > updateInCurrentTable > state.currentTableId : ', state.currentTableId)
     let table = state.currentTables.find( t => t.id === state.currentTableId)
     let matchKey = space === 'tableFields' ? 'value' : 'id'
     // console.log('S-tables > updateInCurrentTable > matchKey : ', matchKey)
     table[space] = [ ...table[space].map(obj => obj[matchKey] !== item[matchKey] ? obj : {...obj, ...item} ) ]
     // console.log('S-tables > updateInCurrentTable > state.currentTable[space] : ', state.currentTable[space])
   },
-  updateCellValueInTableData (state, {data}) {
-    console.log('\nS-tables > updateCellValueInTableData > data : ', data)
-    let table = state.currentTables.find( t => t.id === data.tableId)
-    console.log('S-tables > updateCellValueInTableData > table : ', table)
-    let row = table.tableData.find( r => r.id === data.rowId)
-    let rowCopy = { ...row }
-    rowCopy[data.headerValue] = data.value
-    console.log('S-tables > updateCellValueInTableData > rowCopy : ', rowCopy)
-    console.log('S-tables > updateCellValueInTableData > table.tableData : ', table.tableData)
-    console.log(`S-tables > updateCellValueInTableData > - ${state.currentTables[0].id} - currentTableId : ${state.currentTableId} - state.currentTables[0] : `, state.currentTables[0].tableData)
-    console.log(`S-tables > updateCellValueInTableData > - ${state.currentTables[1].id} - currentTableId : ${state.currentTableId} - state.currentTables[1] : `, state.currentTables[1].tableData)
-    // commit('updateInCurrentTable', { space: 'tableData', item: row})
-  },
+
   deleteInCurrentTable (state, {space, itemId}) {
     let table = state.currentTables.find( t => t.id === state.currentTableId)
     table[space] = table[space].filter(r => r.id !== itemId)
@@ -146,15 +134,9 @@ export const actions = {
   setCurrentTables ({ commit }, tables) {
     commit('setItems', {space: 'currentTables', items: tables})
   },
-  // setCurrentTable ({ commit }, table) {
-  //   commit('setItems', {space: 'currentTable', items: table})
-  // },
   setCurrentTableId ({ commit }, tableId) {
     commit('setCurrentTableId', tableId)
   },
-  // resetCurrentTable ({ commit }) {
-  //   commit('resetItems', {space: 'currentTable'})
-  // },
 
   // TABLES LIST
   appendTable ({ commit }, table) {
@@ -183,16 +165,19 @@ export const actions = {
   },
 
   // DATA - currrent table actions
-  appendRowToCurrentTableData ({ commit }, newRow) {
+  appendRowToCurrentTableData ({ commit, getters }, newRow) {
     commit('appendToCurrentTable', {space: 'tableData', item: newRow})
   },
-  updateRowInCurrentTableData ({ commit }, row) {
+  updateRowInCurrentTableData ({ commit, getters }, row) {
     commit('updateInCurrentTable', {space: 'tableData', item: row})
   },
-  updateCellValueInTableData ({ commit }, cellData) {
-    commit('updateCellValueInTableData', {data: cellData} )
+  updateCellValueInTableData ({ commit, getters }, cellData) {
+    const table = getters.getCurrentTable
+    let row = { ...table.tableData.find( r => r.id === cellData.rowId) }
+    row[cellData.headerValue] = cellData.value
+    commit('updateInCurrentTable', {space: 'tableData', item: row} )
   },
-  deleteRowInCurrentTableData ({ commit }, rowId) {
+  deleteRowInCurrentTableData ({ commit, getters }, rowId) {
     commit('deleteInCurrentTable', {space: 'tableData', itemId: rowId})
   },
 }

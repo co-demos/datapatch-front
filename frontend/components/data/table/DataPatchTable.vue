@@ -98,7 +98,7 @@ td {
 
           <!-- UNFIXED COLUMNS -->
           <draggable
-            :list="tableHeaders"
+            v-model="tableHeaders"
             v-bind="dragOptionsHeaders"
             tag="tr"
             draggable=".th-drag"
@@ -130,7 +130,7 @@ td {
 
         <!-- VALUES / ROWS -->
         <draggable
-          :list="tableRows"
+          v-model="tableRows"
           v-bind="dragOptionsRows"
           tag="tbody"
           @start="drag=true"
@@ -239,7 +239,7 @@ td {
 <script>
 
   import { mapState, mapGetters, mapActions } from 'vuex'
-  import { Field, helpHeadersFields, endHeadersFields } from '@/utils/utilsFields'
+  import { Field } from '@/utils/utilsFields'
 
   export default {
     name: 'DataPatchTable',
@@ -249,8 +249,12 @@ td {
     watch: {
       tableId(next) {
         this.log && console.log(`\nC-DataPatchTable > watch > tableId > next : `, next)
+
         this.tableHeaders = [ ...this.getCurrentTableFields ]
+
+        this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 1 : `, this.tableRows)
         this.tableRows = [ ...this.getCurrentTableRows ]
+        this.log && console.log(`C-DataPatchTable > watch > tableId > this.tableRows - 2 : `, this.tableRows)
       }
     },
     data () {

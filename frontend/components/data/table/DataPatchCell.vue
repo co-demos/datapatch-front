@@ -239,6 +239,11 @@
       'selectedRows'
     ],
     watch: {
+      tableId(next) {
+        // this.log && console.log(`\nC-DataTableRow > watch > tableId > next : `, next)
+        // this.log && console.log(`C-DataTableRow > watch > tableId > this.cellData : `, this.cellData)
+        this.localData = this.cellData
+      },
       cellData(next) {
         this.log && console.log(`\nC-DataTableRow > watch > cellData > this.tableId : `, this.tableId)
         this.log && console.log(`C-DataTableRow > watch > cellData > next : `, next)

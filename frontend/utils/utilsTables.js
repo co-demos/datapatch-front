@@ -131,6 +131,13 @@ export class TableMetaData {
   { id: 10, name: 'test 10' },
 
 ]
+export const defaultEmptyTableData = [
+  { id: 1, surname: 'value 1' },
+  { id: 2, surname: 'value 2' },
+  { id: 3, surname: 'value 3' },
+  { id: 4, surname: 'value 4' },
+  { id: 5, surname: 'value 5' },
+]
 
 export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescription, newId=false, addSecondTable=true) => {
 
@@ -153,7 +160,9 @@ export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescriptio
   }
 
   // SET ROWS FOR BLANK
-  let tableBlankRows = defaultTableData
+  let tableBlankRows = [ ...defaultTableData ]
+  let tableEmptyBlankRows = [ ...defaultEmptyTableData ]
+
 
   // WRAP UP AND SET TABLE FOR BLANK DATA AND DEFAULT FIELDS
   let now = new Date(Date.now())
@@ -176,11 +185,55 @@ export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescriptio
       id: 2,
       title: `${defaulTableTitle} - 2`,
       description: `${defaulTableDescription} - 2`,
-      tableFields: tableBlankData.tableFields.slice(0, 4),
-      tableData: tableBlankData.tableData.slice(0, 5),
+      tableFields: tableBlankData.tableFields.slice(1, 4),
+      tableData: tableBlankRows.slice(0, 5),
+      // tableData: tableEmptyBlankRows,
     }
+    let tableEmptyBlankData = [ ...defaultEmptyTableData ]
     tables.push(tableBlankDataCopy)
   }
+
+  return tables
+
+}
+
+export const CreateEmptyBlankTable = (userId, defaulTableTitle, defaulTableDescription, newId=false) => {
+
+  // SET HEADERS FOR BLANK
+  let tableBlankHeaders = []
+  for (let [i, defaultHeader] of defaultHeaders.slice(0, 4).entries()) {
+    let now = new Date(Date.now())
+    let fieldClass = new Field(
+      userId,
+      defaultHeader.value,
+      defaultHeader.text,
+      defaultHeader.type,
+      defaultHeader.title,
+      now.toISOString(),
+      i + 1, 
+    )
+    // fieldClass.fixed = i === 0
+    fieldClass.divider = true
+    tableBlankHeaders.push(fieldClass)
+  }
+
+  // SET ROWS FOR BLANK
+  let tableEmptyBlankRows = [ ...defaultEmptyTableData ]
+
+  // WRAP UP AND SET TABLE FOR BLANK DATA AND DEFAULT FIELDS
+  let now = new Date(Date.now())
+  let tableBlank = new TableMetaData(
+    userId,
+    defaulTableTitle,
+    defaulTableDescription,
+    newId || 1,
+    now.toISOString(),
+    tableBlankHeaders,
+    tableEmptyBlankRows
+  )
+  let tableBlankData = tableBlank.data
+
+  let tables = [ tableBlankData ]
 
   return tables
 

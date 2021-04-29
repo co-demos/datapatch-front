@@ -141,7 +141,7 @@
 
   import { mapState, mapGetters, mapActions } from 'vuex'
 
-  import { TableMetaData, defaultTableData, CreateBlankTable } from '@/utils/utilsTables'
+  import { TableMetaData, CreateEmptyBlankTable } from '@/utils/utilsTables'
 
   export default {
     name: 'DataTables',
@@ -209,7 +209,7 @@
       },
       addTable() {
         let newId = this.getCurrentTables.length + 1
-        let newTable = CreateBlankTable(
+        let newTable = CreateEmptyBlankTable(
           this.userId,
           `${this.$t('tables.defaultTitle')} - ${newId}`,
           this.$t('tables.defaultDescription'),
