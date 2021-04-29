@@ -255,6 +255,9 @@ export class Field {
   set hide (val) {
     this.hHide = val
   }
+  set rebuild (obj) {
+    Object.assign(this, obj)
+  }
 
   get data () {
     return { 

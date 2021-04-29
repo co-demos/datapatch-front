@@ -72,6 +72,9 @@ td {
 .row-selected {
   background-color: gainsboro !important;
 }
+.row-resizing {
+  border-right: 2px solid black !important;
+}
 
 </style>
 
@@ -119,6 +122,7 @@ td {
                 :itemModel="fieldModel"
                 @resizeHeader="updateHeader"
                 @addColumn="addColumn"
+                @hoverResize="hoverResize"
               />
             </th>
           </draggable>
@@ -143,6 +147,7 @@ td {
                 ${!h.helpHeader || h.divider ? 'td-drag' : 'td-help'} 
                 ${h.fixed ? 'fixed-column' : ''} 
                 ${selectedRows.includes(rowData.id) ? 'row-selected' : ''}
+                ${!h.helpHeader && headerResizingId === h.id ? 'row-resizing' : ''}
               `"
               :style="`
                 min-width: ${h.width ? h.width + 'px' : 'auto'}; 
@@ -168,7 +173,9 @@ td {
             <td
               v-for="(h, hIdx) in tableHeaders"
               :key="`r-h-${hIdx}`"
-              :class="`${h.fixed ? 'fixed-column' : ''} justify-center`"
+              :class="`justify-center 
+                ${h.fixed ? 'fixed-column' : ''} 
+              `"
               :style="`
                 min-width: ${h.width ? h.width + 'px' : 'auto'}; 
                 ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
@@ -195,7 +202,7 @@ td {
 
     <ModalRow
       :item="rowDataToEdit"
-      :itemModel="dataFields"
+      :itemModel="tableHeaders"
       :itemType="'row'"
       :parentDialog="dialogEditRow"
       :action="'update'"
@@ -205,19 +212,18 @@ td {
 
 
     <!-- DEBUGGING -->
-    <v-row class="text-caption" v-if="false">
+    <v-row class="text-caption" v-if="true">
       <v-col cols="12">
         <h5>
           <hr> DEBUG FROM : DataPatchTable
         </h5>
       </v-col>
       <v-col cols="4">
-        tableHeaders: <br>
-        <code><pre>{{ tableHeaders }}</pre></code>
+        tableId: <code>{{ tableId }}</code>
       </v-col>
       <v-col cols="4">
-        dataFields: <br>
-        <code><pre>{{ dataFields }}</pre></code>
+        tableHeaders: <br>
+        <code><pre>{{ tableHeaders }}</pre></code>
       </v-col>
       <v-col cols="4">
         tableRows: <br>
@@ -232,25 +238,19 @@ td {
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   import { Field, helpHeadersFields, endHeadersFields } from '@/utils/utilsFields'
 
   export default {
     name: 'DataPatchTable',
     props: [
       'tableId',
-      // 'dataFields',
-      // 'dataRows',
     ],
     watch: {
       tableId(next) {
-        let currentTable = this.getCurrentTable
-
-        let dataFields = currentTable.tableFields
-        this.dataFields = dataFields.map( h => h.data )
-        this.tableHeaders = [ ...this.helpersHs, ...dataFields, ...this.addColHs ]
-
-        this.tableRows =  currentTable.tableData
+        this.log && console.log(`\nC-DataPatchTable > watch > tableId > next : `, next)
+        this.tableHeaders = [ ...this.getCurrentTableFields ]
+        this.tableRows = [ ...this.getCurrentTableRows ]
       }
     },
     data () {
@@ -258,15 +258,13 @@ td {
 
         drag: false,
         dialogEditRow: 0,
+        headerResizingId: undefined,
 
         // field models
         fieldModel: undefined,
-        dataFields: undefined,
 
         // headers - fields
-        helpersHs: helpHeadersFields.map( h => h.dataHelper ),
         tableHeaders: [],
-        addColHs: endHeadersFields.map( h => h.dataHelper ),
 
         // rows
         tableRows: [],
@@ -291,12 +289,8 @@ td {
         meta: emptyField.meta,
       }
 
-      let currentTable = this.getCurrentTable
-      let dataFields = currentTable.tableFields
-      this.dataFields = dataFields.map( h => h.data )
-      this.tableHeaders = [ ...this.helpersHs, ...dataFields, ...this.addColHs ]
-      this.tableRows =  currentTable.tableData
-
+      this.tableHeaders = [...this.getCurrentTableFields]
+      this.tableRows = [...this.getCurrentTableRows]
     },
 
     computed: {
@@ -323,35 +317,57 @@ td {
       ...mapGetters({
         userId: 'user/userId',
         headerUser: 'user/headerUser',
+
         getCurrentTable: 'tables/getCurrentTable',
         getTableById: 'tables/getTableById',
+
+        getCurrentTableFieldsDataLength: 'tables/getCurrentTableFieldsDataLength',
+        getCurrentTableFields: 'tables/getCurrentTableFields',
+        getCurrentTableRowsLength: 'tables/getCurrentTableRowsLength',
+        getCurrentTableRows: 'tables/getCurrentTableRows',
       }),
     },
     methods: {
-      updateHeader(data) {
-        // this.log && console.log(`\nC-DataPatchTable > data : `, data)
-        this.tableHeaders = [ ...this.tableHeaders.map(obj => obj.value !== data.value ? obj : {...obj, ...data} ) ]
-        // this.tableHeaders = [...this.helpersHs, ...updatedFields, ...this.addColHs]
+      ...mapActions({
+        appendColumnToCurrentTableFields: 'tables/appendColumnToCurrentTableFields',
+        updateColumnInCurrentTableFields: 'tables/updateColumnInCurrentTableFields',
+        deleteColumnInCurrentTableFields: 'tables/deleteColumnInCurrentTableFields',
+        appendRowToCurrentTableData: 'tables/appendRowToCurrentTableData',
+        updateRowInCurrentTableData: 'tables/updateRowInCurrentTableData',
+        deleteRowInCurrentTableData: 'tables/deleteRowInCurrentTableData',
+      }),
+      hoverResize(headerId) {
+        this.headerResizingId = headerId
+      },
+      updateHeader(headerData) {
+        // this.log && console.log(`\nC-DataPatchTable > updateHeader > headerData : `, headerData)
+        // this.tableHeaders = [ ...this.tableHeaders.map(obj => obj.value !== headerData.value ? obj : {...obj, ...headerData} ) ]
+        this.updateColumnInCurrentTableFields(headerData)
+        this.tableHeaders = this.getCurrentTableFields
       },
       tableMarginLeft () {
         let marginL = 0
-        for (const h of this.tableHeaders) {
-          // this.log && console.log(`C-DataPatchTable > h : `, h)
-          if (h.fixed) {
-            marginL += h.width
-          }
-        }
+        // this.log && console.log(`\nC-DataPatchTable > tableMarginLeft > this.tableHeaders : `, this.tableHeaders)
+        // this.log && console.log(`\nC-DataPatchTable > tableMarginLeft > this.getCurrentTableFields : `, this.getCurrentTableFields)
+        // for (const h of this.tableHeaders) {
+        // for (const h of this.getCurrentTableFields) {
+        //   this.log && console.log(`C-DataPatchTable > tableMarginLeft > h : `, h)
+        //   if (h && h.fixed) {
+        //     marginL += h.width
+        //   }
+        // }
         return marginL + 1
       },
       getHeaderLeft(header)  {
         let LeftPx = 0
-        for ( const h of this.tableHeaders) {
-          if (h.value !== header.value ) {
-            LeftPx += h.width
-          } else {
-            return LeftPx
-          }
-        }
+        // this.log && console.log(`\nC-DataPatchTable > tableMarginLeft > this.getCurrentTableFields : `, this.getCurrentTableFields)
+        // for ( const h of this.tableHeaders) {
+        // for (const h of this.getCurrentTableFields) {
+        //  if (h && h.value !== header.value ) {
+        //     LeftPx += h.width
+        //   }
+        // }
+        return LeftPx
       },
       addColumn(type='str') {
         // this.log && console.log(`\nC-DataPatchTable > addColumn ...`)
@@ -366,21 +382,24 @@ td {
         )
         newHeader.helpHeader = false
         // this.log && console.log(`C-DataPatchTable > addColumn > newHeader.data :`, newHeader.data)
-        this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
+        // this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
         // this.log && console.log(`C-DataPatchTable > addColumn > this.tableHeaders :`, this.tableHeaders)
+        this.appendColumnToCurrentTableFields(newHeader)
+        this.tableHeaders = [...this.getCurrentTableFields]
       },
       deleteColumn(headerData) {
-        // this.log && console.log(`\nC-DataPatchTable > deleteColumn ...`)
-        this.tableHeaders = this.tableHeaders && this.tableHeaders.filter(h => h !== headerData)
+        this.log && console.log(`\nC-DataPatchTable > deleteColumn : headerData`, headerData)
+        this.deleteColumnInCurrentTableFields(headerData.id)
       },
       addRow() {
         // this.log && console.log(`\nC-DataPatchTable > addRow ...`)
         // this.log && console.log(`C-DataPatchTable > addRow > this.tableHeaders : `, this.tableHeaders)
         let newRow = {}
-        this.tableHeaders.forEach( h => {if( !h.helpHeader) {newRow[h.value] = ''}} )
+        this.tableHeaders.forEach( h => {if( !h.helpHeader) { newRow[h.value] = '' }} )
         newRow.id = this.tableRows.length + 1
         // this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
-        this.tableRows.push(newRow)
+        this.appendRowToCurrentTableData(newRow)
+        this.tableRows = [...this.getCurrentTableRows]
       },
       toggleSelectRow(rowId) {
         if (!this.selectedRows.includes(rowId)) {
@@ -390,17 +409,20 @@ td {
         }
       },
       editRow(rowId) {
-        // this.log && console.log(`\nC-DataPatchTable > editRow ...`)
+        this.log && console.log(`\nC-DataPatchTable > editRow ...`)
         let rowToEdit = this.tableRows.find( r => r.id === rowId )
         this.rowDataToEdit = rowToEdit
         this.dialogEditRow += 1
       },
       saveItem(rowData) {
-        this.tableRows = this.tableRows.map( r => r.id === rowData.id ? rowData : r )
+        this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
+        this.updateRowInCurrentTableData(rowData)
+        this.tableRows = [...this.getCurrentTableRows]
       },
       deleteRow(rowId) {
-        // this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
-        this.tableRows = this.tableRows && this.tableRows.filter(r => r.id !== rowId)
+        this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
+        this.deleteRowInCurrentTableData(rowId)
+        this.tableRows = [...this.getCurrentTableRows]
       },
     }
   }

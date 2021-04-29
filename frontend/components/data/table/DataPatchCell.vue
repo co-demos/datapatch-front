@@ -114,17 +114,17 @@
 
       <v-simple-checkbox
         v-if="header.type === 'bool'"
-        v-model="cellData"
+        v-model="localData"
         disabled
       />
 
       <span v-else-if="header.type === 'str'">
-        {{ cellData || '-' }}
+        {{ localData || '-' }}
       </span>
 
       <span v-else-if="header.type === 'tag'">
         <v-chip
-          v-for="(val, i) in cellData"
+          v-for="(val, i) in localData"
           :key="i"
           label
           small
@@ -136,7 +136,7 @@
 
       <span v-else-if="header.type === 'rating'">
         <v-icon
-          v-for="(v,i) in cellData"
+          v-for="(v,i) in localData"
           :key="i"
           class=""
           small
@@ -146,7 +146,7 @@
       </span>
 
       <span v-else>
-        {{ cellData || '-' }}
+        {{ localData || '-' }}
       </span>
 
     </div>
@@ -164,54 +164,60 @@
       <v-card-text class="pa-0">
         <v-checkbox
           v-if="header.type === 'bool'"
-          v-model="cellData"
+          v-model="localData"
           filled
           dense
           hide-details
+          @change="updateValueInStore"
           />
 
         <v-textarea
           v-else-if="header.type === 'longStr'"
-          v-model="cellData"
+          v-model="localData"
           filled
           dense
           hide-details
+          @change="updateValueInStore"
           />
 
         <v-combobox
           v-else-if="header.type === 'tag'"
-          v-model="cellData"
+          v-model="localData"
           multiple
           smalll-chips
           filled
           dense
           hide-details
+          @change="updateValueInStore"
           />
 
         <v-text-field
           v-else-if="header.type === 'int' || header.type === 'float'"
-          v-model="cellData"
+          v-model="localData"
           type="number"
           filled
           dense
           hide-details
+          @change="updateValueInStore"
           />
 
         <v-select
           v-else-if="header.type === 'rating'"
-          v-model="cellData"
+          v-model="localData"
           :items="[0,1,2,3,4,5]"
           filled
           dense
           hide-details
+          @change="updateValueInStore"
           />
 
         <v-text-field
           v-else
-          v-model="cellData"
+          v-model="localData"
           filled
           dense
           hide-details
+          @change="updateValueInStore"
         />
 
       </v-card-text>
@@ -221,7 +227,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'DataPatchCell',
@@ -232,6 +238,13 @@
       'rowId',
       'selectedRows'
     ],
+    watch: {
+      cellData(next) {
+        this.log && console.log(`\nC-DataTableRow > watch > cellData > this.tableId : `, this.tableId)
+        this.log && console.log(`C-DataTableRow > watch > cellData > next : `, next)
+        this.localData = next
+      }
+    },
     data () {
       return {
         editMode: false,
@@ -241,7 +254,7 @@
       }
     },
     beforeMount () {
-      // this.localData = this.cellData
+      this.localData = this.cellData
     },
     computed: {
       ...mapState({
@@ -254,6 +267,9 @@
       }),
     },
     methods: {
+      ...mapActions({
+        updateCellValueInTableData: 'tables/updateCellValueInTableData',
+      }),
       getJustify(head) {
         // this.log && head.type === 'int' && console.log(`C-DataTableRow > cleanTableHeaders > head : `, head)
         let justify = 'start'
@@ -269,13 +285,6 @@
       editCell(e) {
         this.log && console.log(`\C-DataTableRow > editCell > this.rowId : `, this.rowId)
         e.preventDefault()
-        // let cell = this.$refs.cell
-        // // this.log && console.log(`\C-DataTableRow > editCell > cell : `, cell)
-        // let cellX = this.$refs.cell.getBoundingClientRect().left
-        // let cellY = this.$refs.cell.getBoundingClientRect().top
-        // this.editMode = false
-        // this.x = cellX + 1 //e.clientX
-        // this.y = cellY - 1 //e.clientY
         this.$nextTick(() => {
           this.editMode = true
         })
@@ -283,6 +292,19 @@
       editRow() {
         // this.log && console.log(`C-DataTableRow > editRow > this.rowId : `, this.rowId)
         this.$emit('editRow', this.rowId)
+      },
+      updateValueInStore(e) {
+        this.log && console.log(`C-DataTableRow > updateValueInStore > this.tableId : `, this.tableId)
+        this.log && console.log(`C-DataTableRow > updateValueInStore > this.header.id : `, this.header.id)
+        this.log && console.log(`C-DataTableRow > updateValueInStore > this.rowId : `, this.rowId)
+        this.log && console.log(`C-DataTableRow > updateValueInStore > e : `, e)
+        let cellData = {
+          tableId : this.tableId,
+          rowId : this.rowId,
+          headerValue: this.header.value,
+          value: e
+        }
+        this.updateCellValueInTableData(cellData)
       },
       selectRow() {
         // this.log && console.log(`\nC-DataTableRow > selectRow > this.rowId : `, this.rowId)

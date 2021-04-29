@@ -187,14 +187,18 @@
     },
     methods: {
       findText(value, model) {
+        // this.log && console.log('\nC-ModalFields > findText > value :' , value)
+        // this.log && console.log('C-ModalFields > findText > model :' , model)
+        let valueStr = Boolean(value)
         let needTranslation = model.options.translate
-        let item = model.options.items.find( i => i.value === value.toString())
+        let item = model.options.items.find( i => i.value === valueStr.toString() )
         return needTranslation ? this.$t(item.text) : item.text
       },
       findPreprendIcon(value, model) {
+        let valueStr = Boolean(value)
         let needPrependIcon = model.options.prependIcon
         if (needPrependIcon) {
-          let item = model.options.items.find( i => i.value === value.toString())
+          let item = model.options.items.find( i => i.value === valueStr.toString())
           return item.icon
         }
       },

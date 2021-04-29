@@ -167,15 +167,11 @@
     //   prop: 'hidden',
     //   event: 'blur'
     // },
-    // watch: {
-    //   header(next, prev) {
-    //     this.log && console.log(`\nC-DataPatchHeader > watch > header > next.value :`, next.value)
-    //     this.log && console.log(`C-DataPatchHeader > watch > header > prev.value :`, prev.value)
-    //     if (next.value !== prev.value) {
-    //       this.getHeaderWidth(next)
-    //     }
-    //   }
-    // },
+    watch: {
+      activeResize(next) {
+        this.$emit('hoverResize', next ? this.header && this.header.id : undefined)
+      }
+    },
     data () {
       return {
         dialog: 0,
@@ -210,6 +206,8 @@
           let headerUpdated = { ...this.header }
           headerUpdated.width = width
           this.$emit('resizeHeader', headerUpdated)
+          // this.header.width = width
+          // this.$emit('resizeHeader', this.header)
         }, 100)
       },
 

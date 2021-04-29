@@ -172,11 +172,11 @@
         infos: emptyTable.infos,
         auth: emptyTable.auth,
       }
-      this.log && console.log(`\nC-DataTables > beforeMount > emptyTable : `, emptyTable)
+      // this.log && console.log(`\nC-DataTables > beforeMount > emptyTable : `, emptyTable)
 
       // set default tab
       this.tab = this.currrentDatasetTables[0].id
-      this.setCurrentTableById(this.tab)
+      this.setCurrentTableId(this.tab)
    },
     computed: {
       getDatasetColor() {
@@ -199,13 +199,13 @@
     methods: {
       ...mapActions({
         setCurrentTables: 'tables/setCurrentTables',
-        setCurrentTable: 'tables/setCurrentTable',
-        setCurrentTableById: 'tables/setCurrentTableById',
+        // setCurrentTable: 'tables/setCurrentTable',
+        setCurrentTableId: 'tables/setCurrentTableId',
         appendTable: 'tables/appendTable',
       }),
       changeTab(tableId) {
         this.tab = tableId
-        this.setCurrentTableById(tableId)
+        this.setCurrentTableId(tableId)
       },
       addTable() {
         let newId = this.getCurrentTables.length + 1
