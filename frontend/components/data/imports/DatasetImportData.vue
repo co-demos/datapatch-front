@@ -543,8 +543,11 @@
           index: 1,
         }
         this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableMetadata : `, tableMetadata)
-        // const table = this.rawDataToTable(tableMetadata, dataObj)
-        // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > table : `, table)
+        const table = this.rawDataToTable(tableMetadata, dataObj)
+        this.log && console.log(`C-DatasetImportData > readFromCopyPaste > table : `, table)
+        const tables = [ table ]
+        this.setCurrentTables(tables)
+        this.toggleTablesNeedReload(true)
       },
       async readCsvFiles() {
         this.resetCurrentTables()
@@ -552,8 +555,6 @@
         try {
           const tables = await this.readCsvFilesAsync()
           this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
-          // this.tablesCsvFiles = tables
-          // this.sendTables(tables)
           this.setCurrentTables(tables)
           this.toggleTablesNeedReload(true)
         } catch (ex) {
