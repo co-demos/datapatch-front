@@ -43,6 +43,13 @@ export class TableMetaData {
     this.url = url
   }
 
+  set importData (obj) {
+    this.tImportData = obj
+  }
+  get importData () {
+    return this.tImportData
+  }
+
   get data () {
     return { 
       owner_id: this.owner_id,
@@ -61,6 +68,8 @@ export class TableMetaData {
       patch: this.patch,
       write: this.write,
       manage: this.manage,
+
+      importData: this.tImportData
     }
   }
 

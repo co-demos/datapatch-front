@@ -108,3 +108,51 @@ export const convertCSVToJSON = (str, delimiter = ',') => {
     values: rowValues
   }
 }
+
+export const convertGithubUrlToRawUrl = (url) => {
+  console.log(`U-utilsImports > convertGithubUrlToRawUrl > url :`, url)
+  const githubPublic = 'https://github.com/'
+  const githubRaw = 'https://raw.githubusercontent.com/'
+  let blob = 'blob/'
+
+  let trimmedPath = ''
+  let remainingPath = ''
+  let pathArrayUrl
+  let urlData = {
+    originalFileUrl: url,
+    githubUser: undefined,
+    repo: undefined,
+    branch: undefined,
+    filename: undefined,
+    rawFileUrl: undefined,
+  }
+
+  /*
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-PiNG-2021.csv
+  to =>
+  https://raw.githubusercontent.com/co-demos/datapatch-front/master/test-files/csv/test-datapatch-PiNG-2021.csv
+  */
+
+  if ( url.startsWith(githubPublic) ) {
+    console.log(`U-utilsImports > convertGithubUrlToRawUrl > githubPublic > ...`)
+    trimmedPath = url.replace(githubPublic, '' )
+    pathArrayUrl = trimmedPath.split('/') 
+    console.log(`U-utilsImports > convertGithubUrlToRawUrl > githubRaw > pathArrayUrl :`, pathArrayUrl)
+    urlData.branch = pathArrayUrl[3]
+  } 
+  else if ( url.startsWith(githubRaw) ) {
+    console.log(`U-utilsImports > convertGithubUrlToRawUrl > githubRaw > ...`)
+    trimmedPath = url.replace(githubRaw, '' )
+    pathArrayUrl = trimmedPath.split('/') 
+    urlData.branch = pathArrayUrl[2]
+  }
+  urlData.githubUser = pathArrayUrl[0]
+  urlData.repo = pathArrayUrl[1]
+  urlData.filename = pathArrayUrl[pathArrayUrl.length - 1]  
+  remainingPath = trimmedPath.replace(`/${urlData.filename}`, '').replace(blob, '')
+
+  urlData.rawFileUrl = `${githubRaw}${remainingPath}/${urlData.filename }`
+
+  return urlData
+  
+}

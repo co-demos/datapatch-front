@@ -130,6 +130,7 @@
                 <v-btn
                   tile
                   outlined
+                  :disabled="!copyPasteData"
                   color="primary"
                   class="text-none font-weight-bold px-5"
                   @click="readFromCopyPaste"
@@ -178,6 +179,7 @@
                 <v-btn
                   tile
                   outlined
+                  :disabled="!csvFiles"
                   color="primary"
                   class="text-none font-weight-bold px-5"
                   @click="readCsvFiles"
@@ -216,6 +218,7 @@
             <v-btn
               tile
               outlined
+              :disabled="!xlsFile"
               color="primary"
               class="text-none font-weight-bold px-5"
               @click="readExcelFile"
@@ -253,6 +256,7 @@
             <v-btn
               tile
               outlined
+              :disabled="!jsonFiles"
               color="primary"
               class="text-none font-weight-bold px-5"
               @click="readJsonFiles"
@@ -270,6 +274,12 @@
           <v-col cols="4" class="pb-0">
             <p v-html="$t('imports.csvGithub_helper')" class="text-body-2" />
             <p v-html="$t('imports.sep_helper')" class="text-body-2" />
+            <p class="text-caption">
+              https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-PiNG-2021.csv
+            </p>
+            <p class="text-caption">
+              https://raw.githubusercontent.com/co-demos/datapatch-front/master/test-files/csv/test-datapatch-PiNG-2021.csv
+            </p>
           </v-col>
 
           <v-col cols="8" class="pb-0">
@@ -310,6 +320,7 @@
                 <v-btn
                   tile
                   outlined
+                  :disabled="!csvGithubUrl"
                   color="primary"
                   class="text-none font-weight-bold px-5"
                   @click="readCsvFromUrl"
@@ -346,6 +357,7 @@
             <v-btn
               tile
               outlined
+              :disabled="!tableGsheetUrl"
               large
               color="primary"
               class="text-none font-weight-bold px-5"
@@ -394,10 +406,24 @@
   pingcarto8_	CGET	France Tiers-Lieux	CGET	FTL
   pingcarto9_	CGET	France Tiers-Lieux	CGET	FTL
   */
- 
+
+  /*
+  tests for urls - csv on github
+
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-PiNG-2021.csv
+  --> https://raw.githubusercontent.com/co-demos/datapatch-front/master/test-files/csv/test-datapatch-PiNG-2021.csv
+
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-arbories-2021.csv
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-excel%20-%20Lieux.csv
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-excel%20-%20Lieux.tsv
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-excel%20-%20cat%C3%A9gories.csv
+  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-excel%20-%20cat%C3%A9gories.tsv
+
+  */
+
   import { mapState, mapGetters, mapActions } from 'vuex'
 
-  import { csvSeparators, importOptionsInfos, convertCSVToJSON } from '@/utils/utilsImports.js'
+  import { csvSeparators, importOptionsInfos, convertCSVToJSON, convertGithubUrlToRawUrl } from '@/utils/utilsImports.js'
   import { rules } from '@/utils/utilsRules.js'
   import { Field } from '@/utils/utilsFields'
   import { TableMetaData, CreateBlankTable } from '@/utils/utilsTables'
@@ -540,6 +566,7 @@
         const table = newTable.data
         return table
       },
+
       readFromCopyPaste() {
         this.log && console.log(`C-DatasetImportData > readFromCopyPaste > ...`)
         const data = this.copyPasteData
@@ -558,18 +585,7 @@
         this.setCurrentTables(tables)
         this.toggleTablesNeedReload(true)
       },
-      async readCsvFiles() {
-        this.resetCurrentTables()
-        this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
-        try {
-          const tables = await this.readCsvFilesAsync()
-          this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
-          this.setCurrentTables(tables)
-          this.toggleTablesNeedReload(true)
-        } catch (ex) {
-          this.log && console.log(ex)
-        }
-      },
+
       async readCsvFilesAsync() {
         // this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > e :`, e)
         let promisesArray = []
@@ -598,9 +614,56 @@
           return Promise.all(promisesArray)
         }
       },
+      async readCsvFiles() {
+        this.resetCurrentTables()
+        this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
+        try {
+          const tables = await this.readCsvFilesAsync()
+          this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
+          this.setCurrentTables(tables)
+          this.toggleTablesNeedReload(true)
+        } catch (ex) {
+          this.log && console.log(ex)
+        }
+      },
+
       readExcelFile() {},
       readJsonFiles() {},
-      readCsvFromUrl() {},
+
+      async readCsvFromUrlAsync(url) {
+        this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > url : `, url)
+        const header = {
+          accept: '*/*',
+        }
+        this.$axios.get(url, header)
+          .then(resp => {
+            this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > resp.data : `, resp.data)
+            return resp.data
+          })
+      },
+      async readCsvFromUrl() {
+        this.log && console.log(`C-DatasetImportData > readCsvFromUrl > ...`)
+        if (this.csvGithubUrl.startsWith('http')) {
+          let csvUrlData = convertGithubUrlToRawUrl(this.csvGithubUrl)
+          this.log && console.log(`C-DatasetImportData > readCsvFromUrl > csvUrlData : `, csvUrlData)
+          let tableMetadata = {
+            title: csvUrlData.filename,
+            importType: 'csvGithub',
+            index: 1,
+          }
+          tableMetadata.importData = csvUrlData
+          this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableMetadata : `, tableMetadata)
+          try {
+            const table = await this.readCsvFromUrlAsync(csvUrlData.rawFileUrl)
+            this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
+            // this.setCurrentTables([table])
+            // this.toggleTablesNeedReload(true)
+          } catch (ex) {
+            this.log && console.log(ex)
+          }
+        }
+      },
+
       readGsheetUrl() {},
 
       sendTables(tables) {
