@@ -98,21 +98,20 @@
             <v-row>
               <v-col cols="12" class="pb-0">
                 <v-text-field
-                  id="copyPasteDataName"
                   v-model="copyPasteDataName"
                   :label="$t('tables.enterTitle')"
                   :hint="$t('tables.title')"
                   :placeholder="$t('tables.enterTitle')"
+                  dense
                   filled
                   single-line
                   clearable
-                  prepend-inner-icon="icon-copy"
+                  prepend-inner-icon="icon-typography"
                   :rules="minCharRules"
                 />
               </v-col>
               <v-col cols="12" class="py-0">
                 <v-textarea
-                  id="copyPasteRaw"
                   v-model="copyPasteData"
                   :placeholder="$t('imports.copyPaste_placeholder')"
                   filled
@@ -156,7 +155,6 @@
             <v-row>
               <v-col cols="12" class="pb-0">
                 <v-file-input
-                  id="csvRaw"
                   v-model="csvFiles"
                   :placeholder="$t('imports.csv_placeholder')"
                   counter
@@ -203,7 +201,6 @@
           </v-col>
           <v-col cols="8" class="pb-0">
             <v-file-input
-              id="excelRaw"
               v-model="xlsFile"
               :placeholder="$t('imports.excel_placeholder')"
               counter
@@ -241,7 +238,6 @@
           </v-col>
           <v-col cols="8" class="pb-0">
             <v-file-input
-              id="jsonRaw"
               v-model="jsonFiles"
               :placeholder="$t('imports.json_placeholder')"
               counter
@@ -284,21 +280,20 @@
             <v-row>
               <v-col cols="12" class="pb-0">
                 <v-text-field
-                  id="csvGithubUrlName"
                   v-model="csvGithubUrlName"
                   :label="$t('tables.enterTitle')"
                   :hint="$t('tables.title')"
                   :placeholder="$t('tables.enterTitle')"
+                  dense
                   filled
                   single-line
                   clearable
-                  prepend-inner-icon="icon-copy"
+                  prepend-inner-icon="icon-typography"
                   :rules="minCharRules"
                 />
               </v-col>
-              <v-col cols="12" class="pb-0">
+              <v-col cols="12" class="py-0">
                 <v-text-field
-                  id="csvUrlRaw"
                   v-model="csvGithubUrl"
                   :placeholder="$t('imports.csvGithub_placeholder')"
                   filled
@@ -342,7 +337,6 @@
           </v-col>
           <v-col cols="8" class="pb-0">
             <v-text-field
-              id="sheetUrl"
               v-model="tableGsheetUrl"
               :placeholder="$t('imports.gSheet_placeholder')"
               filled
