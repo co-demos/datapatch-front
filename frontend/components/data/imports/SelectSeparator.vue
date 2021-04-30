@@ -52,17 +52,4 @@
     }
   }
 
-  /*
-  INDEX	SOURCE	SOURCE_temp	SOURCE_codes	SOURCE_codes_temp
-  pingcarto1_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto2_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto3_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto4_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto5_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto6_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto7_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto8_	CGET	France Tiers-Lieux	CGET	FTL
-  pingcarto9_	CGET	France Tiers-Lieux	CGET	FTL
-  */
-
 </script>

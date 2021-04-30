@@ -50,7 +50,7 @@ export default function ({
       // log && console.log('MW-checkToken > B > me > isUserPopulated: ', isUserPopulated)
 
       // 1. check if access_token is still valid + get user data if isUserPopulated is empty
-      const initUser = $axios
+      const initUserRequest = $axios
         .get(`${api.users}/${isUserPopulated ? 'verify-acces-token' : 'me'}/`, config.headers)
         .then(resp => {
           // log && console.log('MW-checkToken > B > me > resp.data : ', resp.data)
@@ -73,7 +73,7 @@ export default function ({
           // log && console.log("MW-checkToken > C > refreshTokenCookie : ", refreshTokenCookie)
           let configRefresh = new configHeaders(refreshTokenCookie)
           // log && console.log("MW-checkToken > C > configRefresh.headers : ", configRefresh.headers)
-          $axios
+          const newAccessTokenRequest = $axios
             .get(`${api.users}/new-access-token/`, configRefresh.headers)
             .then(resp => {
              // 3. set cookie with new access_token so next middleware will use this one
@@ -87,8 +87,9 @@ export default function ({
               // log && console.log('MW-checkToken > C > error : ', error)
               return redirect('/login')
             })
+            promisesArray.push(newAccessTokenRequest)
         })
-      promisesArray.push(initUser)
+      promisesArray.push(initUserRequest)
 
       // WAIT FOR ALL PROMISES TO RETURN
       // log && console.log('\n')

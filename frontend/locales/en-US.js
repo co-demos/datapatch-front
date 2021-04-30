@@ -24,8 +24,8 @@ export default {
     deleteConfirm: 'Yes, I delete',
   },
   imports: {
-    blank: 'Start from an empty table',
-    blank_full: 'Start from an empty table',
+    blank: 'Start from an empty dataset',
+    blank_full: 'Start from an empty dataset',
     blank_helper: "Here you can directly edit your tables before creating your dataset.",
     copyPaste: 'Copy-paste your data',
     copyPaste_full: 'Copy-paste your data (either csv-like or copied from your table editor)',

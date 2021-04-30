@@ -24,8 +24,8 @@ export default {
     deleteConfirm: 'Oui, je supprime',
   },
   imports: {
-    blank: "Commencer à partir d'un tableau vide",
-    blank_full: "Commencer à partir d'un tableau vide",
+    blank: "Commencer à partir d'un modèle vide",
+    blank_full: "Commencer à partir d'un jeu de données vide",
     blank_helper: "Vous pouvez éditer directement vos tables ici avant la création de votre jeu de données.",
     copyPaste: 'Copier-coller vos données',
     copyPaste_full: 'Copier-coller vos données (soit de type csv ou copiées depuis votre tableur)',
