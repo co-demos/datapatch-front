@@ -29,7 +29,7 @@ export const getters = {
     return state.currentTableId
   },
   getCurrentTables: (state) => {
-    console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
+    // console.log('S-tables > getCurrentTables > state.currentTables : ', state.currentTables)
     return state.currentTables
   },
   getCurrentTable: (state) => {
@@ -101,7 +101,7 @@ export const mutations = {
   },
 
   setCurrentTables (state, items) {
-    console.log('S-tables > setCurrentTables > items : ', items)
+    // console.log('S-tables > setCurrentTables > items : ', items)
     state.currentTables = items
   },
 

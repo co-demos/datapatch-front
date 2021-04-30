@@ -1,11 +1,95 @@
+export const csvSeparators = [
+  { 
+    value: 'comma',
+    sep: ',',
+    sepTxt: ',',
+    label: 'imports.comma'
+  },
+  { 
+    value: 'semicolon',
+    sep: ';',
+    sepTxt: ';',
+    label: 'imports.semicolon'
+  },
+  { 
+    value: 'tab',
+    sep: '\t',
+    sepTxt: '¶',
+    label: 'imports.tab'
+  },
+  { 
+    value: 'pipe',
+    sep: '|',
+    sepTxt: '|',
+    label: 'imports.pipe'
+  },
+  { 
+    value: 'colon',
+    sep: ':',
+    sepTxt: ':',
+    label: 'imports.colon'
+  },
+]
+
 export const importOptionsInfos = [
-  { title: 'imports.blank', icon: 'icon-file', value: 'blank' },
-  { title: 'imports.copyPaste', icon: 'icon-copy', value: 'copyPaste' },
-  { title: 'imports.csv', icon: 'icon-table2', value: 'csv' },
-  { title: 'imports.excel', icon: 'icon-file-excel-o', value: 'excel', disabled: true },
-  { title: 'imports.json', icon: 'icon-file-code-o', value: 'json', disabled: true },
-  { title: 'imports.csvGithub', icon: 'icon-github', value: 'csvGithub' },
-  { title: 'imports.gSheet', icon: 'icon-google', value: 'gSheet', disabled: true },
+  { 
+    title: 'imports.blank', 
+    title_full: 'imports.blank_full', 
+    icon: 'icon-file', 
+    value: 'blank',
+    disabled: false, 
+  },
+  { 
+    title: 'imports.copyPaste', 
+    title_full: 'imports.copyPaste_full', 
+    icon: 'icon-copy', 
+    value: 'copyPaste',
+    disabled: false,
+    options: {
+      separators: csvSeparators
+    }
+  },
+  { 
+    title: 'imports.csv', 
+    title_full: 'imports.csv_full', 
+    icon: 'icon-table2', 
+    value: 'csv',
+    disabled: false,
+    options: {
+      separators: csvSeparators
+    }
+  },
+  { 
+    title: 'imports.excel', 
+    title_full: 'imports.excel_full', 
+    icon: 'icon-file-excel-o', 
+    value: 'excel',
+    disabled: false,
+  },
+  { 
+    title: 'imports.json', 
+    title_full: 'imports.json_full', 
+    icon: 'icon-file-code-o', 
+    value: 'json',
+    disabled: false,
+  },
+  { 
+    title: 'imports.csvGithub', 
+    title_full: 'imports.csvGithub_full', 
+    icon: 'icon-github', 
+    value: 'csvGithub',
+    disabled: false,
+    options: {
+      separators: csvSeparators
+    }
+  },
+  { 
+    title: 'imports.gSheet', 
+    title_full: 'imports.gSheet_full', 
+    icon: 'icon-google', 
+    value: 'gSheet',
+    disabled: false, 
+  },
 ]
 
 export const convertCSVToJSON = (str, delimiter = ',') => {

@@ -166,7 +166,7 @@
     ],
     watch: {
       getCurrentTables(next, prev) {
-        this.log && console.log(`C-DataTables > watch > getCurrentTables > next :`, next)
+        // this.log && console.log(`C-DataTables > watch > getCurrentTables > next :`, next)
         if (next && !prev) {
           this.tab = next && next.length && next[0].id
           this.setCurrentTableId(this.tab)
@@ -198,7 +198,7 @@
       // this.log && console.log(`\nC-DataTables > beforeMount > emptyTable : `, emptyTable)
 
       // set default tab
-      this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
+      // this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
       this.tab = this.getCurrentTables && this.getCurrentTables.length && this.getCurrentTables[0].id
       // this.tab = this.currrentDatasetTables[0].id
       this.setCurrentTableId(this.tab)

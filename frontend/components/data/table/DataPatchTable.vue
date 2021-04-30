@@ -249,14 +249,14 @@ td {
     ],
     watch: {
       getTablesNeedReload(next) {
-        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
         if (next) {
           this.toggleTablesNeedReload(false)
           this.resetDisplayedTables()
         }
       },
       tableId(next) {
-        this.log && console.log(`C-DataPatchTable > watch > tableId > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > tableId > next :`, next)
         if (next) {
           this.resetDisplayedTables()
         }

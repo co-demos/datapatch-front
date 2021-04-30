@@ -6,6 +6,13 @@ export const rules = {
     ]
   },
 
+  minCharRules: (reqMsg, minMsg) => {
+    return [
+      (value) => !!value || reqMsg,
+      (value) => (value && value.length >= 3) || minMsg,
+    ]
+  },
+
   emailRules: (reqMsg, validMsg) => {
     return [
       (value) => !!value || reqMsg,

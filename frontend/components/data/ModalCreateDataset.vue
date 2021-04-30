@@ -91,7 +91,7 @@
 
 
       <!-- STEPPER -->
-      <v-container>
+      <v-container class="pa-0">
 
         <v-stepper
           non-linear

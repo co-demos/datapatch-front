@@ -161,12 +161,7 @@
       'header',
       'itemModel',
       'redraw',
-      // 'hidden'
     ],
-    // model: {
-    //   prop: 'hidden',
-    //   event: 'blur'
-    // },
     watch: {
       activeResize(next) {
         this.$emit('hoverResize', next ? this.header && this.header.id : undefined)
@@ -195,9 +190,6 @@
       }),
     },
     methods: {
-      // handleInput (value) {
-      //   this.$emit('blur', value)
-      // },
 
       updateItemDebounced(width) {
         clearTimeout(this._timerId)
