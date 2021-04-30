@@ -24,6 +24,8 @@ export default {
     deleteConfirm: 'Yes, I delete',
   },
   imports: {
+    example: 'Example',
+    examples: 'Examples',
     blank: 'Start from an empty dataset',
     blank_full: 'Start from an empty dataset',
     blank_helper: "Here you can directly edit your tables before creating your dataset.",

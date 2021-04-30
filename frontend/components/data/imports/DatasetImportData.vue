@@ -93,6 +93,16 @@
             <p v-html="$t('imports.copyPaste_helper')" class="text-body-2" />
             <p v-html="$t('imports.copyPaste_helper_bis')" class="text-body-2" />
             <p v-html="$t('imports.sep_helper')" class="text-body-2" />
+            <p class="text-caption">
+              {{ $t('imports.example') }} :<br>
+<pre>INDEX	SOURCE	CATEGORIE
+carto1_	source 1	A
+carto2_	source 1	B
+carto3_	source 1	B-A
+carto4_	source 2	B
+carto5_	source 3	C</pre>
+              </code>
+            </p>
           </v-col>
           <v-col cols="8">
             <v-row class="justify-center">
@@ -275,10 +285,15 @@
             <p v-html="$t('imports.csvGithub_helper')" class="text-body-2" />
             <p v-html="$t('imports.sep_helper')" class="text-body-2" />
             <p class="text-caption">
-              https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-PiNG-2021.csv
-            </p>
-            <p class="text-caption">
+              {{ $t('imports.examples') }} :
+              <ul>
+                <li>
+                  https://github.com/co-demos/datapatch-front/blob/master/test-files/csv/test-datapatch-PiNG-2021.csv
+                </li>
+                <li>
               https://raw.githubusercontent.com/co-demos/datapatch-front/master/test-files/csv/test-datapatch-PiNG-2021.csv
+                </li>
+              </ul>
             </p>
           </v-col>
 
