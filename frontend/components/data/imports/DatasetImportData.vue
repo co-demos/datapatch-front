@@ -544,8 +544,8 @@
       },
       rawDataToTable(tableMetadata, dataObj) {
         // read data and convert to table data
-        // this.log && console.log(`\nC-DatasetImportData > rawDataToTables > tableMetadata :`, tableMetadata)
-        // this.log && console.log(`C-DatasetImportData > rawDataToTables > dataObj :`, dataObj)
+        this.log && console.log(`\nC-DatasetImportData > rawDataToTables > tableMetadata :`, tableMetadata)
+        this.log && console.log(`C-DatasetImportData > rawDataToTables > dataObj :`, dataObj)
         const rawFields = dataObj.headers
         const rawRows = dataObj.values.map( (r,i) => { return {id: i + 1, ...r}} )
 
@@ -631,15 +631,20 @@
       readJsonFiles() {},
 
       async readCsvFromUrlAsync(url) {
-        this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > url : `, url)
+        // this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > url : `, url)
         const header = {
           accept: '*/*',
         }
-        this.$axios.get(url, header)
+        let promisesArray = []
+        const getCsvDataPromise = this.$axios.get(url, header)
           .then(resp => {
-            this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > resp.data : `, resp.data)
-            return resp.data
+            // this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > resp.data : `, resp.data)
+            let dataObj = convertCSVToJSON(resp.data, this.csvUrlSeparator)
+            this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > dataObj`, dataObj)
+            return dataObj
           })
+        promisesArray.push(getCsvDataPromise)
+        return Promise.all(promisesArray)
       },
       async readCsvFromUrl() {
         this.log && console.log(`C-DatasetImportData > readCsvFromUrl > ...`)
@@ -654,10 +659,12 @@
           tableMetadata.importData = csvUrlData
           this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableMetadata : `, tableMetadata)
           try {
-            const table = await this.readCsvFromUrlAsync(csvUrlData.rawFileUrl)
+            let dataObj = await this.readCsvFromUrlAsync(csvUrlData.rawFileUrl)
+            this.log && console.log(`C-DatasetImportData > readCsvFromUrl > dataObj :`, dataObj)
+            const table = this.rawDataToTable(tableMetadata, dataObj[0])
             this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
-            // this.setCurrentTables([table])
-            // this.toggleTablesNeedReload(true)
+            this.setCurrentTables([table])
+            this.toggleTablesNeedReload(true)
           } catch (ex) {
             this.log && console.log(ex)
           }
