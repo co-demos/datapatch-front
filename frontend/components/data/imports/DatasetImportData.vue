@@ -648,7 +648,7 @@
       },
       async readCsvFromUrl() {
         this.log && console.log(`C-DatasetImportData > readCsvFromUrl > ...`)
-        if (this.csvGithubUrl.startsWith('http')) {
+        if (this.csvGithubUrl && this.csvGithubUrl.startsWith('http')) {
           let csvUrlData = convertGithubUrlToRawUrl(this.csvGithubUrl)
           this.log && console.log(`C-DatasetImportData > readCsvFromUrl > csvUrlData : `, csvUrlData)
           let tableMetadata = {

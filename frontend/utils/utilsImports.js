@@ -64,14 +64,14 @@ export const importOptionsInfos = [
     title_full: 'imports.excel_full', 
     icon: 'icon-file-excel-o', 
     value: 'excel',
-    disabled: false,
+    disabled: true,
   },
   { 
     title: 'imports.json', 
     title_full: 'imports.json_full', 
     icon: 'icon-file-code-o', 
     value: 'json',
-    disabled: false,
+    disabled: true,
   },
   { 
     title: 'imports.csvGithub', 
