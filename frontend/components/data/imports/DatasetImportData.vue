@@ -95,7 +95,7 @@
             <p v-html="$t('imports.sep_helper')" class="text-body-2" />
           </v-col>
           <v-col cols="8">
-            <v-row>
+            <v-row class="justify-center">
               <v-col cols="12" class="pb-0">
                 <v-text-field
                   v-model="copyPasteDataName"
@@ -130,9 +130,8 @@
                 <v-btn
                   tile
                   outlined
-                  block
                   color="primary"
-                  class="text-none font-weight-bold"
+                  class="text-none font-weight-bold px-5"
                   @click="readFromCopyPaste"
                   >
                   {{ $t('imports.readData') }}
@@ -152,7 +151,7 @@
             <p v-html="$t('imports.sep_helper')" class="text-body-2" />
           </v-col>
           <v-col cols="8" class="pb-0">
-            <v-row>
+            <v-row class="justify-center">
               <v-col cols="12" class="pb-0">
                 <v-file-input
                   v-model="csvFiles"
@@ -179,9 +178,8 @@
                 <v-btn
                   tile
                   outlined
-                  block
                   color="primary"
-                  class="text-none font-weight-bold"
+                  class="text-none font-weight-bold px-5"
                   @click="readCsvFiles"
                   >
                   {{ $t('imports.readData') }}
@@ -218,9 +216,8 @@
             <v-btn
               tile
               outlined
-              block
               color="primary"
-              class="text-none font-weight-bold"
+              class="text-none font-weight-bold px-5"
               @click="readExcelFile"
               >
               {{ $t('imports.readData') }}
@@ -256,9 +253,8 @@
             <v-btn
               tile
               outlined
-              block
               color="primary"
-              class="text-none font-weight-bold"
+              class="text-none font-weight-bold px-5"
               @click="readJsonFiles"
               >
               {{ $t('imports.readData') }}
@@ -314,9 +310,8 @@
                 <v-btn
                   tile
                   outlined
-                  block
                   color="primary"
-                  class="text-none font-weight-bold"
+                  class="text-none font-weight-bold px-5"
                   @click="readCsvFromUrl"
                   >
                   {{ $t('imports.readData') }}
@@ -351,10 +346,9 @@
             <v-btn
               tile
               outlined
-              block
               large
               color="primary"
-              class="text-none font-weight-bold"
+              class="text-none font-weight-bold px-5"
               @click="readGsheetUrl"
               >
               {{ $t('imports.readData') }}
@@ -365,13 +359,13 @@
       </v-col>
     </v-row>
 
-
     <!-- PREVIEW DATA -->
     <v-lazy
       v-model="isActive"
       :options="{ threshold: .5}"
       min-height="200"
       transition="fade-transition"
+      class="mt-3"
       >
 
       <DataTables
