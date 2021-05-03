@@ -59,8 +59,6 @@
             {{ $t('buttons.options') }}
           </v-subheader>
 
-            <!-- @click.stop="dialog += 1" -->
-
           <v-list-item
             v-for="importOption in importOptions"
             :key="importOption.value"

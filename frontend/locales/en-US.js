@@ -8,6 +8,37 @@ export default {
     repo: "Github repository",
     codemos: "an original and open source project by co-demos",
   },
+  features: {
+    featuresTitle: 'Main features',
+    featuresHeader: 'The main features of Data Patch are the following :',
+    featuresHeader: 'Les principales fonctionnalités de Data Patch sontt les suivantes :',
+
+    edit: 'edit',
+    relationalDb: 'relational database',
+    oauth: 'oauth 2', 
+    auths: 'authorizations',
+    collaboration: 'collaboration', 
+    dragdrop: 'drag and drop', 
+    emailing: 'emailing', 
+    share: 'share', 
+    publish: 'publish',
+    api: 'api',
+    moderation: 'moderation',
+    imports: 'import data file or online data',
+
+    editTables: 'Edit your table data',
+    importData: 'Import data from many sources',
+    manageDatasets: 'Manage your datasets easily',
+    dragDropDatasets: 'Drag and drop your items',
+    collaborate: 'Collaborate on datasets',
+  },
+  roadmap: {
+    title: 'Our roadmap',
+  },
+  stack: {
+    title: 'Technologies',
+
+  },
   buttons: {
     prev: 'Previous',
     continue: 'Continue',

@@ -10,69 +10,23 @@
       xs12
       sm8
       md6
-      class="mb-5"
+      class="mb-12 pa-3"
       >
 
-      <div class="text-center mt-5">
-        <LogoAnimated
-          :yoyo="true"
-          :repeat="0"
-          :animated="true"
-          :height="'300px'"
-        />
-      </div>
+      <Alert 
+        :dismissible="true"
+      />
 
-      <v-card 
-        class="elevation-0"
-        >
-        <v-card-title class="headline justify-center">
-          <span v-if="isAuthenticated">
-            {{ $t('datapatch.introUser', { name: userData.name }) }}
-          </span>
-          <span v-else>
-            {{ $t('datapatch.intro') }}
-          </span>
-        </v-card-title>
+      <LandingHead/>
+      <v-divider/>
 
-        <Alert 
-          :dismissible="true"
-        />
+      <LandingCarousel/>
+      <v-divider/>
 
-        <v-card-text class="mt-4">
-          <p>
-            {{ $t('datapatch.pitch') }}
-          </p>
-          <p>
-            {{ $t('datapatch.infos') }}
-            <a
-              href="https://github.com/co-demos/fastapi-boilerplate"
-              target="_blank"
-              >
-              {{ $t('datapatch.repo') }}
-            </a>.
-          </p>
-        </v-card-text>
+      <LandingRoadmap/>
+      <v-divider/>
 
-        <v-card-actions class="justify-center">
-          <!-- <v-spacer /> -->
-          <v-btn
-            dark
-            elevation="0"
-            class="px-12 font-weight-bold"
-            color="primary"
-            nuxt
-            large
-            :to="`/${ isAuthenticated ? 'workspaces' : 'login'}`"
-            >
-            <span>
-              {{ $t(`${ isAuthenticated ? 'buttons.continue' : 'login.in'}`) }}
-            </span>
-            <v-icon class="ml-3">
-              {{ isAuthenticated ? 'icon-chevron-right1' : 'icon-log-in'}}
-            </v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+      <LandingStack/>
 
     </v-flex>
   </v-layout>
@@ -80,35 +34,41 @@
 
 <script>
 
-import { mapState, mapGetters, mapActions } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
-export default {
-  name: 'Home',
-  head() {
-    return {
-      title: `${this.appTitle} - ${this.$t('pages.home')}`,
-      htmlAttrs: {
-        lang: this.$i18n.locale
-      },
+  export default {
+    name: 'Home',
+    components: {
+      LandingHead: () => import(/* webpackChunkName: "LandingHead" */ '@/components/landing/LandingHead.vue'),
+      LandingCarousel: () => import(/* webpackChunkName: "LandingCarousel" */ '@/components/landing/LandingCarousel.vue'),
+      LandingRoadmap: () => import(/* webpackChunkName: "LandingRoadmap" */ '@/components/landing/LandingRoadmap.vue'),
+      LandingStack: () => import(/* webpackChunkName: "LandingStack" */ '@/components/landing/LandingStack.vue'),
+    },
+    head() {
+      return {
+        title: `${this.appTitle} - ${this.$t('pages.home')}`,
+        htmlAttrs: {
+          lang: this.$i18n.locale
+        },
+      }
+    },
+    beforeMount () {
+      this.resetPathList()
+    },
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+        appTitle: (state) => state.appTitle,
+        userData: (state) =>  state.user.userData,
+      }),
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated'
+      })
+    },
+    methods: {
+      ...mapActions({
+        resetPathList: 'resetPathList',
+      })
     }
-  },
-  beforeMount () {
-    this.resetPathList()
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-      appTitle: (state) => state.appTitle,
-      userData: (state) =>  state.user.userData,
-    }),
-    ...mapGetters({
-      isAuthenticated: 'user/isAuthenticated'
-    })
-  },
-  methods: {
-    ...mapActions({
-      resetPathList: 'resetPathList',
-    })
   }
-}
 </script>
