@@ -60,51 +60,21 @@
           </v-subheader>
 
             <!-- @click.stop="dialog += 1" -->
+
           <v-list-item
-            @click.stop="openCreateWithPreset('csv')"
+            v-for="importOption in importOptions"
+            :key="importOption.value"
+            v-if="!importOption.disabled"
+            @click.stop="openCreateWithPreset(importOption.value)"
             >
             <v-list-item-action>
               <v-icon small>
-                icon-download
+                {{ importOption.icon }}
               </v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>
-                {{ $t('datasets.importDataCsv') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider/>
-
-          <v-list-item
-            @click.stop="openCreateWithPreset('blank')"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-edit-3
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('datasets.blankDataset') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider/>
-
-          <v-list-item
-            @click.stop="openCreateWithPreset('copyPaste')"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-copy
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('datasets.pasteDataset') }}
+                {{ $t(importOption.title) }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -328,193 +298,196 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
-import { Dataset } from '@/utils/utilsDatasets'
+  import { mapState, mapGetters } from 'vuex'
+  import { Dataset } from '@/utils/utilsDatasets'
 
-export default {
+  import { importOptionsInfos } from '@/utils/utilsImports.js'
 
-  name: 'DatasetItem',
-  components: {
-    ModalCreateDataset: () => import(/* webpackChunkName: "ModalCreateDataset" */ '@/components/data/ModalCreateDataset.vue'),
-  },
-  props: [
-    'datasetId',
-    'fromWorkspace',
-    'action',
-    'isAlone'
-  ],
-  data () {
-    return {
-      dialog: 0,
-      dialogCreate:0,
-      dialogDelete: 0,
+  export default {
 
-      presetCreate: undefined,
-
-      heightAvatar: 50,
-      hover: false,
-      
-      itemType: 'datasets',
-      ds: undefined,
-      itemModel: undefined,
-      apiUrl: undefined,
-
-      // itemsCreate: [
-      //   { title: 'datasets.importData', icon: 'icon-download', function: 'importData' },
-      //   { title: 'datasets.blankDataset', icon: 'icon-edit-3', function: 'blankDataset' },
-      //   { title: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
-      // ],
-
-      // itemsSettings: [
-      //   // { title: 'datasets.renameDataset', icon: 'icon-edit-3', function: 'importData' },
-      //   { title: 'datasets.prefsDataset', icon: 'icon-settings', function: 'importData' },
-      //   { title: 'datasets.copyDataset', icon: 'icon-copy', function: 'importData' },
-      // ],
-      // itemsShare: [
-      //   { title: 'datasets.inviteDataset', icon: 'icon-user-plus', menu: [] },
-      // ],
-
-      // infos: [
-      //   { title: 'dataPackage.description', key: 'description' },
-      //   { title: 'dataPackage.owner', key: 'owner' },
-      //   { title: 'dataPackage.creationDate', key: 'creationDate' },
-      //   { title: 'dataPackage.licence', key: 'licence' },
-      //   { title: 'dataPackage.id', key: 'id' },
-      // ]
-    }
-  },
-  watch: {
-    datasetId(next) {
-      // this.log && console.log("C-DatasetItem > watch > datasetId > next :", next)
-      this.ds = next && { ...this.getUserDatasetById(next) }
+    name: 'DatasetItem',
+    components: {
+      ModalCreateDataset: () => import(/* webpackChunkName: "ModalCreateDataset" */ '@/components/data/ModalCreateDataset.vue'),
     },
-    currentDataset(next) {
-      // this.log && console.log("C-DatasetItem > watch > currentDataset ...")
-      // this.log && console.log("C-DatasetItem > watch > currentDataset > next : ", next)
-      if (next) {
-        // this.log && console.log("C-DatasetItem > watch > currentDataset > next.id : ", next.id)
-        this.ds = { ...next }
+    props: [
+      'datasetId',
+      'fromWorkspace',
+      'action',
+      'isAlone'
+    ],
+    data () {
+      return {
+        dialog: 0,
+        dialogCreate:0,
+        dialogDelete: 0,
+
+        presetCreate: undefined,
+        importOptions: importOptionsInfos,
+
+        heightAvatar: 50,
+        hover: false,
+        
+        itemType: 'datasets',
+        ds: undefined,
+        itemModel: undefined,
+        apiUrl: undefined,
+
+        // itemsCreate: [
+        //   { title: 'datasets.importData', icon: 'icon-download', function: 'importData' },
+        //   { title: 'datasets.blankDataset', icon: 'icon-edit-3', function: 'blankDataset' },
+        //   { title: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
+        // ],
+
+        // itemsSettings: [
+        //   // { title: 'datasets.renameDataset', icon: 'icon-edit-3', function: 'importData' },
+        //   { title: 'datasets.prefsDataset', icon: 'icon-settings', function: 'importData' },
+        //   { title: 'datasets.copyDataset', icon: 'icon-copy', function: 'importData' },
+        // ],
+        // itemsShare: [
+        //   { title: 'datasets.inviteDataset', icon: 'icon-user-plus', menu: [] },
+        // ],
+
+        // infos: [
+        //   { title: 'dataPackage.description', key: 'description' },
+        //   { title: 'dataPackage.owner', key: 'owner' },
+        //   { title: 'dataPackage.creationDate', key: 'creationDate' },
+        //   { title: 'dataPackage.licence', key: 'licence' },
+        //   { title: 'dataPackage.id', key: 'id' },
+        // ]
       }
-    }
-  },
-  beforeMount () {
-    // this.log && console.log(`\nC-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
-    let emptyDataset = new Dataset()
-    this.itemModel = {
-      infos: emptyDataset.infos,
-      auth: emptyDataset.auth,
-      prefs: emptyDataset.prefs,
-    }
-    if (this.action === 'update') {
-      // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
-      this.itemModel.meta = emptyDataset.meta
-      this.ds = this.getUserDatasetById(this.datasetId)
-    } else {
-      // this.log && console.log("\nC-DatasetItem > beforeMount > this.dataset :", this.dataset)
-      this.resetEmptyDataset()
-    }
-    // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.ds :`, this.ds)
-    this.apiUrl =  this.api[this.itemType]
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-      api: (state) => state.api,
-    }),
-    ...mapGetters({
-      userId: 'user/userId',
-      getUserWorkspaces: 'workspaces/getUserItems',
-      getUserWorkspaceById: 'workspaces/getUserItemById',
-      getUserDatasetById: 'datasets/getUserItemById',
-      headerUser: 'user/headerUser'
-    }),
-    currentDataset() {
-      let dsId = this.datasetId
-      return dsId && this.getUserDatasetById(dsId)
     },
-  },
-  methods: {
-    openCreateWithPreset (preset) {
-      this.log && console.log("C-DatasetItem > openCreateWithPreset > preset :", preset)
-      this.presetCreate = preset
-      this.dialogCreate += 1
+    watch: {
+      datasetId(next) {
+        // this.log && console.log("C-DatasetItem > watch > datasetId > next :", next)
+        this.ds = next && { ...this.getUserDatasetById(next) }
+      },
+      currentDataset(next) {
+        // this.log && console.log("C-DatasetItem > watch > currentDataset ...")
+        // this.log && console.log("C-DatasetItem > watch > currentDataset > next : ", next)
+        if (next) {
+          // this.log && console.log("C-DatasetItem > watch > currentDataset > next.id : ", next.id)
+          this.ds = { ...next }
+        }
+      }
     },
-    shareDataset() {
-      // TO DO
-      this.log && console.log("C-DatasetItem > shareDataset > this.headerUser :", this.headerUser)
-      // this.log && console.log("C-DatasetItem > shareDataset > this.ws :", this.ws)
-      // this.$axios
-      //   .put(`${this.api.datasets}/share`, this.ws, this.headerUser)
-      //   .then(resp => {
-      //     this.log && console.log('C-DatasetItem > shareDataset > resp.data : ', resp.data)
-      //   })
+    beforeMount () {
+      // this.log && console.log(`\nC-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
+      let emptyDataset = new Dataset()
+      this.itemModel = {
+        infos: emptyDataset.infos,
+        auth: emptyDataset.auth,
+        prefs: emptyDataset.prefs,
+      }
+      if (this.action === 'update') {
+        // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
+        this.itemModel.meta = emptyDataset.meta
+        this.ds = this.getUserDatasetById(this.datasetId)
+      } else {
+        // this.log && console.log("\nC-DatasetItem > beforeMount > this.dataset :", this.dataset)
+        this.resetEmptyDataset()
+      }
+      // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.ds :`, this.ds)
+      this.apiUrl =  this.api[this.itemType]
     },
-    resetEmptyDataset() {
-      // this.log && console.log(`C-DatasetItem > fromWorkspace ${this.fromWorkspace} > resetEmptyDataset ...`)
-      let now = new Date(Date.now())
-      let emptyDataset = new Dataset(
-        this.userId,
-        this.$t('datasets.defaultTitle'),
-        this.$t('datasets.defaultDescription'),
-        now.toISOString()
-      )
-      emptyDataset.randomBasics = true
-      this.ds = emptyDataset.data
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+        api: (state) => state.api,
+      }),
+      ...mapGetters({
+        userId: 'user/userId',
+        getUserWorkspaces: 'workspaces/getUserItems',
+        getUserWorkspaceById: 'workspaces/getUserItemById',
+        getUserDatasetById: 'datasets/getUserItemById',
+        headerUser: 'user/headerUser'
+      }),
+      currentDataset() {
+        let dsId = this.datasetId
+        return dsId && this.getUserDatasetById(dsId)
+      },
     },
-    createDataset(itemPayload) {
-      // this.log && console.log('C-DatasetItem > createItem > itemPayload :' , itemPayload)
-      this.$axios
-        .post(`${this.api.datasets}/`, itemPayload, this.headerUser)
-        .then(resp => {
-          // this.log && console.log('C-DatasetItem > createItem > resp.data : ', resp.data)
-          this.$store.dispatch(`datasets/appendUserItem`, resp.data)
-          // this.log && console.log('C-DatasetItem > createItem > this.localItem : ', this.localItem)
-          // this.log && console.log('C-DatasetItem > createItem > this.emptyItem : ', this.emptyItem)
-          
-          this.resetEmptyDataset()
+    methods: {
+      openCreateWithPreset (preset) {
+        this.log && console.log("C-DatasetItem > openCreateWithPreset > preset :", preset)
+        this.presetCreate = preset
+        this.dialogCreate += 1
+      },
+      shareDataset() {
+        // TO DO
+        this.log && console.log("C-DatasetItem > shareDataset > this.headerUser :", this.headerUser)
+        // this.log && console.log("C-DatasetItem > shareDataset > this.ws :", this.ws)
+        // this.$axios
+        //   .put(`${this.api.datasets}/share`, this.ws, this.headerUser)
+        //   .then(resp => {
+        //     this.log && console.log('C-DatasetItem > shareDataset > resp.data : ', resp.data)
+        //   })
+      },
+      resetEmptyDataset() {
+        // this.log && console.log(`C-DatasetItem > fromWorkspace ${this.fromWorkspace} > resetEmptyDataset ...`)
+        let now = new Date(Date.now())
+        let emptyDataset = new Dataset(
+          this.userId,
+          this.$t('datasets.defaultTitle'),
+          this.$t('datasets.defaultDescription'),
+          now.toISOString()
+        )
+        emptyDataset.randomBasics = true
+        this.ds = emptyDataset.data
+      },
+      createDataset(itemPayload) {
+        // this.log && console.log('C-DatasetItem > createItem > itemPayload :' , itemPayload)
+        this.$axios
+          .post(`${this.api.datasets}/`, itemPayload, this.headerUser)
+          .then(resp => {
+            // this.log && console.log('C-DatasetItem > createItem > resp.data : ', resp.data)
+            this.$store.dispatch(`datasets/appendUserItem`, resp.data)
+            // this.log && console.log('C-DatasetItem > createItem > this.localItem : ', this.localItem)
+            // this.log && console.log('C-DatasetItem > createItem > this.emptyItem : ', this.emptyItem)
+            
+            this.resetEmptyDataset()
 
-          // action from workspace append dataset to workspace.datasets
-          let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
-          // this.log && console.log('C-DatasetItem > createItem > currentWs : ', currentWs)
-          let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
-          let payloadWs = { ...currentWs }
-          payloadWs.datasets = {
-            ids: [ ...wsPreviousDatasets, resp.data.id ]
-          }
-          // this.log && console.log('C-DatasetItem > createItem > payloadWs : ', payloadWs)
-          this.$axios
-            .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
-            .then( resp => {
-              this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
-            })
-
-        })
-    },
-    deleteDataset() {
-      // this.log && console.log("C-DatasetItem > deleteDataset > this.headerUser :", this.headerUser)
-      // this.log && console.log(`\nC-DatasetItem > deleteDataset > ds ${this.ds.id} > this.fromWorkspace :`, this.fromWorkspace)
-      this.$axios
-        .delete(`${this.apiUrl}/${this.ds.id}`, this.headerUser)
-        .then(resp => {
-          // this.log && console.log(`C-DatasetItem > deleteDataset > ds ${this.ds.id} > resp.data : `, resp.data)
-          this.$store.dispatch(`${this.itemType}/removeUserItem`, resp.data)
-          
-          // delete dataset reference from ALL workspace datasets
-          // this.log && console.log('C-DatasetItem > deleteDataset > this.getUserWorkspaces : ', this.getUserWorkspaces)
-          for (let ws of this.getUserWorkspaces) {
-            // this.log && console.log(`\n...C-DatasetItem > deleteDataset > ds ${this.ds.id} > ws.id : `, ws.id)
-            let wsPreviousDatasets = ws.datasets && ws.datasets.ids || []
-            // this.log && console.log(`...C-DatasetItem > deleteDataset > ${this.ds.id} > wsPreviousDatasets : `, wsPreviousDatasets)
-            let payloadWs = { ...ws }
+            // action from workspace append dataset to workspace.datasets
+            let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
+            // this.log && console.log('C-DatasetItem > createItem > currentWs : ', currentWs)
+            let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
+            let payloadWs = { ...currentWs }
             payloadWs.datasets = {
-              ids: wsPreviousDatasets.filter(ds => ds !==  this.ds.id )
+              ids: [ ...wsPreviousDatasets, resp.data.id ]
             }
-            // this.log && console.log(`...C-DatasetItem > deleteDataset > ds ${this.ds.id} > payloadWs : `, payloadWs)
-            this.$store.dispatch(`workspaces/updateUserItem`, payloadWs)
-          }
-        })
-    },
-  }
+            // this.log && console.log('C-DatasetItem > createItem > payloadWs : ', payloadWs)
+            this.$axios
+              .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
+              .then( resp => {
+                this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
+              })
 
-}
+          })
+      },
+      deleteDataset() {
+        // this.log && console.log("C-DatasetItem > deleteDataset > this.headerUser :", this.headerUser)
+        // this.log && console.log(`\nC-DatasetItem > deleteDataset > ds ${this.ds.id} > this.fromWorkspace :`, this.fromWorkspace)
+        this.$axios
+          .delete(`${this.apiUrl}/${this.ds.id}`, this.headerUser)
+          .then(resp => {
+            // this.log && console.log(`C-DatasetItem > deleteDataset > ds ${this.ds.id} > resp.data : `, resp.data)
+            this.$store.dispatch(`${this.itemType}/removeUserItem`, resp.data)
+            
+            // delete dataset reference from ALL workspace datasets
+            // this.log && console.log('C-DatasetItem > deleteDataset > this.getUserWorkspaces : ', this.getUserWorkspaces)
+            for (let ws of this.getUserWorkspaces) {
+              // this.log && console.log(`\n...C-DatasetItem > deleteDataset > ds ${this.ds.id} > ws.id : `, ws.id)
+              let wsPreviousDatasets = ws.datasets && ws.datasets.ids || []
+              // this.log && console.log(`...C-DatasetItem > deleteDataset > ${this.ds.id} > wsPreviousDatasets : `, wsPreviousDatasets)
+              let payloadWs = { ...ws }
+              payloadWs.datasets = {
+                ids: wsPreviousDatasets.filter(ds => ds !==  this.ds.id )
+              }
+              // this.log && console.log(`...C-DatasetItem > deleteDataset > ds ${this.ds.id} > payloadWs : `, payloadWs)
+              this.$store.dispatch(`workspaces/updateUserItem`, payloadWs)
+            }
+          })
+      },
+    }
+
+  }
 </script>

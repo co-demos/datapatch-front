@@ -186,6 +186,7 @@ export const actions = {
 
   resetCurrentTables ({ commit }) {
     commit('resetItems', {space: 'currentTables'})
+    commit('setSelectedRows', {})
   },
 
   // SELECTED ROWS 

@@ -20,7 +20,8 @@
     "nuxt-i18n": "^6.23.0",
     "standard": "^16.0.3",
     "vue-draggable-resizable": "^2.3.0",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0"

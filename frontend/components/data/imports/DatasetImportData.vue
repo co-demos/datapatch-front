@@ -66,6 +66,7 @@
     </v-row>
 
     <!-- SELECTION IMPORTS -->
+
     <v-row class="mx-0 mb-4 align-top justify-center">
       <v-col cols="12" class="pa-0">
 
@@ -112,6 +113,8 @@ carto5_	source 3	C</pre>
                   :label="$t('tables.enterTitle')"
                   :hint="$t('tables.title')"
                   :placeholder="$t('tables.enterTitle')"
+                  :disabled="loading"
+                  :loading="loading"
                   dense
                   filled
                   single-line
@@ -123,11 +126,13 @@ carto5_	source 3	C</pre>
               <v-col cols="12" class="py-0">
                 <v-textarea
                   v-model="copyPasteData"
+                  :disabled="loading"
                   :placeholder="$t('imports.copyPaste_placeholder')"
                   filled
                   hide-details
                   prepend-inner-icon="icon-copy"
                   background-color="grey lighten-3"
+                  @change="readFromCopyPaste"
                 />
               </v-col>
               <v-col cols="12" class="pb-0">
@@ -140,7 +145,7 @@ carto5_	source 3	C</pre>
                 <v-btn
                   tile
                   outlined
-                  :disabled="!copyPasteData"
+                  :disabled="!copyPasteData || loading"
                   color="primary"
                   class="text-none font-weight-bold px-5"
                   @click="readFromCopyPaste"
@@ -167,6 +172,8 @@ carto5_	source 3	C</pre>
                 <v-file-input
                   v-model="csvFiles"
                   :placeholder="$t('imports.csv_placeholder')"
+                  :disabled="loading"
+                  :loading="loading"
                   counter
                   filled
                   multiple
@@ -189,7 +196,7 @@ carto5_	source 3	C</pre>
                 <v-btn
                   tile
                   outlined
-                  :disabled="!csvFiles"
+                  :disabled="!csvFiles || loading"
                   color="primary"
                   class="text-none font-weight-bold px-5"
                   @click="readCsvFiles"
@@ -213,6 +220,8 @@ carto5_	source 3	C</pre>
             <v-file-input
               v-model="xlsFile"
               :placeholder="$t('imports.excel_placeholder')"
+              :disabled="loading"
+              :loading="loading"
               counter
               filled
               show-size
@@ -228,7 +237,7 @@ carto5_	source 3	C</pre>
             <v-btn
               tile
               outlined
-              :disabled="!xlsFile"
+              :disabled="!xlsFile || loading"
               color="primary"
               class="text-none font-weight-bold px-5"
               @click="readExcelFile"
@@ -250,6 +259,8 @@ carto5_	source 3	C</pre>
             <v-file-input
               v-model="jsonFiles"
               :placeholder="$t('imports.json_placeholder')"
+              :diasbled="laoding"
+              :loading="loading"
               counter
               filled
               multiple
@@ -266,7 +277,7 @@ carto5_	source 3	C</pre>
             <v-btn
               tile
               outlined
-              :disabled="!jsonFiles"
+              :disabled="!jsonFiles || loading"
               color="primary"
               class="text-none font-weight-bold px-5"
               @click="readJsonFiles"
@@ -305,6 +316,7 @@ carto5_	source 3	C</pre>
                   :label="$t('tables.enterTitle')"
                   :hint="$t('tables.title')"
                   :placeholder="$t('tables.enterTitle')"
+                  :loading="loading"
                   dense
                   filled
                   single-line
@@ -317,6 +329,7 @@ carto5_	source 3	C</pre>
                 <v-text-field
                   v-model="csvGithubUrl"
                   :placeholder="$t('imports.csvGithub_placeholder')"
+                  :loading="loading"
                   filled
                   single-line
                   clearable
@@ -335,7 +348,7 @@ carto5_	source 3	C</pre>
                 <v-btn
                   tile
                   outlined
-                  :disabled="!csvGithubUrl"
+                  :disabled="!csvGithubUrl || loading"
                   color="primary"
                   class="text-none font-weight-bold px-5"
                   @click="readCsvFromUrl"
@@ -355,31 +368,85 @@ carto5_	source 3	C</pre>
           >
           <v-col cols="4" class="pb-0">
             <p v-html="$t('imports.gSheet_helper')" class="text-body-2" />
+            <p class="text-caption">
+              {{ $t('imports.examples') }} :
+              <ul>
+                <li>
+                  https://docs.google.com/spreadsheets/d/12Sq361P9QbOjqNLjE2TpDm1aa6ued8hUN10y6t6Bvc0/edit#gid=0
+                </li>
+              </ul>
+            </p>
           </v-col>
+
           <v-col cols="8" class="pb-0">
-            <v-text-field
-              v-model="tableGsheetUrl"
-              :placeholder="$t('imports.gSheet_placeholder')"
-              filled
-              single-line
-              clearable
-              prepend-inner-icon="icon-google"
-              :rules="urlRules"
-              @input="readGsheetUrl"
-            />
-          </v-col>
-          <v-col cols="8" class="offset-4 pt-0">
-            <v-btn
-              tile
-              outlined
-              :disabled="!tableGsheetUrl"
-              large
-              color="primary"
-              class="text-none font-weight-bold px-5"
-              @click="readGsheetUrl"
-              >
-              {{ $t('imports.readData') }}
-            </v-btn>
+            <v-row>
+              <v-col cols="12" class="pb-0">
+                <v-text-field
+                  v-model="tableGsheetUrl"
+                  :placeholder="$t('imports.gSheet_placeholder')"
+                  :disabled="loading"
+                  :loading="loading"
+                  filled
+                  single-line
+                  clearable
+                  prepend-inner-icon="icon-google"
+                  :rules="urlRules"
+                  @input="readGsheetUrl"
+                />
+              </v-col>
+              <v-col cols="6" class="pt-0">
+                <v-select
+                  v-model="tableGsheetSheetNumbersSelection"
+                  :items="tableGsheetSheetNumbers"
+                  multiple
+                  dense
+                  filled
+                  hide-details
+                  >
+                  <template v-slot:item="{ item, index }">
+                    <span>
+                      {{ $t('imports.gSheet_sheet') }} 
+                      {{ item }}
+                    </span>
+                  </template>
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip class="mb-1">
+                      <span>
+                        {{ $t('imports.gSheet_sheet') }} 
+                        {{ item }}
+                      </span>
+                    </v-chip>
+                  </template>
+                </v-select>
+              </v-col>
+              <v-col cols="6" class="pt-0">
+                <v-btn
+                  block
+                  tile
+                  elevation="0"
+                  class="text-none"
+                  @click.stop="addSheetNumber()"
+                  >
+                  <v-icon small class="mr-2">
+                    icon-plus
+                  </v-icon>
+                  {{ $t('imports.gSheet_addSheet')}}
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="pt-0 mt-2">
+                <v-btn
+                  tile
+                  outlined
+                  :disabled="!tableGsheetUrl || loading"
+                  large
+                  color="primary"
+                  class="text-none font-weight-bold px-5"
+                  @click="readGsheetUrl"
+                  >
+                  {{ $t('imports.readData') }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
 
@@ -438,11 +505,11 @@ carto5_	source 3	C</pre>
 
   import { mapState, mapGetters, mapActions } from 'vuex'
 
-  import { csvSeparators, importOptionsInfos, convertCSVToJSON, convertGithubUrlToRawUrl } from '@/utils/utilsImports.js'
+  import { csvSeparators, importOptionsInfos, convertCSVToJSON, convertGithubUrlToRawUrl, loadGoogleSheet } from '@/utils/utilsImports.js'
   import { rules } from '@/utils/utilsRules.js'
   import { Field } from '@/utils/utilsFields'
   import { TableMetaData, CreateBlankTable } from '@/utils/utilsTables'
-  import { processFile } from '@/utils/utilsFiles'
+  import { processFile, convertXlsToJson } from '@/utils/utilsFiles'
 
   export default {
 
@@ -470,6 +537,7 @@ carto5_	source 3	C</pre>
       return {
         importOptions: importOptionsInfos,
         isActive: false,
+        loading: false,
 
         urlRules: rules.urlRules( this.$t('rules.urlRequired'), this.$t('rules.urlValid') ),
         minCharRules: rules.minCharRules( this.$t('rules.valEnter'), this.$t('rules.minChars') ),
@@ -492,6 +560,9 @@ carto5_	source 3	C</pre>
         csvUrlSeparator: undefined,
 
         tableGsheetUrl: undefined,
+        tableGsheetSheets: 1,
+        tableGsheetSheetNumbers: [1],
+        tableGsheetSheetNumbersSelection: [1],
 
       }
     },
@@ -559,8 +630,8 @@ carto5_	source 3	C</pre>
       },
       rawDataToTable(tableMetadata, dataObj) {
         // read data and convert to table data
-        this.log && console.log(`\nC-DatasetImportData > rawDataToTables > tableMetadata :`, tableMetadata)
-        this.log && console.log(`C-DatasetImportData > rawDataToTables > dataObj :`, dataObj)
+        // this.log && console.log(`\nC-DatasetImportData > rawDataToTables > tableMetadata :`, tableMetadata)
+        // this.log && console.log(`C-DatasetImportData > rawDataToTables > dataObj :`, dataObj)
         const rawFields = dataObj.headers
         const rawRows = dataObj.values.map( (r,i) => { return {id: i + 1, ...r}} )
 
@@ -583,66 +654,109 @@ carto5_	source 3	C</pre>
       },
 
       readFromCopyPaste() {
-        this.log && console.log(`C-DatasetImportData > readFromCopyPaste > ...`)
-        const data = this.copyPasteData
-        this.log && console.log(`C-DatasetImportData > readFromCopyPaste > data : `, data)
-        const dataObj = convertCSVToJSON(data, this.copyPasteSeparator)
-        this.log && console.log(`C-DatasetImportData > readFromCopyPaste > dataObj : `, dataObj)
-        let tableMetadata = {
-          title: this.copyPasteDataName,
-          importType: 'copyPaste',
-          index: 1,
+        if (this.copyPasteData) {
+          // this.log && console.log(`C-DatasetImsportData > readFromCopyPaste > ...`)
+          this.loading = true
+          this.resetCurrentTables()
+          const data = this.copyPasteData
+          const dataObj = convertCSVToJSON(data, this.copyPasteSeparator)
+          // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > data : `, data)
+          // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > dataObj : `, dataObj)
+          let tableMetadata = {
+            title: this.copyPasteDataName,
+            importType: 'copyPaste',
+            index: 1,
+          }
+          // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableMetadata : `, tableMetadata)
+          const table = this.rawDataToTable(tableMetadata, dataObj)
+          setTimeout(() => {
+            // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > table : `, table)
+            this.setCurrentTables([table])
+            this.toggleTablesNeedReload(true)
+            this.loading = false
+          }, 200)
         }
-        this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableMetadata : `, tableMetadata)
-        const table = this.rawDataToTable(tableMetadata, dataObj)
-        this.log && console.log(`C-DatasetImportData > readFromCopyPaste > table : `, table)
-        const tables = [ table ]
-        this.setCurrentTables(tables)
-        this.toggleTablesNeedReload(true)
       },
 
       async readCsvFilesAsync() {
         // this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > e :`, e)
         let promisesArray = []
-        this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > this.csvFiles :`, this.csvFiles)
-        if ( this.csvFiles && this.csvFiles.length > 0 ) {
-          this.csvFiles.forEach( (file, i) => {
-            this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > i :`, i)
-            this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > file :`, file)
-            let tableMetadata = {
-              title: file.name,
-              importType: 'csv',
-              index: i + 1,
-            }
-            this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > tableMetadata :`, tableMetadata)
-            
-            const promise = processFile(file)
-              .then( data => {
-                // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > data :`, data)
-                let dataObj = convertCSVToJSON(data, this.csvSeparator)
-                const table = this.rawDataToTable(tableMetadata, dataObj)
-                this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > table :`, table)
-                return table
-              })
-            promisesArray.push(promise)
-          })
-          return Promise.all(promisesArray)
-        }
+        // this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > this.csvFiles :`, this.csvFiles)
+        this.csvFiles.forEach( (file, i) => {
+          // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > i :`, i)
+          // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > file :`, file)
+          let tableMetadata = {
+            title: file.name,
+            importType: 'csv',
+            index: i + 1,
+          }
+          // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > tableMetadata :`, tableMetadata)
+          
+          const promise = processFile(file)
+            .then( data => {
+              // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > data :`, data)
+              let dataObj = convertCSVToJSON(data, this.csvSeparator)
+              const table = this.rawDataToTable(tableMetadata, dataObj)
+              // this.log && console.log(`C-DatasetImportData > readCsvFilesAsync > table :`, table)
+              return table
+            })
+          promisesArray.push(promise)
+        })
+        return Promise.all(promisesArray)
       },
       async readCsvFiles() {
-        this.resetCurrentTables()
-        this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
-        try {
-          const tables = await this.readCsvFilesAsync()
-          this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
-          this.setCurrentTables(tables)
-          this.toggleTablesNeedReload(true)
-        } catch (ex) {
-          this.log && console.log(ex)
+        if ( this.csvFiles && this.csvFiles.length > 0 ) {
+          this.loading = true
+          this.resetCurrentTables()
+          // this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
+          try {
+            const tables = await this.readCsvFilesAsync()
+            // this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
+            this.setCurrentTables(tables)
+            this.toggleTablesNeedReload(true)
+            this.loading = false
+          } catch (ex) {
+            this.log && console.log(ex)
+          }
         }
       },
 
-      readExcelFile() {},
+      async readExcelFile() {
+        if (this.xlsFile) {
+
+          this.loading = true
+          this.resetCurrentTables()
+          let tables = []
+
+          try {
+
+            const xlsData = await processFile(this.xlsFile, 'xls')
+              .then( xlsData => {
+                this.log && console.log(`C-DatasetImportData > readExcelFile > xlsData :`, xlsData)
+                xlsData.SheetNames.forEach( (sheetName, dataIdx) => {
+                  // this.log && console.log(`C-DatasetImportData > readExcelFile > table :`, table)
+                  let tableMetadata = {
+                    title: sheetName,
+                    importType: 'excel',
+                    index: dataIdx + 1,
+                  }
+                  let dataObj = convertXlsToJson(xlsData.Sheets[sheetName])
+                  this.log && console.log(`C-DatasetImportData > readExcelFile > dataObj :`, dataObj)
+                  const table = this.rawDataToTable(tableMetadata, dataObj)
+                  this.log && console.log(`C-DatasetImportData > readExcelFile > table :`, table)
+                  tables.push(table)
+                }) 
+              })
+            this.log && console.log(`C-DatasetImportData > readExcelFile > tables :`, tables)
+            this.setCurrentTables(tables)
+            this.toggleTablesNeedReload(true)
+            this.loading = false
+          } catch (ex) {
+            this.log && console.log(ex)
+          }
+        }
+      },
+
       readJsonFiles() {},
 
       async readCsvFromUrlAsync(url) {
@@ -655,38 +769,69 @@ carto5_	source 3	C</pre>
           .then(resp => {
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > resp.data : `, resp.data)
             let dataObj = convertCSVToJSON(resp.data, this.csvUrlSeparator)
-            this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > dataObj`, dataObj)
+            // this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > dataObj`, dataObj)
             return dataObj
           })
         promisesArray.push(getCsvDataPromise)
         return Promise.all(promisesArray)
       },
       async readCsvFromUrl() {
-        this.log && console.log(`C-DatasetImportData > readCsvFromUrl > ...`)
+        // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > ...`)
         if (this.csvGithubUrl && this.csvGithubUrl.startsWith('http')) {
+          this.loading = true
           let csvUrlData = convertGithubUrlToRawUrl(this.csvGithubUrl)
-          this.log && console.log(`C-DatasetImportData > readCsvFromUrl > csvUrlData : `, csvUrlData)
+          // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > csvUrlData : `, csvUrlData)
           let tableMetadata = {
             title: csvUrlData.filename,
             importType: 'csvGithub',
             index: 1,
           }
           tableMetadata.importData = csvUrlData
-          this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableMetadata : `, tableMetadata)
+          // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableMetadata : `, tableMetadata)
           try {
             let dataObj = await this.readCsvFromUrlAsync(csvUrlData.rawFileUrl)
-            this.log && console.log(`C-DatasetImportData > readCsvFromUrl > dataObj :`, dataObj)
+            // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > dataObj :`, dataObj)
             const table = this.rawDataToTable(tableMetadata, dataObj[0])
-            this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
+            // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
             this.setCurrentTables([table])
             this.toggleTablesNeedReload(true)
+            this.loading = false
           } catch (ex) {
             this.log && console.log(ex)
           }
         }
       },
 
-      readGsheetUrl() {},
+      addSheetNumber() {
+        this.tableGsheetSheets += 1
+        this.tableGsheetSheetNumbers.push(this.tableGsheetSheets)
+        this.tableGsheetSheetNumbersSelection.push(this.tableGsheetSheets)
+      },
+      async readGsheetUrl() {
+        // this.log && console.log(`C-DatasetImportData > readGsheetUrl > ...`)
+        if (this.tableGsheetUrl && this.tableGsheetUrl.startsWith('http')) {
+          this.loading = true
+          // this.log && console.log(`C-DatasetImportData > readGsheetUrl > this.tableGsheetUrl :`, this.tableGsheetUrl)
+          let gsheetUrlData = await loadGoogleSheet(this.tableGsheetUrl, this.tableGsheetSheetNumbersSelection)
+          // this.log && console.log(`C-DatasetImportData > readGsheetUrl > gsheetUrlData :`, gsheetUrlData)
+          let tables = []
+          gsheetUrlData.data.forEach( (gsData, gsIdx) => {
+            let tableMetadata = {
+              title: gsData.nameSheet,
+              importType: 'gSheet',
+              index: gsIdx + 1,
+            }
+            tableMetadata.importData = gsheetUrlData.GSheetConfig
+            const table = this.rawDataToTable(tableMetadata, gsData)
+            // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
+            tables.push(table)
+          })
+          this.setCurrentTables(tables)
+          this.toggleTablesNeedReload(true)
+          this.loading = false
+        }
+
+      },
 
       sendTables(tables) {
         // let tables = undefined

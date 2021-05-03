@@ -2,7 +2,7 @@
   <v-container class="mt-5">
     <!-- presetCreate: {{ presetCreate }}<br>
     selected: {{ selected }} -->
-    <v-row class="align-center justify-center px-12">
+    <v-row class="align-top justify-left px-12">
       <v-col
         v-for="option in importOptions"
         :key="option.value"
@@ -11,7 +11,7 @@
         sm="12"
         md="6"
         lg="4"
-        xl="3"
+        xl="4"
         class="px-5"
         >
         <v-btn

@@ -54,6 +54,8 @@ export default {
     gSheet_full: 'Importer un tableur publié sur Google Sheet',
     gSheet_helper: 'Importer un tableur publié sur Google Sheet',
     gSheet_placeholder: 'Url publique de votre tableur dans Google Sheet',
+    gSheet_sheet: 'feuille n°',
+    gSheet_addSheet: 'Ajouter un numéro de feuille',
     resume: 'Résumé des informations',
     sep_helper: "Si le résultat n'est pas satisfaisant vous pouvez changer le type de séparateur puis re-cliquer sur le bouton.",
     sep_prefix: "Séparateur de type",
