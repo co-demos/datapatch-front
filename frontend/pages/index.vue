@@ -3,14 +3,14 @@
     column
     justify-center
     align-center
-    class="my-5"
+    class="my-5 mx-4"
     >
   
     <v-flex
       xs12
       sm8
       md6
-      class="mb-12 pa-3"
+      class="mb-12"
       >
 
       <Alert 
@@ -21,6 +21,9 @@
       <v-divider/>
 
       <LandingCarousel/>
+      <v-divider/>
+
+      <LandingUsecases/>
       <v-divider/>
 
       <LandingRoadmap/>
@@ -41,6 +44,7 @@
     components: {
       LandingHead: () => import(/* webpackChunkName: "LandingHead" */ '@/components/landing/LandingHead.vue'),
       LandingCarousel: () => import(/* webpackChunkName: "LandingCarousel" */ '@/components/landing/LandingCarousel.vue'),
+      LandingUsecases: () => import(/* webpackChunkName: "LandingUsecases" */ '@/components/landing/LandingUsecases.vue'),
       LandingRoadmap: () => import(/* webpackChunkName: "LandingRoadmap" */ '@/components/landing/LandingRoadmap.vue'),
       LandingStack: () => import(/* webpackChunkName: "LandingStack" */ '@/components/landing/LandingStack.vue'),
     },

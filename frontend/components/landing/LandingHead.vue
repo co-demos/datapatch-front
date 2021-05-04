@@ -1,8 +1,10 @@
 <template>
 
-  <v-row class="align-center mt-5 mb-12 pb-12">
+  <v-row class="align-center mt-5 mb-12 pb-12"
+    style="height: 80vh;"
+    >
 
-    <v-col cols="8" class="pa-0 pt-4">
+    <v-col cols="6" class=" pa-0 pt-4">
       <div class="text-center">
         <LogoAnimated
           :yoyo="true"
@@ -13,11 +15,12 @@
       </div>
     </v-col>
 
-    <v-col cols="4" class="px-2 py-0">
+    <v-col cols="6" class="px-0 py-0">
       <v-card 
         class="elevation-0"
         >
-        <v-card-title class="headline justify-center">
+
+        <v-card-title class="headline mb-4 justify-center">
           <span v-if="isAuthenticated">
             {{ $t('datapatch.introUser', { name: userData.name }) }}
           </span>
@@ -26,22 +29,16 @@
           </span>
         </v-card-title>
 
-        <v-card-text class="mt-4">
-          <p>
-            {{ $t('datapatch.pitch') }}
-          </p>
-          <p>
-            {{ $t('datapatch.infos') }}
-            <a
-              href="https://github.com/co-demos/fastapi-boilerplate"
-              target="_blank"
-              >
-              {{ $t('datapatch.repo') }}
-            </a>.
-          </p>
+
+        <v-card-text class="text-justify py-1">
+          {{ $t('datapatch.pitch') }}
         </v-card-text>
 
-        <v-card-actions class="justify-center">
+        <v-card-text class="text-justify py-1">
+          {{ $t('datapatch.pitch_bis') }}
+        </v-card-text>
+
+        <v-card-actions class="justify-center px-4 my-5">
           <!-- <v-spacer /> -->
           <v-btn
             dark
@@ -61,6 +58,17 @@
             </v-icon>
           </v-btn>
         </v-card-actions>
+
+        <v-card-text class="text-justify py-1">
+          {{ $t('datapatch.infos') }}
+          <a
+            href="https://github.com/co-demos/fastapi-boilerplate"
+            target="_blank"
+            >
+            {{ $t('datapatch.repo') }}
+          </a>.
+        </v-card-text>
+
       </v-card>
     </v-col>
 

@@ -1,38 +1,47 @@
 <template>
 
-  <v-row class="align-top justify-center my-12">
-    
-    <v-col cols="12" class="text-center mb-5">
-      <p class="text-h5">
-        {{ $t('stack.title') }}
-      </p>
-    </v-col>
+  <div>
+      
+    <v-row class="align-top justify-center mt-12">
+      <v-col cols="12" class="text-center mb-0">
+        <p class="text-h5">
+          {{ $t('stack.title') }}
+        </p>
+      </v-col>
 
-    <v-col
-      cols="3"
-      class="pa-5 align-center text-center"
-      v-for="item in items"
-      :key='item.name'
-      >
-      <a 
-        :href="item.href"
-        target="_blank"
+      <v-col cols="6" class="justify-text mb-5">
+        <p class="body-2">
+          {{ $t('stack.stackText') }}
+        </p>
+      </v-col>
+    </v-row>
+
+    <v-row class="align-top justify-center mb-12">
+      <v-col
+        cols="3"
+        class="pa-5 align-center text-center"
+        v-for="item in items"
+        :key='item.name'
         >
-        <v-img
-          contain
-          max-height="100"
-          :src="item.src"
-          />
-        <!-- 
-        <p class="mt-3">
-          {{ item.name }}
-        </p> 
-        -->
-      </a>
-    </v-col>
+        <a 
+          :href="item.href"
+          target="_blank"
+          >
+          <v-img
+            contain
+            max-height="100"
+            :src="item.src"
+            />
+          <!-- 
+          <p class="mt-3">
+            {{ item.name }}
+          </p> 
+          -->
+        </a>
+      </v-col>
+    </v-row>
 
-  </v-row>
-
+  </div>
 </template>
 
 <script>
@@ -54,6 +63,11 @@
             name: 'Python',
             href: 'https://www.python.org/',
             src: '/stack/python.png'
+          },
+          {
+            name: 'Oauth2',
+            href: 'https://oauth.net/2/',
+            src: '/stack/oauth.png'
           },
           {
             name: 'PostgreSQL',

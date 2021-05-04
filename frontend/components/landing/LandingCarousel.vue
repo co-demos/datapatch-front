@@ -2,28 +2,15 @@
 
   <v-row class="align-top my-12">
 
-    <v-col cols="12" class="text-left mb-5">
+    <v-col cols="12" class="text-center mb-0 pb-0">
       <p class="text-h5">
         {{ $t('features.featuresTitle') }}
       </p>
     </v-col>
 
-    <v-col cols="4">
-      <p>
-        {{ $t('features.featuresHeader') }}
-      </p>
-      <ul>
-        <li
-          v-for="feat in features"
-          :key="feat" 
-          >
-          {{ $t(feat) }}
-        </li>
-      </ul>
-    </v-col>
-
-    <v-col cols="8">
+    <v-col cols="12" class="mb-3">
       <v-carousel
+        cycle
         hide-delimiter-background
         show-arrows-on-hover
         height="100%"
@@ -36,9 +23,13 @@
           <v-sheet
             class="pt-2 px-5"
             color="secondary"
+            rounded
             style="height: 100%;"
             >
             <p class="h6 text-center font-weight-bold py-2 mb-1">
+              <v-icon small class="mr-2 pb-1">
+                {{  item.icon }}
+              </v-icon>
               {{ $t(item.title) }}
             </p>
             <v-card
@@ -57,6 +48,46 @@
       </v-carousel>
     </v-col>
 
+    <v-col cols="12" class="text-center mb-0 pb-0">
+      <p>
+        {{ $t('features.featuresHeader') }}
+      </p>
+    </v-col>
+
+    <v-col cols="6" class="text-caption py-0">
+      <v-list disabled dense class="">
+        <v-list-item
+          v-for="feat in featuresLeft"
+          :key="feat.text" 
+          class="mb-1"
+          >
+          <v-list-item-icon class="">
+            <v-icon small v-text="feat.icon"/>
+          </v-list-item-icon>
+          <v-list-item-content class="py-0">
+            {{ $t(feat.text) }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-col>
+
+    <v-col cols="6" class="text-caption py-0">
+      <v-list disabled dense class="">
+        <v-list-item
+          v-for="feat in featuresRight"
+          :key="feat.text" 
+          class="mb-1"
+          >
+          <v-list-item-icon class="">
+            <v-icon small v-text="feat.icon"/>
+          </v-list-item-icon>
+          <v-list-item-content class="py-0">
+            {{ $t(feat.text) }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-col>
+
   </v-row>
 
 </template>
@@ -73,38 +104,46 @@
         items: [
           {
             title: 'features.editTables',
+            icon: 'icon-edit-3',
             src: '/screenshots/dataset-edit-01.png',
           },
           {
             title: 'features.importData',
+            icon: 'icon-download',
             src: '/screenshots/imports-types-01.png',
           },
           {
             title: 'features.manageDatasets',
+            icon: 'icon-database',
             src: '/screenshots/ws-01.png',
           },
           {
             title: 'features.dragDropDatasets',
+            icon: 'icon-mouse-pointer',
             src: '/screenshots/ws-dragdrop-01.jpg',
           },
           {
             title: 'features.collaborate',
+            icon: 'icon-share-2',
             src: '/screenshots/ws-dragdrop-01.jpg',
           },
         ],
-        features: [
-          'features.edit',
-          'features.relationalDb',
-          'features.oauth',
-          'features.auths',
-          'features.collaboration',
-          'features.dragdrop',
-          'features.emailing',
-          'features.share',
-          'features.publish',
-          'features.api',
-          'features.moderation',
-          'features.imports',
+        featuresLeft: [
+          { text: 'features.edit', icon: 'icon-edit-3' },
+          { text: 'features.relationalDb', icon: 'icon-database' },
+          { text: 'features.oauth', icon: 'icon-lock' },
+          { text: 'features.auths', icon: 'icon-users' },
+          { text: 'features.share', icon: 'icon-share' },
+          { text: 'features.collaboration', icon: 'icon-edit' },
+          { text: 'features.dragdrop', icon: 'icon-mouse-pointer' },
+        ],
+        featuresRight: [
+          { text: 'features.emailing', icon: 'icon-bell' },
+          { text: 'features.publish', icon: 'icon-share-2' },
+          { text: 'features.api', icon: 'icon-code' },
+          { text: 'features.moderation', icon: 'icon-check-square' },
+          { text: 'features.imports', icon: 'icon-download' },
+          { text: 'features.sovereign', icon: 'icon-hard-drive' },
         ]
       }
     },
