@@ -520,15 +520,16 @@ carto5_	source 3	C</pre>
     props: [
       'datasetItem',
       'importType',
-      'dataImport'
     ],
     watch: {
       importType(next) {
         // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
         this.resetCurrentTables()
+        this.setImportData(false)
         if ( next && next === 'blank') {
           // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
           this.setCurrentTables(this.tablesBlank)
+          this.setImportData(true)
         }
         this.toggleTablesNeedReload(true)
       },
@@ -580,6 +581,7 @@ carto5_	source 3	C</pre>
       this.resetCurrentTables()
       if (this.importType && this.importType === 'blank') {
         this.setCurrentTables(this.tablesBlank)
+        this.setImportData(true)
         // this.sendTables(this.tablesBlank)
       }
       this.toggleTablesNeedReload(true)
@@ -653,10 +655,12 @@ carto5_	source 3	C</pre>
         return table
       },
 
+      // === COPY PASTE DATA ===
       readFromCopyPaste() {
         if (this.copyPasteData) {
           // this.log && console.log(`C-DatasetImsportData > readFromCopyPaste > ...`)
           this.loading = true
+          this.setImportData(false)
           this.resetCurrentTables()
           const data = this.copyPasteData
           const dataObj = convertCSVToJSON(data, this.copyPasteSeparator)
@@ -674,10 +678,12 @@ carto5_	source 3	C</pre>
             this.setCurrentTables([table])
             this.toggleTablesNeedReload(true)
             this.loading = false
+            this.setImportData(true)
           }, 200)
         }
       },
 
+      // === CSV FILES ===
       async readCsvFilesAsync() {
         // this.log && console.log(`\nC-DatasetImportData > readCsvFilesAsync > e :`, e)
         let promisesArray = []
@@ -707,6 +713,7 @@ carto5_	source 3	C</pre>
       async readCsvFiles() {
         if ( this.csvFiles && this.csvFiles.length > 0 ) {
           this.loading = true
+          this.setImportData(false)
           this.resetCurrentTables()
           // this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
           try {
@@ -715,21 +722,21 @@ carto5_	source 3	C</pre>
             this.setCurrentTables(tables)
             this.toggleTablesNeedReload(true)
             this.loading = false
+            this.setImportData(true)
           } catch (ex) {
             this.log && console.log(ex)
           }
         }
       },
 
+      // === EXCEL FILE ===
       async readExcelFile() {
         if (this.xlsFile) {
-
           this.loading = true
+          this.setImportData(false)
           this.resetCurrentTables()
           let tables = []
-
           try {
-
             const xlsData = await processFile(this.xlsFile, 'xls')
               .then( xlsData => {
                 this.log && console.log(`C-DatasetImportData > readExcelFile > xlsData :`, xlsData)
@@ -751,14 +758,17 @@ carto5_	source 3	C</pre>
             this.setCurrentTables(tables)
             this.toggleTablesNeedReload(true)
             this.loading = false
-          } catch (ex) {
+            this.setImportData(true)
+         } catch (ex) {
             this.log && console.log(ex)
           }
         }
       },
 
+      // === JSON FILE ===
       readJsonFiles() {},
 
+      // === CSV URL ===
       async readCsvFromUrlAsync(url) {
         // this.log && console.log(`C-DatasetImportData > readCsvFromUrlAsync > url : `, url)
         const header = {
@@ -779,6 +789,7 @@ carto5_	source 3	C</pre>
         // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > ...`)
         if (this.csvGithubUrl && this.csvGithubUrl.startsWith('http')) {
           this.loading = true
+          this.setImportData(false)
           let csvUrlData = convertGithubUrlToRawUrl(this.csvGithubUrl)
           // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > csvUrlData : `, csvUrlData)
           let tableMetadata = {
@@ -796,12 +807,14 @@ carto5_	source 3	C</pre>
             this.setCurrentTables([table])
             this.toggleTablesNeedReload(true)
             this.loading = false
+            this.setImportData(true)
           } catch (ex) {
             this.log && console.log(ex)
           }
         }
       },
 
+      // === GSHEET DATA ===
       addSheetNumber() {
         this.tableGsheetSheets += 1
         this.tableGsheetSheetNumbers.push(this.tableGsheetSheets)
@@ -811,6 +824,7 @@ carto5_	source 3	C</pre>
         // this.log && console.log(`C-DatasetImportData > readGsheetUrl > ...`)
         if (this.tableGsheetUrl && this.tableGsheetUrl.startsWith('http')) {
           this.loading = true
+          this.setImportData(false)
           // this.log && console.log(`C-DatasetImportData > readGsheetUrl > this.tableGsheetUrl :`, this.tableGsheetUrl)
           let gsheetUrlData = await loadGoogleSheet(this.tableGsheetUrl, this.tableGsheetSheetNumbersSelection)
           // this.log && console.log(`C-DatasetImportData > readGsheetUrl > gsheetUrlData :`, gsheetUrlData)
@@ -828,6 +842,7 @@ carto5_	source 3	C</pre>
           })
           this.setCurrentTables(tables)
           this.toggleTablesNeedReload(true)
+          this.setImportData(true)
           this.loading = false
         }
 
@@ -860,7 +875,13 @@ carto5_	source 3	C</pre>
         // }
         this.log && console.log(`C-DatasetImportData > sendValue > tables :`, tables)
         this.$emit('setDataImport', tables)
+      },
+
+      setImportData(bool) {
+        // this.log && console.log(`C-DatasetImportData > setImportData > bool :`, bool)
+        this.$emit('setDataImport', bool)
       }
+
     }
   }
 

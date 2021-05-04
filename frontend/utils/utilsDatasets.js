@@ -12,6 +12,9 @@ export const initialsFromString = (str) => {
 // cf :  https://dmitripavlutin.com/javascript-classes-complete-guide/
 
 export class Dataset {
+
+  itemType = 'dataset'
+
   constructor (
     owner_id=undefined,
     title='My new dataset',
@@ -63,6 +66,8 @@ export class Dataset {
       patch: this.patch,
       write: this.write,
       manage: this.manage,
+
+      itemType: this.itemType,
     }
   }
 

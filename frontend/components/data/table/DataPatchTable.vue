@@ -121,6 +121,7 @@ td {
                 :tableId="tableId"
                 :header="h"
                 :itemModel="fieldModel"
+                :onlyLocalUpdate="onlyLocalUpdate"
                 @resizeHeader="updateHeader"
                 @addColumn="addColumn"
                 @hoverResize="hoverResize"
@@ -162,6 +163,7 @@ td {
                 :header="h"
                 :rowId="rowData.id"
                 :selectedRows="selectedRows"
+                :onlyLocalUpdate="onlyLocalUpdate"
                 @editRow="editRow"
                 @deleteRow="deleteRow"
                 @selectRow="toggleSelectRow"
@@ -207,7 +209,7 @@ td {
       :itemType="'row'"
       :parentDialog="dialogEditRow"
       :action="'update'"
-      :onlyLocalUpdate="true"
+      :onlyLocalUpdate="onlyLocalUpdate"
       @saveItem="saveItem"
     />
 
@@ -219,14 +221,14 @@ td {
           <hr> DEBUG FROM : DataPatchTable
         </h5>
       </v-col>
-      <v-col cols="1">
-        tableId: <code>{{ tableId }}</code>
+      <v-col cols="2">
+        tableId: <code>{{ tableId }}</code><br>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="4">
         tableHeaders: <br>
         <code><pre>{{ tableHeaders }}</pre></code>
       </v-col>
-      <v-col cols="8">
+      <v-col cols="6">
         tableRows: <br>
         <code><pre>{{ tableRows }}</pre></code>
       </v-col>
@@ -246,10 +248,11 @@ td {
     name: 'DataPatchTable',
     props: [
       'tableId',
+      'onlyLocalUpdate',
     ],
     watch: {
       getTablesNeedReload(next) {
-        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
         if (next) {
           this.toggleTablesNeedReload(false)
           this.resetDisplayedTables()
@@ -260,6 +263,9 @@ td {
         if (next) {
           this.resetDisplayedTables()
         }
+      },
+      getCurrentTableFields(next, prev) {
+        this.tableHeaders = [ ...this.getCurrentTableFields ]
       }
     },
     data () {
@@ -364,9 +370,8 @@ td {
       },
       updateHeader(headerData) {
         // this.log && console.log(`\nC-DataPatchTable > updateHeader > headerData : `, headerData)
-        // this.tableHeaders = [ ...this.tableHeaders.map(obj => obj.value !== headerData.value ? obj : {...obj, ...headerData} ) ]
         this.updateColumnInCurrentTableFields(headerData)
-        this.tableHeaders = this.getCurrentTableFields
+        // this.tableHeaders = this.getCurrentTableFields
       },
       tableMarginLeft () {
         let marginL = 0

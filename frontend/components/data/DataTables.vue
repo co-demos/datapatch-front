@@ -60,57 +60,68 @@
     <!-- TABS TABLES -->
     <v-row 
       v-if="tab"
-      :class="`align-center ${fromCreate ? '' : getDatasetColor} my-0 pl-12 pt-3`"
+      :class="`align-center justify-center ${fromCreate ? '' : getDatasetColor} my-0 pl-5 pt-3 flex-grow-0`"
       >
-      <v-col cols="11" class="pl-5 pb-0 pt-0 pr-12">
-        <div class="align-center hide-x-scroll-parent">
+      <v-col cols="1" class="pa-0 text-center">
+
+        <v-tooltip right>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              small
+              :color="`${ fromCreate ? 'primary' : 'white' }`"
+              :class="`mb-2 mx-0`"
+              v-bind="attrs"
+              v-on="on"
+              @click="addTable()"
+              >
+              <v-icon
+                small
+                :class="`font-weight-bold`"
+                >
+                icon-plus
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>
+            {{ $t('tables.addTable') }}
+          </span>
+        </v-tooltip>
+
+
+      </v-col>
+
+      <v-col cols="9" class="pa-0">
+        <v-row class="ma-0">
 
           <!-- TABLE TAB -->
-          <TableItem
-            v-for="table in getCurrentTables"
-            :key="`table-tab-${table.id}`"
-            :tab="tab"
-            :currentDataset="currentDataset"
-            :tableId="table.id"
-            :itemModel="itemModel"
-            :itemType="itemType"
-            :fromCreate="fromCreate"
-            @changeTab="changeTab"
-            @removeTable="deleteTable"
-          />
-          <!-- :table="table" -->
-
-          <!-- v-if="!fromCreate" -->
-          <v-btn
-            text
-            x-small
-            :color="`${ this.fromCreate ? 'primary' : 'white' }`"
-            :class="`mb-2 ml-0`"
-            @mouseover="hoverPlus=true"
-            @mouseleave="hoverPlus=false"
-            @click="addTable()"
+          <draggable
+            v-model="tables"
+            v-bind="dragOptionsTables"
+            tag="div"
+            class="row ma-0 pa-0 hide-x-scroll-parent "
+            @start="drag=true"
+            @end="drag=false; updateTablesOrder()"
             >
-            <v-icon
-              small
-              :class="`font-weight-bold`"
-              >
-              icon-plus
-            </v-icon>
-            <span
-              v-show="hoverPlus" 
-              :class="`ml-1 text-none`"
-              >
-              {{ $t('tables.addTable') }}
-            </span>
-          </v-btn>
-            
-        </div>
-
+            <TableItem
+              v-for="table in tables"
+              :key="`table-tab-${table.id}`"
+              :tab="tab"
+              :currentDataset="currentDataset"
+              :tableId="table.id"
+              :itemModel="itemModel"
+              :itemType="itemType"
+              :fromCreate="fromCreate"
+              @changeTab="changeTab"
+              @removeTable="deleteTable"
+            />
+          </draggable>
+        </v-row>
       </v-col>
 
       <v-spacer/>
 
-      <v-col class="pr-5 pt-0 pb-1 ma-0">
+      <v-col cols="1" class="pr-5 pt-0 pb-2 ma-0">
         <v-btn
           v-if="!fromCreate"
           icon
@@ -169,10 +180,13 @@
         // this.log && console.log(`C-DataTables > watch > getCurrentTables > next :`, next)
         if (next && !prev) {
           this.tab = next && next.length && next[0].id
+          this.tables = next && next.length && [ ...next ]
           this.setCurrentTableId(this.tab)
         } else if (next && prev) {
           this.tab = this.tab
+          this.tables = next && next.length && [ ...next ]
         } else {
+          this.tables = undefined
           this.tab = undefined
         }
       },
@@ -182,8 +196,10 @@
         itemType: 'tables',
         itemModel: undefined,
 
+        drag: false,
+
         tab: undefined,
-        hoverPlus: true,
+        tables: undefined,
 
       }
     },
@@ -199,11 +215,20 @@
 
       // set default tab
       // this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
-      this.tab = this.getCurrentTables && this.getCurrentTables.length && this.getCurrentTables[0].id
-      // this.tab = this.currrentDatasetTables[0].id
+      let hasTables = this.getCurrentTables && this.getCurrentTables.length
+      this.tab = hasTables && this.getCurrentTables[0].id
+      this.tables = hasTables && [ ...this.getCurrentTables ]
       this.setCurrentTableId(this.tab)
    },
     computed: {
+      dragOptionsTables() {
+        return {
+          animation: 200,
+          group: "tables",
+          disabled: false,
+          ghostClass: "ghost"
+        }
+      },
       getDatasetColor() {
         let color = this.fromCreate ? 'grey darken-1' : this.currentDataset.color
         return color
@@ -226,12 +251,16 @@
       ...mapActions({
         setCurrentTables: 'tables/setCurrentTables',
         setCurrentTableId: 'tables/setCurrentTableId',
-        appendTable: 'tables/appendTable',
+        appendTableStart: 'tables/appendTableStart',
         removeTable: 'tables/removeTable',
       }),
       changeTab(tableId) {
         this.tab = tableId
         this.setCurrentTableId(tableId)
+      },
+      updateTablesOrder() {
+        // this.log && console.log(`\nC-DataTables > updateTablesOrder > this.tables : `, this.tables)
+        this.setCurrentTables(this.tables)
       },
       addTable() {
         let existingIds = this.getCurrentTables.map(t => t.id)
@@ -244,8 +273,8 @@
           newId,
           false
         )[0]
-        this.log && console.log(`\nC-DataTables > newTable : `, newTable)
-        this.appendTable(newTable)
+        // this.log && console.log(`\nC-DataTables > addTable > newTable : `, newTable)
+        this.appendTableStart(newTable)
         this.changeTab(newTable.id)
       },
       deleteTable(table) {

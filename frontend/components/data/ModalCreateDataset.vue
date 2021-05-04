@@ -70,21 +70,11 @@
           <code><pre>{{ localItem }}</pre></code>
         </v-col>
         <v-col cols="3">
+          e1: <code>{{ e1 }}</code><br>
           importType: <code>{{ importType }}</code><br>
-          dataImport: <br>
-          <code><pre>{{ 
-            dataImport && dataImport.length > 0 && dataImport.map( d => {
-              return {
-                title: d.title,
-                tableFieldsLlength: d.tableFields.length,
-                tableDataLlength: d.tableData.length,
-                // tableFields: d.tableFields.map( tf => { return { value : tf.value } } ),
-                // tableData: d.tableData.map( td => { return { name : td.name } } ),
-              }
-            })
-          }}
-          </pre></code><br>
-          datasetMeta: <code>{{ datasetMeta }}</code><br>
+          dataImport: <code>{{ dataImport }}</code><br>
+          isCreateDisabled(): <code>{{ isCreateDisabled() }}</code><br>
+          <!-- datasetMeta: <code>{{ datasetMeta }}</code><br> -->
         </v-col>
       </v-row>
       <!-- <hr> -->
@@ -196,7 +186,7 @@
                   <div class="mt-5 mb-8">
                     <DatasetImportResume
                       :importType="importType"
-                      :localItem="localItem"
+                      :datasetItem="localItem"
                       :dataImport="dataImport"
                     />
                   </div>
@@ -244,16 +234,19 @@
           </span>
         </v-btn>
         <v-spacer/>
+
         <v-btn
           color="primary darken-1"
-          class="px-3 white--text"
+          class="px-3"
           width="200"
+          :disabled="isCreateDisabled()"
           large
           tile
           elevation="0"
           @click="e1 + 1 === stepsList.length ? createItem() : nextStep(e1)"
           >
-          <span class="white--text text-body-2 font-weight-bold text-uppercase" v-if="e1+1!== stepsList.length">
+
+          <span class="white--text text-body-2 font-weight-bold text-uppercase" v-if="e1+1 !== stepsList.length">
             {{ $t('buttons.continue') }}
             <v-icon
               medium
@@ -262,15 +255,25 @@
               icon-chevron-right1
             </v-icon>
           </span>
+          
           <span class="white--text text-body-2 font-weight-bold text-uppercase" v-else>
             {{ $t('buttons.create') }}
-            <v-icon medium class="ml-2 pb-1">
+            <v-icon
+              medium
+              class="ml-2 pb-1"
+              style="color: white !important;"
+              >
               icon-chevron-right1
             </v-icon>
-            <v-icon medium class="ml-2 pb-1">
+            <v-icon
+              medium
+              class="ml-2 pb-1"
+              style="color: white !important;"
+              >
               icon-save
             </v-icon>
           </span>
+
         </v-btn>
 
       </v-bottom-navigation>
@@ -340,8 +343,8 @@
         localItem: undefined,
         importType: undefined,
         
-        dataImport: [],
-        datasetMeta: undefined,
+        dataImport: false,
+        // datasetMeta: undefined,
 
         stepsList: [
           { 
@@ -374,12 +377,12 @@
         userId: 'user/userId',
         headerUser: 'user/headerUser',
         getCurrentTables: 'tables/getCurrentTables',
-      })
+      }),
     },
     methods: {
-      ...mapActions({
-        setCurrentTables: 'tables/setCurrentTables'
-      }),
+      // ...mapActions({
+      //   setCurrentTables: 'tables/setCurrentTables'
+      // }),
       addToVisited (n) {
         let inidicesvisited = [ ...this.visited, n]
         this.visited = [ ...new Set(inidicesvisited) ]
@@ -400,21 +403,30 @@
         this.importType = value
         this.e1 += 1
       },
-      setDataImport(tables) {
-        this.log && console.log(`C-ModalCreateDataset > @setDataImport > tables :`, tables)
-        this.dataImport = tables
-        this.setCurrentTables(tables)
+      setDataImport(bool) {
+        // this.log && console.log(`C-ModalCreateDataset > @setDataImport > bool :`, bool)
+        this.dataImport = bool
         // this.e1 += 1
       },
-      createItem() {
-        this.log && console.log(`C-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)
-        this.dialog = false
-        let datasetPayload = {
-          dataset: this.localItem,
-          tables: this.dataImport
+      isCreateDisabled() {
+        let isDisabled = false
+        if (this.e1 + 1 === this.stepsList.length) {
+          isDisabled = !(this.localItem && this.importType && this.dataImport)
         }
-        this.log && console.log(`C-ModalCreateDataset > createDataset > datasetPayload :`, datasetPayload)
-        this.$emit('createItem', this.localItem)
+        return isDisabled
+      },
+      createItem() {
+        if (!this.isCreateDisabled()) {
+          this.log && console.log(`\nC-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)
+          this.log && console.log(`C-ModalCreateDataset > createDataset > this.getCurrentTables :`, this.getCurrentTables)
+          this.dialog = false
+          let datasetPayload = {
+            dataset: this.localItem,
+            tables: this.getCurrentTables
+          }
+          this.log && console.log(`C-ModalCreateDataset > createDataset > datasetPayload :`, datasetPayload)
+          this.$emit('createItem', this.localItem)
+        }
       },
     }
   }

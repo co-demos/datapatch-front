@@ -2,6 +2,9 @@ import * as models from '@/utils/utilsModels.js'
 import { AuthsModels } from '@/utils/utilsAuths.js'
 
 export class Workspace {
+
+  static itemType = 'workspace'
+
   constructor (
     owner_id=undefined,
     title='My new workspace',
@@ -39,14 +42,19 @@ export class Workspace {
       title: this.title,
       description: this.description, 
       creationDate: this.creationDate,
+
       color: this.color,
-      icon: this.icon, 
+      icon: this.icon,
+
       datasets: this.datasets,
+
       read: this.read,
       // comment: this.comment,
       // patch: this.patch,
       write: this.write,
       manage: this.manage,
+
+      itemType: this.itemType,
     }
   }
 

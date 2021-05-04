@@ -74,6 +74,7 @@
     <!-- CUSTOM TABLE FOR DATA PATCH -->
     <DataPatchTable
       :tableId="tableId"
+      :onlyLocalUpdate="fromCreate"
     />
 
   </div>

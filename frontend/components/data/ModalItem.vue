@@ -21,6 +21,7 @@
         </v-btn>
       </v-card-actions>
 
+      <!-- MODAL ITEM TITLE ROW -->
       <v-card-title class="py-0 mb-0">
 
         <!-- AVATAR -->
@@ -59,6 +60,24 @@
           </v-col>
         </v-row>
       </v-card-title>
+      
+      <!-- DEBUGGING -->
+      <v-row class="text-caption" v-if="false">
+        <v-col cols="12">
+          <h5>
+            <hr> DEBUG FROM : ModalItem
+          </h5>
+        </v-col>
+        <v-col cols="12">
+          itemType : <code>{{ itemType }}</code><br>
+          action : <code>{{ action }}</code><br>
+          onlyLocalUpdate : <code>{{ onlyLocalUpdate }}</code><br>
+          localItem : <code>{{ localItem }}</code><br>
+          <!-- <span v-if="itemType === 'fields'">
+            localItem.data : <code>{{ localItem.data }}</code><br>
+          </span> -->
+        </v-col>
+      </v-row>
 
       <ModalTabs
         :tabsSpaces="tabsSpaces"
@@ -69,6 +88,7 @@
         :action="action"
         :updateCurrentDataset="updateCurrentDataset"
         :onlyLocalUpdate="onlyLocalUpdate"
+        :needUpdateStore="needUpdateStore"
       />
       <!-- <v-toolbar
         flat dense
@@ -165,15 +185,11 @@
       'apiUrl',
       'noAvatar',
       'updateCurrentDataset',
-      'onlyLocalUpdate'
+      'onlyLocalUpdate',
     ],
     watch: {
       item () {
-        if (!this.onlyLocalUpdate) {
-          this.localItem = { ...this.item }
-        } else {
-          this.localItem = this.item
-        } 
+        this.rebuildLocalItem()
       },
       parentDialog () {
         this.dialog = true
@@ -184,7 +200,8 @@
         localItem: undefined,
         dialog: false,
         tab: null,
-        tabsSpaces: []
+        tabsSpaces: [],
+        needUpdateStore: false,
       }
     },
     computed: {
@@ -193,15 +210,19 @@
       }),
     },
     beforeMount () {
-      // this.localItem = { ...this.item }
-      if (!this.onlyLocalUpdate) {
-        this.localItem = { ...this.item }
-      } else {
-        this.localItem = this.item
-      } 
+      this.rebuildLocalItem()
       this.tabsSpaces = Object.keys(this.itemModel)
     },
     methods: {
+      rebuildLocalItem() {
+        let updateInStore = ['fields', 'tables']
+        this.needUpdateStore = updateInStore.includes(this.itemType)
+        if (!this.onlyLocalUpdate || this.needUpdateStore) {
+          this.localItem = { ...this.item }
+        } else {
+          this.localItem = this.item
+        } 
+      },
       createItem() {
         let itemPayload = this.localItem
         // this.tab = 0

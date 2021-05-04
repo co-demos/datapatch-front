@@ -5,7 +5,7 @@ export default {
     introUser: 'Bienvenue sur Data Patch, {name}',
     pitch: 'Data Patch est (bientôt) une alternative open source à des outils de gestion de base de données en ligne propriétaires type Airtable ou Google Sheet.',
     pitch_bis: "Data Patch vous permet d'importer vos fichiers de données, d'en créer de nouveaux, de les éditer en ligne, de collaborer sur ces jeux de données, de gérer vos schémas de données, de les publier via l'API ou sous forme de tableur, et surtout de permettre à votre communauté de les améliorer sans avoir à se créer de compte.",
-    infos: "Pour plus d'informations vous pouvez également consulter la documentation sur le ",
+    infos: "Pour plus d'informations vous pouvez également consulter l'ensemble du code et de la documentation sur le ",
     repo: "repo sur Github",
     codemos: "un projet libre et original par co-demos",
   },

@@ -40,11 +40,10 @@
       <v-col class="offset-3">
         <v-tabs
           v-model="tab"
-          dense
           centered
+          dense
           color="grey"
           center-active
-          icons-and-text
           >
           <v-tab
             v-for="tabname in tabsSpaces"
@@ -77,6 +76,7 @@
             :action="action"
             :updateCurrentDataset="updateCurrentDataset"
             :onlyLocalUpdate="onlyLocalUpdate"
+            :needUpdateStore="needUpdateStore"
           />
         </v-card-text>
       </v-tab-item>
@@ -100,7 +100,8 @@ export default {
     'apiUrl',
     'action',
     'updateCurrentDataset',
-    'onlyLocalUpdate'
+    'onlyLocalUpdate',
+    'needUpdateStore',
   ],
   data () {
     return {

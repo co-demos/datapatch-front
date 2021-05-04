@@ -5,6 +5,8 @@ import { Field, defaultHeaders } from '@/utils/utilsFields.js'
 
 export class TableMetaData {
 
+  itemType = 'table'
+
   constructor (
     owner_id=undefined,
     title='My new table',
@@ -43,6 +45,10 @@ export class TableMetaData {
     this.url = url
   }
 
+  set rebuild (obj) {
+    Object.assign(this, obj)
+  }
+
   set importData (obj) {
     this.tImportData = obj
   }
@@ -69,7 +75,8 @@ export class TableMetaData {
       write: this.write,
       manage: this.manage,
 
-      importData: this.tImportData
+      itemType: this.itemType,
+      importData: this.tImportData,
     }
   }
 
@@ -165,7 +172,7 @@ export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescriptio
     )
     // fieldClass.fixed = i === 0
     fieldClass.divider = true
-    tableBlankHeaders.push(fieldClass)
+    tableBlankHeaders.push(fieldClass.data)
   }
 
   // SET ROWS FOR BLANK
@@ -222,7 +229,7 @@ export const CreateEmptyBlankTable = (userId, defaulTableTitle, defaulTableDescr
     )
     // fieldClass.fixed = i === 0
     fieldClass.divider = true
-    tableBlankHeaders.push(fieldClass)
+    tableBlankHeaders.push(fieldClass.data)
   }
 
   // SET ROWS FOR BLANK

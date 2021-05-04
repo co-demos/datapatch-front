@@ -106,12 +106,15 @@ export const mutations = {
   },
 
   addItem (state, {space, item}) {
-    // console.log('S-tables > addItem > item : ', item)
     state[space].push(item)
   },
+  addItemStart (state, {space, item}) {
+    state[space] = [ item, ...state[space] ]
+  },
   updateItem (state, {space, item}) {
-    // console.log('S-tables > updateItem > item : ', item)
+    console.log('S-tables > updateItem > item : ', item)
     state[space] = [ ...state[space].map(obj => obj.id !== item.id ? obj : {...obj, ...item})]
+    console.log('S-tables > updateItem > state[space] : ', state[space])
   },
   removeItem (state, {space, item}) {
     // console.log('S-tables > removeItem > space : ', space)
@@ -143,10 +146,13 @@ export const mutations = {
     // console.log('S-tables > updateInCurrentTable > item : ', item)
     // console.log('S-tables > updateInCurrentTable > state.currentTableId : ', state.currentTableId)
     let table = state.currentTables.find( t => t.id === state.currentTableId)
-    let matchKey = space === 'tableFields' ? 'value' : 'id'
+    // console.log('S-tables > updateInCurrentTable > table : ', table)
+    // let matchKey = space === 'tableFields' ? 'value' : 'id'
+    // let matchKey = 'id'
     // console.log('S-tables > updateInCurrentTable > matchKey : ', matchKey)
-    table[space] = [ ...table[space].map(obj => obj[matchKey] !== item[matchKey] ? obj : {...obj, ...item} ) ]
-    // console.log('S-tables > updateInCurrentTable > state.currentTable[space] : ', state.currentTable[space])
+    // table[space] = [ ...table[space].map(obj => obj[matchKey] !== item[matchKey] ? obj : {...obj, ...item} ) ]
+    table[space] = [ ...table[space].map(obj => obj.id !== item.id ? obj : {...obj, ...item} ) ]
+    // console.log('S-tables > updateInCurrentTable > table[space] : ', table[space])
   },
 
   deleteInCurrentTable (state, {space, itemId}) {
@@ -177,7 +183,10 @@ export const actions = {
   appendTable ({ commit }, table) {
     commit('addItem', {space: 'currentTables', item: table})
   },
-  updateTables ({ commit }, table) {
+  appendTableStart ({ commit }, table) {
+    commit('addItemStart', {space: 'currentTables', item: table})
+  },
+  updateTable ({ commit }, table) {
     commit('updateItem', {space: 'currentTables', item: table})
   },
   removeTable ({ commit }, table) {

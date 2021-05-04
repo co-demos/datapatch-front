@@ -107,7 +107,7 @@
             status: 'roadmap.inDev',
             title: 'roadmap.coreFunctions',
             text: 'roadmap.coreFunctionsTxt',
-            date: '05/2021',
+            date: '04/2021-05/2021',
             tags: ['core', 'tech'],
           },
           {
@@ -116,7 +116,7 @@
             status: 'roadmap.inDev',
             title: 'roadmap.authFunctions',
             text: 'roadmap.authFunctionsTxt',
-            date: '06/2021',
+            date: '05/2021',
             tags: ['core'],
           },
           {

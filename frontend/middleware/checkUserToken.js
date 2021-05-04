@@ -14,7 +14,7 @@ export default function ({
   const promisesArray = []
   const log = store.state.log
   const exceptionPaths = [
-    '/',
+    // '/',
     '/login',
     '/sign',
     '/logout',
@@ -97,8 +97,12 @@ export default function ({
     }
 
     else {
-      // log && console.log("MW-checkToken > NO accessTokenCookie but need login ... ")
-      return redirect('/login')
+      if (currentPath === '/' ) {
+        return
+      } else {
+        // log && console.log("MW-checkToken > NO accessTokenCookie but need login ... ")
+        return redirect('/login')
+      }
     }
 
   }

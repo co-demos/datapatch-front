@@ -138,18 +138,18 @@ export const FindFieldText = (type) => {
 
 export const itemFieldModel = [
   {
-    name: 'value',
+    name: 'text',
     field: 'text',
-    label: 'dataPackage.fieldValue',
+    label: 'dataPackage.fieldName',
     inModal: true,
     visible: true,
     readonly: false,
     options: undefined
   },
   {
-    name: 'text',
+    name: 'value',
     field: 'text',
-    label: 'dataPackage.fieldName',
+    label: 'dataPackage.fieldValue',
     inModal: true,
     visible: true,
     readonly: false,
@@ -196,6 +196,8 @@ export const itemHideModel = [
 ]
 
 export class Field {
+
+  itemType = 'field'
 
   constructor (
     owner_id=undefined,
@@ -283,6 +285,8 @@ export class Field {
       width: this.hWidth,
       fixed: this.hFixed,
       hide: this.hHide,
+
+      itemType: this.itemType,
     }
   }
 

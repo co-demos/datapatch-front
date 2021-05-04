@@ -32,7 +32,7 @@
             :key="usecase.text"
             >
             <v-list-item-icon class="mt-0">
-              <v-icon v-text="usecase.icon"/>
+              <v-icon v-text="usecase.icon" color="primary"/>
             </v-list-item-icon>
             <v-list-item-content class="pt-0">
               {{ $t(usecase.text) }}

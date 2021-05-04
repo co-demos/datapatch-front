@@ -145,7 +145,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'ModalFields',
@@ -157,6 +157,7 @@
       'action',
       'updateCurrentDataset',
       'onlyLocalUpdate',
+      'needUpdateStore'
     ],
     data () {
       return {
@@ -168,6 +169,7 @@
     watch: {
       item (next) {
         this.localItem = this.item
+        // this.localItem = this.itemType === 'fields' ? { ...this.item } : this.item
       }
     },
     computed: {
@@ -176,16 +178,21 @@
       }),
       ...mapGetters({
         getUserWorkspaceById: 'workspaces/getUserItemById',
-        headerUser: 'user/headerUser'
+        headerUser: 'user/headerUser',
       })
     },
     beforeMount () {
       // this.log && console.log('C-ModalFields > beforeMount > this.apiUrl :' , this.apiUrl)
       // this.log && console.log('C-ModalFields > beforeMount > this.item :' , this.item)
       this.localItem = this.item
+      // this.localItem = this.itemType === 'fields' ? { ...this.item } : this.item
       // this.log && console.log('C-ModalFields > beforeMount > this.localItem :' , this.localItem)
     },
     methods: {
+      ...mapActions({
+        updateTable: 'tables/updateTable',
+        updateColumnInCurrentTableFields: 'tables/updateColumnInCurrentTableFields',
+      }),
       findText(value, model) {
         // this.log && console.log('\nC-ModalFields > findText > value :' , value)
         // this.log && console.log('C-ModalFields > findText > model :' , model)
@@ -225,6 +232,18 @@
             itemPayload.datasets = currentWs.datasets
           }
 
+          if (this.needUpdateStore ) {
+            // this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
+            switch (itemPayload.itemType) {
+              case 'table' :
+                this.updateTable(itemPayload)
+                break
+              case 'field' :
+                this.updateColumnInCurrentTableFields(itemPayload)
+                break
+            }
+          }
+
           if (!this.onlyLocalUpdate) {
             this.$axios
               .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
@@ -237,7 +256,7 @@
                 }
               })
           } else {
-            this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
+            // this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
           }
 
         }

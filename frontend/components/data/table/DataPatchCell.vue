@@ -180,7 +180,7 @@
           filled
           dense
           hide-details
-          @change="updateValueInStore"
+          @change="updateValue"
           />
 
         <v-textarea
@@ -189,7 +189,7 @@
           filled
           dense
           hide-details
-          @change="updateValueInStore"
+          @change="updateValue"
           />
 
         <v-combobox
@@ -200,7 +200,7 @@
           filled
           dense
           hide-details
-          @change="updateValueInStore"
+          @change="updateValue"
           />
 
         <v-text-field
@@ -210,7 +210,7 @@
           filled
           dense
           hide-details
-          @change="updateValueInStore"
+          @change="updateValue"
           />
 
         <v-select
@@ -220,7 +220,7 @@
           filled
           dense
           hide-details
-          @change="updateValueInStore"
+          @change="updateValue"
           />
 
         <v-text-field
@@ -229,7 +229,7 @@
           filled
           dense
           hide-details
-          @change="updateValueInStore"
+          @change="updateValue"
         />
 
       </v-card-text>
@@ -248,17 +248,18 @@
       'header',
       'cellData',
       'rowId',
-      'selectedRows'
+      'selectedRows',
+      'onlyLocalUpdate',
     ],
     watch: {
       tableId(next) {
-        // this.log && console.log(`\nC-DataTableRow > watch > tableId > next : `, next)
-        // this.log && console.log(`C-DataTableRow > watch > tableId > this.cellData : `, this.cellData)
+        // this.log && console.log(`\nC-DataPatchCell > watch > tableId > next : `, next)
+        // this.log && console.log(`C-DataPatchCell > watch > tableId > this.cellData : `, this.cellData)
         this.localData = this.cellData
       },
       cellData(next) {
-        // this.log && console.log(`\nC-DataTableRow > watch > cellData > this.tableId : `, this.tableId)
-        // this.log && console.log(`C-DataTableRow > watch > cellData > next : `, next)
+        // this.log && console.log(`\nC-DataPatchCell > watch > cellData > this.tableId : `, this.tableId)
+        // this.log && console.log(`C-DataPatchCell > watch > cellData > next : `, next)
         this.localData = next
       }
     },
@@ -288,33 +289,33 @@
         updateCellValueInTableData: 'tables/updateCellValueInTableData',
       }),
       getJustify(head) {
-        // this.log && head.type === 'int' && console.log(`C-DataTableRow > cleanTableHeaders > head : `, head)
+        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
         let justify = 'start'
         let centers = ['bool', 'rating', 'date']
         let ends = ['float', 'int']
         justify = centers.includes(head.type) ? 'center' : ends.includes(head.type) ? 'end' : justify
-        // this.log && head.type === 'int' && console.log(`C-DataTableRow > cleanTableHeaders > justify : `, justify)
+        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > justify : `, justify)
         return justify
       },
       onClickOutside() {
         this.editMode = false
       },
       editCell(e) {
-        this.log && console.log(`\C-DataTableRow > editCell > this.rowId : `, this.rowId)
+        // this.log && console.log(`\C-DataPatchCell > editCell > this.rowId : `, this.rowId)
         e.preventDefault()
         this.$nextTick(() => {
           this.editMode = true
         })
       },
       editRow() {
-        // this.log && console.log(`C-DataTableRow > editRow > this.rowId : `, this.rowId)
+        // this.log && console.log(`C-DataPatchCell > editRow > this.rowId : `, this.rowId)
         this.$emit('editRow', this.rowId)
       },
-      updateValueInStore(e) {
-        this.log && console.log(`C-DataTableRow > updateValueInStore > this.tableId : `, this.tableId)
-        this.log && console.log(`C-DataTableRow > updateValueInStore > this.header.id : `, this.header.id)
-        this.log && console.log(`C-DataTableRow > updateValueInStore > this.rowId : `, this.rowId)
-        this.log && console.log(`C-DataTableRow > updateValueInStore > e : `, e)
+      updateValue(e) {
+        // this.log && console.log(`C-DataPatchCell > updateValue > this.tableId : `, this.tableId)
+        // this.log && console.log(`C-DataPatchCell > updateValue > this.header.id : `, this.header.id)
+        // this.log && console.log(`C-DataPatchCell > updateValue > this.rowId : `, this.rowId)
+        // this.log && console.log(`C-DataPatchCell > updateValue > e : `, e)
         let cellData = {
           tableId : this.tableId,
           rowId : this.rowId,
@@ -324,11 +325,11 @@
         this.updateCellValueInTableData(cellData)
       },
       selectRow() {
-        // this.log && console.log(`\nC-DataTableRow > selectRow > this.rowId : `, this.rowId)
+        // this.log && console.log(`\nC-DataPatchCell > selectRow > this.rowId : `, this.rowId)
         this.$emit('selectRow', this.rowId)
       },
       deleteRow() {
-        // this.log && console.log(`\nC-DataTableRow > deleteRow > this.rowId : `, this.rowId)
+        // this.log && console.log(`\nC-DataPatchCell > deleteRow > this.rowId : `, this.rowId)
         this.$emit('deleteRow', this.rowId)
       },
     }

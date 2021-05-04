@@ -142,7 +142,7 @@
       :action="'update'"
       :apiUrl="api.field"
       :noAvatar="true"
-      :onlyLocalUpdate="true"
+      :onlyLocalUpdate="onlyLocalUpdate"
     />
 
   </div>
@@ -160,7 +160,7 @@
       'tableId',
       'header',
       'itemModel',
-      'redraw',
+      'onlyLocalUpdate',
     ],
     watch: {
       activeResize(next) {

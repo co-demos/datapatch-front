@@ -62,8 +62,11 @@
           class="mb-1"
           >
           <v-list-item-icon class="">
-            <v-icon small v-text="feat.icon"/>
+            <v-avatar color="secondary" size="28">
+              <v-icon small v-text="feat.icon" dark />
+            </v-avatar>
           </v-list-item-icon>
+
           <v-list-item-content class="py-0">
             {{ $t(feat.text) }}
           </v-list-item-content>
@@ -79,7 +82,9 @@
           class="mb-1"
           >
           <v-list-item-icon class="">
-            <v-icon small v-text="feat.icon"/>
+            <v-avatar color="secondary" size="28">
+              <v-icon small v-text="feat.icon" dark />
+            </v-avatar>
           </v-list-item-icon>
           <v-list-item-content class="py-0">
             {{ $t(feat.text) }}
