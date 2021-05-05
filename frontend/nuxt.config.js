@@ -75,7 +75,8 @@ export default {
   ** Customize the progress-bar color
   */
   loading: {
-    color: config.loadingColor,
+    // color: config.loadingColor,
+    color: 'white',
     height: config.loadingHeight,
     continuous: config.loadingContinuous
   },

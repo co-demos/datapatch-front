@@ -524,8 +524,8 @@ carto5_	source 3	C</pre>
     watch: {
       importType(next) {
         // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
-        this.resetCurrentTables()
         this.setImportData(false)
+        this.resetCurrentTables()
         if ( next && next === 'blank') {
           // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
           this.setCurrentTables(this.tablesBlank)
@@ -582,14 +582,9 @@ carto5_	source 3	C</pre>
       if (this.importType && this.importType === 'blank') {
         this.setCurrentTables(this.tablesBlank)
         this.setImportData(true)
-        // this.sendTables(this.tablesBlank)
       }
       this.toggleTablesNeedReload(true)
     },
-    // created () {
-    //   this.log && console.log(`\nC-DatasetImportData > created > this.importType :`, this.importType)
-    //   this.log && console.log(`C-DatasetImportData > created > this.tablesBlank :`, this.tablesBlank)
-    // },
     computed: {
       ...mapState({
         log: (state) => state.log,

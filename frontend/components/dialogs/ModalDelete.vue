@@ -32,7 +32,7 @@
 
         <!-- MSG TEXT -->
         <v-card-text class="text-center">
-            {{ confirmDeleteMsg }}
+          {{ confirmDeleteMsg }}
         </v-card-text>
 
         <!-- ITEM TO DELETE TEXT -->

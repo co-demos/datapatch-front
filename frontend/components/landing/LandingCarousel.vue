@@ -1,6 +1,6 @@
 <template>
 
-  <v-row class="align-top my-12">
+  <v-row class="align-top justify-center my-12">
 
     <v-col cols="12" class="text-center mb-0 pb-0">
       <p class="text-h5">
@@ -8,7 +8,7 @@
       </p>
     </v-col>
 
-    <v-col cols="12" class="mb-3">
+    <v-col cols="8" class="mb-3">
       <v-carousel
         cycle
         hide-delimiter-background

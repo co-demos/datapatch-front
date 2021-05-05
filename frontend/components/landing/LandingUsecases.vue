@@ -10,19 +10,7 @@
         </p>
       </v-col>
 
-      <v-col cols="5" class="justify-text">
-        <p class="body-2">
-          {{ $t('usecases.text') }}
-        </p>
-        <p class="body-2">
-          {{ $t('usecases.text_bis') }}
-        </p>
-        <p class="body-2">
-          {{ $t('usecases.text_ter') }}
-        </p>
-      </v-col>
-
-      <v-col cols="6" class="offset-1 justify-text">
+      <v-col cols="6" class="justify-text">
         <v-list
           class="body-2 pt-0"
           disabled
@@ -39,6 +27,18 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
+      </v-col>
+
+      <v-col cols="6" class="justify-text">
+        <p class="body-2">
+          {{ $t('usecases.text') }}
+        </p>
+        <p class="body-2">
+          {{ $t('usecases.text_bis') }}
+        </p>
+        <p class="body-2">
+          {{ $t('usecases.text_ter') }}
+        </p>
       </v-col>
 
     </v-row>

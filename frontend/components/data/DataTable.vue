@@ -11,8 +11,8 @@
     <!-- CUSTOM TABLE TOOLS FOR DATA PATCH -->
     <DataPatchTools
       v-if="!noToolbar"
+      :tableId="tableId"
     />
-
 
     <!-- DEBUGGING -->
     <v-row class="text-caption mb-3 mx-2" v-if="false">
@@ -21,7 +21,6 @@
           <hr> DEBUG FROM : DataTable
         </h5>
       </v-col>
-
 
       <v-col cols="4" v-if="false">
         getTableById(tab) (getter): <br>

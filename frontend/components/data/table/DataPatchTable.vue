@@ -62,10 +62,18 @@ td {
   height: 35px!important;
 }
 .td-oneline {
+  /* display:  block; */
   overflow: hidden; 
   white-space: nowrap;
+  /* text-overflow: ellipsis; */
   padding-left: 20px;
 }
+/* .td-data {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+} */
 .td-drag {
   border-right: thin solid lightGrey !important;
 }
@@ -104,24 +112,25 @@ td {
             tag="tr"
             draggable=".th-drag"
             @start="drag=true"
-            @end="drag=false; updateColumnsOrder()"
+            @end="drag=false; updateColumnsOrder(); triggerGetColSize *= -1"
             >
             <th
               v-for="(h, hIdx) in tableHeaders"
               :key="`h-${hIdx}`"
-              :class="`
-                ${h.helpHeader || h.fixed ? 'th-color-fixed' : 'th-color th-data th-drag'} 
-                ${h.fixed ? 'fixed-column' : ''} 
-                ${h.fixed && !h.helpHeader ? 'fixed-field' : ''}
-              `"
-              :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`"
+              :class="`\
+${h.helpHeader || h.fixed ? 'th-color-fixed' : 'th-color th-data th-drag'}\
+${h.fixed ? ' fixed-column' : ''}\
+${h.fixed && !h.helpHeader ? ' fixed-field' : ''}\
+`"
               >
+              <!-- :style="`min-width: ${h.width ? h.width + 'px' : 'auto'}; ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}`" -->
               <!-- {{ h.value }} - {{ h.fixed }} - {{ h.width }} -->
               <DataPatchHeader
                 :tableId="tableId"
                 :header="h"
                 :itemModel="fieldModel"
                 :onlyLocalUpdate="onlyLocalUpdate"
+                :triggerGetColSize="triggerGetColSize"
                 @resizeHeader="updateHeader"
                 @addColumn="addColumn"
                 @hoverResize="hoverResize"
@@ -145,17 +154,19 @@ td {
             <td
               v-for="(h, hIdx) in tableHeaders"
               :key="`r-h-${hIdx}`"
-              :class="`td 
-                ${!h.helpHeader || h.divider ? 'td-drag' : 'td-help'} 
-                ${h.fixed ? 'fixed-column' : ''} 
-                ${selectedRows.includes(rowData.id) ? 'row-selected' : ''}
-                ${!h.helpHeader && headerResizingId === h.id ? 'row-resizing' : ''}
-              `"
-              :style="`
-                min-width: ${h.width ? h.width + 'px' : 'auto'}; 
-                ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
-              `"
-              >
+              :class="`td \
+${!h.helpHeader || h.divider ? 'td-drag' : 'td-help'}\
+${h.fixed ? ' fixed-column' : ''}\
+${selectedRows.includes(rowData.id) ? ' row-selected' : ''}\
+${!h.helpHeader && headerResizingId === h.id ? ' row-resizing' : ''}\
+`"
+              :style="`\
+${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
+`"
+>
+<!-- width: ${h.width ? h.width + 'px' : 'auto'}; \ -->
+<!-- ${!h.helper ? 'td-data' : ''} \ -->
+<!-- min-width: ${h.width ? h.width + 'px' : 'auto'}; \ -->
               <!-- {{ rowData[ h.value ] }} -->
               <DataPatchCell
                 :tableId="tableId"
@@ -265,7 +276,10 @@ td {
         }
       },
       getCurrentTableFields(next, prev) {
-        this.tableHeaders = [ ...this.getCurrentTableFields ]
+        // this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
+        if (next) {
+          this.tableHeaders =  [ ...next ]
+        }
       }
     },
     data () {
@@ -279,6 +293,7 @@ td {
 
         // headers - fields
         tableHeaders: [],
+        triggerGetColSize: 1,
 
         // rows
         tableRows: [],

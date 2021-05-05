@@ -25,7 +25,7 @@ export default {
     api: 'API documentée (swagger) ;',
     moderation: 'Permission à des internautes de proposer des améliorations sur un jeu de données et interface simple de modération de ces propositions ;',
     imports: 'Importer et exporter des données sous différents formats (csv, xls, gsheet, ...) ;',
-    sovereign: 'un outil souverain et indépendant de toute plateforme ;',
+    sovereign: 'Un outil souverain et indépendant de toute plateforme ;',
 
     editTables: 'Editez vos tables',
     importData: 'Importez vos données depuis différentes sources',

@@ -15,7 +15,7 @@
   display: flex; 
   align-items: center;
   align-content: center;
-  padding-left: 20px;
+  /* padding-left: 20px; */
 }
 
 .clickable {
@@ -25,6 +25,13 @@
 /* .dialog-cell {
   align-self: flex-end;
 } */
+
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .v-dialog__content { 
   position: absolute; 
@@ -37,8 +44,8 @@
   <!-- ROW >>> FIELDS -->
   <div
     ref="cell"
-    :class="`px-${header.helpHeader || editMode ? 0 : 2} td-oneline`"
-    :style="`min-width: ${header.width ? header.width + 'px' : 'auto'}!important;`"
+    :class="`px-${header.helpHeader || editMode ? 0 : 3} td-oneline`"
+    :style="`width: ${header.width ? header.width + 'px' : 'auto'}!important;`"
     >
 
     <div
@@ -107,10 +114,10 @@
     <div
       v-if="!editMode && !header.helpHeader"
       v-click-outside="onClickOutside"
-      :class="`data-cell clickable`"
-      :style="`justify-content: ${ getJustify(header) }`"
+      :class="`data-cell clickable text-overflow text-${getTextJustify(header)}`"
       @click.stop="editCell"
       >
+      <!-- :style="`justify-content: ${ getJustify(header) }`" -->
 
       <v-simple-checkbox
         v-if="header.type === 'bool'"
@@ -288,6 +295,15 @@
       ...mapActions({
         updateCellValueInTableData: 'tables/updateCellValueInTableData',
       }),
+      getTextJustify(head) {
+        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
+        let justify = 'left'
+        let centers = ['bool', 'rating', 'date']
+        let ends = ['float', 'int']
+        justify = centers.includes(head.type) ? 'center' : ends.includes(head.type) ? 'right' : justify
+        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > justify : `, justify)
+        return justify
+      },
       getJustify(head) {
         // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
         let justify = 'start'

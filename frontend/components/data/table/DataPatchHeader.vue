@@ -41,7 +41,7 @@
   <div
     ref="headerElement"
     :class="`cell-container pa-0 justify-${ header.helpHeader ? 'center' : 'end'} ${header.value === 'move' ? 'th-end': ''}`"
-    :style="`width: ${width === 'auto' ? 'auto' : parentWidth + 'px;' }; `"
+    :style="`width: ${width === 'auto' ? 'auto' : width + 'px;' }; `"
     @mouseover="activeResize = true"
     @mouseleave="activeResize = false"   
     >
@@ -161,10 +161,14 @@
       'header',
       'itemModel',
       'onlyLocalUpdate',
+      'triggerGetColSize',
     ],
     watch: {
       activeResize(next) {
         this.$emit('hoverResize', next ? this.header && this.header.id : undefined)
+      },
+      triggerGetColSize() {
+        this.updateItemDebounced(this.width)
       }
     },
     data () {
@@ -173,7 +177,7 @@
         itemType: 'fields',
         width: 'auto',
         minWidth: 200,
-        margin: 10,
+        margin:  5,
         activeResize: false,
         defaultWidth: undefined,
         hoverAddCol: false,
@@ -198,8 +202,6 @@
           let headerUpdated = { ...this.header }
           headerUpdated.width = width
           this.$emit('resizeHeader', headerUpdated)
-          // this.header.width = width
-          // this.$emit('resizeHeader', this.header)
         }, 100)
       },
 
@@ -207,18 +209,17 @@
         return FindFieldIcon(type)
       },
       getHeaderWidth(header) {
-        // this.log && console.log(`\nC-DataPatchHeader > getHeaderWidth > header :`, header)
+        this.log && console.log(`\nC-DataPatchHeader > getHeaderWidth > header :`, header)
         if (!header.helpHeader) {
+          // this.log && console.log(`C-DataPatchHeader > getHeaderWidth > this.$refs.headerElement :`, this.$refs.headerElement)
           this.defaultWidth = this.$refs.headerElement.clientWidth
           // this.log && console.log(`C-DataPatchHeader > getHeaderWidth > this.defaultWidth :`, this.defaultWidth)
           this.width = parseInt(this.defaultWidth) + this.margin 
-          this.parentWidth = this.width + this.margin
-          this.updateItemDebounced(this.parentWidth)
+          this.updateItemDebounced(this.width)
         }
       },
       onResize (x, y, width, height) {
         this.width = parseInt(width) 
-        this.parentWidth = parseInt(width)
         this.updateItemDebounced(width)
       },
       addColumn(type='str') {
