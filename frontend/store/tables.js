@@ -7,6 +7,7 @@ export const state = () => ({
   addColHs: endHeadersFields, //.map( h => h.dataHelper ),
 
   needReload: false,
+  needRedraw: false,
 
   currentTableId: undefined,
   currentTables: undefined,
@@ -17,6 +18,9 @@ export const getters = {
 
   getTablesNeedReload: (state) => {
     return state.needReload
+  },
+  getTablesNeedRedraw: (state) => {
+    return state.needRedraw
   },
 
   getSelectedRowsForCurrentTable: (state) => {
@@ -91,6 +95,9 @@ export const mutations = {
   setTablesNeedReload (state, bool) {
     state.needReload = bool
   },
+  setTablesNeedRedraw (state, bool) {
+    state.needRedraw = bool
+  },
 
   setCurrentTableId (state, tableId) {
     state.currentTableId = tableId
@@ -112,9 +119,9 @@ export const mutations = {
     state[space] = [ item, ...state[space] ]
   },
   updateItem (state, {space, item}) {
-    console.log('S-tables > updateItem > item : ', item)
+    // console.log('S-tables > updateItem > item : ', item)
     state[space] = [ ...state[space].map(obj => obj.id !== item.id ? obj : {...obj, ...item})]
-    console.log('S-tables > updateItem > state[space] : ', state[space])
+    // console.log('S-tables > updateItem > state[space] : ', state[space])
   },
   removeItem (state, {space, item}) {
     // console.log('S-tables > removeItem > space : ', space)
@@ -170,9 +177,13 @@ export const actions = {
       commit('setCurrentTableId', undefined)
     }
   },
+  toggleTablesNeedRedraw ({ commit }, bool) {
+    commit('setTablesNeedRedraw', bool)
+  },
 
   // CURRENT TABLES
   setCurrentTables ({ commit }, tables) {
+    commit('setCurrentTableId', tables[0].id)
     commit('setCurrentTables', tables)
   },
   setCurrentTableId ({ commit }, tableId) {
@@ -220,20 +231,25 @@ export const actions = {
   // DATA - currrent table actions
   appendRowToCurrentTableData ({ commit, getters }, newRow) {
     commit('appendToCurrentTable', {space: 'tableData', item: newRow})
+    commit('setTablesNeedRedraw', true)
   },
   updateRowInCurrentTableData ({ commit, getters }, row) {
     commit('updateInCurrentTable', {space: 'tableData', item: row})
+    commit('setTablesNeedRedraw', true)
   },
   updateCellValueInTableData ({ commit, getters }, cellData) {
     const table = getters.getCurrentTable
     let row = { ...table.tableData.find( r => r.id === cellData.rowId) }
     row[cellData.headerValue] = cellData.value
     commit('updateInCurrentTable', {space: 'tableData', item: row} )
+    commit('setTablesNeedRedraw', true)
   },
   updateRowsOrderInTableData ({ commit, getters }, rows) {
     commit('updateSpaceInCurrentTable', {space: 'tableData', items: rows} )
+    commit('setTablesNeedRedraw', true)
   },
   deleteRowInCurrentTableData ({ commit, getters }, rowId) {
     commit('deleteInCurrentTable', {space: 'tableData', itemId: rowId})
+    commit('setTablesNeedRedraw', true)
   },
 }

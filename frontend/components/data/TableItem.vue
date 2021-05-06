@@ -212,6 +212,7 @@
       },
       getTabBackgroundColor(tableId) {
         let color = this.getDatasetColor
+        // let color = 'transparent'
         let bgColor = this.tab !== tableId ? color : 'white'
         if (this.fromCreate) {
           bgColor = this.tab !== tableId ? 'white' : color

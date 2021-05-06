@@ -1,20 +1,36 @@
 <style scoped>
+
+/* .add-shadow {
+  background-image: 
+    linear-gradient(to right, white, white), 
+    linear-gradient(to right, white, white), 
+    linear-gradient(to right, rgba(255, 255, 255, .50), rgba(255, 255, 255, 0)), 
+    linear-gradient(to left, rgba(255, 255, 255, .50), rgba(255, 255, 255, 0));
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: 0px 100%, 0px 100%, 50px 100%, 50px 100%;
+  background-attachment: local, local, scroll, scroll;
+} */
+
 .hide-x-scroll-parent{
   display: flex;
   flex-wrap: nowrap !important;
   overflow: scroll;
-  overflow-x: auto !important;
+  /* overflow-x: auto !important; */
   margin-bottom: -1px;
-  padding-right: 100px;
+  /* padding-right: 100px; */
+
 }
+
 ::-webkit-scrollbar {
   height: 0;  /* Remove scrollbar space */
   background: transparent;  /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: #FF0000;
-}
+} */
 </style>
 
 <template>
@@ -55,7 +71,6 @@
       </v-col>
 
     </v-row>
-    <!-- <hr> -->
 
     <!-- TABS TABLES -->
     <v-row 
@@ -91,15 +106,18 @@
 
       </v-col>
 
-      <v-col cols="9" class="pa-0">
-        <v-row class="ma-0">
+      <v-col 
+        :cols="fromCreate ? 10 : 9" 
+        class="pa-0"
+        >
 
-          <!-- TABLE TAB -->
+        <!-- TABLE TABS -->
+        <v-row class="ma-0">
           <draggable
             v-model="tables"
             v-bind="dragOptionsTables"
             tag="div"
-            class="row ma-0 pa-0 hide-x-scroll-parent "
+            class="row ma-0 pa-0 hide-x-scroll-parent add-shadow"
             @start="drag=true"
             @end="drag=false; updateTablesOrder()"
             >
@@ -117,13 +135,16 @@
             />
           </draggable>
         </v-row>
+
       </v-col>
 
       <v-spacer/>
 
-      <v-col cols="1" class="pr-5 pt-0 pb-2 ma-0">
+      <v-col 
+        v-if="!fromCreate"
+        cols="1" class="pr-5 pt-0 pb-2 ma-0"
+        >
         <v-btn
-          v-if="!fromCreate"
           icon
           small
           color="white"
@@ -147,13 +168,25 @@
         cols="12"
         class="ma-0 pt-0"
         >
-        <DataTable
+        <!-- <DataTable
           :datasetItem="currentDataset"
           :tableId="getCurrentTableId"
           :noToolbar="noToolbar"
           :fromCreate="fromCreate"
           :fulllWidth="true"
+        /> -->
+
+        <DataPatchTools
+          v-if="!noToolbar"
+          :tableId="tab"
         />
+
+        <!-- CUSTOM TABLE FOR DATA PATCH -->
+        <DataPatchTable
+          :tableId="tab"
+          :onlyLocalUpdate="fromCreate"
+        />
+
       </v-col>
     </v-row>
 
@@ -177,18 +210,23 @@
     ],
     watch: {
       getCurrentTables(next, prev) {
-        // this.log && console.log(`C-DataTables > watch > getCurrentTables > next :`, next)
-        if (next && !prev) {
-          this.tab = next && next.length && next[0].id
+        // this.log && console.log(`\C-DataTables > watch > getCurrentTables > next :`, next)
+        // this.log && console.log(`C-DataTables > watch > getCurrentTables > prev :`, prev)
+        // this.log && console.log(`C-DataTables > watch > getCurrentTables > this.getCurrentTableId :`, this.getCurrentTableId)
+        if (next) {
           this.tables = next && next.length && [ ...next ]
-          this.setCurrentTableId(this.tab)
-        } else if (next && prev) {
-          this.tab = this.tab
-          this.tables = next && next.length && [ ...next ]
+          if (!prev) {
+            this.tab = next && next.length && next[0].id
+            this.setCurrentTableId(this.tab)
+          } else {
+            this.tab = this.getCurrentTableId
+          }
         } else {
           this.tables = undefined
           this.tab = undefined
         }
+        // this.log && console.log(`C-DataTables > watch > getCurrentTables > this.tab :`, this.tab)
+        // this.log && console.log(`C-DataTables > watch > getCurrentTables > this.getCurrentTableId :`, this.getCurrentTableId)
       },
     },
     data () {

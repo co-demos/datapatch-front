@@ -28,7 +28,8 @@
     <!-- ADD DATASET BTN -->
     <v-col
       v-if="action === 'create'"
-      cols="4"
+      cols="3"
+      class="align-center"
       >
       <v-menu
         open-on-hover
@@ -38,7 +39,7 @@
 
           <v-avatar
             :color="`${value ? 'primary' : 'grey lighten-2'}`"
-            class="ml-2"
+            class="ml-1"
             rounded
             :size="heightAvatar"
             v-bind="attrs"
@@ -83,7 +84,7 @@
     </v-col>
 
     <!-- NEW DATASET MESSAGE -->
-    <v-col v-if="isAlone" cols="6" class="pa-0">
+    <v-col v-if="isAlone" cols="8 " class="pa-0">
       <p class="text-body-2 grey--text pt-0 ma-0">
         {{ $t('datasets.newDataset') }}
         <!-- <br> wsId: {{ fromWorkspace }} -->
@@ -118,7 +119,7 @@
           v-if="action !== 'create'"
           flat
           outlined
-          :class="`text-none pa-3 ${hover ? 'add-border' : ''}`"
+          :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
           :color="`${hover ? 'white' : 'grey lighten-4'}`"
           @mouseover="hover = true"
           @mouseleave="hover = false"
@@ -130,7 +131,7 @@
               >
 
               <!-- DATASET AVATAR -->
-              <v-col cols="3" class="">
+              <v-col cols="3" class="pa-3">
                 <ItemAvatar
                   :item="ds"
                   :hover="hover"
@@ -139,9 +140,9 @@
               </v-col>
 
               <!-- DATASET TITLE -->
-              <v-col cols="8" class="ml-2">
+              <v-col cols="9" class="pl-0 py-1">
                 <p
-                  :class="`text-body-1 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
+                  :class="`text-body-2 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
                   >
                   <!-- id: {{ ds.id }} - -->
                   {{ ds.title }} 
@@ -156,9 +157,12 @@
     </v-col>
 
     <!-- DATASET BTNS -->
-    <v-col cols="1" class="ma-0 pa-0">
+    <v-col 
+      v-if="action !== 'create'"
+      cols="1"
+      class="ma-0 pa-0"
+      >
       <v-menu
-        v-if="action !== 'create'"
         bottom
         open-on-hover
         >
@@ -291,6 +295,7 @@
     />
 
   </v-row>
+
 </template>
 
 
@@ -322,7 +327,7 @@
         presetCreate: undefined,
         importOptions: importOptionsInfos,
 
-        heightAvatar: 50,
+        heightAvatar: 36,
         hover: false,
         
         itemType: 'datasets',

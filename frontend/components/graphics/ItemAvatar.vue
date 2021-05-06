@@ -1,3 +1,7 @@
+<style>
+
+</style>
+
 <template>
 
   <div>
@@ -12,13 +16,17 @@
       :size="heightAvatar"
       :width="heightAvatar"
       >
-      <v-icon v-if="item.icon" dark class="white--text">
+      <v-icon
+        v-if="item.icon"
+        :size="`${heightAvatar - 16}`"
+        dark class="white--text"
+        >
         {{ item.icon }}
       </v-icon>
       <v-icon v-else-if="noIconTypes.includes(item.itemType)" dark class="black--text">
         icon-table
       </v-icon>
-      <span v-else class="white--text headline no-decoration">
+      <span v-else class="white--text body-1 no-decoration">
         {{ getInitials(item.title) }}
       </span>
     </v-avatar>

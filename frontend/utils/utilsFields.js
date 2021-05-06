@@ -224,10 +224,12 @@ export class Field {
     
     this.description = description
     this.creationDate = creationDate
+
+    this.id = id
+
     this.read = read
     this.write = write
     this.manage = manage
-    this.id = id
 
     this.hide = hide
     this.hWidth = width

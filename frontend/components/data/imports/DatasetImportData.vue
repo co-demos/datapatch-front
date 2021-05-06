@@ -67,7 +67,7 @@
 
     <!-- SELECTION IMPORTS -->
 
-    <v-row class="mx-0 mb-4 align-top justify-center">
+    <v-row class="mx-0 mb-0 align-top justify-center">
       <v-col cols="12" class="pa-0">
 
         <!-- BLANK -->
@@ -141,7 +141,7 @@ carto5_	source 3	C</pre>
                   :items="getImportOptions(importType, 'options').separators"
                 />
               </v-col>
-              <v-col cols="12" class="mt-2">
+              <v-col cols="12" class="my-2">
                 <v-btn
                   tile
                   outlined
@@ -192,7 +192,7 @@ carto5_	source 3	C</pre>
                   :items="getImportOptions(importType, 'options').separators"
                 />
               </v-col>
-              <v-col cols="12" class="mt-2">
+              <v-col cols="12" class="my-2">
                 <v-btn
                   tile
                   outlined
@@ -233,7 +233,7 @@ carto5_	source 3	C</pre>
               @change="readExcelFile"
             />
           </v-col>
-          <v-col cols="8" class="offset-4 pt-0">
+          <v-col cols="8" class="offset-4 pt-0 mb-2">
             <v-btn
               tile
               outlined
@@ -255,7 +255,7 @@ carto5_	source 3	C</pre>
           <v-col cols="4" class="pb-0">
             <p v-html="$t('imports.json_helper')" class="text-body-2" />
           </v-col>
-          <v-col cols="8" class="pb-0">
+          <v-col cols="8" class="pb-0 mb-2">
             <v-file-input
               v-model="jsonFiles"
               :placeholder="$t('imports.json_placeholder')"
@@ -344,7 +344,7 @@ carto5_	source 3	C</pre>
                   :items="getImportOptions(importType, 'options').separators"
                 />
               </v-col>
-              <v-col cols="12" class="mt-2">
+              <v-col cols="12" class="my-2">
                 <v-btn
                   tile
                   outlined
@@ -433,7 +433,7 @@ carto5_	source 3	C</pre>
                   {{ $t('imports.gSheet_addSheet')}}
                 </v-btn>
               </v-col>
-              <v-col cols="12" class="pt-0 mt-2">
+              <v-col cols="12" class="pt-0 my-2">
                 <v-btn
                   tile
                   outlined
@@ -454,7 +454,7 @@ carto5_	source 3	C</pre>
     </v-row>
 
     <!-- PREVIEW DATA -->
-    <v-lazy
+    <!-- <v-lazy
       v-model="isActive"
       :options="{ threshold: .5}"
       min-height="200"
@@ -468,7 +468,7 @@ carto5_	source 3	C</pre>
         :noToolbar="true"
       />
 
-    </v-lazy>
+    </v-lazy> -->
   </v-container>
 </template>
 
@@ -523,15 +523,17 @@ carto5_	source 3	C</pre>
     ],
     watch: {
       importType(next) {
-        // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
+        this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
         this.setImportData(false)
         this.resetCurrentTables()
         if ( next && next === 'blank') {
           // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
+          // this.setCurrentTableId(1)
           this.setCurrentTables(this.tablesBlank)
           this.setImportData(true)
+        } else {
+          this.toggleTablesNeedReload(true)
         }
-        this.toggleTablesNeedReload(true)
       },
     },
     data () {
@@ -577,13 +579,15 @@ carto5_	source 3	C</pre>
 
       let tablesBlank = CreateBlankTable(this.userId, this.$t('tables.defaultTitle'), this.$t('tables.defaultDescription'))
       this.tablesBlank = tablesBlank
-      // this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
+      this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
       this.resetCurrentTables()
       if (this.importType && this.importType === 'blank') {
+        // this.setCurrentTableId(1)
         this.setCurrentTables(this.tablesBlank)
         this.setImportData(true)
+      } else {
+        this.toggleTablesNeedReload(true)
       }
-      this.toggleTablesNeedReload(true)
     },
     computed: {
       ...mapState({
@@ -600,12 +604,14 @@ carto5_	source 3	C</pre>
       ...mapActions({
         toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
         setCurrentTables: 'tables/setCurrentTables',
+        // setCurrentTableId: 'tables/setCurrentTableId',
         resetCurrentTables: 'tables/resetCurrentTables',
       }),
       getImportOptions (type, targetField) {
         let importOptionType = this.importOptions.find(o => o.value === type)
         return importOptionType && importOptionType[targetField]
       },
+
       rawDataToFields(rawFields) {
         let newHeaders = []
         rawFields.forEach( (rf, rfIdx) => {
@@ -843,34 +849,34 @@ carto5_	source 3	C</pre>
 
       },
 
-      sendTables(tables) {
-        // let tables = undefined
-        // switch (this.importType) {
-        //   case 'blank' :
-        //     tables = this.tablesBlank
-        //     break
-        //   case 'copyPaste' :
-        //     tables = this.tablesCopyPaste
-        //     break
-        //   case 'csv' :
-        //     tables = this.tablesCsvFiles
-        //     break
-        //   case 'excel' :
-        //     tables = this.tablesXlsFile
-        //     break
-        //   case 'json' :
-        //     tables = this.tablesJsonFile
-        //     break
-        //   case 'csvGithub' :
-        //     tables = this.tablesCsvGithub
-        //     break
-        //   case 'gSheet' :
-        //     tables = this.tablesGsheetUrl
-        //     break
-        // }
-        this.log && console.log(`C-DatasetImportData > sendValue > tables :`, tables)
-        this.$emit('setDataImport', tables)
-      },
+      // sendTables(tables) {
+      //   let tables = undefined
+      //   switch (this.importType) {
+      //     case 'blank' :
+      //       tables = this.tablesBlank
+      //       break
+      //     case 'copyPaste' :
+      //       tables = this.tablesCopyPaste
+      //       break
+      //     case 'csv' :
+      //       tables = this.tablesCsvFiles
+      //       break
+      //     case 'excel' :
+      //       tables = this.tablesXlsFile
+      //       break
+      //     case 'json' :
+      //       tables = this.tablesJsonFile
+      //       break
+      //     case 'csvGithub' :
+      //       tables = this.tablesCsvGithub
+      //       break
+      //     case 'gSheet' :
+      //       tables = this.tablesGsheetUrl
+      //       break
+      //   }
+      //   this.log && console.log(`C-DatasetImportData > sendValue > tables :`, tables)
+      //   this.$emit('setDataImport', tables)
+      // },
 
       setImportData(bool) {
         // this.log && console.log(`C-DatasetImportData > setImportData > bool :`, bool)

@@ -63,13 +63,13 @@
       block
       plain
       small
-      class="text-none black--text my-0 mr-3"
+      class="text-none black--text my-0 mx-1"
       @click="dialog += 1"
       >
       <v-icon x-small class="grey--text">
         {{ fieldIcon(header.type) }}
       </v-icon>
-      <span class="mx-5 text-body-1 font-weight-bold">
+      <span class="mx-3 text-body-1 font-weight-bold">
         {{ header.text }}
       </span>
       <v-icon small class="grey--text">
@@ -99,18 +99,18 @@
         text
         plain
         small
-        class="text-none black--text my-0 mr-3"
+        class="text-none black--text my-0 mx-1"
         @click="dialog += 1"
         >
         <!-- {{ parseInt(width) || width }} -->
         <v-icon x-small class="grey--text">
           {{ fieldIcon(header.type) }}
         </v-icon>
-        <span class="mx-5 text-body-1 font-weight-bold">
+        <span class="mx-3 text-body-1 font-weight-bold">
           {{ header.text }}
           <!-- - {{ width }} -->
         </span>
-        <v-icon small class="grey--text">
+        <v-icon x-small class="grey--text">
           icon-more-vertical
         </v-icon>
       </v-btn>
@@ -168,15 +168,19 @@
         this.$emit('hoverResize', next ? this.header && this.header.id : undefined)
       },
       triggerGetColSize() {
-        this.updateItemDebounced(this.width)
-      }
+        if (this.width !== 'auto') {
+          this.updateItemDebounced(this.width)
+        } else {
+          this.getHeaderWidth(this.header)
+        }
+      },
     },
     data () {
       return {
         dialog: 0,
         itemType: 'fields',
         width: 'auto',
-        minWidth: 200,
+        minWidth: 150,
         margin:  5,
         activeResize: false,
         defaultWidth: undefined,
@@ -209,7 +213,7 @@
         return FindFieldIcon(type)
       },
       getHeaderWidth(header) {
-        this.log && console.log(`\nC-DataPatchHeader > getHeaderWidth > header :`, header)
+        // this.log && console.log(`\nC-DataPatchHeader > getHeaderWidth > header :`, header)
         if (!header.helpHeader) {
           // this.log && console.log(`C-DataPatchHeader > getHeaderWidth > this.$refs.headerElement :`, this.$refs.headerElement)
           this.defaultWidth = this.$refs.headerElement.clientWidth

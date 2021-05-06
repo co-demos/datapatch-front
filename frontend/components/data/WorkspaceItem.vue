@@ -6,7 +6,7 @@
   border: thin solid silver !important;
 }
 .new-item  {
-  min-height: 70px;
+  /* min-height: 70px; */
 }
 </style>
 
@@ -26,12 +26,12 @@
 
     <!-- workspace / toolbar -->
     <v-toolbar
-      class="mb-9 mx-n1"
+      class="mb-5 mx-n1"
       dense
       flat
       >
       
-      <v-toolbar-title class="text-h5 px-0 font-weight-black">
+      <v-toolbar-title class="text-h6 px-0 font-weight-black">
         <v-icon 
           v-if="ws.icon"
           :color="ws.color || 'black'"
@@ -207,7 +207,7 @@
         sm="6"
         md="6"
         lg="4"
-        xl="3"
+        xl="4"
         >
         <!-- <code>{{ dsId }}</code> -->
         <DatasetItem 
@@ -219,7 +219,7 @@
       
       <!-- add new dataset -->
       <v-col
-        class="pt-0 pl-4 pb-2 new-item"
+        class="pt-0 pl-4 new-item align-center"
         cols="12"
         xs="12"
         sm="6"

@@ -79,7 +79,6 @@
       </v-row>
       <!-- <hr> -->
 
-
       <!-- STEPPER -->
       <v-container class="pa-0">
 
@@ -130,7 +129,7 @@
               v-for="(stepInfo, index) in stepsList"
               :key="`${index}-content`"
               :step="index"
-              class="px-0"
+              class="px-0 pb-0 mb-0"
               >
 
               <!-- REAL STEPPER CONTENTS -->
@@ -138,9 +137,9 @@
                 fill-height
                 class="mt-0 mb-4"
                 color="white"
-                min-height="200px"
                 elevation="0"
                 >
+                <!-- min-height="200px" -->
 
                 <!-- SET IMPORT OPTION -->
                 <div v-show="stepInfo.component === 'importType'">
@@ -154,7 +153,7 @@
 
                 <!-- SET IMPORT DATA -->
                 <div v-show="stepInfo.component === 'dataImport'">
-                  <div class="mt-5 mb-8">
+                  <div class="mt-5 mb-0">
                     <DatasetImportData
                       :datasetItem="localItem"
                       :importType="importType"
@@ -165,7 +164,7 @@
 
                 <!-- SET METADATA -->
                 <div v-show="stepInfo.component === 'datasetMeta'">
-                  <v-row class="mt-8 mx-5 justify-center">
+                  <v-row class="mt-5 mx-5 justify-center">
                     <v-col cols="8">
                       <ModalTabs
                         :appendTitle="true"
@@ -180,10 +179,9 @@
                   </v-row>
                 </div>
 
-                <!-- SET IMPORT OPTION -->
+                <!-- IMPORT RESUME -->
                 <div v-show="stepInfo.component === 'datasetCreate'">
-                  <!-- {{ stepInfo.component }} <br> -->
-                  <div class="mt-5 mb-8">
+                  <div class="mt-5 mb-0">
                     <DatasetImportResume
                       :importType="importType"
                       :datasetItem="localItem"
@@ -198,7 +196,41 @@
           </v-stepper-items>
 
         </v-stepper>
+
       </v-container>
+
+      <!-- DATA PREVIEW -->
+      <v-container 
+        v-if="canShowPreview"
+        class="pt-1"
+        >
+        <!-- <v-divider/> -->
+        <v-row class="justify-center ma-0"
+          >
+          <!-- <v-col
+            cols="12"
+            class="text-body-2 text-center font-weight-bold grey--text px-0 pb-0 pt-2"
+            >
+            {{ $t('datasets.preview') }} 
+          </v-col> -->
+          <v-col cols="12" class="px-0 pt-0">
+            <!-- <v-lazy
+              v-model="isActive"
+              :options="{ threshold: .5}"
+              min-height="200"
+              transition="fade-transition"
+              class="mt-3"
+              > -->
+              <DataTables
+                :currentDataset="localItem"
+                :fromCreate="true"
+                :noToolbar="true"
+              />
+            <!-- </v-lazy> -->
+          </v-col>
+        </v-row class="justify-center mx-5">
+      </v-container>
+
 
       <!-- NAVIGATION STICKING TO BOTTOM -->
       <v-bottom-navigation 
@@ -335,7 +367,8 @@
     data () {
       return {
         dialog: false,
-        
+        isActive: false,
+
         e1: 0,
         tabsSpaces: [],
         visited: [],
@@ -378,14 +411,22 @@
         headerUser: 'user/headerUser',
         getCurrentTables: 'tables/getCurrentTables',
       }),
+      canShowPreview () {
+        let rightStep = this.e1 === 1 || this.e1 === 3
+        let hasData = this.dataImport && this.getCurrentTables && this.getCurrentTables.length
+        return rightStep && hasData
+      },
     },
     methods: {
-      // ...mapActions({
-      //   setCurrentTables: 'tables/setCurrentTables'
-      // }),
+      ...mapActions({
+        toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
+        toggleTablesNeedRedraw: 'tables/toggleTablesNeedRedraw',
+      }),
       addToVisited (n) {
         let inidicesvisited = [ ...this.visited, n]
         this.visited = [ ...new Set(inidicesvisited) ]
+        // this.toggleTablesNeedReload(true)
+        this.toggleTablesNeedRedraw(true)
       },
       backStep (n) {
         this.addToVisited(n)
@@ -401,12 +442,12 @@
       setImportFormat(value) {
         // this.log && console.log(`C-ModalCreateDataset > setImportFormat :`, value)
         this.importType = value
-        this.e1 += 1
+        // this.e1 += 1
+        this.nextStep(this.e1)
       },
       setDataImport(bool) {
         // this.log && console.log(`C-ModalCreateDataset > @setDataImport > bool :`, bool)
         this.dataImport = bool
-        // this.e1 += 1
       },
       isCreateDisabled() {
         let isDisabled = false

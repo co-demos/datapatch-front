@@ -16,6 +16,7 @@
   align-items: center;
   align-content: center;
   /* padding-left: 20px; */
+  line-height: 1 !important;
 }
 
 .clickable {
@@ -114,7 +115,7 @@
     <div
       v-if="!editMode && !header.helpHeader"
       v-click-outside="onClickOutside"
-      :class="`data-cell clickable text-overflow text-${getTextJustify(header)}`"
+      :class="`data-cell align-center body-2 clickable text-overflow text-${getTextJustify(header)}`"
       @click.stop="editCell"
       >
       <!-- :style="`justify-content: ${ getJustify(header) }`" -->
@@ -180,7 +181,7 @@
       <!-- <v-card-text class="pa-0 mb-2 justify-center text-headline">
         {{ header.text }}
       </v-card-text> -->
-      <v-card-text class="pa-0">
+      <v-card-text class="pa-0 body-2">
         <v-checkbox
           v-if="header.type === 'bool'"
           v-model="localData"
@@ -292,9 +293,9 @@
       }),
     },
     methods: {
-      ...mapActions({
-        updateCellValueInTableData: 'tables/updateCellValueInTableData',
-      }),
+      // ...mapActions({
+      //   updateCellValueInTableData: 'tables/updateCellValueInTableData',
+      // }),
       getTextJustify(head) {
         // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
         let justify = 'left'
@@ -338,7 +339,8 @@
           headerValue: this.header.value,
           value: e
         }
-        this.updateCellValueInTableData(cellData)
+        // this.updateCellValueInTableData(cellData)
+        this.$emit('updateCellValue', cellData)
       },
       selectRow() {
         // this.log && console.log(`\nC-DataPatchCell > selectRow > this.rowId : `, this.rowId)

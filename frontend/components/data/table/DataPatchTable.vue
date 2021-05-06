@@ -89,7 +89,7 @@ td {
 
 <template>
 
-  <div class="table-root">
+  <div class="table-root" v-if="tableId">
 
     <div
       class="table-overflow" 
@@ -176,6 +176,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
                 :selectedRows="selectedRows"
                 :onlyLocalUpdate="onlyLocalUpdate"
                 @editRow="editRow"
+                @updateCellValue="updateCellValue"
                 @deleteRow="deleteRow"
                 @selectRow="toggleSelectRow"
               />
@@ -187,12 +188,12 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
             <td
               v-for="(h, hIdx) in tableHeaders"
               :key="`r-h-${hIdx}`"
-              :class="`justify-center 
-                ${h.fixed ? 'fixed-column' : ''} 
+              :class="`justify-center\
+${h.fixed ? ' fixed-column' : ''} 
               `"
-              :style="`
-                min-width: ${h.width ? h.width + 'px' : 'auto'}; 
-                ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
+              :style="`\
+min-width: ${h.width ? h.width + 'px' : 'auto'};\
+${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
               `"
               >
               <v-btn 
@@ -226,7 +227,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
 
 
     <!-- DEBUGGING -->
-    <v-row class="text-caption" v-if="false">
+    <v-row class="text-caption" v-if="true">
       <v-col cols="12">
         <h5>
           <hr> DEBUG FROM : DataPatchTable
@@ -262,13 +263,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
       'onlyLocalUpdate',
     ],
     watch: {
-      getTablesNeedReload(next) {
-        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
-        if (next) {
-          this.toggleTablesNeedReload(false)
-          this.resetDisplayedTables()
-        }
-      },
       tableId(next) {
         // this.log && console.log(`C-DataPatchTable > watch > tableId > next :`, next)
         if (next) {
@@ -277,10 +271,24 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
       },
       getCurrentTableFields(next, prev) {
         // this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
-        if (next) {
+        if (next && this.tableId) {
           this.tableHeaders =  [ ...next ]
         }
-      }
+      },
+      getTablesNeedReload(next) {
+        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
+        if (next && this.tableId) {
+          this.toggleTablesNeedReload(false)
+          this.resetDisplayedTables()
+        }
+      },
+      getTablesNeedRedraw(next) {
+        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedRedraw > next :`, next)
+        if (next && this.tableId) {
+          // this.resetDisplayedTables()
+          this.redrawRows()
+        }
+      },
     },
     data () {
       return {
@@ -348,6 +356,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
         headerUser: 'user/headerUser',
         
         getTablesNeedReload: 'tables/getTablesNeedReload',
+        getTablesNeedRedraw: 'tables/getTablesNeedRedraw',
         getCurrentTable: 'tables/getCurrentTable',
         getTableById: 'tables/getTableById',
 
@@ -361,10 +370,12 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
     methods: {
       ...mapActions({
         toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
+        toggleTablesNeedRedraw: 'tables/toggleTablesNeedRedraw',
         appendColumnToCurrentTableFields: 'tables/appendColumnToCurrentTableFields',
         updateColumnInCurrentTableFields: 'tables/updateColumnInCurrentTableFields',
         deleteColumnInCurrentTableFields: 'tables/deleteColumnInCurrentTableFields',
         setSelectedRows: 'tables/setSelectedRows',
+        updateCellValueInTableData: 'tables/updateCellValueInTableData',
         appendRowToCurrentTableData: 'tables/appendRowToCurrentTableData',
         updateRowInCurrentTableData: 'tables/updateRowInCurrentTableData',
         deleteRowInCurrentTableData: 'tables/deleteRowInCurrentTableData',
@@ -372,13 +383,22 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
         updateRowsOrderInTableData: 'tables/updateRowsOrderInTableData',
       }),
       resetDisplayedTables() {
+        this.redrawHeaders()
+        this.redrawRows()
+        this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
+      },
+      redrawHeaders() {
         this.tableHeaders = [ ...this.getCurrentTableFields ]
+      },
+      redrawRows() {
         let paginer = {
           start: (this.tableOptions.page - 1) * this.tableOptions.itemsPerPage,
           end: this.tableOptions.itemsPerPage
         }
+        // this.log && console.log(`\nC-DataPatchTable > redrawRows > this.getCurrentTableRows :`, this.getCurrentTableRows)
         this.tableRows = [ ...this.getCurrentTableRows ].splice(paginer.start, paginer.end)
-        this.selectedRows = [ ...this.getSelectedRowsForCurrentTable ]
+        // this.log && console.log(`C-DataPatchTable > redrawRows > this.tableRows :`, this.tableRows)
+        this.toggleTablesNeedRedraw(false)
       },
       hoverResize(headerId) {
         this.headerResizingId = headerId
@@ -386,7 +406,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
       updateHeader(headerData) {
         // this.log && console.log(`\nC-DataPatchTable > updateHeader > headerData : `, headerData)
         this.updateColumnInCurrentTableFields(headerData)
-        // this.tableHeaders = this.getCurrentTableFields
       },
       tableMarginLeft () {
         let marginL = 0
@@ -430,28 +449,31 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
           this.$t('fields.newFieldTitle'),// defaultHeader.title,
           type,// defaultHeader.type,
           undefined,// `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
-          now.toISOString()
+          now.toISOString(),
+          this.tableHeaders.length - 4 // add Id
         )
         newHeader.helpHeader = false
         // this.log && console.log(`C-DataPatchTable > addColumn > newHeader.data :`, newHeader.data)
         // this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
         // this.log && console.log(`C-DataPatchTable > addColumn > this.tableHeaders :`, this.tableHeaders)
         this.appendColumnToCurrentTableFields(newHeader)
-        this.tableHeaders = [...this.getCurrentTableFields]
+        this.redrawHeaders()
+        setTimeout(() => {
+          this.triggerGetColSize *= -1
+        }, 100)
       },
       deleteColumn(headerData) {
-        this.log && console.log(`\nC-DataPatchTable > deleteColumn : headerData`, headerData)
+        // this.log && console.log(`\nC-DataPatchTable > deleteColumn : headerData`, headerData)
         this.deleteColumnInCurrentTableFields(headerData.id)
       },
       addRow() {
         // this.log && console.log(`\nC-DataPatchTable > addRow ...`)
         // this.log && console.log(`C-DataPatchTable > addRow > this.tableHeaders : `, this.tableHeaders)
         let newRow = {}
-        this.tableHeaders.forEach( h => {if( !h.helpHeader) { newRow[h.value] = '' }} )
-        newRow.id = this.tableRows.length + 1
+        this.tableHeaders.forEach( h => { if (!h.helpHeader) { newRow[h.value] = '' } } )
+        newRow.id = this.getCurrentTableRows.length + 1
         // this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
         this.appendRowToCurrentTableData(newRow)
-        this.tableRows = [...this.getCurrentTableRows]
       },
       toggleSelectRow(rowId) {
         if (!this.selectedRows.includes(rowId)) {
@@ -462,20 +484,23 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
         this.setSelectedRows({ tableId: this.tableId, rowIds: this.selectedRows})
       },
       editRow(rowId) {
-        this.log && console.log(`\nC-DataPatchTable > editRow ...`)
+        // this.log && console.log(`\nC-DataPatchTable > editRow ...`)
         let rowToEdit = this.tableRows.find( r => r.id === rowId )
         this.rowDataToEdit = rowToEdit
         this.dialogEditRow += 1
       },
+      updateCellValue(cellData) {
+        // this.log && console.log(`\nC-DataPatchTable > updateCellValue ...`)
+        this.updateCellValueInTableData(cellData)
+        // this.log && console.log(`C-DataPatchTable > updateCellValue > cellData : `, cellData)
+      },
       saveItem(rowData) {
-        this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
+        // this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
         this.updateRowInCurrentTableData(rowData)
-        this.tableRows = [...this.getCurrentTableRows]
       },
       deleteRow(rowId) {
         this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
         this.deleteRowInCurrentTableData(rowId)
-        this.tableRows = [...this.getCurrentTableRows]
       },
     }
   }

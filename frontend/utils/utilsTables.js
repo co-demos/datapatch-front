@@ -155,7 +155,7 @@ export const defaultEmptyTableData = [
   { id: 5, surname: 'value 5' },
 ]
 
-export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescription, newId=false, addSecondTable=true) => {
+export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescription, newId=undefined, addSecondTable=true) => {
 
   // SET HEADERS FOR BLANK
   let tableBlankHeaders = []

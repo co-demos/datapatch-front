@@ -22,16 +22,12 @@ const components = {
 
   TableItem: () => import(/* webpackChunkName: "TableItem" */ '@/components/data/TableItem.vue'),
   DataTables: () => import(/* webpackChunkName: "DataTables" */ '@/components/data/DataTables.vue'),
-  DataTables: () => import(/* webpackChunkName: "DataTables" */ '@/components/data/DataTables.vue'),
 
   DataPatchTable: () => import(/* webpackChunkName: "DataPatchTable" */ '@/components/data/table/DataPatchTable.vue'),
   DataPatchTools: () => import(/* webpackChunkName: "DataPatchTools" */ '@/components/data/table/DataPatchTools.vue'),
   DataPatchHeader: () => import(/* webpackChunkName: "DataPatchHeader" */ '@/components/data/table/DataPatchHeader.vue'),
   DataPatchCell: () => import(/* webpackChunkName: "DataPatchCell" */ '@/components/data/table/DataPatchCell.vue'),
 
-
-  DataTable: () => import(/* webpackChunkName: "DataTable" */ '@/components/data/DataTable.vue'),
-  // DataTableHeader: () => import(/* webpackChunkName: "DataTableHeader" */ '@/components/data/DataTableHeader.vue'),
 }
 
 Object.entries(components).forEach(([name, component]) => {
