@@ -67,7 +67,7 @@
       @click="dialog += 1"
       >
       <v-icon x-small class="grey--text">
-        {{ fieldIcon(header.type) }}
+        {{ fieldIcon(header.field_type) }}
       </v-icon>
       <span class="mx-3 text-body-1 font-weight-bold">
         {{ header.text }}
@@ -104,7 +104,7 @@
         >
         <!-- {{ parseInt(width) || width }} -->
         <v-icon x-small class="grey--text">
-          {{ fieldIcon(header.type) }}
+          {{ fieldIcon(header.field_type) }}
         </v-icon>
         <span class="mx-3 text-body-1 font-weight-bold">
           {{ header.text }}

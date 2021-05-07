@@ -438,18 +438,18 @@
         this.ds = emptyDataset.data
       },
       createDataset(itemPayload) {
-        // this.log && console.log('C-DatasetItem > createItem > itemPayload :' , itemPayload)
+        this.log && console.log('C-DatasetItem > createItem > itemPayload :' , itemPayload)
         this.$axios
           .post(`${this.api.datasets}/`, itemPayload, this.headerUser)
           .then(resp => {
-            // this.log && console.log('C-DatasetItem > createItem > resp.data : ', resp.data)
+            this.log && console.log('C-DatasetItem > createItem > resp.data : ', resp.data)
             this.$store.dispatch(`datasets/appendUserItem`, resp.data)
             // this.log && console.log('C-DatasetItem > createItem > this.localItem : ', this.localItem)
             // this.log && console.log('C-DatasetItem > createItem > this.emptyItem : ', this.emptyItem)
             
             this.resetEmptyDataset()
 
-            // action from workspace append dataset to workspace.datasets
+            // action from workspace : append new dataset to workspace.datasets
             let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
             // this.log && console.log('C-DatasetItem > createItem > currentWs : ', currentWs)
             let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
@@ -462,6 +462,9 @@
               .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
               .then( resp => {
                 this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
+
+                // commented during backend dev / debugging
+                // this.$router.push(`/dataset/${resp.data.id}`)
               })
 
           })

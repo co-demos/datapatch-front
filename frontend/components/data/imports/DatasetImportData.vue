@@ -25,32 +25,32 @@
 
       <v-col cols="5" v-if="importType === 'blank' ">
         tablesBlank (local): <br>
-        <code><pre>{{ tablesBlank && tablesBlank.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code><pre>{{ tablesBlank && tablesBlank.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
       <v-col cols="5" v-if="importType === 'csv' ">
         tablesCsvFiles (local): <br>
         <code><pre>{{ tablesCsvFiles }}</pre></code>
-        <!-- <code><pre>{{ tablesCsvFiles && tablesCsvFiles.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code> -->
+        <!-- <code><pre>{{ tablesCsvFiles && tablesCsvFiles.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code> -->
       </v-col>
       <v-col cols="5" v-if="importType === 'copyPaste' ">
         tablesCopyPaste (local): <br>
-        <code><pre>{{ tablesCopyPaste && tablesCopyPaste.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code><pre>{{ tablesCopyPaste && tablesCopyPaste.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
       <v-col cols="5" v-if="importType === 'excel' ">
         tablesXlsFile (local): <br>
-        <code><pre>{{ tablesXlsFile && tablesXlsFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code><pre>{{ tablesXlsFile && tablesXlsFile.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
       <v-col cols="5" v-if="importType === 'json' ">
         tablesJsonFile (local): <br>
-        <code><pre>{{ tablesJsonFile && tablesJsonFile.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code><pre>{{ tablesJsonFile && tablesJsonFile.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
       <v-col cols="5" v-if="importType === 'csvGithub' ">
         tablesCsvGithub (local): <br>
-        <code><pre>{{ tablesCsvGithub && tablesCsvGithub.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code><pre>{{ tablesCsvGithub && tablesCsvGithub.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
       <v-col cols="5" v-if="importType === 'gSheet' ">
         tablesGsheetUrl (local): <br>
-        <code><pre>{{ tablesGsheetUrl && tablesGsheetUrl.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code><pre>{{ tablesGsheetUrl && tablesGsheetUrl.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
 
     </v-row>
@@ -453,22 +453,6 @@ carto5_	source 3	C</pre>
       </v-col>
     </v-row>
 
-    <!-- PREVIEW DATA -->
-    <!-- <v-lazy
-      v-model="isActive"
-      :options="{ threshold: .5}"
-      min-height="200"
-      transition="fade-transition"
-      class="mt-3"
-      >
-
-      <DataTables
-        :currentDataset="datasetItem"
-        :fromCreate="true"
-        :noToolbar="true"
-      />
-
-    </v-lazy> -->
   </v-container>
 </template>
 
@@ -620,7 +604,7 @@ carto5_	source 3	C</pre>
             this.userId,
             rf.value || rf,
             rf.text || rf,
-            rf.type || 'str',
+            rf.field_type || 'str',
             rf.title || rf,
             now.toISOString(),
             rfIdx + 1, 

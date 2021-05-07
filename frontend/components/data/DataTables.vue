@@ -52,7 +52,7 @@
 
       <v-col cols="4" v-if="true">
         getCurrentTables (getter): <br>
-        <code>{{ getCurrentTables && getCurrentTables.map( t => { return { id: t.id, title: t.title, tableFieldsLength: t.tableFields.length, tableDataLength: t.tableData.length } } ) }}</pre></code>
+        <code>{{ getCurrentTables && getCurrentTables.map( t => { return { id: t.id, title: t.title, table_fieldsLength: t.table_fields.length, table_dataLength: t.table_data.length } } ) }}</pre></code>
       </v-col>
 
       <v-col cols="4" v-if="true">
@@ -65,8 +65,8 @@
         <code><pre>{{ getCurrentTable && { 
           id: getCurrentTable.id, 
           title: getCurrentTable.title, 
-          tableDataLength: getCurrentTable.tableData.length, 
-          tableFieldsLength: getCurrentTable.tableFields.length 
+          table_dataLength: getCurrentTable.table_data.length, 
+          table_fieldsLength: getCurrentTable.table_fields.length 
         } }}</pre></code>
       </v-col>
 

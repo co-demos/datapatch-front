@@ -447,7 +447,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
           this.userId,
           this.$t('fields.newField') + Math.floor(Math.random() * 1000) ,// defaultHeader.field,
           this.$t('fields.newFieldTitle'),// defaultHeader.title,
-          type,// defaultHeader.type,
+          type,// defaultHeader.field_type,
           undefined,// `${this.$t('dataPackage.description')} - ${defaultHeader.title}`,
           now.toISOString(),
           this.tableHeaders.length - 4 // add Id

@@ -14,8 +14,8 @@ export class TableMetaData {
     id=undefined,
     creationDate=undefined,
 
-    tableFields=[],
-    tableData=[],
+    table_fields=[],
+    table_data=[],
 
     licence='ODbL',
 
@@ -32,16 +32,17 @@ export class TableMetaData {
     this.description = description
     this.id = id
     this.creationDate = creationDate
-    this.licence=licence
+    this.licence = licence
 
-    this.tableData = tableData
-    this.tableFields = tableFields
+    this.table_data = table_data
+    this.table_fields = table_fields
 
     this.read = read
     this.comment = comment
     this.patch = patch
     this.write = write
     this.manage = manage
+
     this.url = url
   }
 
@@ -66,8 +67,8 @@ export class TableMetaData {
       creationDate: this.creationDate,
       licence: this.licence,
 
-      tableData: this.tableData,
-      tableFields: this.tableFields,
+      table_data: this.table_data,
+      table_fields: this.table_fields,
 
       read: this.read,
       comment: this.comment,
@@ -165,7 +166,7 @@ export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescriptio
       userId,
       defaultHeader.value,
       defaultHeader.text,
-      defaultHeader.type,
+      defaultHeader.field_type,
       defaultHeader.title,
       now.toISOString(),
       i + 1, 
@@ -200,9 +201,9 @@ export const CreateBlankTable = (userId, defaulTableTitle, defaulTableDescriptio
       id: 2,
       title: `${defaulTableTitle} - 2`,
       description: `${defaulTableDescription} - 2`,
-      tableFields: tableBlankData.tableFields.slice(1, 4),
-      tableData: tableBlankRows.slice(0, 5),
-      // tableData: tableEmptyBlankRows,
+      table_fields: tableBlankData.table_fields.slice(1, 4),
+      table_data: tableBlankRows.slice(0, 5),
+      // table_data: tableEmptyBlankRows,
     }
     let tableEmptyBlankData = [ ...defaultEmptyTableData ]
     tables.push(tableBlankDataCopy)
@@ -222,7 +223,7 @@ export const CreateEmptyBlankTable = (userId, defaulTableTitle, defaulTableDescr
       userId,
       defaultHeader.value,
       defaultHeader.text,
-      defaultHeader.type,
+      defaultHeader.field_type,
       defaultHeader.title,
       now.toISOString(),
       i + 1, 

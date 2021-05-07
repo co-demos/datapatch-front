@@ -162,7 +162,7 @@ export class configApp {
       workspaces: this.apiUrlWorkspaces,
       datasets: this.apiUrlDatasets,
       tables: this.apiUrlTables,
-      tableData: this.apiUrlTableData,
+      table_data: this.apiUrlTableData,
       schemas: this.apiUrlSchemas,
       fields: this.apiUrlFields,
       comments: this.apiUrlComments,

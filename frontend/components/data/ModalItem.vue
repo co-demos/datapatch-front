@@ -54,7 +54,7 @@
             <span v-if="itemType === 'fields'" class="caption">
               <br> 
               {{ $t('dataPackage.fieldType')}} 
-              {{ $t(fieldText(localItem.type)) }}
+              {{ $t(fieldText(localItem.field_type)) }}
             </span>
 
           </v-col>

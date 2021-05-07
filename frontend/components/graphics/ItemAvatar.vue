@@ -49,7 +49,7 @@
       >
       <v-card-text class="">
         <v-icon>
-          {{ fieldIcon(item.type) }}
+          {{ fieldIcon(item.field_type) }}
         </v-icon>
       </v-card-text>
       <v-card-text class="pt-0">
@@ -61,7 +61,7 @@
           icon-chevron-left1
         </v-icon>
         <span class="text-body-1">
-          {{ item.type }}
+          {{ item.field_type }}
         </span>
         <v-icon
           dark

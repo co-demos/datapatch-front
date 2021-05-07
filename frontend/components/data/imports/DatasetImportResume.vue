@@ -72,11 +72,11 @@
                 <v-list-item-title>
                   {{ table.title }}
                 </v-list-item-title>
-                <v-list-item-subtitle v-if="table.tableFields">
-                  {{ table.tableFields.length }}
+                <v-list-item-subtitle v-if="table.table_fields">
+                  {{ table.table_fields.length }}
                   {{ $t('dataPackage.fields').toLowerCase() }} 
                   - 
-                  {{ table.tableData.length }}
+                  {{ table.table_data.length }}
                   {{ $t('dataPackage.rows').toLowerCase() }}
                 </v-list-item-subtitle>
               </v-list-item-content>
@@ -87,27 +87,6 @@
       </v-col>
 
     </v-row>
-
-    <!-- PREVIEW TABLES -->
-    <!-- <v-lazy
-      v-model="isActive"
-      :options="{ threshold: .5}"
-      min-height="200"
-      transition="fade-transition"
-      >
-      <v-row class="justify-center mx-0" v-if="dataImport && getCurrentTables && getCurrentTables.length">
-        <v-col cols="12" class="text-body-2 font-weight-bold">
-          {{ $t('datasets.preview') }} 
-        </v-col>
-        <v-col cols="12" class="px-0">
-        <DataTables
-          :currentDataset="datasetItem"
-          :fromCreate="true"
-          :noToolbar="true"
-        />
-        </v-col>
-      </v-row class="justify-center mx-5">
-    </v-lazy> -->
 
     <!-- DEBUGGING -->
     <v-row class="text-caption" v-if="false">
@@ -131,10 +110,10 @@
             return {
               id: d.id,
               title: d.title,
-              tableFieldsLlength: d.tableFields.length,
-              tableDataLlength: d.tableData.length,
-              tableFields: d.tableFields.map( tf => tf.value ),
-              // tableData: d.tableData.map( td => { return { name : td.name } } ),
+              table_fieldsLlength: d.table_fields.length,
+              table_dataLlength: d.table_data.length,
+              table_fields: d.table_fields.map( tf => tf.value ),
+              // table_data: d.table_data.map( td => { return { name : td.name } } ),
             }
           })
         }}</pre></code><br>

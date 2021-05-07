@@ -4,109 +4,109 @@ import * as models from '@/utils/utilsModels.js'
 
 export const FieldTypes = [
   {
-    type: 'str',
+    field_type: 'str',
     name: 'string',
     text: 'fields.str',
     icon: 'icon-typography'
   },
   {
-    type: 'longStr',
+    field_type: 'longStr',
     name: 'string',
     text: 'fields.longStr',
     icon: 'icon-pilcrow'
   },
   {
-    type: 'int',
+    field_type: 'int',
     name: 'integer',
     text: 'fields.int',
     icon: '1'
   },
   {
-    type: 'float',
+    field_type: 'float',
     name: 'float',
     text: 'fields.float',
     icon: '0.1'
   },
   {
-    type: 'bool',
+    field_type: 'bool',
     name: 'boolean',
     text: 'fields.bool',
     icon: 'icon-check-square'
   },
   {
-    type: 'date',
+    field_type: 'date',
     name: 'date',
     text: 'fields.date',
     icon: 'icon-calendar'
   },
   {
-    type: 'tag',
+    field_type: 'tag',
     name: 'tag',
     text: 'fields.tag',
     icon: 'icon-tag'
   },
   {
-    type: 'rating',
+    field_type: 'rating',
     name: 'rating',
     text: 'fields.rating',
     icon: 'icon-star'
   },
   {
-    type: 'url',
+    field_type: 'url',
     name: 'url',
     text: 'fields.url',
     icon: 'icon-link1'
   },
   {
-    type: 'email',
+    field_type: 'email',
     name: 'email',
     text: 'fields.email',
     icon: 'icon-at-sign'
   },
   {
-    type: 'latlon',
+    field_type: 'latlon',
     name: 'latlon',
     text: 'fields.latlon',
     icon: 'icon-map-pin1'
   },
   {
-    type: 'json',
+    field_type: 'json',
     name: 'json',
     text: 'fields.json',
     icon: 'icon-code'
   },
   {
-    type: 'html',
+    field_type: 'html',
     name: 'html',
     text: 'fields.html',
     icon: 'icon-code1'
   },
   {
-    type: 'md',
+    field_type: 'md',
     name: 'markdown',
     text: 'fields.md',
     icon: 'icon-terminal1'
   },
   {
-    type: 'curr',
+    field_type: 'curr',
     name: 'currency',
     text: 'fields.curr',
     icon: 'icon-euro'
   },
   {
-    type: 'ref',
+    field_type: 'ref',
     name: 'reference',
     text: 'fields.ref',
     icon: 'icon-link1'
   },
   {
-    type: 'refs',
+    field_type: 'refs',
     name: 'references list',
     text: 'fields.refs',
     icon: 'icon-link-2'
   },
   {
-    type: 'color',
+    field_type: 'color',
     name: 'color',
     text: 'fields.color',
     icon: 'icon-paint-format'
@@ -126,13 +126,13 @@ export const HideChoices = [
   },
 ]
 
-export const FindFieldIcon = (type) => {
-  let fieldType = FieldTypes.find(f => f.type === type)
+export const FindFieldIcon = (field_type) => {
+  let fieldType = FieldTypes.find(f => f.field_type === field_type)
   return fieldType.icon
 }
 
-export const FindFieldText = (type) => {
-  let fieldType = FieldTypes.find(f => f.type === type)
+export const FindFieldText = (field_type) => {
+  let fieldType = FieldTypes.find(f => f.field_type === field_type)
   return fieldType.text
 }
 
@@ -159,16 +159,16 @@ export const itemFieldModel = [
 
 export const itemTypeModel = [
   {
-    name: 'type',
+    name: 'field_type',
     field: 'select',
-    label: 'dataPackage.type',
+    label: 'dataPackage.fieldTypeShort',
     inModal: true,
     visible: true,
     readonly: false,
     options: {
       custom: true,
       text: 'text',
-      value: 'type',
+      value: 'field_type',
       prependIcon: true,
       translate: true,
       items: FieldTypes
@@ -203,24 +203,26 @@ export class Field {
     owner_id=undefined,
     value=undefined,
     text='My new field',
-    type='str',
+    field_type='str',
     
     description='My field description',
     creationDate=undefined,
     id=undefined,
 
-    hide=false,
-
     read='public',
     write='owner+groups',
     manage='owner-only',
+
     width='auto',
+    hide=false,
+    constraints=undefined,
+
     ) {
     this.owner_id = owner_id
     
     this.value = value
     this.text = text
-    this.type = type
+    this.field_type = field_type
     
     this.description = description
     this.creationDate = creationDate
@@ -233,6 +235,7 @@ export class Field {
 
     this.hide = hide
     this.hWidth = width
+    this.constraints = constraints
   }
 
   set icon (val) {
@@ -269,7 +272,7 @@ export class Field {
       
       value: this.value,
       text: this.text,
-      type: this.type,
+      field_type: this.field_type,
 
       icon: this.icon,
       sortable: false,
@@ -287,6 +290,7 @@ export class Field {
       width: this.hWidth,
       fixed: this.hFixed,
       hide: this.hHide,
+      constraints: this.constraints,
 
       itemType: this.itemType,
     }
@@ -298,7 +302,7 @@ export class Field {
       
       value: this.value,
       text: this.text,
-      type: this.type,
+      field_type: this.field_type,
 
       icon: this.icon,
       position: this.position,
@@ -390,7 +394,7 @@ export const helpHeadersFields = helpHeaders.map(h => {
     undefined,
     h.value,
     h.text,
-    h.type,
+    h.field_type,
   )
   helperField.helpHeader = true
   // helperField.fixed = true
@@ -415,7 +419,7 @@ export const endHeadersFields = addColHeaders.map(h => {
     undefined,
     h.value,
     h.text,
-    h.type,
+    h.field_type,
   )
   helperEndField.helpHeader = true
   helperEndField.position = h.position
@@ -429,7 +433,7 @@ export const defaultHeaders = [
   {
     value: 'name',
     text: 'Name',
-    type: 'str',
+    field_type: 'str',
     // text: 'name', // TO DELETE
     // value: 'name', // TO DELETE
     sortable: false,
@@ -440,7 +444,7 @@ export const defaultHeaders = [
   {
     value: 'surname',
     text: 'Surname',
-    type: 'str',
+    field_type: 'str',
     // text: 'surname', // TO DELETE
     // value: 'surname', // TO DELETE
     sortable: false,
@@ -449,7 +453,7 @@ export const defaultHeaders = [
   {
     value: 'bio',
     text: 'Biography',
-    type: 'longStr',
+    field_type: 'longStr',
     // text: 'bio', // TO DELETE
     // value: 'bio', // TO DELETE
     sortable: false,
@@ -458,7 +462,7 @@ export const defaultHeaders = [
   {
     value: 'age',
     text: 'Age',
-    type: 'int',
+    field_type: 'int',
     // text: 'age', // TO DELETE
     // value: 'age', // TO DELETE
     sortable: false,
@@ -467,7 +471,7 @@ export const defaultHeaders = [
   {
     value: 'ratio',
     text: 'Ratio',
-    type: 'float',
+    field_type: 'float',
     // text: 'ratio', // TO DELETE
     // value: 'ratio', // TO DELETE
     sortable: false,
@@ -476,7 +480,7 @@ export const defaultHeaders = [
   {
     value: 'birthDate',
     text: 'BirthDate',
-    type: 'date',
+    field_type: 'date',
     // text: 'birthDate', // TO DELETE
     // value: 'birthDate', // TO DELETE
     sortable: false,
@@ -485,7 +489,7 @@ export const defaultHeaders = [
   {
     value: 'jsonData',
     text: 'Json data',
-    type: 'json',
+    field_type: 'json',
     // text: 'jsonData', // TO DELETE
     // value: 'jsonData', // TO DELETE
     sortable: false,
@@ -494,7 +498,7 @@ export const defaultHeaders = [
   {
     value: 'tags',
     text: 'Tags',
-    type: 'tag',
+    field_type: 'tag',
     // text: 'tags', // TO DELETE
     // value: 'tags', // TO DELETE
     sortable: false,
@@ -503,7 +507,7 @@ export const defaultHeaders = [
   {
     value: 'note',
     text: 'Note',
-    type: 'rating',
+    field_type: 'rating',
     // text: 'note', // TO DELETE
     // value: 'note', // TO DELETE
     sortable: false,
@@ -512,7 +516,7 @@ export const defaultHeaders = [
   {
     value: 'important',
     text: 'Important',
-    type: 'bool',
+    field_type: 'bool',
     // text: 'important', // TO DELETE
     // value: 'important', // TO DELETE
     sortable: false,
@@ -521,7 +525,7 @@ export const defaultHeaders = [
   {
     value: 'md',
     text: 'Markdown',
-    type: 'md',
+    field_type: 'md',
     // text: 'md', // TO DELETE
     // value: 'md', // TO DELETE
     sortable: false,
@@ -530,7 +534,7 @@ export const defaultHeaders = [
   {
     value: 'wikipediaPage',
     text: 'Wikipedia page',
-    type: 'url',
+    field_type: 'url',
     // text: 'wikipediaPage', // TO DELETE
     // value: 'wikipediaPage', // TO DELETE
     sortable: false,

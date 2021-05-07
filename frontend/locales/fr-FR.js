@@ -247,6 +247,7 @@ export default {
     fieldName: 'Nom du champ', 
     fields: 'Champs', 
     fieldType: 'Champ de type :', 
+    fieldTypeShort: 'Type',
     row: 'Ligne',
     rows: 'Lignes',
     owner: 'Propriétaire',
@@ -260,7 +261,6 @@ export default {
     creationDate: 'Date de création',
     icon: 'Icône', 
     licence: 'License',
-    type: 'Type',
     hide: 'Cacher',
   },
   workspaces: {

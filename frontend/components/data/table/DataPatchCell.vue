@@ -121,13 +121,13 @@
       <!-- :style="`justify-content: ${ getJustify(header) }`" -->
 
       <v-simple-checkbox
-        v-if="header.type === 'bool'"
+        v-if="header.field_type === 'bool'"
         v-model="localData"
         disabled
       />
       
       <!-- <v-text-field
-        v-else-if="header.type === 'str'"
+        v-else-if="header.field_type === 'str'"
         readonly
         hide-details
         :value="JSON.stringify(localData) || '-' "
@@ -135,14 +135,14 @@
         >
       </v-text-field> -->
       <span
-        v-else-if="header.type === 'str'"
+        v-else-if="header.field_type === 'str'"
         v-html="localData || '-'"
         >
         <!-- {{ localData || '-' }}</code> -->
       </span>
 
 
-      <span v-else-if="header.type === 'tag'">
+      <span v-else-if="header.field_type === 'tag'">
         <v-chip
           v-for="(val, i) in localData"
           :key="i"
@@ -154,7 +154,7 @@
         </v-chip>
       </span>
 
-      <span v-else-if="header.type === 'rating'">
+      <span v-else-if="header.field_type === 'rating'">
         <v-icon
           v-for="(v,i) in localData"
           :key="i"
@@ -183,7 +183,7 @@
       </v-card-text> -->
       <v-card-text class="pa-0 body-2">
         <v-checkbox
-          v-if="header.type === 'bool'"
+          v-if="header.field_type === 'bool'"
           v-model="localData"
           filled
           dense
@@ -192,7 +192,7 @@
           />
 
         <v-textarea
-          v-else-if="header.type === 'longStr'"
+          v-else-if="header.field_type === 'longStr'"
           v-model="localData"
           filled
           dense
@@ -201,7 +201,7 @@
           />
 
         <v-combobox
-          v-else-if="header.type === 'tag'"
+          v-else-if="header.field_type === 'tag'"
           v-model="localData"
           multiple
           smalll-chips
@@ -212,7 +212,7 @@
           />
 
         <v-text-field
-          v-else-if="header.type === 'int' || header.type === 'float'"
+          v-else-if="header.field_type === 'int' || header.field_type === 'float'"
           v-model="localData"
           type="number"
           filled
@@ -222,7 +222,7 @@
           />
 
         <v-select
-          v-else-if="header.type === 'rating'"
+          v-else-if="header.field_type === 'rating'"
           v-model="localData"
           :items="[0,1,2,3,4,5]"
           filled
@@ -297,21 +297,21 @@
       //   updateCellValueInTableData: 'tables/updateCellValueInTableData',
       // }),
       getTextJustify(head) {
-        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
+        // this.log && head.field_type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
         let justify = 'left'
         let centers = ['bool', 'rating', 'date']
         let ends = ['float', 'int']
-        justify = centers.includes(head.type) ? 'center' : ends.includes(head.type) ? 'right' : justify
-        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > justify : `, justify)
+        justify = centers.includes(head.field_type) ? 'center' : ends.includes(head.field_type) ? 'right' : justify
+        // this.log && head.field_type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > justify : `, justify)
         return justify
       },
       getJustify(head) {
-        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
+        // this.log && head.field_type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
         let justify = 'start'
         let centers = ['bool', 'rating', 'date']
         let ends = ['float', 'int']
-        justify = centers.includes(head.type) ? 'center' : ends.includes(head.type) ? 'end' : justify
-        // this.log && head.type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > justify : `, justify)
+        justify = centers.includes(head.field_type) ? 'center' : ends.includes(head.field_type) ? 'end' : justify
+        // this.log && head.field_type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > justify : `, justify)
         return justify
       },
       onClickOutside() {

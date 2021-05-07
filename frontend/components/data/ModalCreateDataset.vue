@@ -66,8 +66,8 @@
           <code><pre>{{ item }}</pre></code>
         </v-col>
         <v-col cols="3">
-          localItem (copy of item): <br>
-          <code><pre>{{ localItem }}</pre></code>
+          datasetItem (copy of item): <br>
+          <code><pre>{{ datasetItem }}</pre></code>
         </v-col>
         <v-col cols="3">
           e1: <code>{{ e1 }}</code><br>
@@ -155,7 +155,7 @@
                 <div v-show="stepInfo.component === 'dataImport'">
                   <div class="mt-5 mb-0">
                     <DatasetImportData
-                      :datasetItem="localItem"
+                      :datasetItem="datasetItem"
                       :importType="importType"
                       @setDataImport="setDataImport"
                     />
@@ -169,7 +169,7 @@
                       <ModalTabs
                         :appendTitle="true"
                         :tabsSpaces="tabsSpaces"
-                        :localItem="localItem"
+                        :localItem="datasetItem"
                         :itemType="itemType"
                         :itemModel="itemModel"
                         :apiUrl="apiUrl"
@@ -184,7 +184,7 @@
                   <div class="mt-5 mb-0">
                     <DatasetImportResume
                       :importType="importType"
-                      :datasetItem="localItem"
+                      :datasetItem="datasetItem"
                       :dataImport="dataImport"
                     />
                   </div>
@@ -222,7 +222,7 @@
               class="mt-3"
               > -->
               <DataTables
-                :currentDataset="localItem"
+                :currentDataset="datasetItem"
                 :fromCreate="true"
                 :noToolbar="true"
               />
@@ -339,7 +339,7 @@
     ],
     watch: {
       item () {
-        this.localItem = { ...this.item }
+        this.datasetItem = { ...this.item }
       },
       steps (val) {
         if (this.e1 > val) {
@@ -357,7 +357,7 @@
       }
     },
     beforeMount () {
-      this.localItem = { ...this.item }
+      this.datasetItem = { ...this.item }
       this.tabsSpaces = Object.keys(this.itemModel)
       if (this.presetCreate) {
         this.importType = this.presetCreate
@@ -373,7 +373,7 @@
         tabsSpaces: [],
         visited: [],
 
-        localItem: undefined,
+        datasetItem: undefined,
         importType: undefined,
         
         dataImport: false,
@@ -452,21 +452,27 @@
       isCreateDisabled() {
         let isDisabled = false
         if (this.e1 + 1 === this.stepsList.length) {
-          isDisabled = !(this.localItem && this.importType && this.dataImport)
+          isDisabled = !(this.datasetItem && this.importType && this.dataImport)
         }
         return isDisabled
       },
       createItem() {
         if (!this.isCreateDisabled()) {
-          this.log && console.log(`\nC-ModalCreateDataset > createDataset > this.localItem :`, this.localItem)
+          this.log && console.log(`\nC-ModalCreateDataset > createDataset > this.datasetItem :`, this.datasetItem)
           this.log && console.log(`C-ModalCreateDataset > createDataset > this.getCurrentTables :`, this.getCurrentTables)
-          this.dialog = false
+
+          // join tables to dataset data for payload
           let datasetPayload = {
-            dataset: this.localItem,
-            tables: this.getCurrentTables
+            ...this.datasetItem,
           }
+          datasetPayload.tables = this.getCurrentTables
           this.log && console.log(`C-ModalCreateDataset > createDataset > datasetPayload :`, datasetPayload)
-          this.$emit('createItem', this.localItem)
+
+          // emit signal for dataset creation to parent
+          this.$emit('createItem', datasetPayload)
+
+          // commented during backend dev / debugging
+          this.dialog = false
         }
       },
     }

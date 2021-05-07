@@ -245,6 +245,7 @@ export default {
     fieldName: 'Field name', 
     fields: 'Fields',
     fieldType: 'Field type :',
+    fieldTypeShort: 'Type',
     row: 'Row',
     rows: 'Rows',
     owner: 'Owner',
@@ -258,7 +259,6 @@ export default {
     creationDate: 'Creation date',
     icon: 'Icon', 
     licence: 'Licence',
-    type: 'Type',
     hide: 'Hide',
   },
   workspaces: {

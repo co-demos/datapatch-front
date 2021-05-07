@@ -23,7 +23,7 @@
         <!-- <pre>{{ model }}</pre> -->
 
         <v-text-field
-          v-if="model.type === 'str'"
+          v-if="model.field_type === 'str'"
           filled
           hide-details="auto"
           clearable
@@ -33,7 +33,7 @@
         />
 
         <v-textarea
-          v-else-if="model.type === 'longStr'"
+          v-else-if="model.field_type === 'longStr'"
           filled
           rows="3"
           hide-details="auto"
@@ -43,7 +43,7 @@
         />
 
         <v-textarea
-          v-else-if="model.type === 'json'"
+          v-else-if="model.field_type === 'json'"
           filled
           rows="3"
           hide-details="auto"
@@ -74,11 +74,11 @@
           <v-icon
             x-small
             >
-            {{ fieldIcon(model.type) }}
+            {{ fieldIcon(model.field_type) }}
           </v-icon>
         </v-btn>
         <span  class="text-caption">
-          {{ $t(fieldText(model.type)) }}
+          {{ $t(fieldText(model.field_type)) }}
         </span>
       </v-col>
 

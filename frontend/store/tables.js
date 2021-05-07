@@ -47,7 +47,7 @@ export const getters = {
   },
   getTableMetadataById: (state, getters) => (tableId) => {
     // console.log('S-tables > getCurrentTableMetadata > state.currentTable : ', state.currentTable)
-    const filterOutKeys = ['tableData', 'tableFields']
+    const filterOutKeys = ['table_data', 'table_fields']
     let table = getters.getTableById(tableId)
     const filtered = Object.keys(table)
       .filter(key => !filterOutKeys.includes(key))
@@ -61,17 +61,17 @@ export const getters = {
   // FIELDS - DATA - getters
   getCurrentTableFieldsDataLength: (state, getters) => {
     let currentTable = getters.getCurrentTable
-    return currentTable.tableFields.length
+    return currentTable.table_fields.length
   },
   getCurrentTableFieldsData: (state, getters) => {
-    // console.log('S-tables > getCurrentTableFieldsData > state.currentTable.tableFields : ', state.currentTable.tableFields)
+    // console.log('S-tables > getCurrentTableFieldsData > state.currentTable.table_fields : ', state.currentTable.table_fields)
     let currentTable = getters.getCurrentTable
-    let dataFields = currentTable && currentTable.tableFields.map( h => (h instanceof Field ? h.data : h) )
+    let dataFields = currentTable && currentTable.table_fields.map( h => (h instanceof Field ? h.data : h) )
     // console.log('S-tables > getCurrentTableFieldsData > dataFields : ', dataFields)
     return dataFields
   },
   getCurrentTableFields: (state, getters) => {
-    // console.log('S-tables > getCurrentTableFields > state.currentTable.tableFields : ', state.currentTable.tableFields)
+    // console.log('S-tables > getCurrentTableFields > state.currentTable.table_fields : ', state.currentTable.table_fields)
     let helpersHs = state.helpersHs.map( h => h.dataHelper )
     let addColHs = state.addColHs.map( h => h.dataHelper )
     let dataFields = getters.getCurrentTableFieldsData
@@ -82,11 +82,11 @@ export const getters = {
   },
   getCurrentTableRowsLength: (state, getters) => {
     let currentTable = getters.getCurrentTable
-    return currentTable && currentTable.tableData.length
+    return currentTable && currentTable.table_data.length
   },
   getCurrentTableRows: (state, getters) => {
     let currentTable = getters.getCurrentTable
-    return currentTable && currentTable.tableData
+    return currentTable && currentTable.table_data
   },
 }
 
@@ -154,7 +154,7 @@ export const mutations = {
     // console.log('S-tables > updateInCurrentTable > state.currentTableId : ', state.currentTableId)
     let table = state.currentTables.find( t => t.id === state.currentTableId)
     // console.log('S-tables > updateInCurrentTable > table : ', table)
-    // let matchKey = space === 'tableFields' ? 'value' : 'id'
+    // let matchKey = space === 'table_fields' ? 'value' : 'id'
     // let matchKey = 'id'
     // console.log('S-tables > updateInCurrentTable > matchKey : ', matchKey)
     // table[space] = [ ...table[space].map(obj => obj[matchKey] !== item[matchKey] ? obj : {...obj, ...item} ) ]
@@ -216,40 +216,40 @@ export const actions = {
 
   // FIELDS - currrent table actions
   appendColumnToCurrentTableFields ({ commit }, newCol) {
-    commit('appendToCurrentTable', {space: 'tableFields', item: newCol})
+    commit('appendToCurrentTable', {space: 'table_fields', item: newCol})
   },
   updateColumnInCurrentTableFields ({ commit }, col) {
-    commit('updateInCurrentTable', {space: 'tableFields', item: col})
+    commit('updateInCurrentTable', {space: 'table_fields', item: col})
   },
   deleteColumnInCurrentTableFields ({ commit }, colId) {
-    commit('deleteInCurrentTable', {space: 'tableFields', item: colId})
+    commit('deleteInCurrentTable', {space: 'table_fields', item: colId})
   },
   updateColumnsOrderInTableData ({ commit, getters }, columns) {
-    commit('updateSpaceInCurrentTable', {space: 'tableFields', items: columns} )
+    commit('updateSpaceInCurrentTable', {space: 'table_fields', items: columns} )
   },
 
   // DATA - currrent table actions
   appendRowToCurrentTableData ({ commit, getters }, newRow) {
-    commit('appendToCurrentTable', {space: 'tableData', item: newRow})
+    commit('appendToCurrentTable', {space: 'table_data', item: newRow})
     commit('setTablesNeedRedraw', true)
   },
   updateRowInCurrentTableData ({ commit, getters }, row) {
-    commit('updateInCurrentTable', {space: 'tableData', item: row})
+    commit('updateInCurrentTable', {space: 'table_data', item: row})
     commit('setTablesNeedRedraw', true)
   },
   updateCellValueInTableData ({ commit, getters }, cellData) {
     const table = getters.getCurrentTable
-    let row = { ...table.tableData.find( r => r.id === cellData.rowId) }
+    let row = { ...table.table_data.find( r => r.id === cellData.rowId) }
     row[cellData.headerValue] = cellData.value
-    commit('updateInCurrentTable', {space: 'tableData', item: row} )
+    commit('updateInCurrentTable', {space: 'table_data', item: row} )
     commit('setTablesNeedRedraw', true)
   },
   updateRowsOrderInTableData ({ commit, getters }, rows) {
-    commit('updateSpaceInCurrentTable', {space: 'tableData', items: rows} )
+    commit('updateSpaceInCurrentTable', {space: 'table_data', items: rows} )
     commit('setTablesNeedRedraw', true)
   },
   deleteRowInCurrentTableData ({ commit, getters }, rowId) {
-    commit('deleteInCurrentTable', {space: 'tableData', itemId: rowId})
+    commit('deleteInCurrentTable', {space: 'table_data', itemId: rowId})
     commit('setTablesNeedRedraw', true)
   },
 }
