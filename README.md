@@ -10,9 +10,9 @@ The current goal is to make it work with the following generic features, so it c
 
 - [x] **Authentication** pages & components : login + renew password + middlewares
 - [x] **Internationalization** with i18n
-- [ ] **Workspaces** pages & components (current) : list of datasets + meta
-- [ ] **Datasets** pages & components
-- [ ] **Tables** pages & components
+- [x] **Workspaces** pages & components (current) : list of datasets + meta
+- [x] **Datasets** pages & components
+- [x] **Tables** pages & components
 - [ ] **Schemas** pages & components
 - [ ] **Fields** pages & components
 - [ ] **Groups** pages & components

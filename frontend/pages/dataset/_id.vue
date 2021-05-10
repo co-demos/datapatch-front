@@ -42,7 +42,6 @@
     <DataTables
       :currentDataset="currentDataset"
     />
-      <!-- :currrentDatasetTables="tablesBlank" -->
 
     <!-- DIALOG FOR DATASET INFOS -->
     <ModalItem
@@ -128,12 +127,12 @@
         prefs: emptyDataset.prefs,
       }
 
-      this.tablesBlank = CreateBlankTable(
-        this.userId,
-        this.$t('tables.defaultTitle'),
-        this.$t('tables.defaultDescription')
-      )
-      this.setCurrentTables(this.tablesBlank)
+      // this.tablesBlank = CreateBlankTable(
+      //   this.userId,
+      //   this.$t('tables.defaultTitle'),
+      //   this.$t('tables.defaultDescription')
+      // )
+      // this.setCurrentTables(this.tablesBlank)
 
     },
     computed: {

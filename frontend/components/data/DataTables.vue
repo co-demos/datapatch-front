@@ -277,6 +277,8 @@
       }),
       ...mapGetters({
         userId: 'user/userId',
+        headerUser: 'user/headerUser',
+
         isAuthenticated: 'user/isAuthenticated',
         getTablesNeedReload: 'tables/getTablesNeedReload',
         getCurrentTables: 'tables/getCurrentTables',
@@ -290,9 +292,23 @@
         setCurrentTables: 'tables/setCurrentTables',
         setCurrentTableId: 'tables/setCurrentTableId',
         appendTableStart: 'tables/appendTableStart',
+        updateTable: 'tables/updateTable',
         removeTable: 'tables/removeTable',
       }),
-      changeTab(tableId) {
+      async changeTab(tableId) {
+        if (!this.fromCreate) {
+          const tablemetaId = tableId
+          let tableData = await this.$axios
+            .get(`${this.api.tables}/${tablemetaId}/data`, this.headerUser)
+            .then( respTable => {
+              this.log && console.log('C-DataTables > respTable.data : ', respTable.data)
+              return respTable.data
+            })
+          let table = this.currentDataset.tables.find( t => t.id === tableId)
+          table.table_data = tableData
+          this.log && console.log('C-DataTables > table : ', table)
+          this.updateTable(table)
+        }
         this.tab = tableId
         this.setCurrentTableId(tableId)
       },

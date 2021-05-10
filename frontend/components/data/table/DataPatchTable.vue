@@ -170,7 +170,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}\
               <!-- {{ rowData[ h.value ] }} -->
               <DataPatchCell
                 :tableId="tableId"
-                :cellData="rowData[ h.value ]"
+                :cellData="onlyLocalUpdate ? rowData[ h.value ] : rowData[ h.field_code ]"
                 :header="h"
                 :rowId="rowData.id"
                 :selectedRows="selectedRows"
@@ -227,7 +227,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
 
 
     <!-- DEBUGGING -->
-    <v-row class="text-caption" v-if="true">
+    <v-row class="text-caption" v-if="false">
       <v-col cols="12">
         <h5>
           <hr> DEBUG FROM : DataPatchTable
@@ -264,26 +264,26 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
     ],
     watch: {
       tableId(next) {
-        // this.log && console.log(`C-DataPatchTable > watch > tableId > next :`, next)
+        this.log && console.log(`C-DataPatchTable > watch > tableId > next :`, next)
         if (next) {
           this.resetDisplayedTables()
         }
       },
       getCurrentTableFields(next, prev) {
-        // this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
+        this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
         if (next && this.tableId) {
           this.tableHeaders =  [ ...next ]
         }
       },
       getTablesNeedReload(next) {
-        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
+        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
         if (next && this.tableId) {
           this.toggleTablesNeedReload(false)
           this.resetDisplayedTables()
         }
       },
       getTablesNeedRedraw(next) {
-        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedRedraw > next :`, next)
+        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedRedraw > next :`, next)
         if (next && this.tableId) {
           // this.resetDisplayedTables()
           this.redrawRows()
