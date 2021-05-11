@@ -270,7 +270,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         }
       },
       getCurrentTableFields(next, prev) {
-        this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
         if (next && this.tableId) {
           this.tableHeaders =  [ ...next ]
         }

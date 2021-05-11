@@ -437,13 +437,13 @@
         emptyDataset.randomBasics = true
         this.ds = emptyDataset.data
       },
-      createDataset(itemPayload) {
+      async createDataset(itemPayload) {
         this.log && console.log('C-DatasetItem > createItem > itemPayload :' , itemPayload)
-        this.$axios
+        let resp = await this.$axios
           .post(`${this.api.datasets}/`, itemPayload, this.headerUser)
-          .then(resp => {
-            this.log && console.log('C-DatasetItem > createItem > resp.data : ', resp.data)
-            this.$store.dispatch(`datasets/appendUserItem`, resp.data)
+          .then(respPost => {
+            this.log && console.log('C-DatasetItem > createItem > respPost.data : ', respPost.data)
+            this.$store.dispatch(`datasets/appendUserItem`, respPost.data)
             // this.log && console.log('C-DatasetItem > createItem > this.localItem : ', this.localItem)
             // this.log && console.log('C-DatasetItem > createItem > this.emptyItem : ', this.emptyItem)
             
@@ -455,16 +455,17 @@
             let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
             let payloadWs = { ...currentWs }
             payloadWs.datasets = {
-              ids: [ ...wsPreviousDatasets, resp.data.id ]
+              ids: [ ...wsPreviousDatasets, respPost.data.id ]
             }
             // this.log && console.log('C-DatasetItem > createItem > payloadWs : ', payloadWs)
             this.$axios
               .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
-              .then( resp => {
-                this.$store.dispatch(`workspaces/updateUserItem`, resp.data)
+              .then( respPut => {
+                this.$store.dispatch(`workspaces/updateUserItem`, respPut.data)
 
                 // commented during backend dev / debugging
-                // this.$router.push(`/dataset/${resp.data.id}`)
+                this.$router.push(`/dataset/${respPost.data.id}`)
+                return
               })
 
           })

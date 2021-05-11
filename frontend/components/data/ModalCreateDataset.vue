@@ -472,7 +472,7 @@
           this.$emit('createItem', datasetPayload)
 
           // commented during backend dev / debugging
-          // this.dialog = false
+          this.dialog = false
         }
       },
     }

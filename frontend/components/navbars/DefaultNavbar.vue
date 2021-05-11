@@ -37,7 +37,9 @@
       dense
       flat
       app
+      :extension-height="searchHeight"
       >
+      <!-- :style="`${ searchOpen ? 'box-shadow: 0 20px 10px -2px white !important;' : ''}`" -->
 
       <v-app-bar-nav-icon
         small
@@ -69,6 +71,81 @@
       <NotificationsButton v-if="isAuthenticated"/>
 
       <UserButton/>
+
+      <v-tooltip 
+        bottom
+        >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            elevation="0"
+            class="ml-5"
+            fab
+            :color="searchOpen ? 'white' : 'transparent'"
+            x-small
+            v-bind="attrs"
+            v-on="on"
+            @click.stop="searchOpen = !searchOpen"
+            >
+            <v-icon
+              :class="searchOpen ? 'primary--text' : ''"
+              small
+              >
+              icon-search1
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>
+          {{ $t('workspaces.searchDataset') }}
+        </span>
+      </v-tooltip>
+
+      <!-- <v-expand-transition> -->
+        <template
+          v-slot:extension
+          v-if="searchOpen"
+          >
+          <v-row
+            class="align-center justify-center ma-0"
+            >
+            <!-- :style="`${searchOpen ? 'border-bottom: thin solid white;' : ''}`" -->
+            <v-col
+              cols="8"
+              class=""
+              :height="searchHeight"
+              >
+              <v-text-field
+                v-model="searchQuery"
+                dense
+                class=""
+                :label="$t('buttons.searchText')"
+                flat
+                light
+                solo
+                hide-details
+                clearable
+                >
+                <template v-slot:prepend>
+                  <v-tooltip 
+                    bottom
+                    >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        class="white--text mr-4"
+                        v-on="on"
+                        >
+                        icon-search1
+                      </v-icon>
+                    </template>
+                    <span>
+                      {{ $t('workspaces.searchDataset') }}
+                    </span>
+                  </v-tooltip>
+                </template>
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </template>
+      <!-- </v-expand-transition> -->
 
     </v-app-bar>
 
@@ -104,6 +181,9 @@ export default {
       drawer: false,
       miniVariant: true,
       fixed: false,
+      searchHeight: "93px",
+      searchOpen: false,
+      searchQuery: undefined,
       items: [
         {
           icon: 'icon-home',

@@ -99,6 +99,7 @@ export default {
     cancel: 'Cancel',
     delete: 'Delete',
     deleteConfirm: 'Yes, I delete',
+    searchText: 'search for an element (dataset, table, workspace...)',
   },
   imports: {
     example: 'Example',

@@ -152,7 +152,7 @@
         @confirmDelete="deleteWorkspace()"
       />
 
-      <v-spacer/>
+      <!-- <v-spacer/>
 
       <v-tooltip 
         left
@@ -173,7 +173,7 @@
         <span>
           {{ $t('workspaces.searchDataset') }}
         </span>
-      </v-tooltip>
+      </v-tooltip> -->
 
     </v-toolbar>
 

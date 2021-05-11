@@ -101,6 +101,7 @@ export default {
     cancel: 'Annuler',
     delete: 'Supprimer',
     deleteConfirm: 'Oui, je supprime',
+    searchText: 'Rechercher un élément (jeu de données, table, espace de travail...)',
   },
   imports: {
     example: 'Exemple',
