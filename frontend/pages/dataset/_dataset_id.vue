@@ -132,7 +132,7 @@
       //   this.$t('tables.defaultTitle'),
       //   this.$t('tables.defaultDescription')
       // )
-      // this.setCurrentTables(this.tablesBlank)
+      // this.setCurrentTables({ tables: this.tablesBlank })
 
     },
     computed: {

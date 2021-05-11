@@ -182,8 +182,10 @@ export const actions = {
   },
 
   // CURRENT TABLES
-  setCurrentTables ({ commit }, tables) {
-    commit('setCurrentTableId', tables[0].id)
+  setCurrentTables ({ commit }, { tables, tableId=undefined } ) {
+    console.log('S-tables > setCurrentTables > table : ', tables )
+    console.log('S-tables > setCurrentTables > tableId : ', tableId )
+    commit('setCurrentTableId', tableId || tables[0].id)
     commit('setCurrentTables', tables)
   },
   setCurrentTableId ({ commit }, tableId) {
@@ -191,13 +193,16 @@ export const actions = {
   },
 
   // TABLES LIST
-  appendTable ({ commit }, table) {
+  appendTable ({ commit }, table ) {
     commit('addItem', {space: 'currentTables', item: table})
   },
   appendTableStart ({ commit }, table) {
     commit('addItemStart', {space: 'currentTables', item: table})
   },
   updateTable ({ commit }, table) {
+    commit('updateItem', {space: 'currentTables', item: table})
+  },
+  updateUserItem ({ commit }, table) {
     commit('updateItem', {space: 'currentTables', item: table})
   },
   removeTable ({ commit }, table) {

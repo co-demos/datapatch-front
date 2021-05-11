@@ -13,8 +13,11 @@ export default function ({
   const log = store.state.log
   
   // console.log("MW-getDatasetById > route : ", route)
-  const datasetId = route.params.id
+  const datasetId = route.params.dataset_id
   // console.log("MW-getDatasetById > datasetId : ", datasetId)
+
+  const tableId = route.params.table_id
+  console.log("MW-getDatasetById > tableId : ", tableId)
 
   const api = store.state.api
 
@@ -23,7 +26,7 @@ export default function ({
 
   if (tokenAccess) {
     // log && console.log("MW-getDatasetById > HAS tokenAccess ... ")
-
+    
     let config = new configHeaders(tokenAccess)
 
     let initDataset = $axios
@@ -31,17 +34,24 @@ export default function ({
       .then(resp => {
         log && console.log('MW-getDatasetById > B1 > resp.data : ', resp.data)
         store.dispatch('datasets/setCurrentItem', resp.data)
+        let dataset = resp.data
 
         // get data from first table in dataset's tables array
-        const tablemetaId = resp.data.tables[0].id
+        const tablemetaId = parseInt(tableId) || resp.data.tables[0].id
+        console.log("MW-getDatasetById > tablemetaId : ", tablemetaId)
+
         let initTableData = $axios
           .get(`${api.tables}/${tablemetaId}/data`, config.headers)
           .then( respTable => {
             log && console.log('MW-getDatasetById > B2 > respTable.data : ', respTable.data)
-            let dataset = resp.data
-            dataset.tables[0].table_data = respTable.data
-            log && console.log('MW-getDatasetById > B2 > dataset : ', dataset)
-            store.dispatch('tables/setCurrentTables', dataset.tables )
+            log && console.log('MW-getDatasetById > B2 > dataset 1 : ', dataset)
+            let table = dataset.tables.find(t => t.id === tablemetaId )
+            log && console.log('MW-getDatasetById > B2 > table : ', table)
+            table.table_data = respTable.data
+            log && console.log('MW-getDatasetById > B2 > dataset.tables : ', dataset.tables )
+            // store.dispatch('tables/resetCurrentTables')
+            store.dispatch('tables/setCurrentTables', { tables: dataset.tables, tableId: tablemetaId } )
+            // store.dispatch('tables/setCurrentTableId', tablemetaId )
           })
           .catch(error => {
             log && console.log('MW-getDatasetById > B2 > error > error : ', error)

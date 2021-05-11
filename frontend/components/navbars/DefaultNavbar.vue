@@ -181,7 +181,7 @@ export default {
       drawer: false,
       miniVariant: true,
       fixed: false,
-      searchHeight: "93px",
+      searchHeight: "80px",
       searchOpen: false,
       searchQuery: undefined,
       items: [

@@ -75,7 +75,7 @@
     <!-- TABS TABLES -->
     <v-row 
       v-if="tab"
-      :class="`align-center justify-center ${fromCreate ? '' : getDatasetColor} my-0 pl-5 pt-3 flex-grow-0`"
+      :class="`align-center justify-center ${fromCreate ? '' : getDatasetColor} my-0 pl-5 pt-0 flex-grow-0`"
       >
       <v-col cols="1" class="pa-0 text-center">
 
@@ -254,7 +254,7 @@
       // set default tab
       // this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
       let hasTables = this.getCurrentTables && this.getCurrentTables.length
-      this.tab = hasTables && this.getCurrentTables[0].id
+      this.tab = hasTables && this.getCurrentTableId // this.getCurrentTables[0].id
       this.tables = hasTables && [ ...this.getCurrentTables ]
       this.setCurrentTableId(this.tab)
    },
@@ -296,8 +296,12 @@
         removeTable: 'tables/removeTable',
       }),
       async changeTab(tableId) {
+        let datasetId = this.currentDataset.id
         if (!this.fromCreate) {
           const tablemetaId = tableId
+          // this.log && console.log('C-DataTables > this.$route : ', this.$route)
+          // this.$router.replace({ params: { ...this.$route.params, table_id: tableId } })
+          this.$router.replace(`/dataset/${datasetId}/table/${tableId}`)
           let tableData = await this.$axios
             .get(`${this.api.tables}/${tablemetaId}/data`, this.headerUser)
             .then( respTable => {
@@ -313,8 +317,8 @@
         this.setCurrentTableId(tableId)
       },
       updateTablesOrder() {
-        // this.log && console.log(`\nC-DataTables > updateTablesOrder > this.tables : `, this.tables)
-        this.setCurrentTables(this.tables)
+        this.log && console.log(`\nC-DataTables > updateTablesOrder > this.tables : `, this.tables)
+        this.setCurrentTables({tables: this.tables})
       },
       addTable() {
         let existingIds = this.getCurrentTables.map(t => t.id)

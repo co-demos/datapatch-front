@@ -513,7 +513,7 @@ carto5_	source 3	C</pre>
         if ( next && next === 'blank') {
           // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
           // this.setCurrentTableId(1)
-          this.setCurrentTables(this.tablesBlank)
+          this.setCurrentTables({ tables: this.tablesBlank })
           this.setImportData(true)
         } else {
           this.toggleTablesNeedReload(true)
@@ -567,7 +567,7 @@ carto5_	source 3	C</pre>
       this.resetCurrentTables()
       if (this.importType && this.importType === 'blank') {
         // this.setCurrentTableId(1)
-        this.setCurrentTables(this.tablesBlank)
+        this.setCurrentTables({ tables: this.tablesBlank })
         this.setImportData(true)
       } else {
         this.toggleTablesNeedReload(true)
@@ -657,10 +657,10 @@ carto5_	source 3	C</pre>
             index: 1,
           }
           // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableMetadata : `, tableMetadata)
-          const table = this.rawDataToTable(tableMetadata, dataObj)
+          const tableCopyPaste = this.rawDataToTable(tableMetadata, dataObj)
           setTimeout(() => {
-            // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > table : `, table)
-            this.setCurrentTables([table])
+            // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableCopyPaste : `, tableCopyPaste)
+            this.setCurrentTables( { tables: [tableCopyPaste] } )
             this.toggleTablesNeedReload(true)
             this.loading = false
             this.setImportData(true)
@@ -702,9 +702,9 @@ carto5_	source 3	C</pre>
           this.resetCurrentTables()
           // this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
           try {
-            const tables = await this.readCsvFilesAsync()
-            // this.log && console.log(`C-DatasetImportData > readCsvFiles > tables :`, tables)
-            this.setCurrentTables(tables)
+            const tablesCsv = await this.readCsvFilesAsync()
+            // this.log && console.log(`C-DatasetImportData > readCsvFiles > tablesCsv :`, tablesCsv)
+            this.setCurrentTables({tables: tablesCsv})
             this.toggleTablesNeedReload(true)
             this.loading = false
             this.setImportData(true)
@@ -720,7 +720,7 @@ carto5_	source 3	C</pre>
           this.loading = true
           this.setImportData(false)
           this.resetCurrentTables()
-          let tables = []
+          let tablesExcel = []
           try {
             const xlsData = await processFile(this.xlsFile, 'xls')
               .then( xlsData => {
@@ -736,11 +736,11 @@ carto5_	source 3	C</pre>
                   this.log && console.log(`C-DatasetImportData > readExcelFile > dataObj :`, dataObj)
                   const table = this.rawDataToTable(tableMetadata, dataObj)
                   this.log && console.log(`C-DatasetImportData > readExcelFile > table :`, table)
-                  tables.push(table)
+                  tablesExcel.push(table)
                 }) 
               })
-            this.log && console.log(`C-DatasetImportData > readExcelFile > tables :`, tables)
-            this.setCurrentTables(tables)
+            this.log && console.log(`C-DatasetImportData > readExcelFile > tablesExcel :`, tablesExcel)
+            this.setCurrentTables({ tables: tablesExcel })
             this.toggleTablesNeedReload(true)
             this.loading = false
             this.setImportData(true)
@@ -787,9 +787,9 @@ carto5_	source 3	C</pre>
           try {
             let dataObj = await this.readCsvFromUrlAsync(csvUrlData.rawFileUrl)
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > dataObj :`, dataObj)
-            const table = this.rawDataToTable(tableMetadata, dataObj[0])
-            // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
-            this.setCurrentTables([table])
+            const tableCsvUrl = this.rawDataToTable(tableMetadata, dataObj[0])
+            // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableCsvUrl :`, tableCsvUrl)
+            this.setCurrentTables({ tables: [tableCsvUrl] })
             this.toggleTablesNeedReload(true)
             this.loading = false
             this.setImportData(true)
@@ -813,7 +813,7 @@ carto5_	source 3	C</pre>
           // this.log && console.log(`C-DatasetImportData > readGsheetUrl > this.tableGsheetUrl :`, this.tableGsheetUrl)
           let gsheetUrlData = await loadGoogleSheet(this.tableGsheetUrl, this.tableGsheetSheetNumbersSelection)
           // this.log && console.log(`C-DatasetImportData > readGsheetUrl > gsheetUrlData :`, gsheetUrlData)
-          let tables = []
+          let tablesGsheet = []
           gsheetUrlData.data.forEach( (gsData, gsIdx) => {
             let tableMetadata = {
               title: gsData.nameSheet,
@@ -823,9 +823,9 @@ carto5_	source 3	C</pre>
             tableMetadata.importData = gsheetUrlData.GSheetConfig
             const table = this.rawDataToTable(tableMetadata, gsData)
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
-            tables.push(table)
+            tablesGsheet.push(table)
           })
-          this.setCurrentTables(tables)
+          this.setCurrentTables({ tables: tablesGsheet })
           this.toggleTablesNeedReload(true)
           this.setImportData(true)
           this.loading = false

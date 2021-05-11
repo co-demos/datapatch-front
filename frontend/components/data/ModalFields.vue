@@ -37,7 +37,6 @@
     
       <v-col cols="8">
 
-
         <v-checkbox
           v-if="model.field === 'checkbox'"
           hide-details="auto"
@@ -233,7 +232,7 @@
           }
 
           if (this.needUpdateStore ) {
-            // this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
+            this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
             switch (itemPayload.itemType) {
               case 'table' :
                 this.updateTable(itemPayload)
@@ -248,7 +247,7 @@
             this.$axios
               .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
               .then(resp => {
-                // this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
+                this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
                 this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
   
                 if (this.updateCurrentDataset) {

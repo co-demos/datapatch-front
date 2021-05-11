@@ -29,12 +29,11 @@
           </span>
         </v-card-title>
 
-
         <v-card-text class="text-justify py-1">
           {{ $t('datapatch.pitch') }}
         </v-card-text>
 
-        <v-card-text class="text-justify py-1">
+        <v-card-text class="text-justify py-1 font-weight-bold">
           {{ $t('datapatch.pitch_bis') }}
         </v-card-text>
 
