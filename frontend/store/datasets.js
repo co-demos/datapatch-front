@@ -5,6 +5,10 @@ let emptyDataset = new Dataset()
 export const state = () => ({
   currentDataset: undefined,
 
+  isLoading: false,
+  loadingItem: undefined,
+  // loadingItems: [],
+
   userDatasets: [],
   shareddatasets: [],
 
@@ -25,6 +29,13 @@ export const state = () => ({
 
 
 export const getters = {
+  // getLoadingById: (state) => (id) => {
+  //   console.log('\nS-datasets > getLoadingById > id : ', id)
+  //   let itemLoading = state.loadingItems.find(item => item.id === id )
+  //   console.log('S-datasets > getLoadingById > itemLoading : ', itemLoading)
+  //   return itemLoading && itemLoading.isLoading
+  // },
+
   getCurrentItem: (state) => {
     // console.log('S-datasets > getCurrentItem > state.currentDataset : ', state.currentDataset)
     return state.currentDataset
@@ -44,8 +55,22 @@ export const getters = {
 }
 
 export const mutations = {
+
+  setIsLoading (state, bool) {
+    state.isLoading = bool
+  },
+  setItemLoading (state, id) {
+    state.loadingItem = id
+  },
+  // setItemsLoading (state, itemLoading ) {
+  //   // console.log('S-datasets > setItemsLoading > state.loadingItems A : ', state.loadingItems)
+  //   // console.log('S-datasets > setItemsLoading > itemLoading : ', itemLoading)
+  //   let itemLoadingIdx = state.loadingItems.findIndex( it => it.id === itemLoading.id )
+  //   itemLoadingIdx === -1 ? state.loadingItems.push(itemLoading) : state.loadingItems[itemLoadingIdx] = itemLoading
+  //   // console.log('S-datasets > setItemsLoading > state.loadingItems B : ', state.loadingItems)
+  // },
+
   setItems (state, {space, items}) {
-    // console.log('S-datasets > setItems > items : ', items)
     // console.log('S-datasets > setItems > items : ', items)
     state[space] = items
   },
@@ -68,6 +93,10 @@ export const mutations = {
 }
 
 export const actions = {
+
+  togggleIsLoading({commit}, bool) {
+    commit('setIsLoading', bool)
+  },
 
   setCurrentItem ({ commit }, dataset) {
     commit('setItems', {space: 'currentDataset', items: dataset})

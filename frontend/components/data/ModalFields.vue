@@ -218,12 +218,17 @@
         }, 500)
       },
       updateItem() {
-        if (this.action === 'update'){
-
+        if ( this.action === 'update' ){
+          // this.log && console.log('\nC-ModalFields > updateItem > this.itemType :' , this.itemType)
+          // this.log && console.log('C-ModalFields > updateItem > this.item :' , this.item)
           // this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
-          let itemPayload = this.localItem
-          // this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
+          // this.log && console.log('C-ModalFields > updateItem > this.needUpdateStore :' , this.needUpdateStore)
+          // this.log && console.log('C-ModalFields > updateItem > this.onlyLocalUpdate :' , this.onlyLocalUpdate)
+          // this.log && console.log('C-ModalFields > updateItem > this.updateCurrentDataset :' , this.updateCurrentDataset)
           // this.log && console.log('C-ModalFields > updateItem > this.itemModel :' , this.itemModel)
+          
+          let itemPayload = this.localItem
+          this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
 
           // don't forget ux if update workspace
           if (this.itemType === 'workspaces') {
@@ -231,9 +236,9 @@
             itemPayload.datasets = currentWs.datasets
           }
 
-          if (this.needUpdateStore ) {
-            this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)
-            switch (itemPayload.itemType) {
+          if ( this.needUpdateStore ) {
+            this.log && console.log('C-ModalFields > updateItem > needUpdateStore > itemPayload :' , itemPayload)
+            switch (itemPayload.item_type) {
               case 'table' :
                 this.updateTable(itemPayload)
                 break
@@ -243,16 +248,32 @@
             }
           }
 
-          if (!this.onlyLocalUpdate) {
+          if ( !this.onlyLocalUpdate ) {
+            this.$store.commit(`${this.itemType}/setItemLoading`, this.item.id)
+            
+            let itemId = this.item.id
+            if (this.itemType === 'fields') {
+              itemId = this.$store.getters['tables/getCurrentTableId'] // get id from table
+              let currentTable = this.$store.getters['tables/getCurrentTable'] // get id from table
+              // this.log && console.log('C-ModalFields > updateItem > !this.onlyLocalUpdate > currentTable :' , currentTable)
+              itemPayload = currentTable
+            }
+            this.log && console.log('C-ModalFields > updateItem > itemPayload :' , itemPayload)
+
             this.$axios
-              .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
+              .put(`${this.apiUrl}/${itemId}`, itemPayload, this.headerUser)
               .then(resp => {
                 this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
-                this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
-  
+                
+                if (this.itemType !== 'fields') {
+                  this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
+                }
+                
                 if (this.updateCurrentDataset) {
                   this.$store.dispatch(`${this.itemType}/setCurrentItem`, resp.data)
                 }
+
+                this.$store.commit(`${this.itemType}/setItemLoading`, undefined)
               })
           } else {
             // this.log && console.log('C-ModalFields > updateItem > onlyLocalUpdate > itemPayload :' , itemPayload)

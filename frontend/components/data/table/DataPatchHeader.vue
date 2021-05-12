@@ -140,7 +140,7 @@
       :itemModel="itemModel"
       :itemType="itemType"
       :action="'update'"
-      :apiUrl="api.field"
+      :apiUrl="api.tables"
       :noAvatar="true"
       :onlyLocalUpdate="onlyLocalUpdate"
     />

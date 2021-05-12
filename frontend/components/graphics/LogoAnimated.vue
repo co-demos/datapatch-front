@@ -90,12 +90,12 @@ svg {
         </defs>
         
         <!-- texts -->
-        <g id="name" opacity="60%">
+        <g v-show="!noText" id="name" opacity="60%">
           <text class="brand teal" x="67" y="63">data</text>
           <text class="brand teal" x="68" y="81">patch</text>
         </g>
         
-        <g id="name2" mask="url(#maskText)">
+        <g v-show="!noText" id="name2" mask="url(#maskText)">
           <text class="brand purple" x="67" y="63">data</text>
           <text class="brand purple" x="68" y="81">patch</text>
         </g>
@@ -170,7 +170,8 @@ svg {
       'animated',
       'height',
       'yoyo',
-      'repeat'
+      'repeat',
+      'noText'
     ],
 
     data () {

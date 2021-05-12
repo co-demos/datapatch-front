@@ -352,6 +352,7 @@
     },
     methods: {
       ...mapActions({
+        togggleTablesIsLoading: 'tables/togggleIsLoading',
         setCurrentTables: 'tables/setCurrentTables',
         setCurrentTableId: 'tables/setCurrentTableId',
         appendTableStart: 'tables/appendTableStart',
@@ -362,6 +363,7 @@
         let datasetId = this.currentDataset.id
         
         if (!this.fromCreate) {
+          this.togggleTablesIsLoading(true)
           const tablemetaId = tableId
           // this.log && console.log('C-DataTables > this.$route : ', this.$route)
           // this.$router.replace({ params: { ...this.$route.params, table_id: tableId } })
@@ -369,12 +371,12 @@
           let tableData = await this.$axios
             .get(`${this.api.tables}/${tablemetaId}/data`, this.headerUser)
             .then( respTable => {
-              this.log && console.log('C-DataTables > respTable.data : ', respTable.data)
+              // this.log && console.log('C-DataTables > changeTab > respTable.data : ', respTable.data)
               return respTable.data
             })
           let table = this.currentDataset.tables.find( t => t.id === tableId)
           table.table_data = tableData
-          this.log && console.log('C-DataTables > table : ', table)
+          // this.log && console.log('C-DataTables > changeTab > table : ', table)
           this.updateTable(table)
         }
 

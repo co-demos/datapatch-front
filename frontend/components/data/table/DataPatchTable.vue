@@ -85,6 +85,10 @@ td {
   border-right: 2px solid black !important;
 }
 
+.partial-full-height {
+  height: 75vh;
+}
+
 </style>
 
 <template>
@@ -94,6 +98,7 @@ td {
     <div
       class="table-overflow" 
       :style="`margin-left: ${tableMarginLeft()}px`"
+      v-show="!isTableLoading"
       >
 
       <table
@@ -225,6 +230,27 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
       @saveItem="saveItem"
     />
 
+    <v-row
+      v-show="isTableLoading"
+      class="align-top justify-center ma-0 partial-full-height"
+      >
+      <v-col class="text-center" cols="12">
+        <!-- <LogoAnimated
+          :yoyo="true"
+          :repeat="-1"
+          :animated="true"
+          :height="'200px'"
+          :noText="true"
+        /> -->
+        <v-skeleton-loader
+          class="mt-2 mb-3"
+          type="text"
+        />
+        <v-skeleton-loader
+          type="divider, table-row-divider@10"
+        />
+      </v-col>
+    </v-row>
 
     <!-- DEBUGGING -->
     <v-row class="text-caption" v-if="false">
@@ -270,7 +296,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         }
       },
       getCurrentTableFields(next, prev) {
-        this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
         if (next && this.tableId) {
           this.tableHeaders =  [ ...next ]
         }
@@ -296,9 +322,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         dialogEditRow: 0,
         headerResizingId: undefined,
 
-        // field models
-        fieldModel: undefined,
-
         // headers - fields
         tableHeaders: [],
         triggerGetColSize: 1,
@@ -319,12 +342,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
     },
     beforeMount () {
 
-      let emptyField = new Field()
-      this.fieldModel = {
-        infos: emptyField.infos,
-        auth: emptyField.auth,
-        meta: emptyField.meta,
-      }
       if (this.tableId) {
         this.resetDisplayedTables()
       }
@@ -350,6 +367,8 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        isTableLoading: (state) => state.tables.isLoading,
+        fieldModel: (state) => state.fields.itemModel,
       }),
       ...mapGetters({
         userId: 'user/userId',

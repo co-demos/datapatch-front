@@ -106,9 +106,9 @@ export default {
     }
   },
   beforeMount () {
-    this.log && console.log(`\nC-ModalTabs > beforeMount > this.itemType : `, this.itemType )
-    this.log && console.log(`C-ModalTabs > beforeMount > this.localItem : `, this.localItem )
-    this.log && console.log(`C-ModalTabs > beforeMount > this.itemModel : `, this.itemModel )
+    // this.log && console.log(`\nC-ModalTabs > beforeMount > this.itemType : `, this.itemType )
+    // this.log && console.log(`C-ModalTabs > beforeMount > this.localItem : `, this.localItem )
+    // this.log && console.log(`C-ModalTabs > beforeMount > this.itemModel : `, this.itemModel )
     this.tab = 0
     // this.tabsSpacesLocal = this.tabsSpaces
   },

@@ -7,6 +7,9 @@ export const state = () => ({
   helpersHs: helpHeadersFields, //.map( h => h.dataHelper ),
   addColHs: endHeadersFields, //.map( h => h.dataHelper ),
 
+  isLoading: false,
+  loadingItem: undefined,
+
   itemModel: {
     infos: emptyTable.infos,
     auth: emptyTable.auth,
@@ -103,6 +106,13 @@ export const getters = {
 
 export const mutations = {
 
+  setIsLoading (state, bool) {
+    state.isLoading = bool
+  },
+  setItemLoading (state, id) {
+    state.loadingItem = id
+  },
+
   setTablesNeedReload (state, bool) {
     state.needReload = bool
   },
@@ -160,7 +170,7 @@ export const mutations = {
     table[space] = items
   },
   updateInCurrentTable (state, {space, item}) {
-    // console.log('S-tables > updateInCurrentTable > space : ', space)
+    // console.log('\nS-tables > updateInCurrentTable > space : ', space)
     // console.log('S-tables > updateInCurrentTable > item : ', item)
     // console.log('S-tables > updateInCurrentTable > state.currentTableId : ', state.currentTableId)
     let table = state.currentTables.find( t => t.id === state.currentTableId)
@@ -182,6 +192,10 @@ export const mutations = {
 
 export const actions = {
 
+  togggleIsLoading({commit}, bool) {
+    commit('setIsLoading', bool)
+  },
+
   toggleTablesNeedReload ({ commit }, bool) {
     commit('setTablesNeedReload', bool)
     if (bool) {
@@ -194,10 +208,11 @@ export const actions = {
 
   // CURRENT TABLES
   setCurrentTables ({ commit }, { tables, tableId=undefined } ) {
-    console.log('S-tables > setCurrentTables > table : ', tables )
-    console.log('S-tables > setCurrentTables > tableId : ', tableId )
+    // console.log('S-tables > setCurrentTables > table : ', tables )
+    // console.log('S-tables > setCurrentTables > tableId : ', tableId )
     commit('setCurrentTableId', tableId || tables[0].id)
     commit('setCurrentTables', tables)
+    commit('setIsLoading', false)
   },
   setCurrentTableId ({ commit }, tableId) {
     commit('setCurrentTableId', tableId)

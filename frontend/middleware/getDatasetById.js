@@ -17,7 +17,7 @@ export default function ({
   // console.log("MW-getDatasetById > datasetId : ", datasetId)
 
   const tableId = route.params.table_id
-  console.log("MW-getDatasetById > tableId : ", tableId)
+  // console.log("MW-getDatasetById > tableId : ", tableId)
 
   const api = store.state.api
 
@@ -32,23 +32,23 @@ export default function ({
     let initDataset = $axios
       .get(`${api.datasets}/${datasetId}/`, config.headers)
       .then(resp => {
-        log && console.log('MW-getDatasetById > B1 > resp.data : ', resp.data)
+        // log && console.log('MW-getDatasetById > B1 > resp.data : ', resp.data)
         store.dispatch('datasets/setCurrentItem', resp.data)
         let dataset = resp.data
 
         // get data from first table in dataset's tables array
         const tablemetaId = parseInt(tableId) || resp.data.tables[0].id
-        console.log("MW-getDatasetById > tablemetaId : ", tablemetaId)
+        // console.log("MW-getDatasetById > tablemetaId : ", tablemetaId)
 
         let initTableData = $axios
           .get(`${api.tables}/${tablemetaId}/data`, config.headers)
           .then( respTable => {
-            log && console.log('MW-getDatasetById > B2 > respTable.data : ', respTable.data)
-            log && console.log('MW-getDatasetById > B2 > dataset 1 : ', dataset)
+            // log && console.log('MW-getDatasetById > B2 > respTable.data : ', respTable.data)
+            // log && console.log('MW-getDatasetById > B2 > dataset 1 : ', dataset)
             let table = dataset.tables.find(t => t.id === tablemetaId )
-            log && console.log('MW-getDatasetById > B2 > table : ', table)
+            // log && console.log('MW-getDatasetById > B2 > table : ', table)
             table.table_data = respTable.data
-            log && console.log('MW-getDatasetById > B2 > dataset.tables : ', dataset.tables )
+            // log && console.log('MW-getDatasetById > B2 > dataset.tables : ', dataset.tables )
             store.dispatch('tables/resetCurrentTables')
             store.dispatch('tables/setCurrentTables', { tables: dataset.tables, tableId: tablemetaId } )
             // store.dispatch('tables/setCurrentTableId', tablemetaId )

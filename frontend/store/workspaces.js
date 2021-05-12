@@ -5,6 +5,10 @@ let emptyWorkspace = new Workspace()
 export const state = () => ({
   uxWorkspaces: {},
 
+  isLoading: false,
+  loadingItem: undefined,
+  // loadingItems: [],
+
   userWorkspaces: [],
   sharedWorkspaces: [],
 
@@ -25,6 +29,11 @@ export const state = () => ({
 
 
 export const getters = {
+  // getLoadingById: (state) => (id) => {
+  //   let itemLoading = state.loadingItems.find(item => item.id === id )
+  //   return itemLoading && itemLoading.isLoading
+  // },
+
   getUserUx: (state) => {
     return state.uxWorkspaces
   },
@@ -44,6 +53,18 @@ export const getters = {
 }
 
 export const mutations = {
+
+  setIsLoading (state, bool) {
+    state.isLoading = bool
+  },
+  setItemLoading (state, id) {
+    state.loadingItem = id
+  },
+  // setItemsLoading (state, itemLoading) {
+  //   let itemLoadingIdx = state.loadingItems.findIndex( it => it.id === itemLoading.id )
+  //   itemLoadingIdx === -1 ? state.loadingItems.push(itemLoading) : state.loadingItems[itemLoadingIdx] = itemLoading
+  // },
+
   setItems (state, {space, items}) {
     // console.log('S-workspaces > setUserItems > items : ', items)
     // console.log('S-workspaces > setUserItems > items : ', items)
@@ -68,6 +89,10 @@ export const mutations = {
 }
 
 export const actions = {
+
+  togggleIsLoading({commit}, bool) {
+    commit('setIsLoading', bool)
+  },
 
   populateUserUX ({ commit }, ux_prefs) {
     commit('setItems', {space: 'uxWorkspaces', items: ux_prefs})

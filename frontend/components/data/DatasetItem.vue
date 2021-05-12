@@ -19,289 +19,317 @@
 </style>
 
 <template>
+  <div>
 
-  <v-row
-    v-if="ds"
-    class="pl-2 align-center justify-left"
-    >
-
-    <!-- ADD DATASET BTN -->
-    <v-col
-      v-if="action === 'create'"
-      cols="3"
-      class="align-center"
-      >
-      <v-menu
-        open-on-hover
-        offset-x
-        >
-        <template v-slot:activator="{ on, attrs, value }">
-
-          <v-avatar
-            :color="`${value ? 'primary' : 'grey lighten-2'}`"
-            class="ml-1"
-            rounded
-            :size="heightAvatar"
-            v-bind="attrs"
-            v-on="on"
-            @click.stop="dialogCreate += 1"
-            >
-            <!-- @click.stop="dialog += 1" -->
-            <v-icon dark>
-              icon-plus
-            </v-icon>
-          </v-avatar>
-
-        </template>
-
-        <v-list dense>
-        
-          <v-subheader class="pa-5 text-uppercase">
-            {{ $t('datasets.newDataset') }}
-          </v-subheader>
-
-          <v-list-item
-            v-for="importOption in importOptions"
-            :key="importOption.value"
-            v-if="!importOption.disabled"
-            @click.stop="openCreateWithPreset(importOption.value)"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                {{ importOption.icon }}
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t(importOption.title) }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-        </v-list>
-
-      </v-menu>
-    </v-col>
-
-    <!-- NEW DATASET MESSAGE -->
-    <v-col v-if="isAlone" cols="8 " class="pa-0">
-      <p class="text-body-2 grey--text pt-0 ma-0">
-        {{ $t('datasets.newDataset') }}
-        <!-- <br> wsId: {{ fromWorkspace }} -->
-      </p>
-    </v-col>
-
-    <!-- DIALOG FOR DATASET CREATION -->
-    <ModalCreateDataset
-      :parentDialog="dialogCreate"
-      :item="ds"
-      :fromWorkspace="fromWorkspace"
-      :itemModel="itemModel"
-      :itemType="itemType"
-      :action="action"
-      :apiUrl="apiUrl"
-      :presetCreate="presetCreate"
-      @createItem="createDataset"
-    />
-
-
-    <!-- DATASET CARD -->
-    <v-col
-      v-if="action === 'update'"
-      cols="11"
-      class="pr-1"
-      >
-      <nuxt-link
-        :to="`/dataset/${ds.id}`"
-        class="ml-0 no-decoration text-none"
-        >
-        <v-card 
-          v-if="action !== 'create'"
-          flat
-          outlined
-          :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
-          :color="`${hover ? 'white' : 'grey lighten-4'}`"
-          @mouseover="hover = true"
-          @mouseleave="hover = false"
-          >
-          <v-card-actions class="pa-0">
-
-            <v-row
-              class="align-center wrap justify-left flex-grow-1"
-              >
-
-              <!-- DATASET AVATAR -->
-              <v-col cols="3" class="pa-3">
-                <ItemAvatar
-                  :item="ds"
-                  :hover="hover"
-                  :heightAvatar="heightAvatar"
-                />
-              </v-col>
-
-              <!-- DATASET TITLE -->
-              <v-col cols="9" class="align-center pl-0 py-1">
-                <p
-                  :class="`text-body-2 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
-                  >
-                  <!-- id: {{ ds }} -->
-                  {{ ds.title }} 
-                </p>
-                <p class="caption pa-0 ma-0 text-lowercase font-italic">
-                  {{ ds.tables.length }} {{ $tc('dataPackage.table', ds.tables.length) }}
-                </p>
-              </v-col>
-
-            </v-row>
-
-          </v-card-actions>
-          
-
-        </v-card>
-      </nuxt-link>
-    </v-col>
-
-    <!-- DATASET BTNS -->
-    <v-col 
-      v-if="action !== 'create'"
-      cols="1"
-      class="ma-0 pa-0"
-      >
-      <v-menu
-        bottom
-        open-on-hover
-        >
-        <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
-          <v-btn
-            x-small
-            icon
-            class="pl-0 tex-none"
-            v-bind="{...attrsMenu}"
-            v-on="{...onMenu}"
-            @click.stop="dialog += 1"
-            >
-            <v-icon small>
-              icon-more-vertical
-              <!-- icon-chevron-down1 -->
-            </v-icon>
-          </v-btn>
-        </template>
-
-
-        <!-- <MenuList
-          :items="itemsSettings"
-        />
-        <v-divider class="bg-white"/>
-        <MenuList
-          :items="itemsShare"
-        />
-        <v-divider class="bg-white"/>
-        <MenuList
-          :items="itemsDelete"
-        /> -->
-
-        <v-list dense>
-        
-          <v-subheader class="pa-5 text-uppercase">
-            {{ $t('datasets.prefsDataset') }}
-          </v-subheader>
-
-          <v-list-item
-            @click.stop="dialog += 1"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-hash
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('datasets.editDataset') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item
-            disabled
-            @click.stop="dialog += 1"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-copy
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('datasets.copyDataset') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider/>
-
-          <v-list-item
-            disabled
-            @click.stop="dialog += 1"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-user-plus
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('datasets.inviteDataset') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider/>
-
-          <v-list-item
-            @click.stop="dialogDelete += 1"
-            >
-            <!-- @click.stop="deleteDataset()" -->
-            <v-list-item-action>
-              <v-icon small>
-                icon-trash-2
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('datasets.deleteDataset') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-        </v-list>
-
-      </v-menu>
-    </v-col>
-    
-    <!-- DIALOG FOR DATASET INFOS -->
-    <ModalItem
+    <v-row
       v-if="ds"
-      :parentDialog="dialog"
-      :item="ds"
-      :fromWorkspace="fromWorkspace"
-      :itemModel="action === 'update' ? itemModelMeta : itemModel"
-      :itemType="itemType"
-      :action="action"
-      :apiUrl="apiUrl"
-      @createItem="createDataset"
-    />
+      v-show="!currentLoadingState"
+      class="pl-2 align-center justify-left"
+      >
 
-    <!-- DIALOG FOR DATASET DELETE -->
-    <ModalDelete
-      :parentDialog="dialogDelete"
-      :confirmDeleteTitle="$t('datasets.deleteDataset')"
-      :confirmDeleteMsg="$t('datasets.deleteDatasetConfirm')"
-      :itemToDelete="ds"
-      @confirmDelete="deleteDataset()"
-    />
+      <!-- ADD DATASET BTN -->
+      <v-col
+        v-if="action === 'create'"
+        v-show="!isLoading"
+        cols="3"
+        class="align-center"
+        >
+        <v-menu
+          open-on-hover
+          offset-x
+          >
+          <template v-slot:activator="{ on, attrs, value }">
 
-  </v-row>
+            <v-avatar
+              :color="`${value ? 'primary' : 'grey lighten-2'}`"
+              class="ml-1"
+              rounded
+              :size="heightAvatar"
+              v-bind="attrs"
+              v-on="on"
+              @click.stop="dialogCreate += 1"
+              >
+              <!-- @click.stop="dialog += 1" -->
+              <v-icon dark>
+                icon-plus
+              </v-icon>
+            </v-avatar>
 
+          </template>
+
+          <v-list dense>
+          
+            <v-subheader class="pa-5 text-uppercase">
+              {{ $t('datasets.newDataset') }}
+            </v-subheader>
+
+            <v-list-item
+              v-for="importOption in importOptions"
+              :key="importOption.value"
+              v-if="!importOption.disabled"
+              @click.stop="openCreateWithPreset(importOption.value)"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  {{ importOption.icon }}
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t(importOption.title) }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+
+        </v-menu>
+      </v-col>
+
+      <!-- NEW DATASET MESSAGE -->
+      <v-col v-if="isAlone && !isLoading" cols="8 " class="pa-0">
+        <p class="text-body-2 grey--text pt-0 ma-0">
+          {{ $t('datasets.newDataset') }}
+          <!-- <br> wsId: {{ fromWorkspace }} -->
+        </p>
+      </v-col>
+
+      <!-- DIALOG FOR DATASET CREATION -->
+      <ModalCreateDataset
+        :parentDialog="dialogCreate"
+        :item="ds"
+        :fromWorkspace="fromWorkspace"
+        :itemModel="itemModel"
+        :itemType="itemType"
+        :action="action"
+        :apiUrl="apiUrl"
+        :presetCreate="presetCreate"
+        @createItem="createDataset"
+      />
+
+      <!-- DATASET CARD -->
+      <v-col
+        v-if="action === 'update'"
+        cols="11"
+        class="pr-1"
+        >
+        <nuxt-link
+          :to="`/dataset/${ds.id}`"
+          class="ml-0 no-decoration text-none"
+          >
+          <v-card 
+            v-if="action !== 'create'"
+            flat
+            outlined
+            :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
+            :color="`${hover ? 'white' : 'grey lighten-4'}`"
+            @mouseover="hover = true"
+            @mouseleave="hover = false"
+            >
+            <v-card-actions class="pa-0">
+
+              <v-row
+                class="align-center wrap justify-left flex-grow-1"
+                >
+
+                <!-- DATASET AVATAR -->
+                <v-col cols="3" class="pa-3">
+                  <ItemAvatar
+                    :item="ds"
+                    :hover="hover"
+                    :heightAvatar="heightAvatar"
+                  />
+                </v-col>
+
+                <!-- DATASET TITLE -->
+                <v-col cols="9" class="align-center pl-0 py-1">
+                  <p
+                    :class="`text-body-2 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
+                    >
+                    <!-- id: {{ ds }} -->
+                    {{ ds.title }} 
+                  </p>
+                  <p class="caption pa-0 ma-0 text-lowercase font-italic">
+                    {{ ds.tables.length }} {{ $tc('dataPackage.table', ds.tables.length) }}
+                    <!-- - {{ datasetId }} -->
+                    <!-- - {{ ds.id }} -->
+                    <!-- - {{ currentLoadingState }} -->
+                  </p>
+                </v-col>
+
+              </v-row>
+
+            </v-card-actions>
+            
+          </v-card>
+        </nuxt-link>
+      </v-col>
+
+      <!-- DATASET BTNS -->
+      <v-col 
+        v-if="action !== 'create'"
+        cols="1"
+        class="ma-0 pa-0"
+        >
+        <v-menu
+          bottom
+          open-on-hover
+          >
+          <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
+            <v-btn
+              x-small
+              icon
+              class="pl-0 tex-none"
+              v-bind="{...attrsMenu}"
+              v-on="{...onMenu}"
+              @click.stop="dialog += 1"
+              >
+              <v-icon small>
+                icon-more-vertical
+                <!-- icon-chevron-down1 -->
+              </v-icon>
+            </v-btn>
+          </template>
+
+
+          <!-- <MenuList
+            :items="itemsSettings"
+          />
+          <v-divider class="bg-white"/>
+          <MenuList
+            :items="itemsShare"
+          />
+          <v-divider class="bg-white"/>
+          <MenuList
+            :items="itemsDelete"
+          /> -->
+
+          <v-list dense>
+          
+            <v-subheader class="pa-5 text-uppercase">
+              {{ $t('datasets.prefsDataset') }}
+            </v-subheader>
+
+            <v-list-item
+              @click.stop="dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-hash
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.editDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item
+              disabled
+              @click.stop="dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-copy
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.copyDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider/>
+
+            <v-list-item
+              disabled
+              @click.stop="dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-user-plus
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.inviteDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider/>
+
+            <v-list-item
+              @click.stop="dialogDelete += 1"
+              >
+              <!-- @click.stop="deleteDataset()" -->
+              <v-list-item-action>
+                <v-icon small>
+                  icon-trash-2
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.deleteDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+
+        </v-menu>
+      </v-col>
+      
+      <!-- DIALOG FOR DATASET INFOS -->
+      <ModalItem
+        v-if="ds"
+        :parentDialog="dialog"
+        :item="ds"
+        :fromWorkspace="fromWorkspace"
+        :itemModel="action === 'update' ? itemModelMeta : itemModel"
+        :itemType="itemType"
+        :action="action"
+        :apiUrl="apiUrl"
+        @createItem="createDataset"
+      />
+
+      <!-- DIALOG FOR DATASET DELETE -->
+      <ModalDelete
+        :parentDialog="dialogDelete"
+        :confirmDeleteTitle="$t('datasets.deleteDataset')"
+        :confirmDeleteMsg="$t('datasets.deleteDatasetConfirm')"
+        :itemToDelete="ds"
+        @confirmDelete="deleteDataset()"
+      />
+
+    </v-row>
+
+    <v-row
+      v-show="currentLoadingState"
+      class="ma-0 align-center"
+      >
+      <!-- v-show="true" -->
+      <!-- <v-col cols="3" class="px-4">
+        <v-skeleton-loader
+          type="button"
+        />
+      </v-col>
+      <v-col cols="9" class="pl-0 mt-2 pr-5">
+        <v-skeleton-loader
+          type="text, text"
+        />
+      </v-col> -->
+      <v-col cols="11" class="pa-0 ma-0 ml-2">
+        <v-skeleton-loader
+          type="image"
+          max-height="50px"
+        />
+      </v-col>
+    </v-row>
+
+  </div>
 </template>
 
 
@@ -330,6 +358,8 @@
         dialogCreate:0,
         dialogDelete: 0,
 
+        isLoading: false,
+
         presetCreate: undefined,
         importOptions: importOptionsInfos,
 
@@ -340,28 +370,6 @@
         ds: undefined,
         apiUrl: undefined,
 
-        // itemsCreate: [
-        //   { title: 'datasets.importData', icon: 'icon-download', function: 'importData' },
-        //   { title: 'datasets.blankDataset', icon: 'icon-edit-3', function: 'blankDataset' },
-        //   { title: 'datasets.pasteDataset', icon: 'icon-copy', function: 'pasteDataset' },
-        // ],
-
-        // itemsSettings: [
-        //   // { title: 'datasets.renameDataset', icon: 'icon-edit-3', function: 'importData' },
-        //   { title: 'datasets.prefsDataset', icon: 'icon-settings', function: 'importData' },
-        //   { title: 'datasets.copyDataset', icon: 'icon-copy', function: 'importData' },
-        // ],
-        // itemsShare: [
-        //   { title: 'datasets.inviteDataset', icon: 'icon-user-plus', menu: [] },
-        // ],
-
-        // infos: [
-        //   { title: 'dataPackage.description', key: 'description' },
-        //   { title: 'dataPackage.owner', key: 'owner' },
-        //   { title: 'dataPackage.creationDate', key: 'creationDate' },
-        //   { title: 'dataPackage.licence', key: 'licence' },
-        //   { title: 'dataPackage.id', key: 'id' },
-        // ]
       }
     },
     watch: {
@@ -379,16 +387,25 @@
       }
     },
     beforeMount () {
-      // this.log && console.log(`\nC-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
+      this.isLoading = true
+    },
+    mounted () {
+      // this.log && console.log(`\nC-DatasetItem > ${this.action} > mounted > this.datasetId :`, this.datasetId)
 
       if (this.action === 'update') {
-        // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
-        this.ds = this.getUserDatasetById(this.datasetId)
+        // this.log && console.log(`C-DatasetItem > ${this.action} > mounted > this.datasetId :`, this.datasetId)
+        setTimeout(() => {
+          this.ds = this.getUserDatasetById(this.datasetId)
+          this.isLoading = false
+        }, 200)
       } else {
-        // this.log && console.log("\nC-DatasetItem > beforeMount > this.dataset :", this.dataset)
-        this.resetEmptyDataset()
+        // this.log && console.log("\nC-DatasetItem > mounted > this.dataset :", this.dataset)
+        setTimeout(() => {
+          this.resetEmptyDataset()
+          this.isLoading = false
+        }, 100)
       }
-      // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.ds :`, this.ds)
+      // this.log && console.log(`C-DatasetItem > ${this.action} > mounted > this.ds :`, this.ds)
       this.apiUrl =  this.api[this.itemType]
     },
     computed: {
@@ -396,21 +413,29 @@
         log: (state) => state.log,
         api: (state) => state.api,
         itemModel: (state) => state.datasets.itemModel,
-        itemModelMeta: (state) => state.datasets.itemModelMeta
+        itemModelMeta: (state) => state.datasets.itemModelMeta,
+        loadingItem: (state) => state.datasets.loadingItem,
       }),
       ...mapGetters({
         userId: 'user/userId',
         getUserWorkspaces: 'workspaces/getUserItems',
         getUserWorkspaceById: 'workspaces/getUserItemById',
         getUserDatasetById: 'datasets/getUserItemById',
+        // getLoading: 'datasets/getLoadingById',
         headerUser: 'user/headerUser'
       }),
       currentDataset() {
-        let dsId = this.datasetId
-        return dsId && this.getUserDatasetById(dsId)
+        // let dsId = this.datasetId
+        return this.getUserDatasetById(this.datasetId)
+      },
+      currentLoadingState() {
+        return this.action === 'update' && this.loadingItem === this.datasetId
       },
     },
     methods: {
+      // currentLoadingState() {
+      //   return this.loadingItem === this.datasetId
+      // },
       openCreateWithPreset (preset) {
         this.log && console.log("C-DatasetItem > openCreateWithPreset > preset :", preset)
         this.presetCreate = preset

@@ -210,11 +210,20 @@
         xl="4"
         >
         <!-- <code>{{ dsId }}</code> -->
-        <DatasetItem 
+        <DatasetItem
+          v-show="!isWorkspacesLoading"
           :datasetId="dsId"
           :fromWorkspace="ws.id"
           :action="'update'"
         />
+        
+        <v-skeleton-loader
+          v-show="isWorkspacesLoading"
+          class="ml-2 mr-0 my-3"
+          max-width="300"
+          type="text"
+        />
+
       </v-col>
       
       <!-- add new dataset -->
@@ -227,7 +236,8 @@
         lg="4"
         xl="3"
         >
-        <DatasetItem 
+        <DatasetItem
+          v-show="!isWorkspacesLoading"
           :fromWorkspace="ws.id"
           :action="'create'"
           :isAlone="!Boolean(datasets.length)"
@@ -244,7 +254,7 @@
 
   import { mapState, mapGetters } from 'vuex'
   // import { configHeaders } from '@/utils/utilsAxios'
-  import { Workspace } from '@/utils/utilsWorkspaces'
+  // import { Workspace } from '@/utils/utilsWorkspaces'
   // import { Dataset } from '@/utils/utilsDatasets'
 
   export default {
@@ -292,6 +302,9 @@
       // this.log && console.log('\nC-WorkspaceItem > beforeMount > this.ws :' , this.ws)
       this.getDatasets(this.workspace)
     },
+    // mounted () {
+    //   this.$store.dispatch('workspaces/togggleIsLoading', false)
+    // },
     computed: {
       dragOptions() {
         return {
@@ -305,12 +318,14 @@
         log: (state) => state.log,
         api: (state) => state.api,
         itemModel: (state) => state.workspaces.itemModel,
+        isWorkspacesLoading: (state) => state.workspaces.isLoading
       }),
       ...mapGetters({
         userId: 'user/userId',
         uxWorkspaces: 'workspaces/getUserUx',
+        getLoading: 'workspaces/getLoadingById',
         userDatasets: 'datasets/getUserItems',
-        headerUser: 'user/headerUser'
+        headerUser: 'user/headerUser',
       })
     },
     methods: {

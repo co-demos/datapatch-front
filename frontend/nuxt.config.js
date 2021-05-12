@@ -67,7 +67,8 @@ export default {
     prefetchLinks: false,
     middleware: [
       'resetDialogs',
-      'checkUserToken'
+      'checkUserAccessToken',
+      'populateUserItems'
     ]
   },
 
