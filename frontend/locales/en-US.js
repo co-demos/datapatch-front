@@ -237,7 +237,7 @@ export default {
     workspace: 'Workspace', 
     dataset: 'Dataset', 
     datasets: 'Datasets', 
-    table: 'Table', 
+    table: 'Table | Tables', 
     tables: 'Tables', 
     schema: 'Schema', 
     schemas: 'Schemas',
@@ -315,6 +315,11 @@ export default {
     pasteTable: 'Copy-paste a table',
     deleteTable: 'Delete this table',
     deleteTableConfirm: 'Are you sure you want to delete this table ?',
+
+    stepChoose: "Choose an import format",
+    stepImport: "Import your data",
+    stepMeta: "Metadata",
+    stepCreateEnd: "Create your table",
   },
   fields: {
     newField: 'field',

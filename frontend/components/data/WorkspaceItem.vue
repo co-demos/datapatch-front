@@ -74,7 +74,7 @@
         <v-list dense>
         
           <v-subheader class="pa-5 text-uppercase">
-            {{ $t('buttons.options') }}
+            {{ $t('workspaces.prefsWorkspace') }}
           </v-subheader>
 
           <v-list-item
@@ -266,7 +266,7 @@
         drag: false,
         itemType: 'workspaces',
 
-        itemModel:  undefined,
+        // itemModel:  undefined,
         ws: this.workspace,
         datasets: [],
 
@@ -291,13 +291,6 @@
       this.ws = { ...this.workspace }
       // this.log && console.log('\nC-WorkspaceItem > beforeMount > this.ws :' , this.ws)
       this.getDatasets(this.workspace)
-      let emptyWorkspace = new Workspace()
-      this.itemModel = {
-        infos: emptyWorkspace.infos,
-        auth: emptyWorkspace.auth,
-        prefs: emptyWorkspace.prefs,
-        meta: emptyWorkspace.meta
-      }
     },
     computed: {
       dragOptions() {
@@ -311,6 +304,7 @@
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        itemModel: (state) => state.workspaces.itemModel,
       }),
       ...mapGetters({
         userId: 'user/userId',

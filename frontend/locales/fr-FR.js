@@ -239,7 +239,7 @@ export default {
     workspace: 'Espace de travail',
     dataset: 'Jeu de données', 
     datasets: 'Jeux de données', 
-    table: 'Table', 
+    table: 'Table | Tables', 
     tables: 'Tables', 
     schema: 'Schema', 
     schemas: 'Schemas',
@@ -317,6 +317,11 @@ export default {
     pasteTable: 'Copier-coller une table',
     deleteTable: 'Supprimer cette table',
     deleteTableConfirm: 'Etes-vous sûr.e de vouloir supprimer cette table ?',
+
+    stepChoose: "Choisir un format d'import",
+    stepImport: "Importer vos données",
+    stepMeta: "Métadonnées",
+    stepCreateEnd: "Créer votre table",
   },
   fields: {
     newField: 'champ',

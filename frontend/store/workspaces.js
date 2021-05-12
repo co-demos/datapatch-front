@@ -1,11 +1,25 @@
 import { Workspace } from '@/utils/utilsWorkspaces.js' 
 
+let emptyWorkspace = new Workspace()
 
 export const state = () => ({
   uxWorkspaces: {},
 
   userWorkspaces: [],
   sharedWorkspaces: [],
+
+  itemModel: {
+    infos: emptyWorkspace.infos,
+    auth: emptyWorkspace.auth,
+    prefs: emptyWorkspace.prefs,
+    // meta: emptyWorkspace.meta
+  },
+  itemModelMeta: {
+    infos: emptyWorkspace.infos,
+    auth: emptyWorkspace.auth,
+    prefs: emptyWorkspace.prefs,
+    meta: emptyWorkspace.meta
+  },
 
 })
 

@@ -49,7 +49,7 @@ export default function ({
             log && console.log('MW-getDatasetById > B2 > table : ', table)
             table.table_data = respTable.data
             log && console.log('MW-getDatasetById > B2 > dataset.tables : ', dataset.tables )
-            // store.dispatch('tables/resetCurrentTables')
+            store.dispatch('tables/resetCurrentTables')
             store.dispatch('tables/setCurrentTables', { tables: dataset.tables, tableId: tablemetaId } )
             // store.dispatch('tables/setCurrentTableId', tablemetaId )
           })

@@ -27,7 +27,7 @@
           filled
           hide-details="auto"
           clearable
-          v-model="localItem[model.value]"
+          v-model="localItem[modelKey(model)]"
           dense
           @input="updateItemDebounced()"
         />
@@ -37,7 +37,7 @@
           filled
           rows="3"
           hide-details="auto"
-          v-model="localItem[model.value]"
+          v-model="localItem[modelKey(model)]"
           dense
           @input="updateItemDebounced()"
         />
@@ -47,7 +47,7 @@
           filled
           rows="3"
           hide-details="auto"
-          v-model="localItem[model.value]"
+          v-model="localItem[modelKey(model)]"
           dense
           @input="updateItemDebounced()"
         />
@@ -57,7 +57,7 @@
           filled
           hide-details="auto"
           clearable
-          v-model="localItem[model.value]"
+          v-model="localItem[modelKey(model)]"
           dense
           @input="updateItemDebounced()"
         />
@@ -123,7 +123,7 @@
       ...mapGetters({
         getUserWorkspaceById: 'workspaces/getUserItemById',
         headerUser: 'user/headerUser'
-      })
+      }),
     },
     beforeMount () {
       // this.log && console.log('C-ModalFields > beforeMount > this.apiUrl :' , this.apiUrl)
@@ -137,6 +137,10 @@
       },
       fieldText(type) {
         return FindFieldText(type)
+      },
+      modelKey(model) {
+        const key = this.onlyLocalUpdate ? model.value : model.field_code
+        return key
       },
       updateItemDebounced() {
         // cancel pending call

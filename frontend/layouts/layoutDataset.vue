@@ -26,6 +26,7 @@
 <script>
 
 export default {
+  name: 'layoutDataset',
   components: {
     DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
     BasicFooter: () => import('@/components/footers/BasicFooter.vue'),

@@ -42,7 +42,7 @@
       </v-col> -->
 
       <v-col 
-        cols="9"
+        cols="10"
         class="offset-1"
         >
 
@@ -147,7 +147,6 @@ export default {
         }
       ],
       itemType: 'workspaces',
-      itemModel: undefined,
       apiUrl: undefined,
       newWorkspace: undefined,
       emptyWorkspace: undefined,
@@ -181,6 +180,7 @@ export default {
       log: (state) => state.log,
       appTitle: (state) => state.appTitle,
       api: (state) => state.api,
+      itemModel: (state) => state.workspaces.itemModel,
     }),
     ...mapGetters({
       isAuthenticated: 'user/isAuthenticated',
@@ -215,12 +215,6 @@ export default {
       // emptyWorkspace.randomBasics = true
       this.emptyWorkspace = emptyWorkspace.data
       this.newWorkspace = emptyWorkspace.data
-      this.itemModel = {
-        infos: emptyWorkspace.infos,
-        auth: emptyWorkspace.auth,
-        prefs: emptyWorkspace.prefs,
-        // meta: emptyWorkspace.meta
-      }
     },
     createWorkspace(itemPayload) {
       // this.log && console.log("\nP-Workspaces > createWorkspace > itemPayload : ", itemPayload)

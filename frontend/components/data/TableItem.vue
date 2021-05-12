@@ -111,6 +111,7 @@
 
     <!-- DIALOG FOR TABLE INFOS -->
     <ModalItem
+      v-if="table"
       :parentDialog="dialog"
       :item="table"
       :itemModel="itemModel"
@@ -122,6 +123,7 @@
 
     <!-- DIALOG FOR WORKSPACE DELETE -->
     <ModalDelete
+      v-if="table"
       :parentDialog="dialogDelete"
       :confirmDeleteTitle="$t('tables.deleteTable')"
       :confirmDeleteMsg="$t('tables.deleteTableConfirm')"

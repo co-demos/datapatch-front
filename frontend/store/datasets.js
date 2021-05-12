@@ -1,11 +1,25 @@
 import { Dataset } from '@/utils/utilsDatasets.js' 
 
+let emptyDataset = new Dataset()
 
 export const state = () => ({
   currentDataset: undefined,
 
   userDatasets: [],
   shareddatasets: [],
+
+  itemModel: {
+    infos: emptyDataset.infos,
+    auth: emptyDataset.auth,
+    prefs: emptyDataset.prefs,
+  },
+
+  itemModelMeta: {
+    infos: emptyDataset.infos,
+    auth: emptyDataset.auth,
+    prefs: emptyDataset.prefs,
+    meta: emptyDataset.meta,
+  },
 
 })
 

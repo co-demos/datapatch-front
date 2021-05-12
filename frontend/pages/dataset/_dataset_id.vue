@@ -7,6 +7,21 @@
       :onlyErrors="true"
     />
 
+    <!-- DEBUGGING -->
+    <v-row class="text-caption" v-if="false">
+      <v-col cols="12">
+        <h5>
+          <hr> DEBUG FROM : _dataset_id.vue
+        </h5>
+      </v-col>
+      <v-col cols="12">
+        itemType : <code>{{ itemType }}</code><br>
+        dialog : <code>{{ dialog }}</code><br>
+        currentDataset : <code>{{ currentDataset }}</code><br>
+        currentDataset : <code>{{ currentDataset }}</code><br>
+      </v-col>
+    </v-row>
+
     <!-- DATASET TITLE TOOLBAR -->
     <v-toolbar
       flat
@@ -45,6 +60,7 @@
 
     <!-- DIALOG FOR DATASET INFOS -->
     <ModalItem
+      v-if="currentDataset"
       :parentDialog="dialog"
       :item="currentDataset"
       :itemModel="itemModel"
@@ -70,7 +86,7 @@
 
   export default {
     name: 'Dataset',
-    layout: 'dataset',
+    layout: 'layoutDataset',
     middleware: [
       'getDatasetById'
     ],
@@ -100,7 +116,6 @@
           },
         ],
         itemType: 'datasets',
-        itemModel: undefined,
 
         tablesBlank: [],
 
@@ -120,13 +135,6 @@
       this.pathItems.push(pathData)
       this.updatePath(this.pathItems)
 
-      let emptyDataset = new Dataset()
-      this.itemModel = {
-        infos: emptyDataset.infos,
-        auth: emptyDataset.auth,
-        prefs: emptyDataset.prefs,
-      }
-
       // this.tablesBlank = CreateBlankTable(
       //   this.userId,
       //   this.$t('tables.defaultTitle'),
@@ -140,6 +148,7 @@
         log: (state) => state.log,
         appTitle: (state) => state.appTitle,
         api: (state) => state.api,
+        itemModel: (state) => state.datasets.itemModel,
       }),
       ...mapGetters({
         userId: 'user/userId',

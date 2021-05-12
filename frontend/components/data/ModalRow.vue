@@ -32,6 +32,7 @@
 
       <v-card-text class="my-4">
 
+        onlyLocalUpdate : <code>{{ onlyLocalUpdate }}</code><br>
         <!-- localItem : <code><pre>{{ localItem }}</pre></code><br> -->
         <!-- itemModel : <code><pre>{{ itemModel.filter(h => !h.helpHeader) }}</pre></code><br> -->
         

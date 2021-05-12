@@ -1,10 +1,16 @@
 import { Field, helpHeadersFields, endHeadersFields } from '@/utils/utilsFields'
-import { TableMetadata } from '@/utils/utilsTables.js' 
+import { TableMetaData } from '@/utils/utilsTables.js' 
 
+let emptyTable = new TableMetaData()
 
 export const state = () => ({
   helpersHs: helpHeadersFields, //.map( h => h.dataHelper ),
   addColHs: endHeadersFields, //.map( h => h.dataHelper ),
+
+  itemModel: {
+    infos: emptyTable.infos,
+    auth: emptyTable.auth,
+  },
 
   needReload: false,
   needRedraw: false,
@@ -12,6 +18,11 @@ export const state = () => ({
   currentTableId: undefined,
   currentTables: undefined,
   selectedRows: {},
+
+  tempTableId: undefined,
+  tempTables: undefined,
+  tempSelectedRows: {},
+
 })
 
 export const getters = {

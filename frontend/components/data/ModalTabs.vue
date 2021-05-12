@@ -33,10 +33,6 @@
 
     <!-- TABS -->
     <v-row dense>
-    <!-- <v-toolbar
-      flat dense
-      class=""
-      > -->
       <v-col class="offset-3">
         <v-tabs
           v-model="tab"
@@ -54,7 +50,6 @@
           </v-tab>
         </v-tabs>
       </v-col>
-    <!-- </v-toolbar> -->
     </v-row>
 
     <!-- TABS ITEMS -->
@@ -69,6 +64,7 @@
         >
         <v-card-text>
           <ModalFields
+            v-if="localItem"
             :item="localItem"
             :itemModel="itemModel[tabname]"
             :itemType="itemType"
@@ -110,6 +106,9 @@ export default {
     }
   },
   beforeMount () {
+    this.log && console.log(`\nC-ModalTabs > beforeMount > this.itemType : `, this.itemType )
+    this.log && console.log(`C-ModalTabs > beforeMount > this.localItem : `, this.localItem )
+    this.log && console.log(`C-ModalTabs > beforeMount > this.itemModel : `, this.itemModel )
     this.tab = 0
     // this.tabsSpacesLocal = this.tabsSpaces
   },

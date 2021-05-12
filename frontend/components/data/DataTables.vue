@@ -77,9 +77,11 @@
       v-if="tab"
       :class="`align-center justify-center ${fromCreate ? '' : getDatasetColor} my-0 pl-5 pt-0 flex-grow-0`"
       >
+
+      <!-- ADD TABLE -->
       <v-col cols="1" class="pa-0 text-center">
 
-        <v-tooltip right>
+        <!-- <v-tooltip right>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
@@ -101,17 +103,81 @@
           <span>
             {{ $t('tables.addTable') }}
           </span>
-        </v-tooltip>
+        </v-tooltip> -->
 
+        <v-menu
+          v-if="currentDataset"
+          open-on-hover
+          offset-x
+          >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              small
+              :color="`${ fromCreate ? 'primary' : 'white' }`"
+              :class="`mb-2 mx-0`"
+              v-bind="attrs"
+              v-on="on"
+              @click.stop="fromCreate ? addTable() : dialogCreate += 1"
+              >
+              <v-icon
+                small
+                :class="`font-weight-bold`"
+                >
+                icon-plus
+              </v-icon>
+            </v-btn>
+          </template>
+
+          <v-list dense>
+          
+            <v-subheader class="pa-5 text-uppercase">
+              {{ $t('tables.newTable') }}
+            </v-subheader>
+
+            <v-list-item
+              v-for="importOption in importOptions"
+              :key="importOption.value"
+              v-if="!importOption.disabled"
+              @click.stop="openCreateWithPreset(importOption.value)"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  {{ importOption.icon }}
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t(importOption.title) }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+        </v-menu>
+
+        <!-- DIALOG FOR DATASET CREATION -->
+        <ModalCreateTable
+          v-if="currentDataset"
+          :parentDialog="dialogCreate"
+          :item="currentDataset"
+          :fromWorkspace="false"
+          :itemModel="itemModel"
+          :itemType="itemType"
+          :action="'create'"
+          :apiUrl="apiUrl"
+          :presetCreate="presetCreate"
+          @createItem="false"
+        />
 
       </v-col>
 
+      <!-- TABLE TABS -->
       <v-col 
         :cols="fromCreate ? 10 : 9" 
         class="pa-0"
         >
 
-        <!-- TABLE TABS -->
         <v-row class="ma-0">
           <draggable
             v-model="tables"
@@ -140,6 +206,7 @@
 
       <v-spacer/>
 
+      <!-- COMMENTS -->
       <v-col 
         v-if="!fromCreate"
         cols="1" class="pr-5 pt-0 pb-2 ma-0"
@@ -168,13 +235,6 @@
         cols="12"
         class="ma-0 pt-0"
         >
-        <!-- <DataTable
-          :datasetItem="currentDataset"
-          :tableId="getCurrentTableId"
-          :noToolbar="noToolbar"
-          :fromCreate="fromCreate"
-          :fulllWidth="true"
-        /> -->
 
         <DataPatchTools
           v-if="!noToolbar"
@@ -199,10 +259,14 @@
 
   import { mapState, mapGetters, mapActions } from 'vuex'
 
-  import { TableMetaData, CreateEmptyBlankTable } from '@/utils/utilsTables'
+  import { CreateEmptyBlankTable } from '@/utils/utilsTables'
+  import { importOptionsInfos } from '@/utils/utilsImports.js'
 
   export default {
     name: 'DataTables',
+    components: {
+      ModalCreateTable: () => import(/* webpackChunkName: "ModalCreateTable" */ '@/components/data/table/ModalCreateTable.vue'),
+    },
     props: [
       'currentDataset',
       'noToolbar',
@@ -232,9 +296,13 @@
     data () {
       return {
         itemType: 'tables',
-        itemModel: undefined,
+        apiUurl: undefined,
 
         drag: false,
+
+        dialogCreate: 0,
+        presetCreate: undefined,
+        importOptions: importOptionsInfos,
 
         tab: undefined,
         tables: undefined,
@@ -243,13 +311,7 @@
     },
     beforeMount () {
 
-      // create model
-      let emptyTable = new TableMetaData()
-      this.itemModel = {
-        infos: emptyTable.infos,
-        auth: emptyTable.auth,
-      }
-      // this.log && console.log(`\nC-DataTables > beforeMount > emptyTable : `, emptyTable)
+      this.apiUrl =  this.api[this.itemType]
 
       // set default tab
       // this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
@@ -274,6 +336,7 @@
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        itemModel: (state) => state.tables.itemModel,
       }),
       ...mapGetters({
         userId: 'user/userId',
@@ -297,6 +360,7 @@
       }),
       async changeTab(tableId) {
         let datasetId = this.currentDataset.id
+        
         if (!this.fromCreate) {
           const tablemetaId = tableId
           // this.log && console.log('C-DataTables > this.$route : ', this.$route)
@@ -313,12 +377,18 @@
           this.log && console.log('C-DataTables > table : ', table)
           this.updateTable(table)
         }
+
         this.tab = tableId
         this.setCurrentTableId(tableId)
       },
+      openCreateWithPreset (preset) {
+        this.log && console.log("C-DataTables > openCreateWithPreset > preset :", preset)
+        this.presetCreate = preset
+        this.dialogCreate += 1
+      },
       updateTablesOrder() {
         this.log && console.log(`\nC-DataTables > updateTablesOrder > this.tables : `, this.tables)
-        this.setCurrentTables({tables: this.tables})
+        this.setCurrentTables({tables: this.tables, tableId: this.tab})
       },
       addTable() {
         let existingIds = this.getCurrentTables.map(t => t.id)

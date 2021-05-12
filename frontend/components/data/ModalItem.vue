@@ -71,8 +71,9 @@
         <v-col cols="12">
           itemType : <code>{{ itemType }}</code><br>
           action : <code>{{ action }}</code><br>
-          onlyLocalUpdate : <code>{{ onlyLocalUpdate }}</code><br>
-          localItem : <code>{{ localItem }}</code><br>
+          onlyLocalUpdate : <code>{{ onlyLocalUpdate }}</code><hr>
+          localItem.title : <code>{{ localItem && localItem.title }}</code><hr>
+          itemModel : <code>{{ itemModel }}</code><hr>
           <!-- <span v-if="itemType === 'fields'">
             localItem.data : <code>{{ localItem.data }}</code><br>
           </span> -->
@@ -80,6 +81,7 @@
       </v-row>
 
       <ModalTabs
+        v-if="localItem && itemModel"
         :tabsSpaces="tabsSpaces"
         :localItem="localItem"
         :itemType="itemType"
@@ -191,8 +193,8 @@
       item () {
         this.rebuildLocalItem()
       },
-      parentDialog () {
-        this.dialog = true
+      parentDialog (next) {
+        this.dialog = next
       },
     },
     data () {

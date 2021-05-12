@@ -57,7 +57,7 @@
         <v-list dense>
         
           <v-subheader class="pa-5 text-uppercase">
-            {{ $t('buttons.options') }}
+            {{ $t('datasets.newDataset') }}
           </v-subheader>
 
           <v-list-item
@@ -140,18 +140,23 @@
               </v-col>
 
               <!-- DATASET TITLE -->
-              <v-col cols="9" class="pl-0 py-1">
+              <v-col cols="9" class="align-center pl-0 py-1">
                 <p
                   :class="`text-body-2 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
                   >
-                  <!-- id: {{ ds.id }} - -->
+                  <!-- id: {{ ds }} -->
                   {{ ds.title }} 
+                </p>
+                <p class="caption pa-0 ma-0 text-lowercase font-italic">
+                  {{ ds.tables.length }} {{ $tc('dataPackage.table', ds.tables.length) }}
                 </p>
               </v-col>
 
             </v-row>
 
           </v-card-actions>
+          
+
         </v-card>
       </nuxt-link>
     </v-col>
@@ -198,7 +203,7 @@
         <v-list dense>
         
           <v-subheader class="pa-5 text-uppercase">
-            {{ $t('buttons.options') }}
+            {{ $t('datasets.prefsDataset') }}
           </v-subheader>
 
           <v-list-item
@@ -211,7 +216,7 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>
-                {{ $t('datasets.prefsDataset') }}
+                {{ $t('datasets.editDataset') }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -275,10 +280,11 @@
     
     <!-- DIALOG FOR DATASET INFOS -->
     <ModalItem
+      v-if="ds"
       :parentDialog="dialog"
       :item="ds"
       :fromWorkspace="fromWorkspace"
-      :itemModel="itemModel"
+      :itemModel="action === 'update' ? itemModelMeta : itemModel"
       :itemType="itemType"
       :action="action"
       :apiUrl="apiUrl"
@@ -332,7 +338,6 @@
         
         itemType: 'datasets',
         ds: undefined,
-        itemModel: undefined,
         apiUrl: undefined,
 
         // itemsCreate: [
@@ -375,15 +380,9 @@
     },
     beforeMount () {
       // this.log && console.log(`\nC-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
-      let emptyDataset = new Dataset()
-      this.itemModel = {
-        infos: emptyDataset.infos,
-        auth: emptyDataset.auth,
-        prefs: emptyDataset.prefs,
-      }
+
       if (this.action === 'update') {
         // this.log && console.log(`C-DatasetItem > ${this.action} > beforeMount > this.datasetId :`, this.datasetId)
-        this.itemModel.meta = emptyDataset.meta
         this.ds = this.getUserDatasetById(this.datasetId)
       } else {
         // this.log && console.log("\nC-DatasetItem > beforeMount > this.dataset :", this.dataset)
@@ -396,6 +395,8 @@
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        itemModel: (state) => state.datasets.itemModel,
+        itemModelMeta: (state) => state.datasets.itemModelMeta
       }),
       ...mapGetters({
         userId: 'user/userId',
