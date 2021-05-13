@@ -219,7 +219,7 @@
       },
       updateItem() {
         if ( this.action === 'update' ){
-          // this.log && console.log('\nC-ModalFields > updateItem > this.itemType :' , this.itemType)
+          this.log && console.log('\nC-ModalFields > updateItem > this.itemType :' , this.itemType)
           // this.log && console.log('C-ModalFields > updateItem > this.item :' , this.item)
           // this.log && console.log('C-ModalFields > updateItem > this.apiUrl :' , this.apiUrl)
           // this.log && console.log('C-ModalFields > updateItem > this.needUpdateStore :' , this.needUpdateStore)

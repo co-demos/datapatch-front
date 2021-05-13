@@ -329,14 +329,15 @@
         this.$emit('editRow', this.rowId)
       },
       updateValue(e) {
-        // this.log && console.log(`C-DataPatchCell > updateValue > this.tableId : `, this.tableId)
-        // this.log && console.log(`C-DataPatchCell > updateValue > this.header.id : `, this.header.id)
-        // this.log && console.log(`C-DataPatchCell > updateValue > this.rowId : `, this.rowId)
-        // this.log && console.log(`C-DataPatchCell > updateValue > e : `, e)
+        this.log && console.log(`\nC-DataPatchCell > updateValue > this.tableId : `, this.tableId)
+        this.log && console.log(`C-DataPatchCell > updateValue > this.header.id : `, this.header.id)
+        this.log && console.log(`C-DataPatchCell > updateValue > this.rowId : `, this.rowId)
+        this.log && console.log(`C-DataPatchCell > updateValue > e : `, e)
         let cellData = {
           tableId : this.tableId,
           rowId : this.rowId,
           headerValue: this.header.value,
+          headerCode: this.header.field_code,
           value: e
         }
         // this.updateCellValueInTableData(cellData)

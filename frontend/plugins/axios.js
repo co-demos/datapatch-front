@@ -7,7 +7,7 @@ export default function ({ $axios, store }) {
   })
 
   $axios.onResponse(resp => {
-    // console.log(`PG-axios > resp : `, resp)
+    console.log(`PG-axios > resp : `, resp)
     store.dispatch('dialogs/commitIsLoading', false)
   })
 

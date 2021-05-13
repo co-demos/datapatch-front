@@ -51,7 +51,7 @@ export default function ({
       const initUserRequest = $axios
         .get(`${api.users}/verify-acces-token/`, config.headers)
         .then(resp => {
-          log && console.log('MW-checkUserAccessToken > B > me > resp.data : ', resp.data)
+          // log && console.log('MW-checkUserAccessToken > B > me > resp.data : ', resp.data)
           return
         })
         .catch(error => {

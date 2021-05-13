@@ -271,7 +271,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         <code><pre>{{ tableRows }}</pre></code>
       </v-col>
     </v-row>
-    <!-- <hr> -->
 
   </div>
 </template>
@@ -509,13 +508,54 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         this.dialogEditRow += 1
       },
       updateCellValue(cellData) {
-        // this.log && console.log(`\nC-DataPatchTable > updateCellValue ...`)
+        this.log && console.log(`\nC-DataPatchTable > updateCellValue ...`)
+        this.log && console.log(`C-DataPatchTable > updateCellValue > this.tableId : `, this.tableId)
+        this.log && console.log(`C-DataPatchTable > updateCellValue > this.onlyLocalUpdate : `, this.onlyLocalUpdate)
+        this.log && console.log(`C-DataPatchTable > updateCellValue > this.getCurrentTable : `, this.getCurrentTable)
+        this.log && console.log(`C-DataPatchTable > updateCellValue > cellData : `, cellData)
         this.updateCellValueInTableData(cellData)
-        // this.log && console.log(`C-DataPatchTable > updateCellValue > cellData : `, cellData)
+        if (!this.onlyLocalUpdate) {
+          const updatePayload = {
+            update_type: 'cell',
+            tablemeta_id: this.tableId,
+            table_data_uuid: this.getCurrentTable.table_data_uuid,
+            table_data_cell: {
+              row_id: cellData.rowId,
+              column: cellData.headerCode,
+              value: cellData.value,
+            },
+          }
+          this.log && console.log(`C-DataPatchTable > updateCellValue > updatePayload : `, updatePayload)
+          this.$axios
+            .put( `${this.api.tables}/${this.tableId}/data`, updatePayload, this.headerUser )
+            .then( resp => {
+                this.log && console.log('C-DataPatchTable > updateCellValue > resp.data : ', resp.data)
+            })
+        }
+
       },
       saveItem(rowData) {
-        // this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
+        this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
+        this.log && console.log(`C-DataPatchTable > saveItem > this.tableId : `, this.tableId)
+        this.log && console.log(`C-DataPatchTable > saveItem > this.onlyLocalUpdate : `, this.onlyLocalUpdate)
+        this.log && console.log(`C-DataPatchTable > saveItem > this.getCurrentTable : `, this.getCurrentTable)
+        this.log && console.log(`C-DataPatchTable > saveItem > cellData : `, rowData)
         this.updateRowInCurrentTableData(rowData)
+        if (!this.onlyLocalUpdate) {
+          const updatePayload = {
+            update_type: 'row',
+            tablemeta_id: this.tableId,
+            table_data_uuid: this.getCurrentTable.table_data_uuid,
+            table_data_row_id: rowData.id,
+            table_data_row: rowData,
+          }
+          this.log && console.log(`C-DataPatchTable > updateCellValue > updatePayload : `, updatePayload)
+          this.$axios
+            .put( `${this.api.tables}/${this.tableId}/data`, updatePayload, this.headerUser )
+            .then( resp => {
+                this.log && console.log('C-DataPatchTable > updateCellValue > resp.data : ', resp.data)
+            })
+        }
       },
       deleteRow(rowId) {
         this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
