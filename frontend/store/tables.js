@@ -51,8 +51,8 @@ export const getters = {
     return state.currentTables
   },
   getCurrentTable: (state) => {
-    // console.log('S-tables > getCurrentTable > state.currentTables : ', state.currentTables)
-    // console.log('S-tables > getCurrentTable > state.currentTableId : ', state.currentTableId)
+    console.log('S-tables > getCurrentTable > state.currentTables : ', state.currentTables)
+    console.log('S-tables > getCurrentTable > state.currentTableId : ', state.currentTableId)
     return state.currentTables && state.currentTables.find(t => t.id === state.currentTableId)
   },
   getTableById: (state) => (tableId) => {
@@ -100,6 +100,7 @@ export const getters = {
   },
   getCurrentTableRows: (state, getters) => {
     let currentTable = getters.getCurrentTable
+    console.log('S-tables > getCurrentTableRows > currentTable : ', currentTable)
     return currentTable && currentTable.table_data
   },
 }
@@ -184,8 +185,12 @@ export const mutations = {
   },
 
   deleteInCurrentTable (state, {space, itemId}) {
+    console.log('\nS-tables > deleteInCurrentTable > space : ', space)
+    console.log('S-tables > deleteInCurrentTable > itemId : ', itemId)
     let table = state.currentTables.find( t => t.id === state.currentTableId)
-    table[space] = table[space].filter(r => r.id !== itemId)
+    console.log('S-tables > deleteInCurrentTable > table[space].length A : ', table[space].length)
+    table[space] = [ ...table[space].filter(r => r.id !== itemId) ]
+    console.log('S-tables > deleteInCurrentTable > table[space].length B : ', table[space].length)
   },
 
 }
@@ -281,6 +286,8 @@ export const actions = {
   },
   deleteRowInCurrentTableData ({ commit, getters }, rowId) {
     commit('deleteInCurrentTable', {space: 'table_data', itemId: rowId})
+    const table = getters.getCurrentTable
+    console.log('S-tables > deleteRowInCurrentTableData > table : ', table)
     commit('setTablesNeedRedraw', true)
   },
 }

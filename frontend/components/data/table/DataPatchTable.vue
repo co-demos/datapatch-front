@@ -220,6 +220,9 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
 
     </div>
 
+    <!-- PAGINATION -->
+    <!-- TO DO -->
+
     <ModalRow
       :item="rowDataToEdit"
       :itemModel="tableHeaders"
@@ -379,6 +382,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         getTableById: 'tables/getTableById',
 
         getSelectedRowsForCurrentTable: 'tables/getSelectedRowsForCurrentTable',
+        getCurrentTable: 'tables/getCurrentTable',
         getCurrentTableFieldsDataLength: 'tables/getCurrentTableFieldsDataLength',
         getCurrentTableFields: 'tables/getCurrentTableFields',
         getCurrentTableRowsLength: 'tables/getCurrentTableRowsLength',
@@ -413,9 +417,12 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
           start: (this.tableOptions.page - 1) * this.tableOptions.itemsPerPage,
           end: this.tableOptions.itemsPerPage
         }
+        this.log && console.log(`\nC-DataPatchTable > redrawRows > this.getCurrentTable :`, this.getCurrentTable)
         // this.log && console.log(`\nC-DataPatchTable > redrawRows > this.getCurrentTableRows :`, this.getCurrentTableRows)
-        this.tableRows = [ ...this.getCurrentTableRows ].splice(paginer.start, paginer.end)
-        // this.log && console.log(`C-DataPatchTable > redrawRows > this.tableRows :`, this.tableRows)
+        let rows = this.getCurrentTable.table_data
+        // this.tableRows = [ ...this.getCurrentTableRows ].splice(paginer.start, paginer.end)
+        this.tableRows = [ ...rows ].splice(paginer.start, paginer.end)
+        this.log && console.log(`C-DataPatchTable > redrawRows > this.tableRows :`, this.tableRows)
         this.toggleTablesNeedRedraw(false)
       },
       hoverResize(headerId) {
@@ -488,10 +495,31 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         // this.log && console.log(`\nC-DataPatchTable > addRow ...`)
         // this.log && console.log(`C-DataPatchTable > addRow > this.tableHeaders : `, this.tableHeaders)
         let newRow = {}
-        this.tableHeaders.forEach( h => { if (!h.helpHeader) { newRow[h.value] = '' } } )
-        newRow.id = this.getCurrentTableRows.length + 1
-        // this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
-        this.appendRowToCurrentTableData(newRow)
+        if (!this.onlyLocalUpdate) {
+          this.tableHeaders.forEach( h => { if (!h.helpHeader) { newRow[h.field_code] = null } } )
+        } else {
+          this.tableHeaders.forEach( h => { if (!h.helpHeader) { newRow[h.value] = '' } } )
+        }
+        this.log && console.log(`C-DataPatchTable > addRow > newRow :`, newRow)
+        
+        if (!this.onlyLocalUpdate) {
+          const updatePayload = {
+            update_type: 'row',
+            tablemeta_id: this.tableId,
+            table_data_uuid: this.getCurrentTable.table_data_uuid,
+            table_data_row: newRow,
+          }
+          this.log && console.log(`C-DataPatchTable > addRow > updatePayload : `, updatePayload)
+          this.$axios
+            .put( `${this.api.tables}/${this.tableId}/data`, updatePayload, this.headerUser )
+            .then( resp => {
+              this.log && console.log('C-DataPatchTable > addRow > resp.data : ', resp.data)
+              this.appendRowToCurrentTableData(resp.data)
+            })
+        } else {
+          newRow.id = this.getCurrentTableRows.length + 1
+          this.appendRowToCurrentTableData(newRow)
+        }
       },
       toggleSelectRow(rowId) {
         if (!this.selectedRows.includes(rowId)) {
@@ -529,7 +557,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
           this.$axios
             .put( `${this.api.tables}/${this.tableId}/data`, updatePayload, this.headerUser )
             .then( resp => {
-                this.log && console.log('C-DataPatchTable > updateCellValue > resp.data : ', resp.data)
+              this.log && console.log('C-DataPatchTable > updateCellValue > resp.data : ', resp.data)
             })
         }
 
@@ -553,13 +581,30 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
           this.$axios
             .put( `${this.api.tables}/${this.tableId}/data`, updatePayload, this.headerUser )
             .then( resp => {
-                this.log && console.log('C-DataPatchTable > updateCellValue > resp.data : ', resp.data)
+              this.log && console.log('C-DataPatchTable > updateCellValue > resp.data : ', resp.data)
             })
         }
       },
       deleteRow(rowId) {
         this.log && console.log(`\nC-DataPatchTable > deleteRow ...`)
-        this.deleteRowInCurrentTableData(rowId)
+        if (!this.onlyLocalUpdate) {
+          const deletePayload = {
+            update_type: 'row',
+            tablemeta_id: this.tableId,
+            table_data_uuid: this.getCurrentTable.table_data_uuid,
+            table_data_row_id: rowId,
+          }
+          this.log && console.log(`C-DataPatchTable > deleteRow > deletePayload : `, deletePayload)
+          // this.log && console.log(`C-DataPatchTable > deleteRow > this.headerUser : `, this.headerUser)
+          this.$axios
+            .delete( `${this.api.tables}/${this.tableId}/data`, { data: deletePayload, ...this.headerUser } )
+            .then( resp => {
+              this.log && console.log('C-DataPatchTable > deleteRow > resp.data : ', resp.data)
+              this.deleteRowInCurrentTableData(resp.data.id)
+            })
+        } else {
+          this.deleteRowInCurrentTableData(rowId)
+        }
       },
     }
   }
