@@ -239,6 +239,7 @@
         <DataPatchTools
           v-if="!noToolbar"
           :tableId="tab"
+          v-model="tableOptions"
         />
 
         <!-- CUSTOM TABLE FOR DATA PATCH -->
@@ -307,6 +308,13 @@
         tab: undefined,
         tables: undefined,
 
+        tableOptions: {
+          search: '',
+          sortBy: undefined,
+          page: 1,
+          itemsPerPage: 20,
+          pagesTotal: 2,
+        },
       }
     },
     beforeMount () {

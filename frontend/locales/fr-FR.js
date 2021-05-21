@@ -300,6 +300,13 @@ export default {
     stepMeta: "Métadonnées",
     stepCreateEnd: "Créer votre jeu de données",
   },
+  pagination: {
+    page: "page {page} sur {pages}",
+    perPage: "entrées par page",
+    nextPage: "page suivante",
+    prevPage: "page précédente",
+    searchPlaceholder: "recherche dans cette table",
+  },
   tables: {
     title: 'Titre de la table',
     enterTitle: 'Entrez le titre de votre nouvelle table',

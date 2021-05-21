@@ -298,6 +298,13 @@ export default {
     stepMeta: "Metadata",
     stepCreateEnd: "Create your dataset",
   },
+  pagination: {
+    page: "page {page} of {pages}",
+    perPage: "entries per page",
+    nextPage: "next page",
+    prevPage: "previous page",
+    searchPlaceholder: "search within this table",
+  },
   tables: {
     title: 'Table title',
     enterTitle: 'Enter a title for your new table',

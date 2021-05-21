@@ -220,8 +220,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
 
     </div>
 
-    <!-- PAGINATION -->
-    <!-- TO DO -->
 
     <ModalRow
       :item="rowDataToEdit"
