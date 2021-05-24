@@ -14,10 +14,22 @@ export const itemTitleModel = [
 ]
 
 export const itemDescriptionModel = [ 
-    {
+  {
     name: 'description',
     field: 'textarea',
     label: 'dataPackage.description',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined
+  },
+]
+
+export const itemTagsModel = [ 
+  {
+    name: 'tags',
+    field: 'combobox',
+    label: 'dataPackage.tags',
     inModal: true,
     visible: true,
     readonly: false,

@@ -19,6 +19,7 @@ export class Workspace {
     // patch='owner-only',
     write='owner-only',
     manage='owner-only',
+    tags=[],
     ) {
     this.owner_id = owner_id
     this.id = id
@@ -33,6 +34,7 @@ export class Workspace {
     // this.patch = patch
     this.write = write
     this.manage = manage
+    this.tags = tags
   }
 
   get data () {
@@ -55,12 +57,14 @@ export class Workspace {
       manage: this.manage,
 
       itemType: this.itemType,
+      tags: this.tags
     }
   }
 
   get infos () {
     return [
       ...models.itemInfosModel,
+      ...models.itemTagsModel,
     ]
   }
   get auth () {

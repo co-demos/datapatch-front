@@ -5,9 +5,10 @@
 <template>
 
   <div>
-    <!-- <span class="black--text" >
-      {{ item }}
-    </span> -->
+    <!-- <span class="black--text" > -->
+      <!-- {{ item }} -->
+      <!-- - {{ itemType }} -->
+    <!-- </span> -->
     <v-avatar
       v-if="!noAvatar"
       :class="`${customClass ? customClass : 'ml-0'}`"
@@ -23,7 +24,7 @@
         >
         {{ item.icon }}
       </v-icon>
-      <v-icon v-else-if="noIconTypes.includes(item.itemType)" dark class="black--text">
+      <v-icon v-else-if="noIconTypes.includes(itemType)" dark class="black--text">
         icon-table
       </v-icon>
       <span v-else class="white--text body-1 no-decoration">
@@ -95,7 +96,7 @@ export default {
   ],
   data () {
     return {
-      noIconTypes: ['table', 'field']
+      noIconTypes: ['tables', 'field']
     }
   },
   methods: {

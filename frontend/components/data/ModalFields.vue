@@ -10,7 +10,12 @@
       class="align-top"
       >
 
-      <!-- <pre>{{ model }}</pre> -->
+      <!-- DEBUGGING -->
+      <code v-if="false && model.field === 'combobox'">
+        <!-- <pre>{{ localItem[model.name] }}</pre> -->
+        <pre>{{ localItem }}</pre>
+        <!-- <pre>{{ model }}</pre> -->
+      </code>
 
       <v-col cols="4">
         <v-subheader class="text-right">
@@ -18,7 +23,7 @@
         </v-subheader>
 
         <!-- DEBUGGING -->
-        <!-- <p class="text-caption"> -->
+        <p class="text-caption" v-if="false">
           <!-- <pre>
             {{ model.field === 'select' ? model.options : '' }}
           </pre> -->
@@ -26,12 +31,18 @@
             {{ model.field === 'select' ? model.options.items : '' }}
           </pre> -->
 
+          <!-- <code v-if="model.field === 'combobox'">
+            <pre>
+              {{ model.field === 'combobox' ? model.options : '' }}
+            </pre>
+          </code> -->
+
           <!-- <code v-if="model.field === 'checkbox'">
             - {{ findPreprendIcon(localItem[model.name], model) }}<br><br>
             - {{ localItem }}<br><br>
             - {{ model }}
           </code> -->
-        <!-- </p> -->
+        </p>
 
       </v-col>
     
@@ -73,6 +84,46 @@
           dense
           @input="updateItemDebounced()"
         />
+
+        <v-combobox
+          v-if="model.field === 'combobox'"
+          filled
+          multiple
+          class="mb-2"
+          hide-details="auto"
+          :hint="$t('dataPackage.tagsHint')"
+          persistent-hint
+          chips
+          :disabled="model.readonly"
+          :clearable="model.clearable"
+          v-model="localItem[model.name]"
+          :items="localItem[model.name] || comboboxItems"
+          dense
+          hide-selected
+          @change="splitAndUpdate(model)"
+          >
+          <template v-slot:selection="data">
+            <v-chip
+              v-bind="data.attrs"
+              :color="localItem.color || 'black'"
+              :input-value="data.selected"
+              class="mx-1"
+              label
+              small
+              >
+              <span class="pr-2 white--text">
+                {{ data.item }}
+              </span>
+              <v-icon
+                x-small
+                color="white"
+                @click="data.parent.selectItem(data.item)"
+                >
+                icon-clear
+              </v-icon>
+            </v-chip>
+          </template>
+        </v-combobox>
 
         <v-select
           v-if="model.field === 'select'"
@@ -163,6 +214,7 @@
         localItem: undefined,
         dialog: false,
         tab: null,
+        comboboxItems: []
       }
     },
     watch: {
@@ -207,6 +259,15 @@
           let item = model.options.items.find( i => i.value === valueStr.toString())
           return item.icon
         }
+      },
+      splitAndUpdate(model) {
+        let splitted = this.localItem[model.name].join(',').replace(/ /g, ',')
+        // this.log && console.log('C-ModalFields > splitAndUpdate > splitted 1 :' , splitted)
+        splitted = splitted.split(',').filter(el => el !== '')
+        // this.log && console.log('C-ModalFields > splitAndUpdate > splitted 2 :' , splitted)
+        this.localItem[model.name] = [...new Set(splitted)]
+        // this.log && console.log('C-ModalFields > splitAndUpdate > this.localItem[model.name] :' , this.localItem[model.name])
+        this.updateItemDebounced()
       },
       updateItemDebounced() {
         // cancel pending call

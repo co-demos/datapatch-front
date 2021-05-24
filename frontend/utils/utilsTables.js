@@ -26,6 +26,7 @@ export class TableMetaData {
     manage='owner-only',
 
     url=undefined,
+    tags=[]
     ) {
     this.owner_id = owner_id
     this.title = title
@@ -44,6 +45,7 @@ export class TableMetaData {
     this.manage = manage
 
     this.url = url
+    this.tags = tags 
   }
 
   set rebuild (obj) {
@@ -78,6 +80,7 @@ export class TableMetaData {
 
       itemType: this.itemType,
       importData: this.tImportData,
+      tags: this.tags,
     }
   }
 
@@ -85,6 +88,7 @@ export class TableMetaData {
     return [
       ...models.itemInfosModel,
       ...models.itemLicenceModel,
+      ...models.itemTagsModel,
     ]
   }
   get auth () {

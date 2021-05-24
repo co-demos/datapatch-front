@@ -31,6 +31,7 @@ export class Dataset {
     write='owner+groups',
     manage='owner-only',
     url=undefined,
+    tags=[],
     ) {
     this.owner_id = owner_id
     this.id = id
@@ -47,6 +48,7 @@ export class Dataset {
     this.patch = patch
     this.write = write
     this.manage = manage
+    this.tags = tags
   }
 
   get data () {
@@ -68,6 +70,7 @@ export class Dataset {
       manage: this.manage,
 
       itemType: this.itemType,
+      tags: this.tags,
     }
   }
 
@@ -75,6 +78,7 @@ export class Dataset {
     return [
       ...models.itemInfosModel,
       ...models.itemLicenceModel,
+      ...models.itemTagsModel,
     ]
   }
   get auth () {
