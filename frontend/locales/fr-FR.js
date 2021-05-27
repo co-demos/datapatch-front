@@ -281,7 +281,7 @@ export default {
     inviteGroup: 'Inviter une personne à rejoindre le groupe',
     prefsGroup: 'Préférences du groupe',
     renameGroup: 'Renommer le groupe',
-    addGroup: 'Ajouter un groupe',
+    addGroup: 'Créer un nouveau groupe',
     editGroup: 'Editer les information du groupe',
     deleteGroup: 'Supprimer ce groupe',
     deleteGroupConfirm: 'Etes-vous sûr.e de vouloir supprimer ce groupe ?',

@@ -63,6 +63,19 @@ export const itemUsersModel = [
   },
 ]
 
+export const itemUsersPendingModel = [ 
+  {
+    name: 'users_pending',
+    field: 'combobox',
+    label: 'dataPackage.users',
+    hint: 'dataPackage.usersHint',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined
+  },
+]
+
 export const itemInviteesModel = [ 
   {
     name: 'invitees',
@@ -194,6 +207,7 @@ export const itemPrefsModel = [
         'icon-message-square',
         'icon-layers',
         'icon-globe',
+        'icon-users',
         'icon-bookmark',
         'icon-camera',
         'icon-at-sign',

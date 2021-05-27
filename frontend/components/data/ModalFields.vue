@@ -119,7 +119,7 @@
               v-bind="data.attrs"
               :color="localItem.color || 'black'"
               :input-value="data.selected"
-              class="mx-1"
+              class="mr-1 my-1"
               label
               small
               >

@@ -4,39 +4,71 @@
 
     <v-row
       fill-height
-      class="justify-center align-top"
+      class="justify-center align-top mt-5"
       >
 
       <v-col 
         cols="10"
         class="offset-1"
         >
-
+        
         <!-- GROUPS / DRAGGABLE -->
         <draggable
           v-model="myGroups"
           v-bind="dragOptions"
           draggable=".group"
           group="groups"
+          class="row wrap align-center"
           @start="drag=true"
           @end="drag=false; updateGroupPositions()"
           >
-          <!-- <GroupItem
+          <v-col
             v-for="grp in myGroups"
-            :key="grp.id"
-            :group="grp"
-            :apiUrl="apiUrl"
-            :dragging="drag"
-          /> -->
+            :key="`grp-${grp.id}`"
+            class="pt-0 group"
+            cols="6"
+            xs="6"
+            sm="6"
+            md="4"
+            lg="3"
+            xl="3"
+            >
+            <GroupItem
+              :groupId="grp.id"
+              :group="grp"
+              :apiUrl="apiUrl"
+              :action="'update'"
+              :dragging="drag"
+            />
+            <!-- <div
+              v-for="grp in myGroups"
+              :key="grp.id"
+              class="group mb-3"
+            >
+            <code>{{ grp }}</code>
+            </div> -->
+          </v-col>
         </draggable>
-        
+
+      </v-col>
+    </v-row>
+
+    <v-row
+      fill-height
+      class="justify-center align-top mt-5"
+      >
+      <v-col 
+        cols="10"
+        class="offset-1"
+        >
+
         <!-- ADD GROUP -->
         <v-card
           class="mb-5 pb-5 pl-2"
           flat
           >
 
-          <v-card-title v-if="! myGroups.length">
+          <v-card-title v-if="!myGroups.length">
             {{ $t('groups.defaultHelp') }}
           </v-card-title>
 
@@ -60,7 +92,7 @@
           <ModalItem
             :item="newGroup"
             :noAvatar="true"
-            :itemModel="itemModel"
+            :itemModel="itemModelNew"
             :parentDialog="dialog"
             :itemType="itemType"
             :action="'create'"
@@ -70,7 +102,6 @@
           />
 
         </v-card>
-
       </v-col>
     </v-row>
 
@@ -88,7 +119,7 @@
     name: 'Groups',
     layout: 'layoutListings',
     components: {
-      // GroupItem: () => import(/* webpackChunkName: "GroupItem" */ '@/components/data/GroupItem.vue'),
+      GroupItem: () => import(/* webpackChunkName: "GroupItem" */ '@/components/data/GroupItem.vue'),
     },
     head() {
       return {
@@ -144,6 +175,7 @@
         appTitle: (state) => state.appTitle,
         api: (state) => state.api,
         itemModel: (state) => state.groups.itemModel,
+        itemModelNew: (state) => state.groups.itemModelNew,
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
@@ -178,8 +210,7 @@
         this.newGroup = emptyGroup.data
       },
       createGroup(itemPayload) {
-        // this.log && console.log("\nP-Groups > createGroup > itemPayload : ", itemPayload)
-        // let now = new Date(Date.now())
+        this.log && console.log("\nP-Groups > createGroup > itemPayload : ", itemPayload)
         this.$axios
           .post(`${this.api.groups}/`, itemPayload, this.headerUser)
           .then(resp => {

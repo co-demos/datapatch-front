@@ -62,6 +62,7 @@ export default function ({
             store.dispatch('user/authenticateUser', {access_token: accessTokenCookie, token_type: 'Bearer'})
             const userData = resp.data
             store.dispatch('user/populateUser', userData)
+            store.dispatch('groups/populateUserItems', userData.groups)
             store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
             store.dispatch('datasets/populateUserItems', userData.my_datasets)
             store.dispatch('workspaces/populateUserUX', userData.ux_workspaces)

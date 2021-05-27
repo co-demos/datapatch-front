@@ -279,7 +279,7 @@ export default {
     inviteGroup: 'Invite people to the group',
     prefsGroup: 'Group preferences',
     renameGroup: 'Rename the group',
-    addGroup: 'Add a group',
+    addGroup: 'Create a new group',
     editGroup: 'Edit group infos',
     deleteGroup: 'Delete this group',
     deleteGroupConfirm: 'Are you sure you want to delete this group ?',

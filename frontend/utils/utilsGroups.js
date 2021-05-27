@@ -10,6 +10,7 @@ export class Group {
     description='My group description',
     creationDate=undefined,
     users=[],
+    users_pending=[],
     id=undefined,
     color='black',
     icon='icon-users',
@@ -22,7 +23,9 @@ export class Group {
     this.id = id
     this.title = title
     this.description = description
+
     this.users = users
+    this.users_pending = users_pending
 
     this.creationDate = creationDate
 
@@ -41,8 +44,10 @@ export class Group {
       owner_id: this.owner,
       id: this.id,
       title: this.title,
-      description: this.description, 
+      description: this.description,
+
       users: this.users,
+      users_pending: this.users_pending,
 
       creationDate: this.creationDate,
 
@@ -58,10 +63,19 @@ export class Group {
     }
   }
 
+  get infos_new () {
+    return [
+      ...models.itemInfosModel,
+      ...models.itemUsersPendingModel,
+      ...models.itemTagsModel,
+    ]
+  }
+
   get infos () {
     return [
       ...models.itemInfosModel,
       ...models.itemUsersModel,
+      ...models.itemUsersPendingModel,
       ...models.itemTagsModel,
     ]
   }

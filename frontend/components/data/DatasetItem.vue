@@ -10,12 +10,7 @@
   .btn-dataset-title {
     white-space: normal !important;
   }
-  .ds-title{
-    /* display: flex;
-    flex: 1 0 auto; */
-    /* min-width: 100% !important; */
-    /* flex-grow: 1; */
-  }
+
 </style>
 
 <template>
@@ -118,7 +113,6 @@
           class="ml-0 no-decoration text-none"
           >
           <v-card 
-            v-if="action !== 'create'"
             flat
             outlined
             :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
@@ -126,6 +120,7 @@
             @mouseover="hover = true"
             @mouseleave="hover = false"
             >
+            <!-- v-if="action !== 'create'" -->
             <v-card-actions class="pa-0">
 
               <v-row
@@ -425,7 +420,6 @@
         headerUser: 'user/headerUser'
       }),
       currentDataset() {
-        // let dsId = this.datasetId
         return this.getUserDatasetById(this.datasetId)
       },
       currentLoadingState() {

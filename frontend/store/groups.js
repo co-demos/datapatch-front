@@ -16,6 +16,11 @@ export const state = () => ({
     auth: emptyGroup.auth,
     prefs: emptyGroup.prefs,
   },
+  itemModelNew: {
+    infos: emptyGroup.infos_new,
+    auth: emptyGroup.auth,
+    prefs: emptyGroup.prefs,
+  },
   itemModelMeta: {
     infos: emptyGroup.infos,
     auth: emptyGroup.auth,
