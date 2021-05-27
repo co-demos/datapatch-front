@@ -30,7 +30,7 @@
             xs="6"
             sm="6"
             md="4"
-            lg="3"
+            lg="4"
             xl="3"
             >
             <GroupItem
@@ -91,7 +91,7 @@
           <!-- DIALOG FOR NEW GROUP INFOS -->
           <ModalItem
             :item="newGroup"
-            :noAvatar="true"
+            :noAvatar="false"
             :itemModel="itemModelNew"
             :parentDialog="dialog"
             :itemType="itemType"

@@ -50,12 +50,17 @@
               >
               {{ localItem.text }}
             </span>
+
             <!-- SUBTITLE MODAL -->
             <span v-if="itemType === 'fields'" class="caption">
               <br> 
               {{ $t('dataPackage.fieldType')}} 
               {{ $t(fieldText(localItem.field_type)) }}
             </span>
+
+            <p class="caption font-italic mt-1 mb-0">
+              {{ $t(`dataPackage.${itemType.slice(0, -1)}`) }}
+            </p>
 
           </v-col>
         </v-row>
