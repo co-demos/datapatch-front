@@ -122,10 +122,11 @@ export class configApp {
 
     this.apiUrlUsers = `${this.apiUrlBackendPrefix}${env.NUXT_API_USERS}`;
     this.apiUrlGroups = `${this.apiUrlBackendPrefix}${env.NUXT_API_GROUPS}`;
+    this.apiUrlInvitations = `${this.apiUrlBackendPrefix}${env.NUXT_API_INVITATIONS}`;
     this.apiUrlWorkspaces = `${this.apiUrlBackendPrefix}${env.NUXT_API_WORKSPACES}`;
     this.apiUrlDatasets = `${this.apiUrlBackendPrefix}${env.NUXT_API_DATASETS}`;
     this.apiUrlTables = `${this.apiUrlBackendPrefix}${env.NUXT_API_TABLES}`;
-    this.apiUrlTableData = `${this.apiUrlBackendPrefix}${env.NUXT_API_TABLE_DATA}`;
+    // this.apiUrlTableData = `${this.apiUrlBackendPrefix}${env.NUXT_API_TABLE_DATA}`;
     this.apiUrlSchemas = `${this.apiUrlBackendPrefix}${env.NUXT_API_SCHEMAS}`;
     this.apiUrlFields = `${this.apiUrlBackendPrefix}${env.NUXT_API_FIELDS}`;
     this.apiUrlComments = `${this.apiUrlBackendPrefix}${env.NUXT_API_COMMENTS}`;
@@ -159,10 +160,11 @@ export class configApp {
 
       users: this.apiUrlUsers,
       groups: this.apiUrlGroups,
+      invitations: this.apiUrlInvitations,
       workspaces: this.apiUrlWorkspaces,
       datasets: this.apiUrlDatasets,
       tables: this.apiUrlTables,
-      table_data: this.apiUrlTableData,
+      // table_data: this.apiUrlTableData,
       schemas: this.apiUrlSchemas,
       fields: this.apiUrlFields,
       comments: this.apiUrlComments,

@@ -1,22 +1,19 @@
 import * as models from '@/utils/utilsModels.js'
-// import { AuthsModels } from '@/utils/utilsAuths.js'
 
-export class Workspace {
+export class Group {
 
-  static itemType = 'workspace'
+  static itemType = 'group'
 
   constructor (
     owner_id=undefined,
-    title='My new workspace',
-    description='My workspace description',
+    title='My new group',
+    description='My group description',
     creationDate=undefined,
+    users=[],
     id=undefined,
     color='black',
-    icon='icon-apps',
-    datasets=[],
+    icon='icon-users',
     read='owner-only',
-    // comment='owner-only',
-    // patch='owner-only',
     write='owner-only',
     manage='owner-only',
     tags=[],
@@ -25,15 +22,17 @@ export class Workspace {
     this.id = id
     this.title = title
     this.description = description
+    this.users = users
+
     this.creationDate = creationDate
+
     this.color = color
     this.icon = icon
-    this.datasets = datasets
+    
     this.read = read
-    // this.comment = comment
-    // this.patch = patch
     this.write = write
     this.manage = manage
+
     this.tags = tags
   }
 
@@ -43,27 +42,26 @@ export class Workspace {
       id: this.id,
       title: this.title,
       description: this.description, 
+      users: this.users,
+
       creationDate: this.creationDate,
 
       color: this.color,
       icon: this.icon,
 
-      datasets: this.datasets,
-
       read: this.read,
-      // comment: this.comment,
-      // patch: this.patch,
       write: this.write,
       manage: this.manage,
 
       itemType: this.itemType,
-      tags: this.tags
+      tags: this.tags,
     }
   }
 
   get infos () {
     return [
       ...models.itemInfosModel,
+      ...models.itemUsersModel,
       ...models.itemTagsModel,
     ]
   }
@@ -81,12 +79,6 @@ export class Workspace {
     return [
       ...models.itemMetaModel,
     ]
-  }
-
-  set randomBasics (value) {
-    let iconsList = models.itemPrefsModel.find(pref => pref.name === 'icon').options.items
-    const randomIconIdx = Math.floor(Math.random() * iconsList.length);
-    this.icon = iconsList[randomIconIdx]
   }
 
  }

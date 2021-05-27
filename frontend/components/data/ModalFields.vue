@@ -17,8 +17,8 @@
         <!-- <pre>{{ model }}</pre> -->
       </code>
 
-      <v-col cols="4">
-        <v-subheader class="text-right">
+      <v-col cols="4" class="">
+        <v-subheader class="">
           {{ $t(model.label) }} :
         </v-subheader>
 
@@ -72,6 +72,18 @@
           @input="updateItemDebounced()"
         />
 
+        <v-text-field
+          v-if="model.field === 'integer'"
+          filled
+          hide-details="auto"
+          type="number"
+          :disabled="model.readonly"
+          :clearable="model.clearable"
+          v-model="localItem[model.name]"
+          dense
+          @input="updateItemDebounced()"
+        />
+
         <v-textarea
           v-if="model.field === 'textarea'"
           filled
@@ -91,7 +103,7 @@
           multiple
           class="mb-2"
           hide-details="auto"
-          :hint="$t('dataPackage.tagsHint')"
+          :hint="$t(model.hint)"
           persistent-hint
           chips
           :disabled="model.readonly"

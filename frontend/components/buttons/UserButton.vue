@@ -80,14 +80,19 @@ export default {
           to: '/me'
         },
         {
+          icon: 'icon-bell',
+          title: 'pages.notifications',
+          to: '/notifications'
+        },
+        {
           icon: 'icon-users',
           title: 'pages.groups',
           to: '/groups'
         },
         {
-          icon: 'icon-bell',
-          title: 'pages.notifications',
-          to: '/notifications'
+          icon: 'icon-user-plus',
+          title: 'pages.invitations',
+          to: '/invitations'
         },
       ],
       itemsUserLogout:  [

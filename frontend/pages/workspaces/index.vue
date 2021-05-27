@@ -1,11 +1,6 @@
 <template>
 
-  <v-container class="mt-8 mb-12">
-
-    <AlertSnack
-      :position="'bottom'"
-      :onlyErrors="true"
-    />
+  <v-container class="mb-12">
 
     <v-row
       fill-height
@@ -117,132 +112,133 @@
 
 <script>
 
-import { mapState, mapGetters, mapActions } from 'vuex'
-import { Workspace } from '@/utils/utilsWorkspaces'
-import { mapOrder } from '@/utils/utilsFunctions'
+  import { mapState, mapGetters, mapActions } from 'vuex'
+  import { Workspace } from '@/utils/utilsWorkspaces'
+  import { mapOrder } from '@/utils/utilsFunctions'
 
-export default {
-  name: 'Workspaces',
-  components: {
-    WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
-    DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
-  },
-  head() {
-    return {
-      title: `${this.appTitle} - ${this.$t('pages.workspaces')}`,
-      htmlAttrs: {
-        lang: this.$i18n.locale
-      },
-    }
-  },
-  data () {
-    return {
-      dialog: 0,
-      drag: false,
-      pathItems: [
-        { 
-          text: 'pages.workspaces',
-          disabled: true,
-          to: '/workspaces',
-        }
-      ],
-      itemType: 'workspaces',
-      apiUrl: undefined,
-      newWorkspace: undefined,
-      emptyWorkspace: undefined,
-      myWorkspaces: [],
-    }
-  },
-  beforeMount () {
-    this.updatePath(this.pathItems)
-    this.orderWorkspaces()
-    this.resetEmptyWorkspace()
-    this.apiUrl = this.api[this.itemType]
-  },
-  watch: {
-    userWorkspaces (next) {
-      // this.log && console.log("P-Workspaces > watch > userWorkspaces > next : ", next)
-      this.orderWorkspaces()
-      // this.resetEmptyWorkspace()
-      this.updateWorkspacePositions()
-    }
-  },
-  computed: {
-    dragOptions() {
+  export default {
+    name: 'Workspaces',
+    layout: 'layoutListings',
+    components: {
+      WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
+      DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
+    },
+    head() {
       return {
-        animation: 200,
-        group: "workspaces",
-        disabled: false,
-        ghostClass: "ghost"
+        title: `${this.appTitle} - ${this.$t('pages.workspaces')}`,
+        htmlAttrs: {
+          lang: this.$i18n.locale
+        },
       }
     },
-    ...mapState({
-      log: (state) => state.log,
-      appTitle: (state) => state.appTitle,
-      api: (state) => state.api,
-      itemModel: (state) => state.workspaces.itemModel,
-    }),
-    ...mapGetters({
-      isAuthenticated: 'user/isAuthenticated',
-      userId: 'user/userId',
-      uxWorkspaces: 'workspaces/getUserUx',
-      userWorkspaces: 'workspaces/getUserItems',
-      sharedWorkspaces: 'workspaces/getSharedItems',
-      userDatasets: 'datasets/getUserItems',
-      sharedDatasets: 'datasets/getSharedItems',
-      headerUser: 'user/headerUser'
-    })
-  },
-  methods: {
-    ...mapActions({
-      updatePath: 'updateCrumbsPath',
-    }),
-    orderWorkspaces() {
-      if (this.uxWorkspaces && this.uxWorkspaces.workspaces_order) {
-        const workspaces_order = this.uxWorkspaces.workspaces_order
-        this.myWorkspaces = mapOrder( [...this.userWorkspaces], workspaces_order, 'id')
-      } else {
-      // this.myWorkspaces =[ ...this.userWorkspaces, ...this.myWorkspacesDummies ]
-        this.myWorkspaces = [...this.userWorkspaces]
+    data () {
+      return {
+        dialog: 0,
+        drag: false,
+        pathItems: [
+          { 
+            text: 'pages.workspaces',
+            disabled: true,
+            to: '/workspaces',
+          }
+        ],
+        itemType: 'workspaces',
+        apiUrl: undefined,
+        newWorkspace: undefined,
+        emptyWorkspace: undefined,
+        myWorkspaces: [],
       }
     },
-    resetEmptyWorkspace() {
-      let emptyWorkspace = new Workspace(
-        this.userId,
-        this.$t('workspaces.defaultTitle'),
-        this.$t('workspaces.defaultDescription'),
-      )
-      // emptyWorkspace.randomBasics = true
-      this.emptyWorkspace = emptyWorkspace.data
-      this.newWorkspace = emptyWorkspace.data
+    beforeMount () {
+      this.updatePath(this.pathItems)
+      this.orderWorkspaces()
+      this.resetEmptyWorkspace()
+      this.apiUrl = this.api[this.itemType]
     },
-    createWorkspace(itemPayload) {
-      // this.log && console.log("\nP-Workspaces > createWorkspace > itemPayload : ", itemPayload)
-      // let now = new Date(Date.now())
-      this.$axios
-        .post(`${this.api.workspaces}/`, itemPayload, this.headerUser)
-        .then(resp => {
-          this.$store.dispatch(`workspaces/appendUserItem`, resp.data)
-          this.resetEmptyWorkspace()
-        })
+    watch: {
+      userWorkspaces (next) {
+        // this.log && console.log("P-Workspaces > watch > userWorkspaces > next : ", next)
+        this.orderWorkspaces()
+        // this.resetEmptyWorkspace()
+        this.updateWorkspacePositions()
+      }
     },
-    updateWorkspacePositions() {
-      // this.log && console.log("\nP-Workspaces > updateWorkspacePositions > this.myWorkspaces : ", this.myWorkspaces)
-      let wsIndexes = this.myWorkspaces.map(ws => ws.id)
-      let payloadUser = {
-        ux_workspaces: {
-          workspaces_order: wsIndexes
+    computed: {
+      dragOptions() {
+        return {
+          animation: 200,
+          group: "workspaces",
+          disabled: false,
+          ghostClass: "ghost"
         }
+      },
+      ...mapState({
+        log: (state) => state.log,
+        appTitle: (state) => state.appTitle,
+        api: (state) => state.api,
+        itemModel: (state) => state.workspaces.itemModel,
+      }),
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated',
+        userId: 'user/userId',
+        uxWorkspaces: 'workspaces/getUserUx',
+        userWorkspaces: 'workspaces/getUserItems',
+        sharedWorkspaces: 'workspaces/getSharedItems',
+        userDatasets: 'datasets/getUserItems',
+        sharedDatasets: 'datasets/getSharedItems',
+        headerUser: 'user/headerUser'
+      })
+    },
+    methods: {
+      ...mapActions({
+        updatePath: 'updateCrumbsPath',
+      }),
+      orderWorkspaces() {
+        if (this.uxWorkspaces && this.uxWorkspaces.workspaces_order) {
+          const workspaces_order = this.uxWorkspaces.workspaces_order
+          this.myWorkspaces = mapOrder( [...this.userWorkspaces], workspaces_order, 'id')
+        } else {
+        // this.myWorkspaces =[ ...this.userWorkspaces, ...this.myWorkspacesDummies ]
+          this.myWorkspaces = [...this.userWorkspaces]
+        }
+      },
+      resetEmptyWorkspace() {
+        let emptyWorkspace = new Workspace(
+          this.userId,
+          this.$t('workspaces.defaultTitle'),
+          this.$t('workspaces.defaultDescription'),
+        )
+        // emptyWorkspace.randomBasics = true
+        this.emptyWorkspace = emptyWorkspace.data
+        this.newWorkspace = emptyWorkspace.data
+      },
+      createWorkspace(itemPayload) {
+        // this.log && console.log("\nP-Workspaces > createWorkspace > itemPayload : ", itemPayload)
+        // let now = new Date(Date.now())
+        this.$axios
+          .post(`${this.api.workspaces}/`, itemPayload, this.headerUser)
+          .then(resp => {
+            this.$store.dispatch(`workspaces/appendUserItem`, resp.data)
+            this.resetEmptyWorkspace()
+          })
+      },
+      updateWorkspacePositions() {
+        // this.log && console.log("\nP-Workspaces > updateWorkspacePositions > this.myWorkspaces : ", this.myWorkspaces)
+        let wsIndexes = this.myWorkspaces.map(ws => ws.id)
+        let payloadUser = {
+          ux_workspaces: {
+            workspaces_order: wsIndexes
+          }
+        }
+        // this.log && console.log("P-Workspaces > updateWorkspacePositions > wsIndexes : ", wsIndexes)
+        this.$axios
+          .put(`${this.api.users}/me/ux`, payloadUser, this.headerUser)
+          .then(resp => {
+            // this.log && console.log('P-Workspaces > updateWorkspacePositions > resp.data : ', resp.data)
+            this.$store.dispatch('workspaces/populateUserUX', resp.data.ux_workspaces)
+          })
       }
-      // this.log && console.log("P-Workspaces > updateWorkspacePositions > wsIndexes : ", wsIndexes)
-      this.$axios
-        .put(`${this.api.users}/me/ux`, payloadUser, this.headerUser)
-        .then(resp => {
-          // this.log && console.log('P-Workspaces > updateWorkspacePositions > resp.data : ', resp.data)
-          this.$store.dispatch('workspaces/populateUserUX', resp.data.ux_workspaces)
-        })
     }
   }
-}
 
 </script>

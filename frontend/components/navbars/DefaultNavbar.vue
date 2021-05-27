@@ -156,121 +156,127 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
 
-export default {
-  components: {
-    Languages: () => import('@/components/buttons/Languages.vue'),
-    NotificationsButton: () => import('@/components/buttons/NotificationsButton.vue'),
-    UserButton: () => import('@/components/buttons/UserButton.vue'),
-  },
-  props: [
-    'noTitle',
-    'noBack',
-    'getDatasetColor'
-  ],
-  watch: {
-    isAuthenticated(next) {
-      this.drawer = next ? true : false
+  export default {
+    components: {
+      Languages: () => import('@/components/buttons/Languages.vue'),
+      NotificationsButton: () => import('@/components/buttons/NotificationsButton.vue'),
+      UserButton: () => import('@/components/buttons/UserButton.vue'),
     },
-  },
-  data () {
-    return {
-      title: 'Data patch',
-      clipped: true,
-      drawer: false,
-      miniVariant: true,
-      fixed: false,
-      searchHeight: "80px",
-      searchOpen: false,
-      searchQuery: undefined,
-      items: [
-        {
-          icon: 'icon-home',
-          title: 'pages.home',
-          to: '/'
-        },
-        {
-          icon: 'icon-info1',
-          title: `pages.documentation`,
-          to: '/documentation'
-        },
-     ],
-      itemsUser: {
-        connected: [
-          { divider: true },
+    props: [
+      'noTitle',
+      'noBack',
+      'getDatasetColor'
+    ],
+    watch: {
+      isAuthenticated(next) {
+        this.drawer = next ? true : false
+      },
+    },
+    data () {
+      return {
+        title: 'Data patch',
+        clipped: true,
+        drawer: false,
+        miniVariant: true,
+        fixed: false,
+        searchHeight: "80px",
+        searchOpen: false,
+        searchQuery: undefined,
+        items: [
           {
-            icon: 'icon-database',
-            title: `pages.myworkspaces`,
-            to: '/workspaces'
+            icon: 'icon-home',
+            title: 'pages.home',
+            to: '/'
           },
           {
-            icon: 'icon-clipboard',
-            title: `pages.myschemas`,
-            to: '/schemas'
+            icon: 'icon-info1',
+            title: `pages.documentation`,
+            to: '/documentation'
           },
-          { divider: true },
-          {
-            icon: 'icon-user',
-            title: 'pages.me',
-            to: '/me'
-          },
-          {
-            icon: 'icon-bell',
-            title: 'pages.notifications',
-            to: '/notifications'
-          },
-          {
-            icon: 'icon-users',
-            title: 'pages.groups',
-            to: '/groups'
-          },
-          { divider: true },
-          {
-            icon: 'icon-log-out',
-            title: 'login.out',
-            to: '/logout'
-          },
-        ],
-        notConnected: [
-          { divider: true },
-          {
-            icon: 'icon-database',
-            title: `pages.workspaces`,
-            to: '/workspaces'
-          },
-          {
-            icon: 'icon-clipboard',
-            title: `pages.schemas`,
-            to: '/schemas'
-          },
-          { divider: true },
-          {
-            icon: 'icon-log-in',
-            title: 'login.in',
-            to: '/login'
-          },
-          {
-            icon: 'icon-edit-3',
-            title: 'login.sign',
-            to: '/sign'
-          },
-        ],
+      ],
+        itemsUser: {
+          connected: [
+            { divider: true },
+            {
+              icon: 'icon-database',
+              title: `pages.myworkspaces`,
+              to: '/workspaces'
+            },
+            {
+              icon: 'icon-clipboard',
+              title: `pages.myschemas`,
+              to: '/schemas'
+            },
+            { divider: true },
+            {
+              icon: 'icon-user',
+              title: 'pages.me',
+              to: '/me'
+            },
+            {
+              icon: 'icon-bell',
+              title: 'pages.notifications',
+              to: '/notifications'
+            },
+            { divider: true },
+            {
+              icon: 'icon-users',
+              title: 'pages.groups',
+              to: '/groups'
+            },
+            {
+              icon: 'icon-user-plus',
+              title: 'pages.invitations',
+              to: '/invitations'
+            },
+            { divider: true },
+            {
+              icon: 'icon-log-out',
+              title: 'login.out',
+              to: '/logout'
+            },
+          ],
+          notConnected: [
+            { divider: true },
+            {
+              icon: 'icon-database',
+              title: `pages.workspaces`,
+              to: '/workspaces'
+            },
+            {
+              icon: 'icon-clipboard',
+              title: `pages.schemas`,
+              to: '/schemas'
+            },
+            { divider: true },
+            {
+              icon: 'icon-log-in',
+              title: 'login.in',
+              to: '/login'
+            },
+            {
+              icon: 'icon-edit-3',
+              title: 'login.sign',
+              to: '/sign'
+            },
+          ],
+        }
       }
-    }
-  },
-  computed: {
-    navbarColor() {
-      let color = this.getDatasetColor ? this.currentDataset.color : 'primary'
-      return color
     },
-    ...mapState({
-      log: (state) =>  state.log
-    }),
-    ...mapGetters({
-      isAuthenticated: 'user/isAuthenticated',
-      currentDataset: 'datasets/getCurrentItem',
-    })
+    computed: {
+      navbarColor() {
+        let color = this.getDatasetColor ? this.currentDataset.color : 'primary'
+        return color
+      },
+      ...mapState({
+        log: (state) =>  state.log
+      }),
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated',
+        currentDataset: 'datasets/getCurrentItem',
+      })
+    }
   }
-}
 </script>

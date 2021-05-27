@@ -32,7 +32,10 @@
     {{ tabsSpaces }} -->
 
     <!-- TABS -->
-    <v-row dense>
+    <v-row
+      v-show="tabsSpaces.length > 1"
+      dense
+      >
       <v-col class="offset-3">
         <v-tabs
           v-model="tab"

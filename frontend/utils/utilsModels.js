@@ -25,11 +25,49 @@ export const itemDescriptionModel = [
   },
 ]
 
+export const itemMessageModel = [ 
+  {
+    name: 'message',
+    field: 'textarea',
+    label: 'dataPackage.message',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined
+  },
+]
+
 export const itemTagsModel = [ 
   {
     name: 'tags',
     field: 'combobox',
     label: 'dataPackage.tags',
+    hint: 'dataPackage.tagsHint',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined
+  },
+]
+
+export const itemUsersModel = [ 
+  {
+    name: 'users',
+    field: 'combobox',
+    label: 'dataPackage.users',
+    hint: 'dataPackage.usersHint',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined
+  },
+]
+
+export const itemInviteesModel = [ 
+  {
+    name: 'invitees',
+    field: 'combobox',
+    label: 'dataPackage.invitees',
     inModal: true,
     visible: true,
     readonly: false,
