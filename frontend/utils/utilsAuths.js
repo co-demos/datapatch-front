@@ -98,7 +98,7 @@ export const AuthsModelsWrite = [
       text: 'label',
       value: 'name',
       translate: true,
-      items: AuthsOptions
+      items: AuthsOptions.slice(0, 3)
     },
   },
   {
@@ -116,7 +116,7 @@ export const AuthsModelsWrite = [
       text: 'label',
       value: 'name',
       translate: true,
-      items: AuthsOptions
+      items: AuthsOptions.slice(0, 2)
     },
   },
 ]
