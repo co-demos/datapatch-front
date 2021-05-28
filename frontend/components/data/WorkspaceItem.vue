@@ -95,9 +95,9 @@
           <v-divider/>
 
           <v-list-item
-            disabled
-            @click.stop="shareWorkspace()"
+            @click.stop="dialogShare += 1"
             >
+            <!-- @click.stop="shareWorkspace()" -->
             <v-list-item-action>
               <v-icon small>
                 icon-user-plus
@@ -141,6 +141,17 @@
         :itemType="itemType"
         :apiUrl="apiUrl"
         :action="'update'"
+      />
+
+      <!-- DIALOG FOR WORKSPACE INFOS -->
+      <ModalShare
+        v-if="ws"
+        :parentDialog="dialogShare"
+        :item="ws"
+        :itemModel="itemModelShare"
+        :itemType="itemType"
+        :action="'update'"
+        :apiUrl="apiUrl"
       />
 
       <!-- DIALOG FOR WORKSPACE DELETE -->
@@ -271,6 +282,7 @@
     data () {
       return {
         dialog: 0,
+        dialogShare:0,
         dialogDelete: 0,
         hover: false,
         drag: false,
@@ -318,6 +330,7 @@
         log: (state) => state.log,
         api: (state) => state.api,
         itemModel: (state) => state.workspaces.itemModel,
+        itemModelShare: (state) => state.workspaces.itemModelShare,
         isWorkspacesLoading: (state) => state.workspaces.isLoading
       }),
       ...mapGetters({

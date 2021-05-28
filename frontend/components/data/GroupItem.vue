@@ -19,7 +19,7 @@
     <v-row
       v-if="grp"
       v-show="!currentLoadingState"
-      class="pl-2 align-center justify-left"
+      class="align-center justify-left mr-2"
       >
 
       <!-- GROUP CARD -->
@@ -29,7 +29,7 @@
         class="pr-1"
         >
         <nuxt-link
-          :to="`/group/${grp.id}`"
+          :to="`/groups/${grp.id}`"
           class="ml-0 no-decoration text-none"
           >
           <v-card 
@@ -46,6 +46,17 @@
               <v-row
                 class="align-center wrap justify-left flex-grow-1"
                 >
+                <!-- GROUP TTTLE -->
+                <v-col 
+                  cols="12"
+                  :class="`px-2 pt-2 pb-0 ma-0 ${hover ? 'black' : 'white' }--text`"
+                  >
+                  <p
+                    :class="`text-center text-body-2 font-weight-bold mb-0`"
+                    >
+                    {{ grp.title }} 
+                  </p>
+                </v-col>
 
                 <!-- GROUP AVATAR -->
                 <v-col cols="3" class="pa-3">
@@ -53,6 +64,7 @@
                     :item="grp"
                     :hover="hover"
                     :heightAvatar="heightAvatar"
+                    :customClass="'border-white'"
                   />
                 </v-col>
 
@@ -60,11 +72,6 @@
                 <v-col cols="9" 
                   :class="`align-center pl-1 py-2 ${hover ? 'black' : 'white' }--text`"
                   >
-                  <p
-                    :class="`text-body-2 ${hover ? 'font-weight-bold' : '' } pa-0 ma-0`"
-                    >
-                    {{ grp.title }} 
-                  </p>
                   <p class="caption pa-0 ma-0 text-lowercase font-italic">
                     {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
                   </p>
@@ -131,8 +138,7 @@
             <v-divider/>
 
             <v-list-item
-              disabled
-              @click.stop="dialog += 1"
+              @click.stop="dialogShare += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -176,6 +182,18 @@
         :item="group"
         :fromWorkspace="fromWorkspace"
         :itemModel="itemModelMeta"
+        :itemType="itemType"
+        :action="action"
+        :apiUrl="apiUrl"
+      />
+
+      <!-- DIALOG FOR GROUP INFOS -->
+      <ModalShare
+        v-if="grp"
+        :parentDialog="dialogShare"
+        :item="group"
+        :fromWorkspace="fromWorkspace"
+        :itemModel="itemModelShare"
         :itemType="itemType"
         :action="action"
         :apiUrl="apiUrl"
@@ -229,7 +247,8 @@
     data () {
       return {
         dialog: 0,
-        dialogCreate:0,
+        dialogCreate: 0,
+        dialogShare: 0,
         dialogDelete: 0,
 
         isLoading: false,
@@ -283,6 +302,7 @@
         api: (state) => state.api,
         itemModel: (state) => state.groups.itemModel,
         itemModelMeta: (state) => state.groups.itemModelMeta,
+        itemModelShare: (state) => state.groups.itemModelShare,
         loadingItem: (state) => state.groups.loadingItem,
       }),
       ...mapGetters({

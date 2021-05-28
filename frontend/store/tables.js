@@ -14,6 +14,9 @@ export const state = () => ({
     infos: emptyTable.infos,
     auth: emptyTable.auth,
   },
+  itemModelShare: {
+    share: emptyTable.share,
+  },
 
   needReload: false,
   needRedraw: false,

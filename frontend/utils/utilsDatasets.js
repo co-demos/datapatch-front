@@ -86,6 +86,11 @@ export class Dataset {
       ...models.itemAuthModelAll,
     ]
   }
+  get share () {
+    return [
+      ...models.itemUserSharingModel,
+    ]
+  }
   get prefs () {
     return [
       ...models.itemPrefsModel,

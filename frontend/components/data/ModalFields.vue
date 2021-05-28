@@ -139,7 +139,7 @@
           <template v-slot:selection="data">
             <v-chip
               v-bind="data.attrs"
-              :color="localItem.color || 'black'"
+              :color="model.chipColor || localItem.color || 'black'"
               :input-value="data.selected"
               class="mr-1 my-1"
               label
@@ -175,6 +175,7 @@
           dense
           @change="updateItemDebounced()"
           >
+
           <!-- custom items list -->
           <template 
             v-if="model.options.custom"
@@ -196,6 +197,27 @@
             <span v-if="!model.options.translate">
               {{ selectItem }}
             </span>
+
+            <v-tooltip
+              v-if="model.options.tooltip"
+              top
+              >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  class="mx-2"
+                  color="grey"
+                  dark
+                  x-small
+                  v-bind="attrs"
+                  v-on="on"
+                  >
+                  icon-info
+                </v-icon>
+              </template>
+              <span>
+                {{ $t(selectItem[model.options.tooltip]) }}
+              </span>
+            </v-tooltip>
 
           </template>
 
@@ -219,6 +241,27 @@
             <span v-if="!model.options.translate">
               {{ selectedItem }}
             </span>
+
+            <v-tooltip
+              v-if="model.options.tooltip"
+              top
+              >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  class="mx-2"
+                  color="grey"
+                  dark
+                  x-small
+                  v-bind="attrs"
+                  v-on="on"
+                  >
+                  icon-info
+                </v-icon>
+              </template>
+              <span>
+                {{ $t(selectedItem[model.options.tooltip]) }}
+              </span>
+            </v-tooltip>
 
           </template>
 

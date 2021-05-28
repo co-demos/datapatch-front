@@ -2,21 +2,25 @@ export const AuthsOptions = [
   {
     name: 'owner-only',
     label: 'auth.ownerOnly',
+    tooltip: 'auth.ownerOnlyHelp',
     help: 'Only owner is authorized',
   },
   {
     name: 'owner+groups',
     label: 'auth.groups',
-    help: 'Owner and invited groups are authorized',
+    tooltip: 'auth.groupsHelp',
+    help: 'Owner and invited groups or users are authorized',
   },
   {
     name: 'owner+groups+users',
     label: 'auth.users',
+    tooltip: 'auth.usersHelp',
     help: 'Owner, invited groups, and registred users are authorized',
   },
   {
     name: 'public',
     label: 'auth.public',
+    tooltip: 'auth.publicHelp',
     help: 'Owner, invited groups, registred and non-registerd users are authorized',
   },
 ]
@@ -36,9 +40,10 @@ export const AuthsModelsRead = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
-      items: AuthsOptions
+      items: AuthsOptions  //.filter( auth => auth.name !== 'owner+groups' )
     },
   },
 ]
@@ -57,6 +62,7 @@ export const AuthsModelsReadGroup = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
       items: AuthsOptions.slice(1, 4)
@@ -79,6 +85,7 @@ export const AuthsModelsComment = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
       items: AuthsOptions
@@ -101,6 +108,7 @@ export const AuthsModelsPatch = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
       items: AuthsOptions
@@ -123,6 +131,7 @@ export const AuthModelsWriteBasics = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
       items: AuthsOptions.slice(0, 3)
@@ -145,6 +154,7 @@ export const AuthsModelsWriteGroup = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
       items: AuthsOptions.slice(0, 2)
@@ -167,6 +177,7 @@ export const AuthsModelsManageBasics = [
     options: {
       custom: true,
       text: 'label',
+      tooltip: 'tooltip',
       value: 'name',
       translate: true,
       items: AuthsOptions.slice(0, 2)

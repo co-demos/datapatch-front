@@ -72,6 +72,11 @@ export class Workspace {
       ...models.itemAuthModelBasic,
     ]
   }
+  get share () {
+    return [
+      ...models.itemUserSharingModel,
+    ]
+  }
   get prefs () {
     return [
       ...models.itemPrefsModel,

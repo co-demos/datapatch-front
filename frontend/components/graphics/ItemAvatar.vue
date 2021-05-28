@@ -1,5 +1,7 @@
-<style>
-
+<style scoped>
+  .border-white {
+    border: thin solid white !important;
+  }
 </style>
 
 <template>
@@ -11,9 +13,9 @@
     <!-- </span> -->
     <v-avatar
       v-if="!noAvatar"
-      :class="`${customClass ? customClass : 'ml-0'}`"
       rounded
       :color="`${hover ? (colorHover ? colorHover : item.color) : item.color}`"
+      :class="`${customClass ? customClass : 'ml-0'}`"
       :size="heightAvatar"
       :width="heightAvatar"
       >

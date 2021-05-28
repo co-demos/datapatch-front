@@ -38,18 +38,103 @@
         <span>
           {{ currentDataset.title }}
         </span>
-        <v-btn
-          icon
-          x-small
-          class="ml-2"
-          @click="dialog += 1"
+
+        <v-menu
+          bottom
+          open-on-hover
           >
-          <v-icon
-            small
-            >
-            icon-more-vertical
-          </v-icon>
-        </v-btn>
+          <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
+            <v-btn
+              icon
+              x-small
+              class="ml-2"
+              v-bind="{...attrsMenu}"
+              v-on="{...onMenu}"
+              @click="dialog += 1"
+              >
+              <v-icon
+                small
+                >
+                icon-more-vertical
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-list dense>
+          
+            <v-subheader class="pa-5 text-uppercase">
+              {{ $t('datasets.prefsDataset') }}
+            </v-subheader>
+
+            <v-list-item
+              @click.stop="dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-hash
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.editDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item
+              disabled
+              @click.stop="dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-copy
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.copyDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider/>
+
+            <v-list-item
+              @click.stop="dialogShare += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-user-plus
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.inviteDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider/>
+
+            <v-list-item
+              @click.stop="dialogDelete += 1"
+              >
+              <!-- @click.stop="deleteDataset()" -->
+              <v-list-item-action>
+                <v-icon small>
+                  icon-trash-2
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.deleteDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+
+        </v-menu>
+
       </v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -70,6 +155,27 @@
       :updateCurrentDataset="true"
     />
 
+    <ModalShare
+      v-if="currentDataset"
+      :parentDialog="dialogShare"
+      :item="currentDataset"
+      :itemModel="itemModelShare"
+      :itemType="itemType"
+      :action="'update'"
+      :apiUrl="api.datasets"
+      :updateCurrentDataset="true"
+    />
+
+    <!-- DIALOG FOR DATASET DELETE -->
+    <ModalDelete
+      v-if="currentDataset"
+      :parentDialog="dialogDelete"
+      :confirmDeleteTitle="$t('datasets.deleteDataset')"
+      :confirmDeleteMsg="$t('datasets.deleteDatasetConfirm')"
+      :itemToDelete="currentDataset"
+      @confirmDelete="deleteDataset()"
+    />
+
   </v-container>
 
 </template>
@@ -78,11 +184,11 @@
 <script>
 
   import { mapState, mapGetters, mapActions } from 'vuex'
-  import { Dataset } from '@/utils/utilsDatasets'
-  import { configHeaders } from '@/utils/utilsAxios'
+  // import { Dataset } from '@/utils/utilsDatasets'
+  // import { configHeaders } from '@/utils/utilsAxios'
 
-  import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
-  import { TableMetaData, defaultTableData, CreateBlankTable } from '@/utils/utilsTables'
+  // import { Field, helpHeadersFields, endHeadersFields, defaultHeaders } from '@/utils/utilsFields'
+  // import { TableMetaData, defaultTableData, CreateBlankTable } from '@/utils/utilsTables'
 
   export default {
     name: 'Dataset',
@@ -101,6 +207,8 @@
     data () {
       return {
         dialog: 0,
+        dialogShare: 0,
+        dialogDelete: 0,
  
         dsId: undefined,
         pathItems: [
@@ -149,6 +257,7 @@
         appTitle: (state) => state.appTitle,
         api: (state) => state.api,
         itemModel: (state) => state.datasets.itemModel,
+        itemModelShare: (state) => state.datasets.itemModelShare,
       }),
       ...mapGetters({
         userId: 'user/userId',
@@ -161,6 +270,31 @@
         updatePath: 'updateCrumbsPath',
         setCurrentTables: 'tables/setCurrentTables'
       }),
+      deleteDataset() {
+        // this.log && console.log("C-Dataset > deleteDataset > this.headerUser :", this.headerUser)
+        // this.log && console.log(`\nC-Dataset > deleteDataset > ds ${this.currentDataset.id} > this.fromWorkspace :`, this.fromWorkspace)
+        this.$axios
+          .delete(`${this.apiUrl}/${this.currentDataset.id}`, this.headerUser)
+          .then(resp => {
+            // this.log && console.log(`C-Dataset > deleteDataset > ds ${this.ds.id} > resp.data : `, resp.data)
+            this.$store.dispatch(`${this.itemType}/removeUserItem`, resp.data)
+            
+            // delete dataset reference from ALL workspace datasets
+            // this.log && console.log('C-Dataset > deleteDataset > this.getUserWorkspaces : ', this.getUserWorkspaces)
+            for (let ws of this.getUserWorkspaces) {
+              // this.log && console.log(`\n...C-Dataset > deleteDataset > ds ${this.ds.id} > ws.id : `, ws.id)
+              let wsPreviousDatasets = ws.datasets && ws.datasets.ids || []
+              // this.log && console.log(`...C-Dataset > deleteDataset > ${this.ds.id} > wsPreviousDatasets : `, wsPreviousDatasets)
+              let payloadWs = { ...ws }
+              payloadWs.datasets = {
+                ids: wsPreviousDatasets.filter(ds => ds !==  this.ds.id )
+              }
+              // this.log && console.log(`...C-Dataset > deleteDataset > ds ${this.ds.id} > payloadWs : `, payloadWs)
+              this.$store.dispatch(`workspaces/updateUserItem`, payloadWs)
+              this.$router.push(`/workspaces`)
+            }
+          })
+      },
     }
 
   }

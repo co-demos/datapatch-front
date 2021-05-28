@@ -220,7 +220,6 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
 
     </div>
 
-
     <ModalRow
       :item="rowDataToEdit"
       :itemModel="tableHeaders"

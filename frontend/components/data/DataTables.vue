@@ -194,6 +194,7 @@
               :currentDataset="currentDataset"
               :tableId="table.id"
               :itemModel="itemModel"
+              :itemShare="itemModelShare"
               :itemType="itemType"
               :fromCreate="fromCreate"
               @changeTab="changeTab"
@@ -345,6 +346,7 @@
         log: (state) => state.log,
         api: (state) => state.api,
         itemModel: (state) => state.tables.itemModel,
+        itemModelShare: (state) => state.tables.itemModelShare,
       }),
       ...mapGetters({
         userId: 'user/userId',

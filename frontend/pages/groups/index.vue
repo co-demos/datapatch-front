@@ -3,10 +3,43 @@
   <v-container class="mb-12">
 
     <v-row
-      fill-height
-      class="justify-center align-top mt-5"
+      class="justify-center align-top"
       >
 
+      <v-col 
+        cols="10"
+        class="offset-2 align-top text-left pa-0 my-3"
+        >
+        <p class="font-weight-bold grey--text">
+          {{ $t('groups.myGroups')}}
+        </p>
+      </v-col>
+
+      <!-- LEFT MENU -->
+      <!-- <v-col 
+        cols="2"
+        class="align-top pa-0"
+        >
+        <v-list dense class="pt-0">
+          <v-list-item
+            v-for="menu in leftMenu"
+            :key="menu.text"
+            two-line
+            class="pt-0"
+            >
+            <v-list-item-content class="pt-0">
+              <v-list-item-title>
+                {{ $t(menu.text) }}
+                </v-list-item-title>
+              <v-list-item-subtitle>
+                {{ $t(menu.textBis) }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col> -->
+
+      <!-- MY GROUPS -->
       <v-col 
         cols="10"
         class="offset-1"
@@ -25,7 +58,7 @@
           <v-col
             v-for="grp in myGroups"
             :key="`grp-${grp.id}`"
-            class="pt-0 group"
+            class="pt-0 pl-0 pb-6 group"
             cols="6"
             xs="6"
             sm="6"
@@ -51,20 +84,15 @@
         </draggable>
 
       </v-col>
-    </v-row>
 
-    <v-row
-      fill-height
-      class="justify-center align-top mt-5"
-      >
+      <!-- ADD GROUP -->
       <v-col 
-        cols="10"
-        class="offset-1"
+        cols="12"
+        class="text-center"
         >
 
-        <!-- ADD GROUP -->
         <v-card
-          class="mb-5 pb-5 pl-2"
+          class="mb-5 pb-5"
           flat
           >
 
@@ -103,6 +131,17 @@
 
         </v-card>
       </v-col>
+
+      <!-- SHARED GROUPS -->
+      <v-col 
+        cols="10"
+        class="offset-2 align-top text-left pa-0 my-3"
+        >
+        <p class="font-weight-bold grey--text">
+          {{ $t('groups.sharedGroups')}}
+        </p>
+      </v-col>
+
     </v-row>
 
   </v-container>
@@ -145,6 +184,18 @@
         newGroup: undefined,
         // emptyGroup: undefined,
         myGroups: [],
+        leftMenu: [
+          {
+            text: 'groups.myGroups',
+            textBis: 'groups.myGroups',
+            anchor: '#myGroups'
+          },
+          {
+            text: 'groups.sharedGroups',
+            textBis: 'groups.sharedGroups',
+            anchor: '#sharedGroups'
+          }
+        ]
       }
     },
     beforeMount () {

@@ -239,8 +239,7 @@
             <v-divider/>
 
             <v-list-item
-              disabled
-              @click.stop="dialog += 1"
+              @click.stop="dialogShare += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -288,6 +287,18 @@
         :action="action"
         :apiUrl="apiUrl"
         @createItem="createDataset"
+      />
+
+      <!-- DIALOG FOR DATASET INFOS -->
+      <ModalShare
+        v-if="ds"
+        :parentDialog="dialogShare"
+        :item="ds"
+        :fromWorkspace="fromWorkspace"
+        :itemModel="itemModelShare"
+        :itemType="itemType"
+        :action="action"
+        :apiUrl="apiUrl"
       />
 
       <!-- DIALOG FOR DATASET DELETE -->
@@ -350,7 +361,8 @@
     data () {
       return {
         dialog: 0,
-        dialogCreate:0,
+        dialogCreate: 0,
+        dialogShare: 0,
         dialogDelete: 0,
 
         isLoading: false,
@@ -409,6 +421,7 @@
         api: (state) => state.api,
         itemModel: (state) => state.datasets.itemModel,
         itemModelMeta: (state) => state.datasets.itemModelMeta,
+        itemModelShare: (state) => state.datasets.itemModelShare,
         loadingItem: (state) => state.datasets.loadingItem,
       }),
       ...mapGetters({

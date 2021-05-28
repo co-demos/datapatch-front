@@ -16,6 +16,7 @@ const components = {
   ModalTabs: () => import(/* webpackChunkName: "ModalTabs" */ '@/components/data/ModalTabs.vue'),
   ModalFields: () => import(/* webpackChunkName: "ModalFields" */ '@/components/data/ModalFields.vue'),
   ModalDelete: () => import(/* webpackChunkName: "ModalDelete" */ '@/components/dialogs/ModalDelete.vue'),
+  ModalShare: () => import(/* webpackChunkName: "ModalShare" */ '@/components/dialogs/ModalShare.vue'),
 
   ModalRow: () => import(/* webpackChunkName: "ModalRow" */ '@/components/data/ModalRow.vue'),
   ModalRowFields: () => import(/* webpackChunkName: "ModalRowFields" */ '@/components/data/ModalRowFields.vue'),

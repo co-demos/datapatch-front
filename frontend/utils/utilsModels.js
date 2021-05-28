@@ -73,7 +73,31 @@ export const itemUsersPendingModel = [
     inModal: true,
     visible: true,
     readonly: false,
-    options: undefined
+    options: undefined,
+    chipColor: 'grey',
+  },
+]
+
+export const itemUserSharingModel = [ 
+  {
+    name: 'authorized_users',
+    field: 'combobox',
+    label: 'dataPackage.authorizedUsers',
+    hint: 'dataPackage.usersHint',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined,
+  },
+  {
+    name: 'authorized_groups',
+    field: 'combobox',
+    label: 'dataPackage.authorizedGroups',
+    hint: 'dataPackage.groupsHint',
+    inModal: true,
+    visible: true,
+    readonly: false,
+    options: undefined,
   },
 ]
 

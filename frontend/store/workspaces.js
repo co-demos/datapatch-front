@@ -24,7 +24,9 @@ export const state = () => ({
     prefs: emptyWorkspace.prefs,
     meta: emptyWorkspace.meta
   },
-
+  itemModelShare: {
+    share: emptyWorkspace.share,
+  },
 })
 
 

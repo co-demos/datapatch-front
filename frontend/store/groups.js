@@ -27,7 +27,9 @@ export const state = () => ({
     prefs: emptyGroup.prefs,
     meta: emptyGroup.meta
   },
-
+  itemModelShare: {
+    share: emptyGroup.share,
+  },
 })
 
 

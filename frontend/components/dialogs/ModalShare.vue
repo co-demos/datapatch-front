@@ -60,12 +60,50 @@
 
             <p class="caption font-italic mt-1 mb-0">
               {{ $t(`dataPackage.${itemType.slice(0, -1)}`) }}
+              - {{ $t(`share.invitePrefs`) }}
             </p>
 
           </v-col>
         </v-row>
       </v-card-title>
       
+      <!-- SEARCH USER OR GROUP -->
+      <v-divider class="mt-8"/>
+      <v-row
+        class="align-center px-12 py-3"
+        dense
+        >
+        <v-col cols="4">
+          <v-subheader class="">
+            {{ $t('buttons.inviteUserGroup') }}
+          </v-subheader>
+        </v-col>
+
+        <v-col cols="8">
+          <v-combobox
+            v-model="model"
+            :items="items"
+            :loading="isLoading"
+            :search-input.sync="search"
+            
+            color="grey"
+
+            hide-no-data
+            hide-selected
+            clearable
+
+            item-text="Description"
+            item-value="API"
+            :label="$t('buttons.searchUserGroup')"
+            :placeholder="$t('buttons.queryUserGroup')"
+            prepend-icon="icon-search1"
+            return-object
+            >
+          </v-combobox>
+        </v-col>
+      </v-row>
+      <v-divider/>
+
       <!-- DEBUGGING -->
       <v-row class="text-caption" v-if="false">
         <v-col cols="12">
@@ -99,7 +137,7 @@
       />
 
       <!-- BTNS -->
-      <v-card-actions v-if="action === 'create'" class="mr-5 pb-5">
+      <!-- <v-card-actions v-if="action === 'create'" class="mr-5 pb-5">
         <v-spacer></v-spacer>
         <v-btn
           color="grey darken-1"
@@ -123,7 +161,7 @@
           >
           {{ $t(`buttons.${action}`) }}
         </v-btn>
-      </v-card-actions>
+      </v-card-actions> -->
 
     </v-card>
   </v-dialog>
@@ -164,6 +202,12 @@
         tab: null,
         tabsSpaces: [],
         needUpdateStore: false,
+
+        descriptionLimit: 60,
+        entries: [],
+        isLoading: false,
+        model: null,
+        search: null,
       }
     },
     computed: {

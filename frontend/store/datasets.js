@@ -24,7 +24,9 @@ export const state = () => ({
     prefs: emptyDataset.prefs,
     meta: emptyDataset.meta,
   },
-
+  itemModelShare: {
+    share: emptyDataset.share,
+  },
 })
 
 

@@ -84,6 +84,11 @@ export class Group {
       ...models.itemAuthModelGroup,
     ]
   }
+  get share () {
+    return [
+      ...models.itemUserSharingModel,
+    ]
+  }
   get prefs () {
     return [
       ...models.itemPrefsModel,

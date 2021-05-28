@@ -121,6 +121,17 @@
       :onlyLocalUpdate="fromCreate"
     />
 
+    <ModalShare
+      v-if="table"
+      :parentDialog="dialogShare"
+      :item="table"
+      :itemModel="itemShare"
+      :itemType="itemType"
+      :action="'update'"
+      :apiUrl="api.tables"
+      :onlyLocalUpdate="fromCreate"
+    />
+
     <!-- DIALOG FOR WORKSPACE DELETE -->
     <ModalDelete
       v-if="table"
@@ -148,6 +159,7 @@
       'tableId',
       'itemModel',
       'itemType',
+      'itemShare',
       'fromCreate',
     ],
     watch: {
@@ -161,6 +173,7 @@
         // x: 0,
         // y: 0,
         dialog: 0,
+        dialogShare: 0,
         dialogDelete: 0,
         // table: undefined,
       }
