@@ -102,8 +102,8 @@ export class Dataset {
     let colorsList = models.itemPrefsModel.find(pref => pref.name === 'color').options.items
     let iconsList = models.itemPrefsModel.find(pref => pref.name === 'icon').options.items
 
-    const randomColorIdx = Math.floor(Math.random() * colorsList.length);
-    const randomIconIdx = Math.floor(Math.random() * iconsList.length);
+    const randomColorIdx = Math.floor(Math.random() * colorsList.length)
+    const randomIconIdx = Math.floor(Math.random() * iconsList.length)
 
     this.color = colorsList[randomColorIdx]
     this.icon = iconsList[randomIconIdx]

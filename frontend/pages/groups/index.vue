@@ -143,7 +143,7 @@
         itemType: 'groups',
         apiUrl: undefined,
         newGroup: undefined,
-        emptyGroup: undefined,
+        // emptyGroup: undefined,
         myGroups: [],
       }
     },
@@ -191,11 +191,12 @@
         updatePath: 'updateCrumbsPath',
       }),
       orderGroups() {
+        // this.log && console.log("\nP-Groups > orderGroups > this.userGroups : ", this.userGroups)
+        // this.log && console.log("P-Groups > orderGroups > this.uxGroups : ", this.uxGroups)
         if (this.uxGroups && this.uxGroups.groups_order) {
           const groups_order = this.uxGroups.groups_order
           this.myGroups = mapOrder( [...this.userGroups], groups_order, 'id')
         } else {
-        // this.myGroups =[ ...this.userGroups, ...this.myGroupsDummies ]
           this.myGroups = [...this.userGroups]
         }
       },
@@ -205,8 +206,8 @@
           this.$t('groups.defaultTitle'),
           this.$t('groups.defaultDescription'),
         )
-        // emptyGroup.randomBasics = true
-        this.emptyGroup = emptyGroup.data
+        emptyGroup.randomBasics = true
+        // this.emptyGroup = emptyGroup.data
         this.newGroup = emptyGroup.data
       },
       createGroup(itemPayload) {

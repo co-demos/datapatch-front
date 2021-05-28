@@ -36,10 +36,11 @@
             flat
             outlined
             :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
-            :color="`${hover ? 'white' : 'grey lighten-4'}`"
+            :color="`${hover ? 'white' : grp.color}`"
             @mouseover="hover = true"
             @mouseleave="hover = false"
             >
+            <!-- :color="`${hover ? 'white' : 'grey lighten-4'}`" -->
             <v-card-actions class="pa-0">
 
               <v-row
@@ -56,12 +57,19 @@
                 </v-col>
 
                 <!-- GROUP TITLE -->
-                <v-col cols="9" class="align-center pl-0 py-1">
+                <v-col cols="9" 
+                  :class="`align-center pl-1 py-2 ${hover ? 'black' : 'white' }--text`"
+                  >
                   <p
-                    :class="`text-body-2 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
+                    :class="`text-body-2 ${hover ? 'font-weight-bold' : '' } pa-0 ma-0`"
                     >
-                    <!-- id: {{ grp }} -->
                     {{ grp.title }} 
+                  </p>
+                  <p class="caption pa-0 ma-0 text-lowercase font-italic">
+                    {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
+                  </p>
+                  <p class="caption pa-0 ma-0 text-lowercase font-italic">
+                    {{ grp.users_pending.length }} {{ $tc('groups.memberPending', grp.users_pending.length) }}
                   </p>
                 </v-col>
 
@@ -263,10 +271,10 @@
         this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
         setTimeout(() => {
           this.grp = this.getUserGroupById(this.groupId)
+          this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.grp :`, this.grp)
           this.isLoading = false
         }, 200)
       }
-      this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.grp :`, this.grp)
       this.apiUrl =  this.api[this.itemType]
     },
     computed: {

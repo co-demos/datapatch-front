@@ -14,7 +14,7 @@ export class Group {
     id=undefined,
     color='black',
     icon='icon-users',
-    read='owner-only',
+    read='owner+groups',
     write='owner-only',
     manage='owner-only',
     tags=[],
@@ -81,7 +81,7 @@ export class Group {
   }
   get auth () {
     return [
-      ...models.itemAuthModelBasic,
+      ...models.itemAuthModelGroup,
     ]
   }
   get prefs () {
@@ -95,4 +95,15 @@ export class Group {
     ]
   }
 
+  set randomBasics (value) {
+    let colorsList = models.itemPrefsModel.find(pref => pref.name === 'color').options.items
+    // let iconsList = models.itemPrefsModel.find(pref => pref.name === 'icon').options.items
+
+    const randomColorIdx = Math.floor(Math.random() * colorsList.length)
+    // const randomIconIdx = Math.floor(Math.random() * iconsList.length)
+
+    this.color = colorsList[randomColorIdx]
+    // this.icon = iconsList[randomIconIdx]
+
+  }
  }

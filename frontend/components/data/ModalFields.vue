@@ -18,8 +18,30 @@
       </code>
 
       <v-col cols="4" class="">
+
         <v-subheader class="">
-          {{ $t(model.label) }} :
+          {{ $t(model.label) }}
+          <v-tooltip
+            v-if="model.tooltip"
+            right
+            >
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                class="mx-2"
+                color="grey"
+                dark
+                x-small
+                v-bind="attrs"
+                v-on="on"
+                >
+                icon-info
+              </v-icon>
+            </template>
+            <span>
+              {{ $t(model.tooltip) }}
+            </span>
+          </v-tooltip>
+          :
         </v-subheader>
 
         <!-- DEBUGGING -->
@@ -123,7 +145,10 @@
               label
               small
               >
-              <span class="pr-2 white--text">
+              <span v-if="model.showField" class="pr-2 white--text">
+                {{ data.item[model.showField] }}
+              </span>
+              <span v-else class="pr-2 white--text">
                 {{ data.item }}
               </span>
               <v-icon

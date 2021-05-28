@@ -36,7 +36,7 @@
       v-show="tabsSpaces.length > 1"
       dense
       >
-      <v-col class="offset-3">
+      <v-col class="offset-4">
         <v-tabs
           v-model="tab"
           centered

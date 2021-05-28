@@ -56,6 +56,7 @@ export const itemUsersModel = [
     field: 'combobox',
     label: 'dataPackage.users',
     hint: 'dataPackage.usersHint',
+    showField: 'email',
     inModal: true,
     visible: true,
     readonly: false,
@@ -67,7 +68,7 @@ export const itemUsersPendingModel = [
   {
     name: 'users_pending',
     field: 'combobox',
-    label: 'dataPackage.users',
+    label: 'dataPackage.usersPending',
     hint: 'dataPackage.usersHint',
     inModal: true,
     visible: true,
@@ -113,11 +114,15 @@ export const itemLicenceModel = [
 export const itemAuthModelAll = [
   ...authsModels.AuthsModelsRead,
   ...authsModels.AuthsModelsPatch,
-  ...authsModels.AuthsModelsWrite
+  ...authsModels.AuthsModelsWriteDefault
 ]
 export const itemAuthModelBasic = [
   ...authsModels.AuthsModelsRead,
-  ...authsModels.AuthsModelsWrite
+  ...authsModels.AuthsModelsWriteDefault
+]
+export const itemAuthModelGroup = [
+  ...authsModels.AuthsModelsReadGroup,
+  ...authsModels.AuthsModelsWriteRestricted
 ]
 
 export const itemMetaModelUrl = [
