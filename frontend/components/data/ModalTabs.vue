@@ -41,6 +41,7 @@
           v-model="tab"
           centered
           dense
+          grow
           color="grey"
           center-active
           >

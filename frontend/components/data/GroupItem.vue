@@ -19,19 +19,44 @@
     <v-row
       v-if="grp"
       v-show="!currentLoadingState"
-      class="align-center justify-left mr-2"
+      class="align-center justify-left mr-2 mb-2"
       >
+      <!-- GROUP AVATAR -->
+      <!-- <v-col 
+        cols="2"
+        class="pa-0 text-center"
+        >
+        <ItemAvatar
+          :item="grp"
+          :hover="hover"
+          :heightAvatar="heightAvatar"
+          :customClass="'border-white'"
+        />
+      </v-col> -->
 
       <!-- GROUP CARD -->
       <v-col
         v-if="action === 'update'"
         cols="11"
-        class="pr-1"
+        class="pr-0"
         >
-        <nuxt-link
-          :to="`/groups/${grp.id}`"
+        <v-badge
+          bordered
+          :color="grp.color"
+          :icon="grp.icon"
+          overlap
+          left
+          tile
+          style="width: 100% !important;"
+          >
+        <a
+          @click.stop="dialog += 1"
           class="ml-0 no-decoration text-none"
           >
+        <!-- <nuxt-link
+          :to="`/groups/${grp.id}`" 
+          class="ml-0 no-decoration text-none"
+          >-->
           <v-card 
             flat
             outlined
@@ -46,10 +71,11 @@
               <v-row
                 class="align-center wrap justify-left flex-grow-1"
                 >
+                
                 <!-- GROUP TTTLE -->
                 <v-col 
                   cols="12"
-                  :class="`px-2 pt-2 pb-0 ma-0 ${hover ? 'black' : 'white' }--text`"
+                  :class="`px-2 pt-3 pb-0 ma-0 ${hover ? grp.color : 'white' }--text`"
                   >
                   <p
                     :class="`text-center text-body-2 font-weight-bold mb-0`"
@@ -58,20 +84,14 @@
                   </p>
                 </v-col>
 
-                <!-- GROUP AVATAR -->
-                <v-col cols="3" class="pa-3">
-                  <ItemAvatar
-                    :item="grp"
-                    :hover="hover"
-                    :heightAvatar="heightAvatar"
-                    :customClass="'border-white'"
-                  />
-                </v-col>
-
-                <!-- GROUP TITLE -->
-                <v-col cols="9" 
-                  :class="`align-center pl-1 py-2 ${hover ? 'black' : 'white' }--text`"
+                <!-- GROUP SUBTITLE -->
+                <v-col
+                  cols="12" 
+                  :class="`align-center text-center px-3 pt-2 pb-4 ${hover ? 'black' : 'white' }--text`"
                   >
+                  <v-divider 
+                    :class="`mb-3 ${hover ? grp.color : 'white'}`"
+                  />
                   <p class="caption pa-0 ma-0 text-lowercase font-italic">
                     {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
                   </p>
@@ -85,7 +105,8 @@
             </v-card-actions>
             
           </v-card>
-        </nuxt-link>
+        </a>
+        </v-badge>
       </v-col>
 
       <!-- GROUP BTNS -->

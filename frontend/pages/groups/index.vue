@@ -7,12 +7,15 @@
       >
 
       <v-col 
-        cols="10"
-        class="offset-2 align-top text-left pa-0 my-3"
+        cols="6"
+        class="offset-1 align-top text-center pa-0 my-5"
         >
-        <p class="font-weight-bold grey--text">
+        
+        <!-- <p class="font-weight-bold grey--text">
           {{ $t('groups.myGroups')}}
-        </p>
+        </p> -->
+        <SearchGroupUser/>
+
       </v-col>
 
       <!-- LEFT MENU -->
@@ -42,7 +45,7 @@
       <!-- MY GROUPS -->
       <v-col 
         cols="10"
-        class="offset-1"
+        class="offset-1 mt-2"
         >
         
         <!-- GROUPS / DRAGGABLE -->
@@ -61,9 +64,9 @@
             class="pt-0 pl-0 pb-6 group"
             cols="6"
             xs="6"
-            sm="6"
-            md="4"
-            lg="4"
+            sm="4"
+            md="3"
+            lg="3"
             xl="3"
             >
             <GroupItem
@@ -133,14 +136,14 @@
       </v-col>
 
       <!-- SHARED GROUPS -->
-      <v-col 
+      <!-- <v-col 
         cols="10"
         class="offset-2 align-top text-left pa-0 my-3"
         >
         <p class="font-weight-bold grey--text">
           {{ $t('groups.sharedGroups')}}
         </p>
-      </v-col>
+      </v-col> -->
 
     </v-row>
 

@@ -80,26 +80,7 @@
         </v-col>
 
         <v-col cols="8">
-          <v-combobox
-            v-model="model"
-            :items="items"
-            :loading="isLoading"
-            :search-input.sync="search"
-            
-            color="grey"
-
-            hide-no-data
-            hide-selected
-            clearable
-
-            item-text="Description"
-            item-value="API"
-            :label="$t('buttons.searchUserGroup')"
-            :placeholder="$t('buttons.queryUserGroup')"
-            prepend-icon="icon-search1"
-            return-object
-            >
-          </v-combobox>
+          <SearchGroupUser/>
         </v-col>
       </v-row>
       <v-divider/>
@@ -203,11 +184,11 @@
         tabsSpaces: [],
         needUpdateStore: false,
 
-        descriptionLimit: 60,
-        entries: [],
-        isLoading: false,
-        model: null,
-        search: null,
+        // descriptionLimit: 60,
+        // entries: [],
+        // isLoading: false,
+        // model: null,
+        // search: null,
       }
     },
     computed: {

@@ -10,6 +10,8 @@ const components = {
   BackRouter: () => import(/* webpackChunkName: "BackRouter" */ '@/components/buttons/BackRouter.vue'),
   Breadcrumbs: () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/navbars/Breadcrumbs.vue'),
 
+  SearchGroupUser: () => import(/* webpackChunkName: "SearchGroupUser" */ '@/components/searches/SearchGroupUser.vue'),
+
   ItemAvatar: () => import(/* webpackChunkName: "ItemAvatar" */ '@/components/graphics/ItemAvatar.vue'),
 
   ModalItem: () => import(/* webpackChunkName: "ModalItem" */ '@/components/data/ModalItem.vue'),

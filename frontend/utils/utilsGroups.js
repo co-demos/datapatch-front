@@ -86,7 +86,9 @@ export class Group {
   }
   get share () {
     return [
-      ...models.itemUserSharingModel,
+      // ...models.itemUserSharingModel,
+      ...models.itemUsersModel,
+      ...models.itemUsersPendingModel,
     ]
   }
   get prefs () {
