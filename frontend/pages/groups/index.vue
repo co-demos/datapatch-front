@@ -7,15 +7,15 @@
       >
 
       <v-col 
-        cols="6"
-        class="offset-1 align-top text-center pa-0 my-5"
+        cols="8"
+        class="offset-1 align-top text-center pa-0 mt-5 mb-8"
         >
-        
         <!-- <p class="font-weight-bold grey--text">
           {{ $t('groups.myGroups')}}
         </p> -->
-        <SearchGroupUser/>
-
+        <SearchAny
+          :itemTypes="['users', 'groups']"
+        />
       </v-col>
 
       <!-- LEFT MENU -->
@@ -90,8 +90,8 @@
 
       <!-- ADD GROUP -->
       <v-col 
-        cols="12"
-        class="text-center"
+        cols="11"
+        class="offset-1 text-center"
         >
 
         <v-card

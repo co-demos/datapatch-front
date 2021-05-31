@@ -3,9 +3,17 @@
   <v-container class="mb-12">
 
     <v-row
-      fill-height
       class="justify-center align-top"
       >
+
+      <v-col 
+        cols="8"
+        class="offset-1 align-top text-center pa-0 mt-5 mb-8"
+        >
+        <SearchAny
+          :itemTypes="['workspaces', 'datasets', 'tables']"
+        />
+      </v-col>
 
       <!-- <v-col cols="2" class=""> -->
         <!-- uxWorkspaces : <code><pre>{{ uxWorkspaces }}</pre></code><hr> -->

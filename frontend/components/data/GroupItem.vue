@@ -173,6 +173,21 @@
               </v-list-item-content>
             </v-list-item>
 
+            <v-list-item
+              @click.stop="dialogShare += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-user-check
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('groups.askJoinGroup') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
             <v-divider/>
 
             <v-list-item
@@ -236,7 +251,7 @@
       v-show="currentLoadingState"
       class="ma-0 align-center"
       >
-      <v-col cols="11" class="pa-0 ma-0 ml-2">
+      <v-col cols="12" class="pa-0 ma-0 ml-2">
         <v-skeleton-loader
           type="image"
           max-height="50px"
@@ -304,14 +319,14 @@
       this.isLoading = true
     },
     mounted () {
-      this.log && console.log(`\nC-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
-      this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.group :`, this.group)
+      // this.log && console.log(`\nC-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
+      // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.group :`, this.group)
 
       if (this.action === 'update') {
-        this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
+        // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
         setTimeout(() => {
           this.grp = this.getUserGroupById(this.groupId)
-          this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.grp :`, this.grp)
+          // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.grp :`, this.grp)
           this.isLoading = false
         }, 200)
       }

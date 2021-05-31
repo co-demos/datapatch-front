@@ -57,7 +57,7 @@
                 :placeholder="$t('login.formEmail')"
                 prepend-inner-icon="icon-mail"
                 :rules="emailRules"
-                ></v-text-field>
+              />
 
               <!-- password -->
               <v-text-field
@@ -74,7 +74,7 @@
                 :placeholder="$t('login.formPwd')"
                 prepend-inner-icon="icon-lock"
                 :rules="passwordLoginRules"
-                ></v-text-field>
+              />
 
               <!-- submit -->
               <v-btn
@@ -143,99 +143,98 @@
 
 <script>
 
-import { mapState, mapActions } from 'vuex'
-import { configHeaders } from '@/utils/utilsAxios'
-import { rules } from '@/utils/utilsRules.js'
+  import { mapState, mapActions } from 'vuex'
+  import { configHeaders } from '@/utils/utilsAxios'
+  import { rules } from '@/utils/utilsRules.js'
 
-export default {
+  export default {
 
-  name: 'Login',
-  data () {
-    return {
-      pathItems: [
-        { 
-          text: 'login.in',
-          disabled: true,
-          to: '/login',
+    name: 'Login',
+    data () {
+      return {
+        pathItems: [
+          { 
+            text: 'login.in',
+            disabled: true,
+            to: '/login',
+          }
+        ],
+
+        isConnected: false,
+        showPwd: false,
+
+        email: '',
+        password: '',
+        emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
+        passwordLoginRules: rules.passwordLoginRules( this.$t('rules.pwdType') ),
+
+        scopes: [
+          'me',
+          'shared',
+          'items'
+        ],
+
+      }
+    },
+    beforeMount () {
+      this.updatePath(this.pathItems)
+    },
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+        api: (state) => state.api,
+        isLoading: (state) => state.dialogs.isLoading,
+      })
+    },
+    methods: {
+      ...mapActions({
+        updatePath: 'updateCrumbsPath',
+        authenticateUser: 'user/authenticateUser',
+        populateUser: 'user/populateUser',
+        populateUser: 'user/populateUser',
+      }),
+      submit () {
+        if ( this.$refs.form.validate() ) {
+          // this.log && console.log('P-Login > submit > this.scopes : ', this.scopes)
+          // this.alert = false
+          // this.isLoading = true
+          const formData = new FormData()
+          formData.append('username', this.email)
+          formData.append('password', this.password)
+    
+          // cf : https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#scope
+          formData.append('scope', this.scopes.join(' ') )
+          
+          // this.log && console.log('P-Login > submit > formData.getAll("scope") : ', formData.getAll('scope'))
+          this.$axios
+            .post(`${this.api.users}/token`, formData)
+            .then(resp => {
+              // this.log && console.log('P-Login > submit > A > resp.data : ', resp.data)
+              this.isConnected = true
+              const token = resp.data
+              // this.log && console.log('P-Login > submit > A > token : ', token)
+
+              this.authenticateUser(token)
+              this.$cookies.set('access_token', token.access_token)
+              this.$cookies.set('refresh_token', token.refresh_token)
+    
+              let config = new configHeaders(token.access_token, token.token_type)
+              // this.log && console.log('P-Login > submit > config.headers : ', config.headers)
+    
+              this.$axios
+                .get(`${this.api.users}/me/`, config.headers)
+                .then(resp => {
+                  // this.log && console.log('P-Login > B > me > resp.data : ', resp.data)
+                  const userData = resp.data
+                  this.populateUser(userData)
+                  this.$i18n.setLocale(userData.locale)
+                  // this.$router.push('/')
+                  this.$router.push('/workspaces')
+                })
+            })
         }
-      ],
-
-      isConnected: false,
-      showPwd: false,
-
-
-      email: '',
-      password: '',
-      emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
-      passwordLoginRules: rules.passwordLoginRules( this.$t('rules.pwdType') ),
-
-      scopes: [
-        'me',
-        'shared',
-        'items'
-      ],
-
-    }
-  },
-  beforeMount () {
-    this.updatePath(this.pathItems)
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-      api: (state) => state.api,
-      isLoading: (state) => state.dialogs.isLoading,
-    })
-  },
-  methods: {
-    ...mapActions({
-      updatePath: 'updateCrumbsPath',
-      authenticateUser: 'user/authenticateUser',
-      populateUser: 'user/populateUser',
-      populateUser: 'user/populateUser',
-    }),
-    submit () {
-      if ( this.$refs.form.validate() ) {
-        // this.log && console.log('P-Login > submit > this.scopes : ', this.scopes)
-        // this.alert = false
-        // this.isLoading = true
-        const formData = new FormData()
-        formData.append('username', this.email)
-        formData.append('password', this.password)
-  
-        // cf : https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#scope
-        formData.append('scope', this.scopes.join(' ') )
-        
-        // this.log && console.log('P-Login > submit > formData.getAll("scope") : ', formData.getAll('scope'))
-        this.$axios
-          .post(`${this.api.users}/token`, formData)
-          .then(resp => {
-            // this.log && console.log('P-Login > submit > A > resp.data : ', resp.data)
-            this.isConnected = true
-            const token = resp.data
-            // this.log && console.log('P-Login > submit > A > token : ', token)
-
-            this.authenticateUser(token)
-            this.$cookies.set('access_token', token.access_token)
-            this.$cookies.set('refresh_token', token.refresh_token)
-  
-            let config = new configHeaders(token.access_token, token.token_type)
-            // this.log && console.log('P-Login > submit > config.headers : ', config.headers)
-  
-            this.$axios
-              .get(`${this.api.users}/me/`, config.headers)
-              .then(resp => {
-                // this.log && console.log('P-Login > B > me > resp.data : ', resp.data)
-                const userData = resp.data
-                this.populateUser(userData)
-                this.$i18n.setLocale(userData.locale)
-                // this.$router.push('/')
-                this.$router.push('/workspaces')
-              })
-          })
       }
     }
   }
-}
 
 </script>

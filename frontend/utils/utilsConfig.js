@@ -127,6 +127,9 @@ export class configApp {
     this.apiUrlDatasets = `${this.apiUrlBackendPrefix}${env.NUXT_API_DATASETS}`;
     this.apiUrlTables = `${this.apiUrlBackendPrefix}${env.NUXT_API_TABLES}`;
     // this.apiUrlTableData = `${this.apiUrlBackendPrefix}${env.NUXT_API_TABLE_DATA}`;
+
+    this.apiUrlSearches = `${this.apiUrlBackendPrefix}${env.NUXT_API_SEARCHES}`;
+
     this.apiUrlSchemas = `${this.apiUrlBackendPrefix}${env.NUXT_API_SCHEMAS}`;
     this.apiUrlFields = `${this.apiUrlBackendPrefix}${env.NUXT_API_FIELDS}`;
     this.apiUrlComments = `${this.apiUrlBackendPrefix}${env.NUXT_API_COMMENTS}`;
@@ -165,6 +168,9 @@ export class configApp {
       datasets: this.apiUrlDatasets,
       tables: this.apiUrlTables,
       // table_data: this.apiUrlTableData,
+
+      searches: this.apiUrlSearches,
+      
       schemas: this.apiUrlSchemas,
       fields: this.apiUrlFields,
       comments: this.apiUrlComments,
