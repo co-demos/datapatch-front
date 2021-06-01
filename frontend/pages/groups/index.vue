@@ -7,14 +7,16 @@
       >
 
       <v-col 
-        cols="8"
-        class="offset-1 align-top text-center pa-0 mt-5 mb-8"
+        cols="10"
+        class="offset-1 align-top text-center pa-0 mt-5 mb-10"
         >
         <!-- <p class="font-weight-bold grey--text">
           {{ $t('groups.myGroups')}}
         </p> -->
         <SearchAny
           :itemTypes="['users', 'groups']"
+          :searchLabel="'buttons.searchUserGroup'"
+          :searchPlaceholder="'buttons.queryUserGroup'"
         />
       </v-col>
 

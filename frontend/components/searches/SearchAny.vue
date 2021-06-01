@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div> -->
 
     <v-form ref="form">
 
@@ -7,77 +7,154 @@
         <!-- @change="chooseItem" -->
         <!-- 
         -->
-      <v-combobox
-        v-model="model"
-        :items="itemsArray"
-        :loading="isLoading"
+        <!-- item-text="item_type"
+        item-value="id"  -->
+      <v-row class="justify-center align-center">
+        <v-col cols="7" class="align-center">
+          <v-combobox
+            v-model="model"
+            :items="itemsArray"
+            :loading="isLoading"
 
-        :search-input.sync="search"
-        item-text="item_type"
-        item-value="id" 
+            :search-input.sync="search"
 
-        color="grey"
-        :label="$t('buttons.searchUserGroup')"
-        :placeholder="$t('buttons.queryUserGroup')"
-        prepend-icon="icon-search1"
-        clearable
+            :label="$t(searchLabel)"
+            :placeholder="$t(searchPlaceholder)"
+            clearable
 
-        hide-no-data
-        return-object
-        >
-        <!-- 
-        hide-selected
-        :error="isError"
-        :error-messages="[errorMsg]"
-        -->
+            hide-details
+            return-object
+            no-filter
 
-        <!-- :rules="minCharRules" -->
-
-
-        <template
-          v-slot:item="{ item }"
-          >
-          <v-icon
-            v-if="item.item_type"
-            small
-            class="mr-3"
-            :color="item.color"
+            :outlined="!solo"
+            :flat="flat"
+            :solo="solo"
+            :light="light"
+            :dense="dense"
+            :color="customColor || 'grey'"
             >
-            {{ item.icon || itemTexts[item.item_type].defaultIcon }}
-          </v-icon>
-          {{ getItemInfos(item, 'select') }}
-        </template>
+            <!-- 
+            hide-no-data
+            :error="isError"
+            :error-messages="[errorMsg]"
+            :rules="minCharRules" 
+            -->
 
-        <template
-          v-slot:selection="{ attr, on, item, selected }"
-          >
-          <div>
-            <v-chip
-              v-if="item.item_type"
-              v-bind="attr"
-              :input-value="selected"
-              :color="item.color || 'black' "
-              class="white--text pr-3"
-              v-on="on"
+            <template v-slot:prepend>
+              <v-tooltip 
+                bottom
+                >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    :class="`${customColor || 'grey'}--text mr-4`"
+                    v-on="on"
+                    >
+                    icon-search1
+                  </v-icon>
+                </template>
+                <span>
+                  {{ $t(searchLabel) }}
+                </span>
+              </v-tooltip>
+            </template>
+
+            <!-- LIST SELECTABLE -->
+            <template
+              v-slot:item="{ item }"
               >
               <v-icon
+                v-if="item.item_type"
                 small
                 class="mr-3"
-                color="white"
+                :color="item.color"
                 >
                 {{ item.icon || itemTexts[item.item_type].defaultIcon }}
               </v-icon>
-              {{ getItemInfos(item, 'selected') }}
-            </v-chip>
-            <span v-else>
-              {{ item }}
-            </span>
-          </div>
-        </template>
+              {{ getItemInfos(item, 'select') }}
+              <v-spacer/>
+              {{ $t(`dataPackage.${item.item_type}`)}}
+            </template>
 
-      </v-combobox>
+            <!-- SELECTED ITEM -->
+            <template
+              v-slot:selection="{ attr, on, item, selected }"
+              >
+              <div>
+                <v-chip
+                  v-if="item.item_type"
+                  v-bind="attr"
+                  :input-value="selected"
+                  :color="item.color || 'grey' "
+                  class="white--text pr-3"
+                  v-on="on"
+                  >
+                  <v-icon
+                    small
+                    class="mr-3"
+                    color="white"
+                    >
+                    {{ item.icon || itemTexts[item.item_type].defaultIcon }}
+                  </v-icon>
+                  {{ getItemInfos(item, 'selected') }}
+                  <v-divider
+                    vertical
+                    color="white"
+                    class="mx-3"
+                  />
+                  <span class="mr-3">
+                  {{ $t(`dataPackage.${item.item_type}`) }}
+                  </span>
+                </v-chip>
+
+                <span v-else>
+                  {{ item }}
+                </span>
+              </div>
+            </template>
+
+          </v-combobox>
+        </v-col>
+
+        <v-col cols="5" class="align-center">
+          <p class="caption">
+            {{ $t('buttons.searchIn') }}
+          </p>
+          <v-row>
+            <v-col cols="6" class="align-top">
+              <span class="caption">
+                {{ $t('dataPackage.itemType') }}
+              </span>
+              <v-checkbox
+                v-for="type in itemTypes"
+                :key="type"
+                dense
+                v-model="searchTypes"
+                :label="$t(`dataPackage.${type}`)"
+                :value="type"
+                hide-details
+                class="my-1"
+              />
+            </v-col>
+            <v-col cols="6" class="align-top">
+              <span class="caption">
+                {{ $t('auth.authTypes') }}
+              </span>
+              <v-checkbox
+                v-for="auth in authTypes"
+                :key="auth"
+                dense
+                v-model="searchAuths"
+                :label="$t(`auth.${auth}`)"
+                :value="auth"
+                hide-details
+                class="my-1"
+              />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
         
-      <v-row class="justify-center align-center">
+      <!-- <v-row class="justify-center align-center">
         <v-col>
           {{ $t('buttons.searchIn') }}
         </v-col>
@@ -88,15 +165,16 @@
           cols="3"
           >
           <v-checkbox
+            dense
             v-model="searchTypes"
             :label="$t(`dataPackage.${type}`)"
             :value="type"
           />
         </v-col>
-      </v-row>
+      </v-row> -->
 
       <!-- DEBUGGING -->
-      <v-row class="justify-left align-top" v-if="true">
+      <v-row class="justify-left align-top" v-if="false">
         <v-divider/>
         <v-col cols="6" class="text-left">
           - search: <code>{{ search }}</pre></code>
@@ -135,18 +213,33 @@
         </v-list>
       </v-expand-transition>
     </v-form>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
 
   import { mapState, mapGetters } from 'vuex'
   import { rules } from '@/utils/utilsRules.js'
+  
+  const AuthsTtypes = [
+    'ownerOnly',
+    'groups',
+    'users',
+    'public',
+  ]
 
   export default {
     name: 'SearchAny',
     props: [
-      'itemTypes'
+      'itemTypes',
+      'searchLabel',
+      'searchPlaceholder',
+      'flat',
+      'solo',
+      'light',
+      'dense',
+      'customClass',
+      'customColor'
     ],
     data () {
       return {
@@ -154,6 +247,9 @@
         isLoading: false,
 
         searchTypes: [],
+        
+        authTypes: AuthsTtypes,
+        searchAuths: [ ...AuthsTtypes ],
 
         search: null,
         entries: [],
@@ -222,8 +318,8 @@
       //   }
       // },
       getItemInfos(item, from) {
-        this.log && console.log('\nC-SearchAny > getItemInfos > item :' , item)
-        this.log && console.log('C-SearchAny > getItemInfos > from :' , from)
+        // this.log && console.log('\nC-SearchAny > getItemInfos > item :' , item)
+        // this.log && console.log('C-SearchAny > getItemInfos > from :' , from)
         if ( item && item.item_type ) {
           const itemType = item.item_type
           const itemConfig = this.itemTexts[itemType]
@@ -272,6 +368,7 @@
         
         // if ( this.$refs.form.validate() ) {
         const urlSearch = this.api.searches
+        this.itemsArray = []
 
         // if (this.isLoading) return
 

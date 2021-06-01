@@ -113,35 +113,17 @@
               class=""
               :height="searchHeight"
               >
-              <v-text-field
-                v-model="searchQuery"
-                dense
-                class=""
-                :label="$t('buttons.searchText')"
-                flat
-                light
-                solo
-                hide-details
-                clearable
-                >
-                <template v-slot:prepend>
-                  <v-tooltip 
-                    bottom
-                    >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon
-                        class="white--text mr-4"
-                        v-on="on"
-                        >
-                        icon-search1
-                      </v-icon>
-                    </template>
-                    <span>
-                      {{ $t('workspaces.searchDataset') }}
-                    </span>
-                  </v-tooltip>
-                </template>
-              </v-text-field>
+              <SearchAny
+                :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
+                :searchLabel="'buttons.searchText'"
+                :searchPlaceholder="'buttons.queryText'"
+                :flat="true"
+                :solo="true"
+                :light="true"
+                :dense="false"
+                :customClass="''"
+                :customColor="'white'"
+              />
             </v-col>
           </v-row>
         </template>
@@ -181,9 +163,8 @@
         drawer: false,
         miniVariant: true,
         fixed: false,
-        searchHeight: "80px",
+        searchHeight: "300px",
         searchOpen: false,
-        searchQuery: undefined,
         items: [
           {
             icon: 'icon-home',

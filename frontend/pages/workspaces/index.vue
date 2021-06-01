@@ -7,11 +7,13 @@
       >
 
       <v-col 
-        cols="8"
-        class="offset-1 align-top text-center pa-0 mt-5 mb-8"
+        cols="10"
+        class="offset-1 align-top text-center pa-0 mt-5 mb-10"
         >
         <SearchAny
           :itemTypes="['workspaces', 'datasets', 'tables']"
+          :searchLabel="'buttons.searchWorkspaceDataset'"
+          :searchPlaceholder="'buttons.queryWorkspaceDataset'"
         />
       </v-col>
 
