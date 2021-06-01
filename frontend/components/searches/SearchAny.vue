@@ -270,9 +270,9 @@
         >
         <v-col cols="6">
 
-          {{ model }}
+          <!-- {{ model }} -->
 
-          <!-- <v-list
+          <v-list
             :class="`text-left mt-3`"
             dense
             rounded
@@ -282,14 +282,14 @@
               color="primary"
               >
               <v-list-item
-                v-for="item in model.filter( i => !i.header )"
+                v-for="item in model.filter( i => i && !i.header )"
                 :key="`${item.item_type}-${item.id}`"
                 >
 
                 <v-list-item-avatar>
                   <v-icon
                     dark
-                    :color="item.color || 'black'"
+                    :class="item.color || 'black'"
                     >
                     {{ item.icon || itemTexts[item.item_type].defaultIcon }}
                   </v-icon>
@@ -306,7 +306,7 @@
 
               </v-list-item>
             </v-list-item-group>
-          </v-list> -->
+          </v-list>
 
         </v-col>
       </v-row>
@@ -435,7 +435,7 @@
         if (val.length === prev.length) return
 
         this.model = val.map(item => {
-          if (typeof item === 'string') {
+          if ( typeof item === 'null' || typeof item === 'string') {
             // item = {
             //   text: item,
             //   color: 'black',
