@@ -1,10 +1,11 @@
 <template>
 
-  <v-row class="align-center mt-5 mb-12 pb-12"
-    style="height: 80vh;"
+  <v-row class="align-center justify-center mt-5 mb-12 pb-12"
+    style="height: 90vh;"
     >
 
-    <v-col cols="6" class=" pa-0 pt-4">
+    <!-- LOGO -->
+    <v-col cols="6" class="pa-0 pt-4">
       <div class="text-center">
         <LogoAnimated
           :yoyo="true"
@@ -15,6 +16,7 @@
       </div>
     </v-col>
 
+    <!-- INTRO TEXTS + CALL TO ACTION -->
     <v-col cols="6" class="px-0 py-0">
       <v-card 
         class="elevation-0"
@@ -68,6 +70,35 @@
           </a>.
         </v-card-text>
 
+      </v-card>
+    </v-col>
+
+    <v-col 
+      cols="10"
+      class="align-center justify-center pa-0 mt-5 mb-10"
+      >
+      <v-card 
+        class="elevation-0 pa-5"
+        color="primary"
+        >
+        <v-card-title class="headline mb-4 justify-center">
+          <span class="white--text">
+            {{ $t('datapatch.testSearch') }}
+          </span>
+        </v-card-title>
+        <v-card-text class="text-justify py-1 mb-5">
+          <SearchAny
+            :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
+            :searchLabel="'buttons.searchText'"
+            :searchPlaceholder="'buttons.queryText'"
+            :flat="true"
+            :solo="true"
+            :light="true"
+            :dense="false"
+            :customClass="''"
+            :customColor="'white'"
+          />
+        </v-card-text>
       </v-card>
     </v-col>
 

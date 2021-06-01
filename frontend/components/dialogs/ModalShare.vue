@@ -2,7 +2,7 @@
   <v-dialog
     v-model="dialog"
     overflowed
-    max-width="700"
+    max-width="800"
     >
     <!-- MODAL TITLE -->
     <v-card>
@@ -70,17 +70,19 @@
       <!-- SEARCH USER OR GROUP -->
       <v-divider class="mt-8"/>
       <v-row
-        class="align-center px-12 py-3"
+        class="align-center px-12 pt-5 ma-0 pb-8"
         dense
         >
-        <v-col cols="4">
-          <v-subheader class="">
+        <v-col cols="8" class="offset-4 justify-left">
+          <p class="subtitle-2">
             {{ $t('buttons.inviteUserGroup') }}
-          </v-subheader>
+          </p>
         </v-col>
-
-        <v-col cols="8">
-          <SearchGroupUser/>
+        <v-col cols="12">
+          <SearchAny
+            :itemTypes="['users', 'groups']"
+            :searchLabel="'buttons.searchUserGroup'"
+            :searchPlaceholder="'buttons.queryUserGroup'"          />
         </v-col>
       </v-row>
       <v-divider/>

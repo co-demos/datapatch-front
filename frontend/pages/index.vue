@@ -18,6 +18,7 @@
       />
 
       <LandingHead/>
+
       <v-divider/>
 
       <LandingCarousel/>

@@ -7,6 +7,7 @@ export default {
     pitch_bis: "Data Patch allows you to import dataset files, to create new ones, edit them online, collaborate with other users or team, manage schemas, publish via the API or as tables, and finally to engage youur community to enhance the datasets without having them creating an account.",
     infos: 'For more information on Data Patch, check out the ',
     repo: "Github repository",
+    testSearch: 'Search for data',
     codemos: "an original and open source project by co-demos",
   },
   features: {
@@ -99,6 +100,7 @@ export default {
     cancel: 'Cancel',
     delete: 'Delete',
     deleteConfirm: 'Yes, I delete',
+    searchCheckboxes: "Filter objects by types",
     searchText: 'Search for an element (user, group, dataset, table, workspace...)',
     queryText: 'Enter the email or the name of an element (user, group, workspace, dataset, table...)',
     searchIn: 'Search within :',
@@ -232,7 +234,7 @@ export default {
     share: 'Sharing',
   },
   auth: {
-    authTypes: 'Auth levels',
+    authTypesRead: 'Auth levels for reading',
     ownerOnly: 'Owner only',
     ownerOnlyHelp: 'Only owner is authorized',
     groups: 'Groups',

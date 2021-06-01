@@ -1,28 +1,47 @@
 <template>
   <v-form ref="form">
-
+      <!-- @change="updateItemDebounced()" -->
+      <!-- @change="chooseItem" -->
+      <!-- 
+      -->
+      <!-- item-text="item_type"
+      item-value="id"  -->
     <v-row class="justify-center align-center">
       <v-col cols="12" class="align-center">
 
+   
         <v-combobox
-          v-model="model"
-          no-filter
-          hide-no-data
-          :items="items"
-          :search-input.sync="search"
-          hide-selected
-          :label="$t(searchLabel)"
-          multiple
+          v-model="selectArray"
+          :items="itemsArray"
+          :loading="isLoading"
 
-          :small-chips="dense"
+          :search-input.sync="search"
+
+          :label="$t(searchLabel)"
+          :placeholder="$t(searchPlaceholder)"
+          clearable
+          hide-details
 
           :outlined="!solo"
-          :solo="solo"
           :flat="flat"
+          :solo="solo"
           :light="light"
           :dense="dense"
           :color="customColor || 'grey'"
+
+          hide-no-data
+
+          multiple
+          return-object
+          :filter="filter"
           >
+          <!-- 
+          no-filter
+          item-value="id"
+          :error="isError"
+          :error-messages="[errorMsg]"
+          :rules="minCharRules" 
+          -->
 
           <!-- PREPEND ICON -->
           <template v-slot:prepend>
@@ -43,90 +62,61 @@
             </v-tooltip>
           </template>
 
-          <!-- NO DATA -->
-          <template v-slot:no-data>
-            <v-list-item>
-              <span class="caption">
-                ... {{ $t(searchPlaceholder) }}
-              </span>
-            </v-list-item>
-          </template>
-          
-          <!-- SELECTION -->
-          <template v-slot:selection="{ attrs, item, parent, selected }">
-            <v-chip
-              v-if="item === Object(item)"
+          <!-- LIST SELECTABLE -->
+          <template
+            v-slot:item="{ item, on, parent, attrs }"
+            >
+            <v-icon
+              v-if="item.item_type"
               v-bind="attrs"
-              :color="`${item.color}`"
-              :input-value="selected"
-              label
-              :small="dense"
-              dark
+              small
+              class="mr-3"
+              :color="item.color"
+              v-on="on"
               >
+              {{ item.icon || itemTexts[item.item_type].defaultIcon }}
+            </v-icon>
+            {{ getItemInfos(item, 'item') }}
+            <v-spacer/>
+            {{ $t(`dataPackage.${item.item_type}`)}}
+          </template>
 
-              <v-icon
-                v-if="item.item_type"
-                small
-                class="mr-3"
-                color="white"
-                >
-                {{ item.icon || itemTexts[item.item_type].defaultIcon }}
-              </v-icon>
-
-              <span class="pr-2 white--text">
-                <!-- {{ item.text }} -->
-                {{ getItemInfos(item, 'SELECTION') }}
-              </span>
-
-              <v-divider
-                vertical
-                color="white"
-                class="mx-3"
-              />
-
-              <span v-if="item.item_type">
-                {{ $t(`dataPackage.${item.item_type}`) }}
-              </span>
-
-              <v-icon
-                small
-                color="white"
-                class="ml-3"
+          <!-- SELECTED ITEM -->
+          <template
+            v-slot:selection="{ attrs, item, selected, parent, select }"
+            >
+            <!-- <div
+              > -->
+              <v-chip
+                v-if="item === Object(item) && item.item_type"
+                v-bind="attrs"
+                :input-value="selected"
+                :color="item.color || 'grey' "
+                class="white--text pr-3 ma-3"
                 @click="parent.selectItem(item)"
                 >
-                icon-clear
-              </v-icon>
-
-            </v-chip>
-          </template>
-
-          <!-- LIST OF SELECTABLE ITEMS -->
-          <template v-slot:item="{ index, item }">
-            <v-chip
-              :color="`${item.color}`"
-              dark
-              label
-              :small="dense"
-              >
-              <v-icon
-                v-if="item.item_type"
-                small
-                class="mr-3"
-                color="white"
-                >
-                {{ item.icon || itemTexts[item.item_type].defaultIcon }}
-              </v-icon>
-              <!-- {{ item.text }} -->
-              {{ getItemInfos(item, 'SELECTABLE') }}
-            </v-chip>
-            <v-spacer/>
-            <span class="caption grey--text">
-              {{ $t(`dataPackage.${item.item_type}`)}}
-            </span>
+                <!-- @click="selectItem(item, parent)" -->
+                <!-- v-on="on" -->
+                <v-icon
+                  small
+                  class="mr-3"
+                  color="white"
+                  >
+                  {{ item.icon || itemTexts[item.item_type].defaultIcon }}
+                </v-icon>
+                {{ getItemInfos(item, 'selected') }}
+                <v-divider
+                  vertical
+                  color="white"
+                  class="mx-3"
+                />
+                <span class="mr-3">
+                  {{ $t(`dataPackage.${item.item_type}`) }}
+                </span>
+              </v-chip>
 
           </template>
 
-          <!-- OUTER ICON -->
           <template v-slot:append-outer>
             <v-tooltip left>
               <template v-slot:activator="{ on, attrs }">
@@ -148,7 +138,6 @@
 
         </v-combobox>
       </v-col>
-
 
       <!-- CHECKBOXES -->
       <v-expand-transition>
@@ -237,13 +226,10 @@
           </v-row>
         </v-col>
       </v-expand-transition>
-
     </v-row>
 
-
-
     <!-- DEBUGGING -->
-    <v-row class="justify-left align-top" v-if="false">
+    <v-row class="justify-left align-top" v-if="true">
       <v-divider/>
       <v-col cols="4" class="text-left">
         - search: <code>{{ search }}</pre></code>
@@ -265,12 +251,12 @@
 
     <v-expand-transition>
       <v-row
-        v-if="model && model.length > 0 && canDisplay"
+        v-if="selectArray.length > 0 && canDisplay"
         class="justify-center"
         >
         <v-col cols="6">
 
-          {{ model }}
+          {{ selectArray }}
 
           <!-- <v-list
             :class="`text-left mt-3`"
@@ -278,11 +264,12 @@
             rounded
             three-line
             >
+
             <v-list-item-group
               color="primary"
               >
               <v-list-item
-                v-for="item in model.filter( i => !i.header )"
+                v-for="item in selectArray"
                 :key="`${item.item_type}-${item.id}`"
                 >
 
@@ -306,6 +293,7 @@
 
               </v-list-item>
             </v-list-item-group>
+
           </v-list> -->
 
         </v-col>
@@ -343,6 +331,11 @@
         authTypes: AuthsOptions,
         searchAuthLevel: AuthsOptions.find(auth => auth.name === 'public').name,
 
+        search: null,
+        entries: [],
+        itemsArray: [],
+        selectArray: [],
+
         isError: false,
         errorMsg: undefined,
 
@@ -351,7 +344,7 @@
         itemTexts: {
           user: {txt: 'username', defaultIcon:'icon-user' },
           group: {txt: 'title', defaultIcon:'icon-users' },
-          workspace: {txt: 'title', defaultIcon:'icon-apps' },
+          workspace: {txt: 'title', defaultIcon:'icon-app' },
           dataset: {txt: 'title', defaultIcon:'icon-database' },
           table: {txt: 'title', defaultIcon:'icon-table' },
         },
@@ -360,90 +353,66 @@
         minCharRules: rules.minCharRules( this.$t('rules.valEnter'), this.$t('rules.minChars') ),
         emailRules: rules.emailRules( this.$t('rules.emailRequired'), this.$t('rules.emailValid') ),
 
-        entries: [],
-        itemsArray: [],
-        selectArray: [],
-
         // DEBUG
         activator: null,
         attach: null,
-
-        header: { header: this.$t(this.searchPlaceholder) },
+        colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+        editing: null,
+        editingIndex: -1,
         items: [
-          { header: this.$t(this.searchPlaceholder) },
-          // {
-          //   text: 'Joe',
-          //   id: 1,
-          //   name: 'This is my group',
-          //   surname: 'This is my group',
-          //   username: 'Jpy',
-          //   color: 'blue',
-          //   item_type: 'user'
-          // },
-          // {
-          //   text: 'My group',
-          //   id: 1,
-          //   title: 'This is my group',
-          //   description: 'my group description',
-          //   color: 'red',
-          //   icon: 'icon-users',
-          //   item_type: 'group'
-          // },
-          // {
-          //   text: 'My workspace',
-          //   id: 1,
-          //   title: 'This is my workspace',
-          //   description: 'my workspace description',
-          //   color: 'primary',
-          //   icon: 'icon-apps',
-          //   item_type: 'workspace'
-          // },
-          // {
-          //   text: 'My dataset',
-          //   id: 1,
-          //   title: 'This is my dataset',
-          //   description: 'my dataset description',
-          //   color: 'warning',
-          //   icon: 'icon-database',
-          //   item_type: 'dataset'
-          // },
+          { header: 'Select an option or create one' },
+          {
+            text: 'Foo',
+            color: 'blue',
+          },
+          {
+            text: 'Bar',
+            color: 'red',
+          },
         ],
-
+        nonce: 1,
+        menu: false,
+        model: [
+          {
+            text: 'Foo',
+            color: 'blue',
+          },
+        ],
+        x: 0,
         search: null,
-        model: [],
-
+        y: 0,
       }
     },
     beforeMount() {
       this.searchTypes = this.itemTypes
     },
     watch: {
-
       search (val) {
-        if (val)  {
-          this.selectArray = []
-          this.log && console.log('C-SearchAny > watch > search > val :' , val)
-          this.log && console.log('C-SearchAny > watch > search > this.search :' , this.search)
-          this.querySearchDebounced(val)
-        }
+        this.selectArray = []
+        this.log && console.log('C-SearchAny > watch > search > val :' , val)
+        this.log && console.log('C-SearchAny > watch > search > this.search :' , this.search)
+        this.querySearchDebounced(val)
       },
-
+      select (val, prev) {
+        this.log && console.log('\nC-SearchAny > watch > select > val :' , val)
+        this.log && console.log('C-SearchAny > watch > select > prev :' , prev)
+      },
       model (val, prev) {
-        this.log && console.log('\nC-SearchAny > watch > model > val :' , val)
-        this.log && console.log('C-SearchAny > watch > model > prev :' , prev)
-        
         if (val.length === prev.length) return
 
-        this.model = val.map(item => {
-          if (typeof item === 'string') {
-            // item = {
-            //   text: item,
-            //   color: 'black',
-            // }
-            // this.items.push(item)
-          } else {
-            return item
+        this.model = val.map(v => {
+          if (typeof v === 'string') {
+            v = {
+              text: v,
+              color: this.colors[this.nonce - 1],
+            }
+
+            this.items.push(v)
+
+            this.nonce++
           }
+
+          return v
         })
       },
     },
@@ -455,9 +424,53 @@
       ...mapGetters({
         headerUser: 'user/headerUser',
       }),
+      // items() {
+      //   this.log && console.log('\nC-SearchAny > getItems > this.search :', this.search)
+      //   this.log && console.log('C-SearchAny > getItems > this.selectArray :', this.selectArray)
+      //   let itemsArrray = []
+      //   if (this.canDisplay && this.entries) {
+      //     for (let type of this.searchTypes) {
+      //       this.log && console.log('C-SearchAny > getItems > type :' , type)
+      //       this.log && console.log('C-SearchAny > getItems > this.entries :' , this.entries)
+      //       if (this.entries[type] && this.entries[type].results.length ) {
+      //         let entriesForType = this.entries[type].results
+      //         this.log && console.log('C-SearchAny > getItems > entriesForType :' , entriesForType)
+      //         itemsArrray.push(...entriesForType)
+      //       }
+      //     }
+      //     this.log && console.log('C-SearchAny > items > itemsArrray :' , itemsArrray)
+      //   }
+      //   return itemsArrray
+      // },
     },
     methods: {
-
+      selectItem(item, parent) {
+        this.log && console.log('\nC-SearchAny > selectItem > item :' , item)
+        this.log && console.log('C-SearchAny > selectItem > parent :' , parent)
+        // parent.selectItem(item)
+      },
+      edit (index, item) {
+        if (!this.editing) {
+          this.editing = item
+          this.editingIndex = index
+        } else {
+          this.editing = null
+          this.editingIndex = -1
+        }
+      },
+      filter (item, queryText, itemText) {
+        this.log && console.log('\nC-SearchAny > filter > item :' , item)
+        this.log && console.log('C-SearchAny > filter > queryText :' , queryText)
+        this.log && console.log('C-SearchAny > filter > itemText :' , itemText)
+        if (item.header) return false
+        const hasValue = val => val != null ? val : ''
+        const text = hasValue(itemText)
+        const query = hasValue(queryText)
+        return text.toString()
+          .toLowerCase()
+          .indexOf(query.toString().toLowerCase()) > -1
+        // return true
+      },
       getItemInfos(item, from) {
         // this.log && console.log('\nC-SearchAny > getItemInfos > item :' , item)
         // this.log && console.log('C-SearchAny > getItemInfos > from :' , from)
@@ -470,26 +483,25 @@
         }
       },
       buildItems(data) {
-        this.log && console.log('\nC-SearchAny > buildItems > this.search :', this.search)
-        this.log && console.log('C-SearchAny > buildItems > this.selectArray :', this.selectArray)
-        let itemsArrray = [ this.header ]
-        // let itemsArrray = [ ]
+        this.log && console.log('\nC-SearchAny > getItems > this.search :', this.search)
+        this.log && console.log('C-SearchAny > getItems > this.selectArray :', this.selectArray)
+        let itemsArrray = []
         if (data) {
           for (let type of this.searchTypes) {
-            // this.log && console.log('C-SearchAny > buildItems > type :' , type)
-            // this.log && console.log('C-SearchAny > buildItems > data :' , data)
+            this.log && console.log('C-SearchAny > getItems > type :' , type)
+            this.log && console.log('C-SearchAny > getItems > data :' , data)
             if (data[type] && data[type].results.length ) {
-              let entriesForType = data[type].results.map( i => {
-                i.text = i[ this.itemTexts[i.item_type].txt ]
-                return i
-              })
-              // this.log && console.log('C-SearchAny > buildItems > entriesForType :' , entriesForType)
+              let entriesForType = data[type].results
+              this.log && console.log('C-SearchAny > getItems > entriesForType :' , entriesForType)
               itemsArrray.push(...entriesForType)
             }
           }
-          this.log && console.log('C-SearchAny > buildItems > itemsArrray :' , itemsArrray)
+          this.log && console.log('C-SearchAny > items > itemsArrray :' , itemsArrray)
         }
         return itemsArrray
+      },
+      chooseItem(val) {
+        this.log && console.log('C-SearchAny > chooseItem > val :' , val)
       },
       querySearchDebounced(val) {
         // this.log && console.log('\nC-SearchAny > querySearchDebounced > val :', val)
@@ -527,7 +539,6 @@
             this.count = data.length
             this.entries = resp.data
             this.itemsArray = this.buildItems(resp.data)
-            this.items = this.buildItems(resp.data)
             this.canDisplay = true
           })
           .catch(err => {
