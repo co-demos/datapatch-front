@@ -5,8 +5,20 @@
     style="height: 90vh;"
     >
 
+    <!-- WELCOME MESSAGE -->
+    <v-col cols="12" class="mt-3 pa-0">
+      <div class="text-center text-h5 font-weight-bold">
+        <span v-if="isAuthenticated">
+          {{ $t('datapatch.introUser', { name: userData.name }) }}
+        </span>
+        <span v-else>
+          {{ $t('datapatch.intro') }}
+        </span>
+      </div>
+    </v-col>
+
     <!-- LOGO -->
-    <v-col cols="6" class="pa-0 pt-4">
+    <v-col cols="6" class="pa-0 pt-3">
       <div class="text-center">
         <LogoAnimated
           :yoyo="true"
@@ -18,27 +30,29 @@
     </v-col>
 
     <!-- INTRO TEXTS + CALL TO ACTION -->
-    <v-col cols="6" class="px-0 py-0">
+    <v-col cols="6" class="pa-0">
       <v-card 
         class="elevation-0"
         >
 
-        <v-card-title class="headline mb-4 justify-center">
+        <!-- <v-card-title class="headline mb-4 justify-center">
           <span v-if="isAuthenticated">
             {{ $t('datapatch.introUser', { name: userData.name }) }}
           </span>
           <span v-else>
             {{ $t('datapatch.intro') }}
           </span>
-        </v-card-title>
+        </v-card-title> -->
 
-        <v-card-text class="text-justify py-1">
-          {{ $t('datapatch.pitch') }}
-        </v-card-text>
+        <v-card-text
+          class="text-justify py-1"
+          v-html="$t('datapatch.pitch')"
+        />
 
-        <v-card-text class="text-justify py-1 font-weight-bold">
-          {{ $t('datapatch.pitch_bis') }}
-        </v-card-text>
+        <v-card-text
+          class="text-justify py-1 font-weight-bold"
+          v-html="$t('datapatch.pitch_bis')"
+        />
 
         <v-card-actions class="justify-center px-4 my-5">
           <!-- <v-spacer /> -->
@@ -92,8 +106,11 @@
     </v-col>
 
     <v-col cols="12" class="px-0 py-0">
-      <v-card-text class="text-justify py-1">
+      <v-card-text class="text-center py-1">
         {{ $t('datapatch.infos') }}
+        <v-icon x-small class="mx-1">
+          icon-github
+        </v-icon>
         <a
           href="https://github.com/co-demos/fastapi-boilerplate"
           target="_blank"

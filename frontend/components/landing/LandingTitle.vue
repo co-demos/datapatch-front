@@ -4,7 +4,7 @@
   }
 </style>
 <template>
-  <v-col cols="12" class="text-center mb-6 pb-0">
+  <v-col cols="12" class="text-center mb-10 pb-0">
     <v-row class="ma-0">
       <v-btn
         icon
@@ -29,7 +29,9 @@
             icon-hash
           </v-icon>
         </nuxt-link>
-        {{ $t(title) }}
+        <span class="font-weight-bold">
+          {{ $t(title) }}
+        </span>
       </span>
       <v-spacer/>
       <v-btn
