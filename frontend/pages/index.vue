@@ -19,17 +19,19 @@
 
       <LandingHead/>
 
-      <v-divider/>
+      <v-divider id="LandingSearch"/>
+      <LandingSearch/>
 
+      <v-divider id="LandingCarousel"/>
       <LandingCarousel/>
-      <v-divider/>
 
+      <v-divider id="LandingUsecases"/>
       <LandingUsecases/>
-      <v-divider/>
 
+      <v-divider id="LandingRoadmap"/>
       <LandingRoadmap/>
-      <v-divider/>
 
+      <v-divider id="LandingStack"/>
       <LandingStack/>
 
     </v-flex>
@@ -44,6 +46,7 @@
     name: 'Home',
     components: {
       LandingHead: () => import(/* webpackChunkName: "LandingHead" */ '@/components/landing/LandingHead.vue'),
+      LandingSearch: () => import(/* webpackChunkName: "LandingSearch" */ '@/components/landing/LandingSearch.vue'),
       LandingCarousel: () => import(/* webpackChunkName: "LandingCarousel" */ '@/components/landing/LandingCarousel.vue'),
       LandingUsecases: () => import(/* webpackChunkName: "LandingUsecases" */ '@/components/landing/LandingUsecases.vue'),
       LandingRoadmap: () => import(/* webpackChunkName: "LandingRoadmap" */ '@/components/landing/LandingRoadmap.vue'),

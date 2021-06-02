@@ -73,35 +73,6 @@
       </v-card>
     </v-col>
 
-    <v-col 
-      cols="10"
-      class="align-center justify-center pa-0 mt-5 mb-10"
-      >
-      <v-card 
-        class="elevation-0 pa-5"
-        color="primary"
-        >
-        <v-card-title class="headline mb-4 justify-center">
-          <span class="white--text">
-            {{ $t('datapatch.testSearch') }}
-          </span>
-        </v-card-title>
-        <v-card-text class="text-justify py-1 mb-5">
-          <SearchAny
-            :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
-            :searchLabel="'buttons.searchText'"
-            :searchPlaceholder="'buttons.queryText'"
-            :flat="true"
-            :solo="true"
-            :light="true"
-            :dense="false"
-            :customClass="''"
-            :customColor="'white'"
-          />
-        </v-card-text>
-      </v-card>
-    </v-col>
-
   </v-row>
 
 </template>

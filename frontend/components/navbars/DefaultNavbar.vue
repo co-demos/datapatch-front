@@ -109,7 +109,7 @@
             >
             <!-- :style="`${searchOpen ? 'border-bottom: thin solid white;' : ''}`" -->
             <v-col
-              cols="8"
+              cols="10"
               class=""
               :height="searchHeight"
               >
@@ -163,7 +163,7 @@
         drawer: false,
         miniVariant: true,
         fixed: false,
-        searchHeight: "300px",
+        searchHeight: "600px",
         searchOpen: false,
         items: [
           {

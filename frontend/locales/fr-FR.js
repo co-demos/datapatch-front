@@ -111,6 +111,13 @@ export default {
     queryUserGroup: "Entrer un nom ou un email",
     searchWorkspaceDataset: 'Rechercher un espace de travail ou un jeu de données',
     queryWorkspaceDataset: "Entrer un titre ou un élément de description",
+    yourSelection: "Votre sélection",
+    selectedOptions: "Options de cet élément",
+    link: "Ouvrir la page de l'élément",
+    add: "Ajouter cet élément aux votres",
+    // share: "Partager cet élément avec des personnes ou des groupes",
+    join: "Demander l'accès à cet élément",
+    invite: "Inviter une personne ou un groupe",
   },
   imports: {
     example: 'Exemple',
