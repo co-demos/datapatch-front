@@ -3,12 +3,14 @@
   <div>
 
     <v-row class="align-top justify-center mt-12">
-      
-      <v-col cols="12" class="text-center">
-        <p class="text-h5">
-          {{ $t('roadmap.title') }}
-        </p>
-      </v-col>
+  
+      <LandingTitle
+        :top="'#LandingHead'"
+        :title="'roadmap.title'"
+        :current="'#LandingRoadmap'"
+        :up="'#LandingUsecases'"
+        :down="'#LandingStack'"
+      />
 
       <v-col cols="4" class="justify-text">
         <p class="body-2">
@@ -47,6 +49,21 @@
 
               <v-col cols="4" class="text-body-2 text-center">
                 <p class="text-caption">
+                  <span
+                    v-if="step.isNew"
+                    >
+                    <v-chip
+                      dark
+                      x-small
+                      color="red"
+                      class="mx-3"
+                      >
+                      <span class="font-weight-bold">
+                        {{ $t('roadmap.new') }}
+                      </span>
+                    </v-chip>
+                    <br>
+                  </span>
                   <strong
                     :class="`font-weigth-bold ${step.color}--text`"
                     >
@@ -111,7 +128,8 @@
             tags: ['core', 'tech'],
           },
           {
-            color: 'grey',
+            isNew: true,
+            color: 'primary',
             version: 'v.dev.0.2',
             status: 'roadmap.inDev',
             title: 'roadmap.authFunctions',

@@ -327,9 +327,9 @@
         itemTexts: {
           user: { 
             txt: 'username', 
-            txtBis: 'email', 
+            txtBis: 'email',
             defaultIcon:'icon-user',
-            actions: ['link'],
+            actions: ['addToGroup'],
           },
           group: { 
             txt: 'title', 

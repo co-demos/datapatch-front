@@ -4,11 +4,13 @@
       
     <v-row class="align-top justify-center my-12">
 
-      <v-col cols="12" class="text-center mb-0">
-        <p class="text-h5">
-          {{ $t('usecases.title') }}
-        </p>
-      </v-col>
+      <LandingTitle
+        :top="'#LandingHead'"
+        :title="'usecases.title'"
+        :current="'#LandingUsecases'"
+        :up="'#LandingCarousel'"
+        :down="'#LandingRoadmap'"
+      />
 
       <v-col cols="6" class="justify-text">
         <v-list

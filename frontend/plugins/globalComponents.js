@@ -9,6 +9,8 @@ const components = {
   AlertSnack: () => import(/* webpackChunkName: "AlertSnack" */ '@/components/dialogs/AlertSnack.vue'),
   BackRouter: () => import(/* webpackChunkName: "BackRouter" */ '@/components/buttons/BackRouter.vue'),
   Breadcrumbs: () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/navbars/Breadcrumbs.vue'),
+  
+  LandingTitle: () => import(/* webpackChunkName: "LandingTitle" */ '@/components/landing/LandingTitle.vue'),
 
   SearchAny: () => import(/* webpackChunkName: "SearchAny" */ '@/components/searches/SearchAny.vue'),
 

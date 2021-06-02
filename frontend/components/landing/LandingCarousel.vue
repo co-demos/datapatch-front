@@ -2,13 +2,15 @@
 
   <v-row class="align-top justify-center my-12">
 
-    <v-col cols="12" class="text-center mb-0 pb-0">
-      <p class="text-h5">
-        {{ $t('features.featuresTitle') }}
-      </p>
-    </v-col>
+    <LandingTitle
+      :top="'#LandingHead'"
+      :title="'features.featuresTitle'"
+      :current="'#LandingCarousel'"
+      :up="'#LandingSearch'"
+      :down="'#LandingUsecases'"
+    />
 
-    <v-col cols="8" class="mb-3">
+    <v-col cols="10" class="mb-3">
       <v-carousel
         cycle
         hide-delimiter-background
@@ -48,13 +50,13 @@
       </v-carousel>
     </v-col>
 
-    <v-col cols="12" class="text-center mb-0 pb-0">
+    <v-col cols="10" class="text-center mb-0 pb-0">
       <p>
         {{ $t('features.featuresHeader') }}
       </p>
     </v-col>
 
-    <v-col cols="6" class="text-caption py-0">
+    <v-col cols="5" class="text-caption py-0">
       <v-list disabled dense class="">
         <v-list-item
           v-for="feat in featuresLeft"
@@ -74,7 +76,7 @@
       </v-list>
     </v-col>
 
-    <v-col cols="6" class="text-caption py-0">
+    <v-col cols="5" class="text-caption py-0">
       <v-list disabled dense class="">
         <v-list-item
           v-for="feat in featuresRight"

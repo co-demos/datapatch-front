@@ -1,6 +1,7 @@
 <template>
 
-  <v-row class="align-center justify-center mt-5 mb-12 pb-12"
+  <v-row 
+    class="align-center justify-center mt-5 mb-12 pb-12"
     style="height: 90vh;"
     >
 
@@ -60,17 +61,46 @@
           </v-btn>
         </v-card-actions>
 
-        <v-card-text class="text-justify py-1">
-          {{ $t('datapatch.infos') }}
-          <a
-            href="https://github.com/co-demos/fastapi-boilerplate"
-            target="_blank"
-            >
-            {{ $t('datapatch.repo') }}
-          </a>.
-        </v-card-text>
 
       </v-card>
+    </v-col>
+
+    <v-col cols="10" class="px-0 py-0">
+      <v-row class="align-center justify-center">
+        <v-col
+          v-for="link in anchorLinks"
+          class="text-center px-3"
+          cols="4"
+          >
+          <v-btn
+            outlined
+            block
+            dark
+            color="secondary"
+            elevation="0"
+            class="text-none"
+            @click="$vuetify.goTo(link.to)"
+            >
+            <!-- :to="link.to" -->
+            <v-icon x-small class="mr-1">
+              icon-hash
+            </v-icon>
+            {{ $t(link.text) }}
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-col>
+
+    <v-col cols="12" class="px-0 py-0">
+      <v-card-text class="text-justify py-1">
+        {{ $t('datapatch.infos') }}
+        <a
+          href="https://github.com/co-demos/fastapi-boilerplate"
+          target="_blank"
+          >
+          {{ $t('datapatch.repo') }}
+        </a>.
+      </v-card-text>
     </v-col>
 
   </v-row>
@@ -80,13 +110,47 @@
 <script>
 
   import { mapState, mapGetters } from 'vuex'
+  // import * as easings from 'vuetify/es5/services/goto/easing-patterns'
 
   export default {
     name: 'LandingHead',
     props: [],
     data () {
       return {
+        anchorLinks: [
+          { 
+            to: '#LandingSearch',
+            text: 'datapatch.testSearch',
+          },
+          { 
+            to: '#LandingCarousel',
+            text: 'features.featuresTitle',
+          },
+          { 
+            to: '#LandingUsecases',
+            text: 'usecases.title',
+          },
+          { 
+            to: '#LandingRoadmap',
+            text: 'roadmap.title',
+          },
+          { 
+            to: '#LandingStack',
+            text: 'stack.title',
+          },
+        ],
 
+        // type: 'selector',
+        // duration: 300,
+        // offset: 0,
+        // easing: 'easeInOutCubic',
+
+        // number: 9999,
+        // selector: '#scroll-with-options',
+        // selected: 'Button',
+        // elements: ['Button', 'Radio group'],
+
+        // easings: Object.keys(easings),
       }
     },
     computed: {
@@ -96,7 +160,24 @@
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated'
-      })
+      }),
+      // target () {
+      //   const value = this[this.type]
+      //   if (!isNaN(value)) return Number(value)
+      //   else return value
+      // },
+      // options () {
+      //   return {
+      //     duration: this.duration,
+      //     offset: this.offset,
+      //     easing: this.easing,
+      //   }
+      // },
+      // element () {
+      //   if (this.selected === 'Button') return this.$refs.button
+      //   else if (this.selected === 'Radio group') return this.$refs.radio
+      //   else return null
+      // },
     },
   }
 

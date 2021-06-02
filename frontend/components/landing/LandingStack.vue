@@ -3,11 +3,13 @@
   <div>
       
     <v-row class="align-top justify-center mt-12">
-      <v-col cols="12" class="text-center mb-0">
-        <p class="text-h5">
-          {{ $t('stack.title') }}
-        </p>
-      </v-col>
+
+      <LandingTitle
+        :top="'#LandingHead'"
+        :title="'stack.title'"
+        :current="'#LandingStack'"
+        :up="'#LandingRoadmap'"
+      />
 
       <v-col cols="6" class="justify-text mb-5">
         <p class="body-2">

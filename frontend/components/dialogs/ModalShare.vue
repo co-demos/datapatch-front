@@ -75,14 +75,16 @@
         >
         <v-col cols="8" class="offset-4 justify-left">
           <p class="subtitle-2">
-            {{ $t('buttons.inviteUserGroup') }}
+            {{ $t(`buttons.inviteUser${itemType === 'groups' ? '' : 'Group'}`) }}
           </p>
         </v-col>
+        <!-- {{ itemType }} -->
         <v-col cols="12">
           <SearchAny
-            :itemTypes="['users', 'groups']"
-            :searchLabel="'buttons.searchUserGroup'"
-            :searchPlaceholder="'buttons.queryUserGroup'"          />
+            :itemTypes="itemType === 'groups' ? ['users'] : ['users', 'groups']"
+            :searchLabel="`buttons.searchUser${itemType === 'groups' ? '' : 'Group'}`"
+            :searchPlaceholder="`buttons.queryUser${itemType === 'groups' ? '' : 'Group'}`"
+          />
         </v-col>
       </v-row>
       <v-divider/>

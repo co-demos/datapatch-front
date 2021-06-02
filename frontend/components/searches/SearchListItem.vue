@@ -40,10 +40,13 @@
             :class="`mb-1 font-weight-bold ${item.color}--text`"
             >
             {{ getItemInfos(item, 'txt') }}
+            <span v-if="item.item_type === 'user'" class="font-weight-medium">
+              - {{ item.name }} {{ item.surname }}<br>
+            </span>
           </p>
           <p class="body-2 ma-0">
             {{ getItemInfos(item, 'txtBis') }}<br>
-            <span class="grey--text">
+            <span class="grey--text font-italic">
               {{ $t(`dataPackage.${item.item_type}`) }}
             </span>
           </p>

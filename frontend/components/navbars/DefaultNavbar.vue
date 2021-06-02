@@ -37,8 +37,8 @@
       dense
       flat
       app
-      :extension-height="searchHeight"
       >
+      <!-- :extension-height="searchHeight" -->
       <!-- :style="`${ searchOpen ? 'box-shadow: 0 20px 10px -2px white !important;' : ''}`" -->
 
       <v-app-bar-nav-icon
@@ -99,38 +99,88 @@
         </span>
       </v-tooltip>
 
-      <!-- <v-expand-transition> -->
-        <template
-          v-slot:extension
-          v-if="searchOpen"
+      <!-- <template
+        v-slot:extension
+        v-if="searchOpen"
+        >
+        <v-row
+          class="align-center justify-center ma-0"
           >
-          <v-row
-            class="align-center justify-center ma-0"
+          <v-col
+            cols="10"
+            class=""
+            :height="searchHeight"
             >
-            <!-- :style="`${searchOpen ? 'border-bottom: thin solid white;' : ''}`" -->
-            <v-col
-              cols="10"
-              class=""
-              :height="searchHeight"
-              >
-              <SearchAny
-                :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
-                :searchLabel="'buttons.searchText'"
-                :searchPlaceholder="'buttons.queryText'"
-                :flat="true"
-                :solo="true"
-                :light="true"
-                :dense="false"
-                :customClass="''"
-                :customColor="'white'"
-              />
-            </v-col>
-          </v-row>
-        </template>
-      <!-- </v-expand-transition> -->
+            <SearchAny
+              :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
+              :searchLabel="'buttons.searchText'"
+              :searchPlaceholder="'buttons.queryText'"
+              :flat="true"
+              :solo="true"
+              :light="true"
+              :dense="false"
+              :customClass="''"
+              :customColor="'white'"
+            />
+          </v-col>
+        </v-row>
+      </template> -->
 
     </v-app-bar>
 
+    <v-dialog
+      v-model="searchOpen"
+      fullscreen
+      hide-overlay
+      transition="dialog-top-transition"
+      >
+
+      <v-card
+        :color="navbarColor || 'primary'"
+        >
+        
+        <!-- CLOSE MODAL -->
+        <v-card-actions class="mr-5 pt-3 pb-0 px-0">
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            small
+            rounded
+            elevation="0"
+            @click="searchOpen = false"
+            dark
+            >
+            <v-icon>icon-clear</v-icon>
+          </v-btn>
+        </v-card-actions>
+
+        <v-card-title class="white--text justify-center">
+          {{ $t('datapatch.testSearch') }}
+        </v-card-title>
+
+        <v-row
+          class="align-center justify-center py-12"
+          >
+          <v-col
+            cols="10"
+            class=""
+            :height="searchHeight"
+            >
+            <SearchAny
+              :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
+              :searchLabel="'buttons.searchText'"
+              :searchPlaceholder="'buttons.queryText'"
+              :flat="true"
+              :solo="true"
+              :light="true"
+              :dense="false"
+              :customClass="''"
+              :customColor="'white'"
+            />
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
 
   </v-container>
 

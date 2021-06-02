@@ -43,6 +43,10 @@
             icon: 'icon-plus',
             tooltip: 'buttons.add',
           },
+          addToGroup: {
+            icon: 'icon-user-plus',
+            tooltip: 'buttons.addToGroup',
+          },
           // share: {
           //   icon: 'icon-share',
           //   tooltip: 'buttons.share'
