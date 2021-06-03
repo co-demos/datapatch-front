@@ -12,15 +12,17 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         elevation="0"
-        class="ma-1 action-border"
-        :color="customColor ? 'white' : 'grey'"
-        fab
+        class="ma-1"
+        icon
+        color="grey"
         x-small
         v-bind="attrs"
         v-on="on"
+        @click.stop="handleAction"
         >
+        <!-- :color="customColor ? 'white' : 'grey'" -->
+        <!-- :class="`${customColor ? 'primary' : 'white'}--text`" -->
         <v-icon
-          :class="`${customColor ? 'primary' : 'white'}--text`"
           size="12"
           >
           {{ action.icon }}
@@ -37,7 +39,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'SearchAction',
@@ -45,6 +47,16 @@
       'action',
       'customColor',
     ],
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+      }),
+    },
+    methods: {
+      handleAction() {
+        this.$emit('itemAction')
+      }
+    }
   }
 
 </script>

@@ -6,7 +6,7 @@
   .border-grey {
     border: thin solid lightGrey !important;
   }
-  .v-input__slot{
+  .v-input__control > .v-input__slot {
     padding: 12px !important;
   }
 
@@ -78,7 +78,7 @@
           </template>
           
           <!-- SELECTION -->
-          <template v-slot:selection="{ attrs, item, parent, selected }">
+          <template v-slot:selection="{ attrs, item, parent, selected }" class="py-2">
             <v-chip
               v-if="item === Object(item)"
               v-bind="attrs"

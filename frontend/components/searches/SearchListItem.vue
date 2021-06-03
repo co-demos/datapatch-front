@@ -49,7 +49,7 @@
         </v-col>
 
         <!-- ITEM TITLE -->
-        <v-col cols="2" class="text-left align-self-center pa-0">
+        <v-col cols="3" class="text-left align-self-center pa-0">
           <p
             :class="`mb-0 mr-1 font-weight-bold ${item.color}--text`"
             >
@@ -67,12 +67,13 @@
           </p>
         </v-col>
 
-        <v-col cols="4" class="text-left align-self-center px-1 py-0">
+        <v-col cols="3" class="text-center align-self-center px-1 py-0">
           <SearchAction
             v-for="(value, name) in buttons"
             v-if="itemTexts[item.item_type].actions.includes(name)"
             :key="name"
             :action="value"
+            @itemAction="handleAction(name)"
           />
         </v-col>
 
@@ -205,6 +206,10 @@
         // this.log && console.log('C-SearchListItem > changeSelection > this.selected :' , this.selected)
         this.$emit('blur', val)
       },
+      handleAction(val) {
+        this.log && console.log('\nC-SearchListItem > handleAction > val :' , val)
+        this.log && console.log('C-SearchListItem > handleAction > this.item :' , this.item)
+      }
     }
   }
 
