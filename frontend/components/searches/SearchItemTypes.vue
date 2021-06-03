@@ -1,4 +1,5 @@
 <template>
+
   <div>
 
     <!-- <code>hidden: {{ hidden }}</code><br> -->
@@ -32,7 +33,7 @@
     props: [
       'hidden',
       'itemTypes',
-      'customColor'
+      'customColor',
     ],
     model: {
       prop: 'hidden',

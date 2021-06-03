@@ -8,6 +8,7 @@
       :class="`caption font-weight-bold text-center ${customColor ? 'white--text' : ''}`"
       >
       {{ $t('auth.authTypesRead') }}
+      <!-- - {{ onlyUsers }} -->
     </p>
     <v-radio-group
       v-model="model"
@@ -15,7 +16,7 @@
       @change="handleInput"
       >
       <v-radio
-        v-for="auth in authTypes"
+        v-for="auth in filteredAuthTypes"
         :key="auth.name"
         dense
         :value="auth.name"
@@ -59,7 +60,8 @@
     name: 'SearchAuthLevel',
     props: [
       'hidden',
-      'customColor'
+      'customColor',
+      'onlyUsers'
     ],
     model: {
       prop: 'hidden',
@@ -73,6 +75,12 @@
     },
     beforeMount () {
       this.model = this.hidden
+    },
+    computed: {
+      filteredAuthTypes() {
+        let filtered = this.onlyUsers ? this.authTypes.filter(auth => auth.name !== 'owner+groups' ) : this.authTypes
+        return  filtered
+      }
     },
     methods: {
       handleInput(val) {

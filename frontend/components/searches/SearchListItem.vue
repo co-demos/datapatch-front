@@ -7,7 +7,7 @@
     class="mb-2"
     >
     <v-container fluid>
-      <v-row class="child-flex py-2 px-3">
+      <v-row class="child-flex ma-0 py-2 px-3">
       
         <!-- CHECKBOX -->
         <v-col cols="1" class="align-self-center justify-center text-center">
@@ -63,8 +63,8 @@
       top
       direction="left"
       transition="slide-x-reverse-transition"
-      :style="'right: -22px;'"
       >
+      <!-- :style="'right: -18px;'" -->
       <template v-slot:activator>
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -72,17 +72,26 @@
               v-model="fabActivated"
               color="info"
               elevation="0"
+              class="pa-1"
               dark
-              fab
               small
+              icon
               v-bind="attrs"
               v-on="on"
               >
-              <v-icon v-if="fabActivated">
+              <!-- fab -->
+              <v-icon
+                small
+                v-if="fabActivated"
+                >
                 icon-clear
               </v-icon>
-              <v-icon v-else>
-                icon-settings
+              <v-icon
+                small
+                v-else
+                >
+                <!-- icon-settings -->
+                icon-more-vertical
               </v-icon>
             </v-btn>
           </template>
@@ -102,7 +111,7 @@
           <v-btn
             elevation="0"
             class="ma-1"
-            color="info"
+            color="success"
             fab
             dark
             x-small

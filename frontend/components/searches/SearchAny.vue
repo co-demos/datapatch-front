@@ -39,6 +39,7 @@
 
           :error="isError"
           :error-messages="errorMsg"
+          class="py-2"
           >
           <!-- 
           no-filter
@@ -179,7 +180,7 @@
         <v-col
           v-show="showCheckboxes"
           cols="10"
-          class="align-center pt-0"
+          class="align-center justify-center pt-0"
           >
           <v-row>
             
@@ -199,6 +200,7 @@
             <v-col
               cols="6"
               class="align-top justify-center"
+              v-show="itemTypes.length > 1"
               >
               <v-card 
                 elevation="0"
@@ -228,6 +230,7 @@
                 <SearchAuthLevel
                   v-model="searchAuth"
                   :customColor="customColor"
+                  :onlyUsers="itemTypes.length === 1 && itemTypes[0] === 'users'"
                 />
               </v-card>
             </v-col>
@@ -261,26 +264,20 @@
       <v-divider/>
     </v-row>
 
+    <!-- RESULTS SELECTION -->
     <v-expand-transition>
       <v-row
         v-if="model && model.length > 0 && canDisplay"
         class="justify-center"
         >
-        <v-col cols="10" class="pt-0">
-
-          <!-- {{ model }} -->
-          <p 
-            :class="`font-weight-bold text-center ${customColor ? 'white' : 'black'}--text`"
-            >
-            {{ $t('buttons.yourSelection') }}
-          </p>
-
+        <v-col cols="10" class="pb-0">
           <SearchList
             v-model="model"
             :itemTexts="itemTexts"
             :getItemInfos="getItemInfos"
+            :customColor="customColor"
+            :filters="{ types: searchTypes, auths: searchAuth  }"
           />
-
         </v-col>
       </v-row>
     </v-expand-transition>
@@ -329,31 +326,31 @@
             txt: 'username', 
             txtBis: 'email',
             defaultIcon:'icon-user',
-            actions: ['addToGroup'],
+            actions: ['addToGroup', 'message'],
           },
           group: { 
             txt: 'title', 
             txtBis: 'description', 
             defaultIcon:'icon-users',
-            actions: ['add', 'join', 'invite'],
+            actions: ['add', 'join', 'invite', 'message', 'comment'],
           },
           workspace: {
             txt: 'title', 
-            txtBis: 'description', 
+            txtBis: 'description',
             defaultIcon:'icon-apps',
-            actions: ['add', 'link', 'join', 'invite'],
+            actions: ['add', 'link', 'join', 'invite', 'comment'],
           },
           dataset: {
             txt: 'title', 
             txtBis: 'description', 
             defaultIcon:'icon-database',
-            actions: ['add', 'link', 'join', 'invite'],
+            actions: ['add', 'link', 'join', 'invite', 'comment'],
           },
           table: {
             txt: 'title', 
             txtBis: 'description', 
             defaultIcon:'icon-table',
-            actions: ['add', 'link', 'join', 'invite'],
+            actions: ['add', 'link', 'join', 'invite', 'comment'],
           },
         },
         showCheckboxes: false,

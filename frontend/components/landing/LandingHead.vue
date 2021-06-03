@@ -55,7 +55,6 @@
         />
 
         <v-card-actions class="justify-center px-4 my-5">
-          <!-- <v-spacer /> -->
           <v-btn
             dark
             block
