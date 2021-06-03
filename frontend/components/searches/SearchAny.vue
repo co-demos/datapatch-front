@@ -7,7 +7,7 @@
     border: thin solid lightGrey !important;
   }
   .v-input__slot{
-    padding: 12px;
+    padding: 12px !important;
   }
 
 </style>
