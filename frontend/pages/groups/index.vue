@@ -7,7 +7,7 @@
       >
 
       <v-col 
-        cols="10"
+        cols="11"
         class="offset-1 align-top text-center pa-0 mt-5 mb-10"
         >
         <!-- <p class="font-weight-bold grey--text">

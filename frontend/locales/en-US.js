@@ -114,6 +114,7 @@ export default {
     searchWorkspaceDataset: 'Search for a workspace or a dataset',
     queryWorkspaceDataset: "Enter a title or a element of the description",
     yourSelection: "Your selection",
+    needSelect: "Select one or several elements",
     selectedOptions: "Options for this element",
     groupedActions: "Grrouped actions",
     selectionFilters: "Selection filters",
@@ -124,6 +125,7 @@ export default {
     join: "Ask the access for this element",
     invite: "Invite a person or a group",
     message: "Send a message",
+    comment: "Comment",
   },
   imports: {
     example: 'Example',

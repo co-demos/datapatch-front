@@ -22,13 +22,8 @@
         >
         <v-card 
           class="elevation-0 px-5 pb-5 pt-10"
-          color="primary"
+          color="secondary"
           >
-          <!-- <v-card-title class="headline mb-4 justify-center">
-            <span class="white--text">
-              {{ $t('datapatch.testSearch') }}
-            </span>
-          </v-card-title> -->
           <v-card-text class="text-justify py-1 mb-5">
             <SearchAny
               :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
@@ -38,7 +33,6 @@
               :solo="true"
               :light="true"
               :dense="false"
-              :customClass="''"
               :customColor="'white'"
             />
           </v-card-text>

@@ -116,6 +116,7 @@ export default {
     searchWorkspaceDataset: 'Rechercher un espace de travail ou un jeu de données',
     queryWorkspaceDataset: "Entrer un titre ou un élément de description",
     yourSelection: "Votre sélection",
+    needSelect: "Sélectionner un ou plusieurs élements",
     selectedOptions: "Options de cet élément",
     groupedActions: "Actions groupées",
     selectionFilters: "Filtres de sélection",
@@ -126,6 +127,7 @@ export default {
     join: "Demander l'accès à cet élément",
     invite: "Inviter une personne ou un groupe",
     message: "Envoyer un message",
+    comment: "Commenter",
   },
   imports: {
     example: 'Exemple',

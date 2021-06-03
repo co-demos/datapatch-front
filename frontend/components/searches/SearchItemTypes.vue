@@ -21,6 +21,8 @@
       hide-details
       class="my-1"
       @change="handleInput"
+      :readonly="justOneSelected && model[0] === type"
+      :disabled="justOneSelected && model[0] === type"
     />
 
   </div>
@@ -34,6 +36,7 @@
       'hidden',
       'itemTypes',
       'customColor',
+      'justOneSelected'
     ],
     model: {
       prop: 'hidden',

@@ -1,13 +1,10 @@
 <template>
-  <v-row class="align-top justify-center">
+  <v-row class="align-top justify-center ma-0">
 
-    <!-- - hidden: <code>{{ hidden }}</code><br> -->
-    <!-- - selected: <code>{{ selected }}</code> -->
-    <!-- - filters: <code>{{ filters }}</code> -->
-
-    <v-col cols="12" class="mb-1">
-      <v-row class="ma-0 pl-2 pr-1 justify-center align-center">
-        <v-col cols="1" class="pl-6">
+    <!-- HEADER + BTNS -->
+    <v-col cols="12" class="mb-1 pa-0">
+      <v-row class="ma-0 pl-2 pr-1 py-0 justify-center align-center">
+        <v-col cols="1" class="pl-4">
           <v-tooltip 
             right
             >
@@ -51,7 +48,7 @@
                 :class="`${btnFilters ? (customColor ? 'white' : 'grey') : (customColor ? '' : 'white')}`"
                 v-bind="attrs"
                 v-on="on"
-                @click.stop="btnFilters = !btnFilters "
+                @click.stop="btnFilters = !btnFilters ; btnFilters ? btnActions = true : ''"
                 >
                 <v-icon
                   small
@@ -67,43 +64,106 @@
       </v-row>
     </v-col>
 
-    <v-row class="ma-0">
-      <v-expand-transition>
-        <v-col 
-          v-show="btnActions"
-          cols="6"
-          class="pt-0"
-          >
-          btnActions
-        </v-col>
-      </v-expand-transition>
+    <!-- DEBUGGING -->
+    <v-col cols="12" v-if="false">
+      <p class="font-weight-bold">from SearchList</p>
+      - hidden: <code>{{ hidden }}</code><br><br>
+      - selected: <code>{{ selected }}</code><br><br>
+      - selectedTypes : <code>{{ selectedTypes }}</code><br><br>
+      <!-- - filters: <code>{{ filters }}</code><br><br> -->
+    </v-col>
 
-      <v-expand-transition>
-        <v-col 
-          v-show="btnFilters"
-          cols="6"
-          class="pt-0"
+    <v-expand-transition>
+      <v-col
+        v-show="btnActions || btnFilters"
+        cols"12"
+        >
+        <v-row
+          class="ma-0"
           >
-          btnFilters
-        </v-col>
-      </v-expand-transition>
-    </v-row>
+          <!-- GROUPED ACTIONS -->
+          <v-col 
+            v-show="btnActions"
+            cols="6"
+            :class="`py-0 mb-2 text-left`"
+            >
+            <div
+              v-if="actionBtns.length > 0"
+              >
+              <SearchAction
+                v-for="btn in actionBtns"
+                :key="btn.tooltip"
+                :action="btn"
+                :customColor="customColor"
+              />
+            </div>
+            <p
+              v-else
+              :class="`my-2 caption ${customColor ? 'white--text' : ''}`"
+              >
+              {{ $t('buttons.needSelect') }}
+            </p>
+          </v-col>
 
-    <v-col cols="12" class="pt-0">
-      <SearchListItem
-        v-for="item in hidden.filter( i => i && !i.header )"
-        :key="`${item.item_type}-${item.id}`"
-        v-model="selected"
-        :item="item"
-        :itemTexts="itemTexts"
-        :getItemInfos="getItemInfos"
-        :buttons="buttons"
-      />
+          <!-- FILTERS -->
+          <v-col 
+            v-show="btnFilters"
+            cols="6"
+            :class="`py-0 mb-2 ${btnActions ? '' : 'offset-6'}`"
+            >
+            <!-- selectedTypes : {{ selectedTypes }} -->
+            <v-row class="ma-0 align-top justify-end">
+              <v-col
+                v-for="type in itemsTypes"
+                :key="type"
+                cols="6"
+                class="pa-0"
+                >
+                <v-checkbox
+                  v-model="filterTypes"
+                  :value="type"
+                  :label="$t(`dataPackage.${type}`)"
+                  :dark="!!customColor"
+                  :color="customColor ? '' : 'grey'"
+                  hide-details
+                  class="pa-0 ma-1"
+                />
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-expand-transition>
+
+    <!-- SLECTION IIEMS -->
+    <v-col cols="12" class="pa-0">
+      <draggable
+        v-model="items"
+        v-bind="dragOptions"
+        draggable=".selection"
+        group="selection"
+        @start="drag=true"
+        @end="drag=false"
+        >
+        <SearchListItem
+          v-for="item in items"
+          v-show="filterTypes.includes(item.item_type)"
+          :key="`${item.item_type}-${item.id}`"
+          v-model="selected"
+          :item="item"
+          :itemTexts="itemTexts"
+          :getItemInfos="getItemInfos"
+          :buttons="buttons"
+          :customColor="customColor"
+        />
+      </draggable>
     </v-col>
   </v-row>
 </template>
 
 <script>
+
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     name: 'SearchList',
@@ -117,14 +177,32 @@
     ],
     components: {
       SearchListItem: () => import(/* webpackChunkName: "SearchListItem" */ '@/components/searches/SearchListItem.vue'),
+      SearchAction: () => import(/* webpackChunkName: "SearchAction" */ '@/components/searches/SearchAction.vue'),
     },
     model: {
       prop: 'hidden',
       event: 'blur'
     },
+    watch: {
+      hidden(val, prev) {
+        this.log && console.log('\nC-SearchList > watch > hidden > val :' , val)
+        this.log && console.log('C-SearchList > watch > hidden > prev :' , prev)
+        // updated selected if model change
+        this.items = val.filter( i => i && !i.header )
+        this.selected = this.selected.filter(item => val.includes(item))
+      },
+      itemsTypes (val, prev) {
+        // append new types if not present previously
+        let newTypes = val.filter(type => !prev.includes(type) )
+        this.filterTypes.push(...newTypes) 
+      }
+    },
     data () {
       return {
+        drag: false,
+        items: [],
         selected: [],
+        filterTypes: [],
         btnActions: false,
         btnFilters: false,
         buttons: {
@@ -163,13 +241,53 @@
         }
       }
     },
+    beforeMount () {
+      this.items = this.hidden.filter( i => i && !i.header )
+      this.filterTypes = this.itemsTypes
+    },
+    computed: {
+      dragOptions() {
+        return {
+          animation: 200,
+          group: "selection",
+          disabled: false,
+          ghostClass: "ghost"
+        }
+      },
+      ...mapState({
+        log: (state) => state.log,
+        api: (state) => state.api,
+      }),
+      ...mapGetters({
+        headerUser: 'user/headerUser',
+      }),
+      itemsTypes() {
+        let types = this.hidden.map(item => item.item_type)
+        types = new Set(types)
+        return [...types]
+      },
+      selectedTypes() {
+        let types = this.selected.map(item => item.item_type)
+        types = new Set(types)
+        return [...types]
+      },
+      actionBtns() {
+        let actions = []
+        this.selectedTypes.forEach(type => {
+          actions.push(...this.itemTexts[type].actions)
+        })
+        actions = [...new Set(actions)]
+        actions = actions.map( action => this.buttons[action] )
+        return actions
+      },
+      filterBtns() {
+        let filters = []
+        return filters
+      }
+    },
     methods: {
       handleInput(val) {
         this.$emit('blur', val)
-      },
-      changeSelection(val) {
-        this.log && console.log('\nC-SearchList > changeSelection > val :' , val)
-
       },
     }
   }

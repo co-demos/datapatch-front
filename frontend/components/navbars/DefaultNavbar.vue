@@ -159,10 +159,10 @@
         </v-card-title>
 
         <v-row
-          class="align-center justify-center py-12"
+          class="align-center justify-center py-3"
           >
           <v-col
-            cols="10"
+            cols="11"
             class=""
             :height="searchHeight"
             >

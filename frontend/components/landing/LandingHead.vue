@@ -82,6 +82,7 @@
       <v-row class="align-center justify-center">
         <v-col
           v-for="link in anchorLinks"
+          :key="link.to"
           class="text-center px-3"
           cols="4"
           >

@@ -6,6 +6,9 @@
   .border-grey {
     border: thin solid lightGrey !important;
   }
+  .v-input__slot{
+    padding: 12px;
+  }
 
 </style>
 
@@ -39,7 +42,6 @@
 
           :error="isError"
           :error-messages="errorMsg"
-          class="py-2"
           >
           <!-- 
           no-filter
@@ -50,7 +52,7 @@
           <!-- PREPEND ICON -->
           <template v-slot:prepend>
             <v-tooltip 
-              bottom
+              top
               >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
@@ -84,6 +86,7 @@
               :input-value="selected"
               label
               :small="dense"
+              class="my-1"
               dark
               >
 
@@ -125,7 +128,7 @@
           <!-- LIST OF SELECTABLE ITEMS -->
           <template v-slot:item="{ index, item }">
             <v-row>
-              <v-col cols="3" class="text-center">
+              <v-col cols="3" class="text-right">
                 <span class="caption grey--text">
                   {{ $t(`dataPackage.${item.item_type}`)}}
                 </span>
@@ -153,7 +156,9 @@
 
           <!-- OUTER ICON -->
           <template v-slot:append-outer>
-            <v-tooltip left>
+            <v-tooltip
+              top
+              >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   class="mx-4 my-0"
@@ -190,7 +195,7 @@
               class="align-top pb-0"
               >
               <p
-                :class="`mb-0 caption font-weight-bold text-center ${customColor ? 'white--text' : ''}`"
+                :class="`mb-0 font-weight-bold text-center ${customColor ? 'white--text' : ''}`"
                 >
                 {{ $t('buttons.searchIn') }}
               </p>
@@ -212,6 +217,7 @@
                   v-model="searchTypes"
                   :itemTypes="itemTypes"
                   :customColor="customColor"
+                  :justOneSelected="searchTypes.length < 2"
                 />
               </v-card>
             </v-col>
@@ -267,10 +273,10 @@
     <!-- RESULTS SELECTION -->
     <v-expand-transition>
       <v-row
-        v-if="model && model.length > 0 && canDisplay"
+        v-if="model && model.length > 0"
         class="justify-center"
         >
-        <v-col cols="10" class="pb-0">
+        <v-col cols="11" class="pa-0">
           <SearchList
             v-model="model"
             :itemTexts="itemTexts"
@@ -319,35 +325,35 @@
         isError: false,
         errorMsg: undefined,
 
-        canDisplay: false,
+        // canDisplay: false,
         
         itemTexts: {
           user: { 
-            txt: 'username', 
+            txt: 'username',
             txtBis: 'email',
             defaultIcon:'icon-user',
             actions: ['addToGroup', 'message'],
           },
           group: { 
-            txt: 'title', 
+            txt: 'title',
             txtBis: 'description', 
             defaultIcon:'icon-users',
             actions: ['add', 'join', 'invite', 'message', 'comment'],
           },
           workspace: {
-            txt: 'title', 
+            txt: 'title',
             txtBis: 'description',
             defaultIcon:'icon-apps',
             actions: ['add', 'link', 'join', 'invite', 'comment'],
           },
           dataset: {
-            txt: 'title', 
+            txt: 'title',
             txtBis: 'description', 
             defaultIcon:'icon-database',
             actions: ['add', 'link', 'join', 'invite', 'comment'],
           },
           table: {
-            txt: 'title', 
+            txt: 'title',
             txtBis: 'description', 
             defaultIcon:'icon-table',
             actions: ['add', 'link', 'join', 'invite', 'comment'],
@@ -536,7 +542,7 @@
         // if (this.isLoading) return
 
         this.isLoading = true
-        this.canDisplay = false
+        // this.canDisplay = false
 
         let item_types_query = this.searchTypes.map(type => `&item_types=${type}`).join('')
         let auth_types_query = `&auth_type=${this.searchAuth}`
@@ -547,7 +553,7 @@
             const data = resp.data
             this.count = data.length
             this.items = this.buildItems(resp.data)
-            this.canDisplay = true
+            // this.canDisplay = true
           })
           .catch(err => {
             console.log(err)
