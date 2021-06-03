@@ -95,6 +95,8 @@
                 :key="btn.tooltip"
                 :action="btn"
                 :customColor="customColor"
+                :outlined="true"
+                @itemAction="handleGroupAction(btn.action)"
               />
             </div>
             <p
@@ -207,34 +209,42 @@
         btnFilters: false,
         buttons: {
           link: {
+            action: 'link',
             icon: 'icon-external-link',
             tooltip: 'buttons.link',
           },
           add: {
+            action: 'add',
             icon: 'icon-plus',
             tooltip: 'buttons.add',
           },
           addToGroup: {
+            action: 'addToGroup',
             icon: 'icon-user-plus',
             tooltip: 'buttons.addToGroup',
           },
           // share: {
+          //   action: 'share',
           //   icon: 'icon-share',
           //   tooltip: 'buttons.share'
           // },
           join: {
+            action: 'join',
             icon: 'icon-user-check',
             tooltip: 'buttons.join',
           },
           invite: {
+            action: 'invite',
             icon: 'icon-user-plus',
             tooltip: 'buttons.invite',
           },
           message: {
+            action: 'message',
             icon: 'icon-mail',
             tooltip: 'buttons.message'
           },
           comment: {
+            action: 'comment',
             icon: 'icon-message-square',
             tooltip: 'buttons.comment'
           },
@@ -289,6 +299,10 @@
       handleInput(val) {
         this.$emit('blur', val)
       },
+      handleGroupAction(val) {
+        this.log && console.log('\nC-SearchList > handleAction > val :' , val)
+        this.log && console.log('C-SearchList > handleAction > this.selected :' , this.selected)
+      }
     }
   }
 

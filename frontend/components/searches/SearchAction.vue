@@ -14,8 +14,10 @@
         elevation="0"
         class="ma-1"
         icon
-        color="grey"
-        x-small
+        :outlined="outlined"
+        :color="customColor || 'grey'"
+        :small="outlined"
+        :x-small="!outlined"
         v-bind="attrs"
         v-on="on"
         @click.stop="handleAction"
@@ -46,6 +48,7 @@
     props: [
       'action',
       'customColor',
+      'outlined',
     ],
     computed: {
       ...mapState({

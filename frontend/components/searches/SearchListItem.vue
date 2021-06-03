@@ -37,10 +37,10 @@
 
         <!-- ITEM AVATAR -->
         <v-col cols="1" class="text-center align-self-center pa-0">
-          <v-avatar size="30">
+          <v-avatar size="22">
             <v-icon
               dark
-              small
+              x-small
               :class="item.color || 'black'"
               >
               {{ item.icon || itemTexts[item.item_type].defaultIcon }}
