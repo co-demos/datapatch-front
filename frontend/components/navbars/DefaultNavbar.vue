@@ -162,7 +162,7 @@
           class="align-center justify-center py-3"
           >
           <v-col
-            cols="11"
+            cols="10"
             class=""
             :height="searchHeight"
             >

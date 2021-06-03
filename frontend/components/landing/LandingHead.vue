@@ -2,7 +2,7 @@
 
   <v-row 
     class="align-center justify-center mt-5 mb-12 pb-12"
-    style="height: 90vh;"
+    style="height: 80vh;"
     >
 
     <!-- WELCOME MESSAGE -->
@@ -78,7 +78,7 @@
       </v-card>
     </v-col>
 
-    <v-col cols="10" class="px-0 py-0">
+    <v-col cols="8" class="pa-0 mt-3 mb-12">
       <v-row class="align-center justify-center">
         <v-col
           v-for="link in anchorLinks"
@@ -105,8 +105,8 @@
       </v-row>
     </v-col>
 
-    <v-col cols="12" class="px-0 py-0">
-      <v-card-text class="text-center py-1">
+    <v-col cols="10" class="px-2 pt-2">
+      <p class="text-center grey--text caption">
         {{ $t('datapatch.infos') }}
         <v-icon x-small class="mx-1">
           icon-github
@@ -117,7 +117,7 @@
           >
           {{ $t('datapatch.repo') }}
         </a>.
-      </v-card-text>
+      </p>
     </v-col>
 
   </v-row>

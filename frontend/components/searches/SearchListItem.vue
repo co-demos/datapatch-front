@@ -51,7 +51,7 @@
         <!-- ITEM TITLE -->
         <v-col cols="3" class="text-left align-self-center pa-0">
           <p
-            :class="`mb-0 mr-1 font-weight-bold ${item.color}--text`"
+            :class="`mb-0 mr-1 body-2 font-weight-medium ${item.color}--text`"
             >
             {{ getItemInfos(item, 'txt') }}
           </p>
