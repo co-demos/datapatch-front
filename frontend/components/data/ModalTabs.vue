@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pt-0 mt-2">
+  <v-container class="pt-0 mt-2 pb-3">
 
     <!-- TITLE  -->
     <v-card-title
@@ -36,7 +36,7 @@
       v-show="tabsSpaces.length > 1"
       dense
       >
-      <v-col class="offset-4">
+      <v-col class="offset-4 my-2 pl-2 pr-4" cols="7">
         <v-tabs
           v-model="tab"
           centered
@@ -44,6 +44,7 @@
           grow
           color="grey"
           center-active
+          class="mr-4"
           >
           <v-tab
             v-for="tabname in tabsSpaces"
@@ -59,14 +60,13 @@
     <!-- TABS ITEMS -->
     <v-tabs-items 
       v-model="tab" 
-      :class="`${action === 'create' ? 'py-0' : 'pt-0 pb-5'}`"
+      :class="`py-0 ${action === 'create' ? '' : 'pt-0 pb-5'}`"
       >
-
       <v-tab-item 
         v-for="tabname in tabsSpaces"
         :key="tabname"
         >
-        <v-card-text>
+        <!-- <v-card-text class=""> -->
           <ModalFields
             v-if="localItem"
             :item="localItem"
@@ -78,10 +78,10 @@
             :onlyLocalUpdate="onlyLocalUpdate"
             :needUpdateStore="needUpdateStore"
           />
-        </v-card-text>
+        <!-- </v-card-text> -->
       </v-tab-item>
-
     </v-tabs-items>
+
   </v-container>
 </template>
 

@@ -163,7 +163,7 @@
           >
           <v-col
             cols="10"
-            class=""
+            class="mb-12"
             :height="searchHeight"
             >
             <SearchAny

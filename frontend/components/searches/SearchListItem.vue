@@ -68,7 +68,7 @@
         <!-- ITEM INFOS -->
         <v-col cols="3" class="text-left align-self-center px-1 py-0">
           <p class="caption ma-0 grey--text">
-            <span v-if="item.item_type === 'user'">
+            <span v-if="item.item_type === 'user'" class="font-weight-bold">
               {{ item.name }} {{ item.surname }}<br>
             </span>
             {{ getItemInfos(item, 'txtBis') }}<br>

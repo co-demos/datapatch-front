@@ -17,9 +17,9 @@
         <!-- <pre>{{ model }}</pre> -->
       </code>
 
-      <v-col cols="4" class="">
+      <v-col cols="4" class="align-center text-right pt-3">
 
-        <v-subheader class="">
+        <span class="grey--text body-2">
           {{ $t(model.label) }}
           <v-tooltip
             v-if="model.tooltip"
@@ -42,7 +42,7 @@
             </span>
           </v-tooltip>
           :
-        </v-subheader>
+        </span>
 
         <!-- DEBUGGING -->
         <p class="text-caption" v-if="false">
@@ -68,7 +68,7 @@
 
       </v-col>
     
-      <v-col cols="8">
+      <v-col cols="7">
 
         <v-checkbox
           v-if="model.field === 'checkbox'"
