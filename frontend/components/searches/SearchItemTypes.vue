@@ -19,6 +19,8 @@
       :value="type"
       :dark="!!customColor"
       hide-details
+      on-icon="icon-check-square"
+      off-icon="icon-square"
       class="my-1"
       @change="handleInput"
       :readonly="justOneSelected && model[0] === type"

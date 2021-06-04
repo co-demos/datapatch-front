@@ -35,6 +35,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   x-small
+                  class="ml-1"
                   :dark="!!customColor"
                   v-bind="attrs"
                   v-on="on"

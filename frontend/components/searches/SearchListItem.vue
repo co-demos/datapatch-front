@@ -1,4 +1,9 @@
 <style scoped>
+  .selection {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
   .side-btn {
     pointer-events: none !important;
     right: -30px;
@@ -19,11 +24,14 @@
         <!-- CHECKBOX -->
         <v-col cols="1" class="align-self-center justify-center text-center pl-5 pr-0 py-0">
           <v-checkbox
-            class="text-center ma-0"
+            class="text-center ma-0 pa-0"
             v-model="selected"
+            dense
             :value="item"
             color="grey"
             hide-details
+            on-icon="icon-check-square"
+            off-icon="icon-square"
             @change="handleInput"
           />
         </v-col>

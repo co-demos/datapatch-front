@@ -15,7 +15,7 @@
         class="ma-1"
         icon
         :outlined="outlined"
-        :color="customColor || 'grey'"
+        :color="customColor || 'black'"
         :small="outlined"
         :x-small="!outlined"
         v-bind="attrs"

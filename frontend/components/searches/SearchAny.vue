@@ -9,6 +9,9 @@
   .v-input__control > .v-input__slot {
     padding: 12px !important;
   }
+  .v-input__append-outer {
+    margin-top: 0px !important;
+  }
 
 </style>
 
@@ -16,7 +19,28 @@
   <v-form ref="form">
 
     <v-row class="justify-center align-center">
-      <v-col cols="12" class="align-center">
+      
+      <!-- PREPEND ICON -->
+      <v-col cols="1">
+        <v-tooltip 
+          top
+          >
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              :class="`${customColor || 'grey'}--text mx-4`"
+              v-on="on"
+              >
+              icon-search1
+            </v-icon>
+          </template>
+          <span>
+            {{ $t(searchLabel) }}
+          </span>
+        </v-tooltip>
+      </v-col>
+      
+      <!-- SEARCH BOX -->
+      <v-col cols="10" class="align-center">
 
         <v-combobox
           v-model="model"
@@ -48,25 +72,6 @@
           item-value="id"
           :rules="minCharRules" 
           -->
-
-          <!-- PREPEND ICON -->
-          <template v-slot:prepend>
-            <v-tooltip 
-              top
-              >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  :class="`${customColor || 'grey'}--text mx-4`"
-                  v-on="on"
-                  >
-                  icon-search1
-                </v-icon>
-              </template>
-              <span>
-                {{ $t(searchLabel) }}
-              </span>
-            </v-tooltip>
-          </template>
 
           <!-- NO DATA -->
           <template v-slot:no-data>
@@ -154,31 +159,36 @@
             </v-row>
           </template>
 
-          <!-- OUTER ICON -->
-          <template v-slot:append-outer>
-            <v-tooltip
-              top
-              >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  class="mx-4 my-0"
-                  :color="showCheckboxes ? customColor || 'primary' : customColor || 'grey'"
-                  @click="showCheckboxes = !showCheckboxes"
-                  v-bind="attrs"
-                  v-on="on"
-                  >
-                  {{ showCheckboxes ? 'icon-plus-square' : 'icon-plus-square' }}
-                </v-icon>
-              </template>
-              <span>
-                {{ $t('buttons.searchCheckboxes')}}
-              </span>
-            </v-tooltip>
-          </template>
-
         </v-combobox>
       </v-col>
 
+      <!-- OUTER ICON -->
+      <v-col cols="1">
+        <v-tooltip
+          top
+          >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              small
+              :class="`${showCheckboxes ? customColor || 'grey' : 'transparent'}`"
+              v-bind="attrs"
+              v-on="on"
+              @click="showCheckboxes = !showCheckboxes"
+              >
+              <v-icon
+                small
+                :class="`${showCheckboxes ? (customColor ? 'primary' : 'white') : (customColor ? 'white' : 'grey')}--text`"
+                >
+                {{ showCheckboxes ? 'icon-x-square' : 'icon-plus-square' }}
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>
+            {{ $t('buttons.searchCheckboxes')}}
+          </span>
+        </v-tooltip>
+      </v-col>
 
       <!-- CHECKBOXES -->
       <v-expand-transition>
@@ -187,7 +197,7 @@
           cols="10"
           class="align-center justify-center pt-0"
           >
-          <v-row>
+          <v-row class="justify-center">
             
             <!-- HELPER TEXT -->
             <v-col
@@ -276,7 +286,7 @@
         v-if="model && model.length > 0"
         class="justify-center"
         >
-        <v-col cols="11" class="pa-0">
+        <v-col cols="12" class="pa-0">
           <SearchList
             v-model="model"
             :itemTexts="itemTexts"

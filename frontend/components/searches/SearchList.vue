@@ -1,10 +1,12 @@
 <template>
-  <v-row class="align-top justify-center ma-0">
+  <v-row class="align-top justify-center ma-0 mt-3">
 
     <!-- HEADER + BTNS -->
     <v-col cols="12" class="mb-1 pa-0">
-      <v-row class="ma-0 pl-2 pr-1 py-0 justify-center align-center">
-        <v-col cols="1" class="pl-4">
+      <v-row class="ma-0 pl-0 pr-1 py-0 justify-center align-center">
+        
+        <!-- GROUPED ACTION BTN -->
+        <v-col cols="1" class="pl-6">
           <v-tooltip 
             right
             >
@@ -29,15 +31,49 @@
             {{ $t('buttons.groupedActions')}}
           </v-tooltip>
         </v-col>
-        <v-col cols="10" class="text-center">
+
+        <!-- GROUPED ACTIONS -->
+        <v-col 
+          cols="5"
+          :class="`pa-0 text-left`"
+          >
+          <div
+            v-show="btnActions"
+            v-if="actionBtns.length > 0"
+            >
+            <SearchAction
+              v-for="btn in actionBtns"
+              :key="btn.tooltip"
+              :action="btn"
+              :customColor="customColor"
+              :outlined="true"
+              @itemAction="handleGroupAction(btn.action)"
+            />
+          </div>
+          <p
+            v-else
+            :class="`my-2 caption ${customColor ? 'white--text' : ''}`"
+            >
+            {{ $t('buttons.needSelect') }}
+          </p>
+        </v-col>
+
+        <!-- HELPER TEXT -->
+        <v-col cols="5" class="text-left pa-0">
           <span
             :class="`font-weight-bold ${customColor ? 'white' : 'grey'}--text`"
             >
             {{ $t('buttons.yourSelection') }}
           </span>
         </v-col>
-        <v-col cols="1" class="text-right">
+
+        <!-- FILTER BTN -->
+        <v-col
+          cols="1"
+          class="text-right"
+          >
           <v-tooltip 
+            v-if="itemsTypes.length > 1"
             left
             >
             <template v-slot:activator="{ on, attrs }">
@@ -54,7 +90,7 @@
                   small
                   :class="`${btnFilters ? (customColor ? 'primary' : 'white') : (customColor ? 'white' : 'grey')}--text`"
                   >
-                  icon-filter
+                  icon-eye
                 </v-icon>
               </v-btn>
             </template>
@@ -79,9 +115,10 @@
         cols"12"
         >
         <v-row
-          class="ma-0"
+          class="ma-0 mb-2"
           >
           <!-- GROUPED ACTIONS -->
+          <!--
           <v-col 
             v-show="btnActions"
             cols="6"
@@ -105,28 +142,30 @@
               >
               {{ $t('buttons.needSelect') }}
             </p>
-          </v-col>
+          </v-col> -->
 
           <!-- FILTERS -->
           <v-col 
             v-show="btnFilters"
-            cols="6"
+            cols="12"
             :class="`py-0 mb-2 ${btnActions ? '' : 'offset-6'}`"
             >
-            <!-- selectedTypes : {{ selectedTypes }} -->
-            <v-row class="ma-0 align-top justify-end">
+            <v-row class="ma-0 align-top justify-center">
               <v-col
                 v-for="type in itemsTypes"
                 :key="type"
-                cols="6"
+                cols="2"
                 class="pa-0"
                 >
                 <v-checkbox
                   v-model="filterTypes"
+                  dense
                   :value="type"
                   :label="$t(`dataPackage.${type}`)"
                   :dark="!!customColor"
                   :color="customColor ? '' : 'grey'"
+                  on-icon="icon-check-square"
+                  off-icon="icon-square"
                   hide-details
                   class="pa-0 ma-1"
                 />
@@ -137,8 +176,8 @@
       </v-col>
     </v-expand-transition>
 
-    <!-- SLECTION IIEMS -->
-    <v-col cols="12" class="pa-0">
+    <!-- SELECTION IIEMS -->
+    <v-col cols="12" class="pa-0 mb-10">
       <draggable
         v-model="items"
         v-bind="dragOptions"
@@ -159,6 +198,12 @@
           :customColor="customColor"
         />
       </draggable>
+    </v-col>
+
+    <v-col cols="10" class="mb-12">
+      <v-divider
+        :dark="!!customColor"
+      />
     </v-col>
   </v-row>
 </template>
@@ -205,7 +250,7 @@
         items: [],
         selected: [],
         filterTypes: [],
-        btnActions: false,
+        btnActions: true,
         btnFilters: false,
         buttons: {
           link: {
