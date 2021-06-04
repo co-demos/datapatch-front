@@ -21,7 +21,7 @@
         class="align-top justify-center pa-0"
         >
         <v-card 
-          class="elevation-0 px-5 pb-5 pt-10"
+          class="elevation-0 pl-5 pr-6 pb-5 pt-10"
           color="secondary"
           >
           <v-card-text class="text-justify py-1 mb-5">

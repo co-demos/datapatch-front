@@ -105,6 +105,7 @@ export default {
     deleteConfirm: 'Oui, je supprime',
     searchCheckboxes: "Filtrer les types d'objets",
     searchText: 'Rechercher un élément (jeu de données, table, espace de travail...)',
+    searchNoData: 'Aucun résultat',
     queryText: "Entrer l'email ou le nom d'un utilisateur, d'un groupe, d'un espace de travail, d'un jeu de données, ... ",
     searchIn: 'Rechercher parmi :',
     inviteUser: "Inviter un utilisateur",

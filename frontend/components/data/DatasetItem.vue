@@ -239,7 +239,7 @@
             <v-divider/>
 
             <v-list-item
-              @click.stop="dialogShare += 1"
+              @click.stop="dialogShare += 1; dialog += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -280,6 +280,7 @@
       <ModalItem
         v-if="ds"
         :parentDialog="dialog"
+        :parentShare="dialogShare"
         :item="ds"
         :fromWorkspace="fromWorkspace"
         :itemModel="action === 'update' ? itemModelMeta : itemModel"
@@ -290,7 +291,7 @@
       />
 
       <!-- DIALOG FOR DATASET INFOS -->
-      <ModalShare
+      <!-- <ModalShare
         v-if="ds"
         :parentDialog="dialogShare"
         :item="ds"
@@ -299,7 +300,7 @@
         :itemType="itemType"
         :action="action"
         :apiUrl="apiUrl"
-      />
+      /> -->
 
       <!-- DIALOG FOR DATASET DELETE -->
       <ModalDelete

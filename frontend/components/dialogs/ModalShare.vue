@@ -68,13 +68,13 @@
       </v-card-title>
       
       <!-- SEARCH USER OR GROUP -->
-      <v-divider class="mt-8"/>
+      <!-- <v-divider class="mt-8"/> -->
       <v-row
-        class="align-center px-12 pt-5 ma-0 pb-8"
+        :class="`align-center px-12 pt-5 ma-0 pb-8 ${localItem.color}`"
         dense
         >
-        <v-col cols="8" class="offset-4 justify-left">
-          <p class="subtitle-2">
+        <v-col cols="11" class="offset-1 justify-left">
+          <p class="subtitle-2 white--text">
             {{ $t(`buttons.inviteUser${itemType === 'groups' ? '' : 'Group'}`) }}
           </p>
         </v-col>
@@ -84,12 +84,18 @@
             :itemTypes="itemType === 'groups' ? ['users'] : ['users', 'groups']"
             :searchLabel="`buttons.searchUser${itemType === 'groups' ? '' : 'Group'}`"
             :searchPlaceholder="`buttons.queryUser${itemType === 'groups' ? '' : 'Group'}`"
+            :flat="true"
+            :solo="true"
+            :light="true"
+            :dense="false"
+            :customClass="''"
+            :customColor="'white'"
             :relatedSpace="itemType"
             :relatedItem="localItem"
           />
         </v-col>
       </v-row>
-      <v-divider/>
+      <!-- <v-divider/ -->
 
       <!-- DEBUGGING -->
       <v-row class="text-caption" v-if="false">
@@ -161,7 +167,7 @@
 
   export default {
 
-    name: 'ModalItem',
+    name: 'ModalShare',
     props: [
       'item',
       'fromWorkspace',

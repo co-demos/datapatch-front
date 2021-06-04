@@ -2,7 +2,7 @@
   <v-row class="align-top justify-center ma-0 mt-3">
 
     <!-- HEADER + BTNS -->
-    <v-col cols="12" class="mb-1 pa-0">
+    <v-col cols="12" class="mb-0 pa-0">
       <v-row class="ma-0 pl-0 pr-1 py-0 justify-center align-center">
         
         <!-- GROUPED ACTION BTN -->
@@ -22,7 +22,7 @@
                 >
                 <v-icon
                   small
-                  :class="`${btnActions ? (customColor ? 'primary' : 'white') : (customColor ? 'white' : 'grey')}--text`"
+                  :class="`${btnActions ? (customColor ? 'grey' : 'white') : (customColor ? 'white' : 'grey')}--text`"
                   >
                   icon-check-square
                 </v-icon>
@@ -88,7 +88,7 @@
                 >
                 <v-icon
                   small
-                  :class="`${btnFilters ? (customColor ? 'primary' : 'white') : (customColor ? 'white' : 'grey')}--text`"
+                  :class="`${btnFilters ? (customColor ? 'grey' : 'white') : (customColor ? 'white' : 'grey')}--text`"
                   >
                   icon-eye
                 </v-icon>
@@ -148,7 +148,7 @@
           <v-col 
             v-show="btnFilters"
             cols="12"
-            :class="`py-0 mb-2 ${btnActions ? '' : 'offset-6'}`"
+            class="py-0 mb-2"
             >
             <v-row class="ma-0 align-top justify-center">
               <v-col
@@ -177,34 +177,43 @@
     </v-expand-transition>
 
     <!-- SELECTION IIEMS -->
-    <v-col cols="12" class="pa-0 mb-10">
+    <v-col cols="12" class="pa-0 mt-2 mb-6">
       <draggable
         v-model="items"
         v-bind="dragOptions"
-        draggable=".selection"
+        draggable=".list-item"
         group="selection"
         @start="drag=true"
         @end="drag=false"
         >
-        <SearchListItem
+        <v-scale-transition
           v-for="item in items"
-          v-show="filterTypes.includes(item.item_type)"
           :key="`${item.item_type}-${item.id}`"
-          v-model="selected"
-          :item="item"
-          :itemTexts="itemTexts"
-          :getItemInfos="getItemInfos"
-          :buttons="buttons"
-          :customColor="customColor"
-        />
+          >
+          <SearchListItem
+            v-show="filterTypes.includes(item.item_type)"
+            v-model="selected"
+            :item="item"
+            :itemTexts="itemTexts"
+            :getItemInfos="getItemInfos"
+            :buttons="buttons"
+            :customColor="customColor"
+            :relatedSpace="relatedSpace"
+            :relatedItem="relatedItem"
+          />
+        </v-scale-transition>
       </draggable>
     </v-col>
 
-    <v-col cols="10" class="mb-12">
+    <!-- <v-col
+      v-if="!noEndDivider"
+      cols="10" class="mb-12"
+      >
       <v-divider
         :dark="!!customColor"
       />
-    </v-col>
+    </v-col> -->
+    
   </v-row>
 </template>
 
@@ -220,6 +229,8 @@
       'getItemInfos',
       'customColor',
       'filters',
+      'relatedSpace',
+      'relatedItem',
       // 'actionBtns'
     ],
     components: {
@@ -316,6 +327,9 @@
       ...mapGetters({
         headerUser: 'user/headerUser',
       }),
+      // noEndDivider() {
+      //   return !!this.relatedItem
+      // },
       itemsTypes() {
         let types = this.hidden.map(item => item.item_type)
         types = new Set(types)
@@ -347,6 +361,8 @@
       handleGroupAction(val) {
         this.log && console.log('\nC-SearchList > handleAction > val :' , val)
         this.log && console.log('C-SearchList > handleAction > this.selected :' , this.selected)
+        this.log && console.log('C-SearchList > handleAction > this.relatedSpace :' , this.relatedSpace)
+        this.log && console.log('C-SearchList > handleAction > this.relatedItem :' , this.relatedItem)
       }
     }
   }

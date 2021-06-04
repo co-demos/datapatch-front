@@ -104,6 +104,7 @@ export default {
     searchCheckboxes: "Filter objects by types",
     searchText: 'Search for an element (user, group, dataset, table, workspace...)',
     queryText: 'Enter the email or the name of an element (user, group, workspace, dataset, table...)',
+    searchNoData: 'No results',
     searchIn: 'Search within :',
     inviteUser: "Invite an user",
     searchUser: 'Search for an user',

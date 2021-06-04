@@ -2,7 +2,7 @@
   <v-dialog
     v-model="dialog"
     overflowed
-    max-width="700"
+    max-width="800"
     >
     <!-- MODAL TITLE -->
     <v-card>
@@ -51,6 +51,31 @@
               {{ localItem.text }}
             </span>
 
+            <!-- OPEN INVITATION -->
+            <v-tooltip
+              right
+              >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  :dark="showSearch"
+                  :class="`ml-3 ${showSearch ? localItem.color : ''}`"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click.stop="showSearch = !showSearch"
+                  >
+                  <v-icon
+                    small
+                    :color="showSearch ? 'white' : localItem.color"
+                    >
+                    icon-users
+                  </v-icon>
+                </v-btn>
+              </template>
+              {{ $t(`buttons.inviteUser${itemType === 'groups' ? '' : 'Group'}`) }}
+            </v-tooltip>
+
             <!-- SUBTITLE MODAL -->
             <span v-if="itemType === 'fields'" class="caption">
               <br> 
@@ -65,7 +90,51 @@
           </v-col>
         </v-row>
       </v-card-title>
-      
+
+      <!-- INVITE SEARCH USER OR GROUP -->
+      <v-expand-transition>
+        <v-row
+          v-show="showSearch"
+          :class="`align-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color}`"
+          dense
+          >
+          <v-col cols="11" class="offset-1 justify-left">
+            <v-row class="ma-0">
+              <p class="subtitle-2 white--text mb-0">
+                {{ $t(`buttons.inviteUser${itemType === 'groups' ? '' : 'Group'}`) }}
+              </p>
+              <v-spacer/>
+              <v-btn
+                icon
+                small
+                rounded
+                dark
+                elevation="0"
+                @click="showSearch = false"
+                >
+                <v-icon>icon-clear</v-icon>
+              </v-btn>
+            </v-row>
+          </v-col>
+          <!-- {{ itemType }} -->
+          <v-col cols="12">
+            <SearchAny
+              :itemTypes="itemType === 'groups' ? ['users'] : ['users', 'groups']"
+              :searchLabel="`buttons.searchUser${itemType === 'groups' ? '' : 'Group'}`"
+              :searchPlaceholder="`buttons.queryUser${itemType === 'groups' ? '' : 'Group'}`"
+              :flat="true"
+              :solo="true"
+              :light="true"
+              :dense="false"
+              :customClass="''"
+              :customColor="'white'"
+              :relatedSpace="itemType"
+              :relatedItem="localItem"
+            />
+          </v-col>
+        </v-row>
+      </v-expand-transition>
+
       <!-- DEBUGGING -->
       <v-row class="text-caption" v-if="false">
         <v-col cols="12">
@@ -142,6 +211,7 @@
       'fromWorkspace',
       'itemModel',
       'parentDialog',
+      'parentShare',
       'itemType',
       'action',
       'apiUrl',
@@ -156,11 +226,15 @@
       parentDialog (next) {
         this.dialog = next
       },
+      parentShare (next) {
+        this.showSearch = true
+      },
     },
     data () {
       return {
         localItem: undefined,
         dialog: false,
+        showSearch: false,
         tab: null,
         tabsSpaces: [],
         needUpdateStore: false,

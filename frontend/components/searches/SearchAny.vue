@@ -67,20 +67,15 @@
           :error="isError"
           :error-messages="errorMsg"
           >
-          <!-- 
-          no-filter
-          item-value="id"
-          :rules="minCharRules" 
-          -->
 
           <!-- NO DATA -->
-          <template v-slot:no-data>
+          <!-- <template v-slot:no-data>
             <v-list-item>
               <span class="caption">
                 ... {{ $t(searchPlaceholder) }}
               </span>
             </v-list-item>
-          </template>
+          </template> -->
           
           <!-- SELECTION -->
           <template v-slot:selection="{ attrs, item, parent, selected }" class="py-2">
@@ -178,7 +173,7 @@
               >
               <v-icon
                 small
-                :class="`${showCheckboxes ? (customColor ? 'primary' : 'white') : (customColor ? 'white' : 'grey')}--text`"
+                :class="`${showCheckboxes ? (customColor ? 'grey' : 'white') : (customColor ? 'white' : 'grey')}--text`"
                 >
                 {{ showCheckboxes ? 'icon-x-square' : 'icon-plus-square' }}
               </v-icon>
@@ -373,6 +368,7 @@
         // attach: null,
 
         header: { header: this.$t(this.searchPlaceholder) },
+        headerNoData: { header: this.$t('buttons.searchNoData') },
         items: [
           { header: this.$t(this.searchPlaceholder) },
           // {
@@ -423,11 +419,18 @@
     },
     watch: {
 
-      search (val) {
+      search (val, prev) {
 
         // this.log && console.log('\nC-SearchAny > watch > search > val :' , val)
+        // this.log && console.log('C-SearchAny > watch > search > prev :' , prev)
+        // this.log && console.log('C-SearchAny > watch > search > this.items :' , this.items)
         // this.log && console.log('C-SearchAny > watch > search > this.minCharRules :' , this.minCharRules)
+        
         this.showCheckboxes = false
+
+        if ( !val && prev && this.items.length < 2) { 
+          this.items = [ this.header ] 
+        }
 
         let errorMsg = undefined
         let canProceed = this.minCharRules.map( rule => {
@@ -505,8 +508,8 @@
       },
       buildItems(data) {
         // this.log && console.log('\nC-SearchAny > buildItems > this.search :', this.search)
-        let itemsArrray = [ this.header ]
-        // let itemsArrray = [ ]
+        // this.log && console.log('C-SearchAny > buildItems > data :', data)
+        let itemsArray = [ ]
         if (data) {
           for (let type of this.searchTypes) {
             // this.log && console.log('C-SearchAny > buildItems > type :' , type)
@@ -517,12 +520,17 @@
                 return i
               })
               // this.log && console.log('C-SearchAny > buildItems > entriesForType :' , entriesForType)
-              itemsArrray.push(...entriesForType)
+              itemsArray.push(...entriesForType)
             }
           }
-          // this.log && console.log('C-SearchAny > buildItems > itemsArrray :' , itemsArrray)
+          // this.log && console.log('C-SearchAny > buildItems > itemsArray :' , itemsArray)
+        } 
+        if (itemsArray.length > 1) {
+          itemsArray.unshift(this.header)
+        } else {
+          itemsArray.unshift(this.headerNoData)
         }
-        return itemsArrray
+        return itemsArray
       },
       querySearchDebounced(val) {
         // this.log && console.log('\nC-SearchAny > querySearchDebounced > val :', val)
@@ -554,7 +562,7 @@
 
         this.$axios.get(`${urlSearch}/any?q=${val}${item_types_query}${auth_types_query}`, this.headerUser)
           .then(resp => {
-            this.log && console.log('\nC-SearchAny > querySearch > resp.data :' , resp.data)
+            // this.log && console.log('\nC-SearchAny > querySearch > resp.data :' , resp.data)
             const data = resp.data
             this.count = data.length
             this.items = this.buildItems(resp.data)

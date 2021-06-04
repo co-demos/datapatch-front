@@ -95,7 +95,7 @@
           <v-divider/>
 
           <v-list-item
-            @click.stop="dialogShare += 1"
+            @click.stop="dialogShare += 1; dialog += 1"
             >
             <!-- @click.stop="shareWorkspace()" -->
             <v-list-item-action>
@@ -138,13 +138,14 @@
         :noAvatar="true"
         :itemModel="itemModel"
         :parentDialog="dialog"
+        :parentShare="dialogShare"
         :itemType="itemType"
         :apiUrl="apiUrl"
         :action="'update'"
       />
 
       <!-- DIALOG FOR WORKSPACE INFOS -->
-      <ModalShare
+      <!-- <ModalShare
         v-if="ws"
         :parentDialog="dialogShare"
         :item="ws"
@@ -152,7 +153,7 @@
         :itemType="itemType"
         :action="'update'"
         :apiUrl="apiUrl"
-      />
+      /> -->
 
       <!-- DIALOG FOR WORKSPACE DELETE -->
       <ModalDelete

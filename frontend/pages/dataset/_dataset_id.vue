@@ -99,7 +99,7 @@
             <v-divider/>
 
             <v-list-item
-              @click.stop="dialogShare += 1"
+              @click.stop="dialog += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -155,7 +155,7 @@
       :updateCurrentDataset="true"
     />
 
-    <ModalShare
+    <!-- <ModalShare
       v-if="currentDataset"
       :parentDialog="dialogShare"
       :item="currentDataset"
@@ -164,7 +164,7 @@
       :action="'update'"
       :apiUrl="api.datasets"
       :updateCurrentDataset="true"
-    />
+    /> -->
 
     <!-- DIALOG FOR DATASET DELETE -->
     <ModalDelete

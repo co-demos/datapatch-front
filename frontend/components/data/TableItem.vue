@@ -113,6 +113,7 @@
     <ModalItem
       v-if="table"
       :parentDialog="dialog"
+      :parentShare="dialogShare"
       :item="table"
       :itemModel="itemModel"
       :itemType="itemType"
@@ -121,7 +122,7 @@
       :onlyLocalUpdate="fromCreate"
     />
 
-    <ModalShare
+    <!-- <ModalShare
       v-if="table"
       :parentDialog="dialogShare"
       :item="table"
@@ -130,7 +131,7 @@
       :action="'update'"
       :apiUrl="api.tables"
       :onlyLocalUpdate="fromCreate"
-    />
+    /> -->
 
     <!-- DIALOG FOR WORKSPACE DELETE -->
     <ModalDelete

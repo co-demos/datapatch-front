@@ -1,5 +1,5 @@
 <style scoped>
-  .selection {
+  .list-item {
     min-height: 48px;
     display: flex;
     align-items: center;
@@ -16,7 +16,7 @@
     outlined
     light
     elevation="0"
-    class="mb-2 selection"
+    class="mb-2 list-item"
     >
     <v-container fluid class="pa-0">
       <v-row class="child-flex ma-0 pa-1">
@@ -174,7 +174,9 @@
       'getItemInfos',
       // 'actionBtns',
       'buttons',
-      'customColor'
+      'customColor',
+      'relatedSpace',
+      'relatedItem',
     ],
     model: {
       prop: 'hidden',
@@ -217,6 +219,8 @@
       handleAction(val) {
         this.log && console.log('\nC-SearchListItem > handleAction > val :' , val)
         this.log && console.log('C-SearchListItem > handleAction > this.item :' , this.item)
+        this.log && console.log('C-SearchListItem > handleAction > this.relatedSpace :' , this.relatedSpace)
+        this.log && console.log('C-SearchListItem > handleAction > this.relatedItem :' , this.relatedItem)
       }
     }
   }

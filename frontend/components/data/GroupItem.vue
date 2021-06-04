@@ -159,7 +159,7 @@
             <v-divider/>
 
             <v-list-item
-              @click.stop="dialogShare += 1"
+              @click.stop="dialogShare += 1; dialog += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -174,7 +174,7 @@
             </v-list-item>
 
             <v-list-item
-              @click.stop="dialogShare += 1"
+              @click.stop="dialog += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -215,6 +215,7 @@
       <ModalItem
         v-if="grp"
         :parentDialog="dialog"
+        :parentShare="dialogShare"
         :item="group"
         :fromWorkspace="fromWorkspace"
         :itemModel="itemModelMeta"
@@ -224,7 +225,7 @@
       />
 
       <!-- DIALOG FOR GROUP INFOS -->
-      <ModalShare
+      <!-- <ModalShare
         v-if="grp"
         :parentDialog="dialogShare"
         :item="group"
@@ -233,7 +234,7 @@
         :itemType="itemType"
         :action="action"
         :apiUrl="apiUrl"
-      />
+      /> -->
 
       <!-- DIALOG FOR GROUP DELETE -->
       <ModalDelete
