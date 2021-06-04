@@ -70,10 +70,14 @@
           />
           <!-- </transition-group> -->
         </draggable>
-        
-        <!-- ADD WORKSPACE -->
+      </v-col>
+
+      <!-- ADD WORKSPACE -->
+      <v-col 
+        cols="12"
+        >
         <v-card
-          class="mb-5 pb-5 pl-2"
+          class="mb-5 pb-5 pl-2 text-center"
           flat
           >
 
@@ -109,7 +113,7 @@
             @createItem="createWorkspace"
             @resetEmptyItem="resetEmptyWorkspace()"
           />
-            <!-- :emptyItem="emptyWorkspace" -->
+          <!-- :emptyItem="emptyWorkspace" -->
 
         </v-card>
 

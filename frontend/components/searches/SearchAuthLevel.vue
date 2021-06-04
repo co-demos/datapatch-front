@@ -5,7 +5,7 @@
     <!-- <code>model: {{ model }}</code> -->
 
     <p
-      :class="`caption font-weight-bold text-center ${customColor ? 'white--text' : ''}`"
+      :class="`caption font-weight-bold text-center mb-1 ${customColor ? 'white--text' : ''}`"
       >
       {{ $t('auth.authTypesRead') }}
       <!-- - {{ onlyUsers }} -->
@@ -13,6 +13,7 @@
     <v-radio-group
       v-model="model"
       hide-details
+      class="mt-0 ml-2"
       @change="handleInput"
       >
       <v-radio

@@ -205,7 +205,7 @@
               class="align-top pb-0"
               >
               <p
-                :class="`mb-0 font-weight-bold text-center ${customColor ? 'white--text' : ''}`"
+                :class="`mb-0 font-weight-bold text-center ${customColor ? 'white' : 'grey'}--text`"
                 >
                 {{ $t('buttons.searchIn') }}
               </p>
@@ -253,15 +253,6 @@
           </v-row>
         </v-col>
       </v-expand-transition>
-      <v-col
-        v-show="showCheckboxes"
-        cols="10"
-        class="mb-4"
-        >
-        <v-divider
-          :dark="!!customColor"
-        />
-      </v-col>
 
     </v-row>
 

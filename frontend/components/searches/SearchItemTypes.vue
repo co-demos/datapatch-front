@@ -6,7 +6,7 @@
     <!-- <code>model: {{ model }}</code> -->
 
     <p
-      :class="`caption font-weight-bold text-center ${customColor ? 'white--text' : ''}`"
+      :class="`caption font-weight-bold text-center mb-1 ${customColor ? 'white--text' : ''}`"
       >
       {{ $t('dataPackage.itemType') }}
     </p>
@@ -21,7 +21,7 @@
       hide-details
       on-icon="icon-check-square"
       off-icon="icon-square"
-      class="my-1"
+      class="my-1 ml-2"
       @change="handleInput"
       :readonly="justOneSelected && model[0] === type"
       :disabled="justOneSelected && model[0] === type"
