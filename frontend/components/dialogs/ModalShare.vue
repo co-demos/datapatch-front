@@ -84,6 +84,8 @@
             :itemTypes="itemType === 'groups' ? ['users'] : ['users', 'groups']"
             :searchLabel="`buttons.searchUser${itemType === 'groups' ? '' : 'Group'}`"
             :searchPlaceholder="`buttons.queryUser${itemType === 'groups' ? '' : 'Group'}`"
+            :relatedSpace="itemType"
+            :relatedItem="localItem"
           />
         </v-col>
       </v-row>

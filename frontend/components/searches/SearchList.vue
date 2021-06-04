@@ -232,8 +232,8 @@
     },
     watch: {
       hidden(val, prev) {
-        this.log && console.log('\nC-SearchList > watch > hidden > val :' , val)
-        this.log && console.log('C-SearchList > watch > hidden > prev :' , prev)
+        // this.log && console.log('\nC-SearchList > watch > hidden > val :' , val)
+        // this.log && console.log('C-SearchList > watch > hidden > prev :' , prev)
         // updated selected if model change
         this.items = val.filter( i => i && !i.header )
         this.selected = this.selected.filter(item => val.includes(item))

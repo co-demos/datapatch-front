@@ -388,6 +388,8 @@ export default {
     stepImport: "Importer vos données",
     stepMeta: "Métadonnées",
     stepCreateEnd: "Créer votre jeu de données",
+
+    btnNotifications: 'Voir les notifications liées à ce jeu de données',
   },
   pagination: {
     page: "page {page} sur {pages}",
@@ -425,6 +427,7 @@ export default {
     btnUsers: 'Gérer les accès',
     btnDownload: 'Télécharger la table ou le jeu de données',
     btnTablelink: 'Partager le lien vers cette table',
+    btnComment: 'Ecrire un commentaire',
     btnTrash: 'Supprimer cette table',
   },
   fields: {

@@ -176,6 +176,7 @@
               :dense="false"
               :customClass="''"
               :customColor="'white'"
+              :relatedSpace="'navbar'"
             />
           </v-col>
         </v-row>

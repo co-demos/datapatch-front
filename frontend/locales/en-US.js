@@ -385,6 +385,8 @@ export default {
     stepImport: "Import your data",
     stepMeta: "Metadata",
     stepCreateEnd: "Create your dataset",
+
+    btnNotifications: 'Check the notifications related to this dataset',
   },
   pagination: {
     page: "page {page} of {pages}",
@@ -422,6 +424,7 @@ export default {
     btnUsers: "Manage users' access",
     btnDownload: 'Download this table or the dataset',
     btnTablelink: 'Share a link to table',
+    btnComment: 'Write a comment',
     btnTrash: 'Delete this table',
   },
   fields: {

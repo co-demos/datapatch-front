@@ -124,32 +124,44 @@
         buttonsLeft: [
           { 
             icon: 'icon-sidebar',
+            action: 'viewsTable',
             tooltip: 'tables.btnSidebar'
           },
           { 
             icon: 'icon-settings',
+            action: 'prefsTable',
             tooltip: 'tables.btnSettings'
           },
           { 
             icon: 'icon-filter',
+            action: 'filterTable',
             tooltip: 'tables.btnFilter'
           },
           { 
             icon: 'icon-users',
+            action: 'manageAccess',
             tooltip: 'tables.btnUsers'
           },
           { 
             icon: 'icon-download',
+            action: 'downloadTable',
             tooltip: 'tables.btnDownload'
           },
           { 
+            icon: 'icon-message-square',
+            action: 'commentTable',
+            tooltip: 'tables.btnComment'
+          },
+          { 
             icon: 'icon-link',
+            action: 'shareLink',
             tooltip: 'tables.btnTablelink'
           },
         ],
         buttonsRight: [
           { 
             icon: 'icon-trash-2',
+            action: 'deleteTable',
             tooltip: 'tables.btnTrash'
           },
         ],

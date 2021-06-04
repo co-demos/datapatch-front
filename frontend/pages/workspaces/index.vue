@@ -14,6 +14,7 @@
           :itemTypes="['workspaces', 'datasets', 'tables']"
           :searchLabel="'buttons.searchWorkspaceDataset'"
           :searchPlaceholder="'buttons.queryWorkspaceDataset'"
+          :relatedSpace="'workspaces'"
         />
       </v-col>
 

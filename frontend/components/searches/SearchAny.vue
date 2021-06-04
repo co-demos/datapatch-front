@@ -284,6 +284,8 @@
             :getItemInfos="getItemInfos"
             :customColor="customColor"
             :filters="{ types: searchTypes, auths: searchAuth  }"
+            :relatedSpace="relatedSpace"
+            :relatedItem="relatedItem"
           />
         </v-col>
       </v-row>
@@ -308,7 +310,9 @@
       'light',
       'dense',
       'customClass',
-      'customColor'
+      'customColor',
+      'relatedSpace',
+      'relatedItem',
     ],
     components: {
       SearchItemTypes: () => import(/* webpackChunkName: "SearchItemTypes" */ '@/components/searches/SearchItemTypes.vue'),

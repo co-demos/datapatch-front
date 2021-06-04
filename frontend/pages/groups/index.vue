@@ -17,6 +17,7 @@
           :itemTypes="['users', 'groups']"
           :searchLabel="'buttons.searchUserGroup'"
           :searchPlaceholder="'buttons.queryUserGroup'"
+          :relatedSpace="'groups'"
         />
       </v-col>
 

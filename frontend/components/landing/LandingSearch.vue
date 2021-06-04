@@ -34,6 +34,7 @@
               :light="true"
               :dense="false"
               :customColor="'white'"
+              :relatedSpace="'landing'"
             />
           </v-card-text>
         </v-card>

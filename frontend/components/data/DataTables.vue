@@ -207,22 +207,33 @@
 
       <v-spacer/>
 
-      <!-- COMMENTS -->
+      <!-- NOTIFICATIONS / COMMENTS -->
       <v-col 
         v-if="!fromCreate"
         cols="1" class="pr-5 pt-0 pb-2 ma-0"
         >
-        <v-btn
-          icon
-          small
-          color="white"
-          class=""
+        <v-tooltip
+          left
           >
-          <v-icon small class="">
-            icon-message-square
-          </v-icon>
-        </v-btn>
-
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              x-small
+              color="white"
+              v-bind="attrs"
+              v-on="on"
+              class=""
+              >
+              <v-icon
+                small
+                class=""
+                >
+                icon-bell
+              </v-icon>
+            </v-btn>
+          </template>
+          {{ $t('datasets.btnNotifications') }}
+        </v-tooltip>
       </v-col>
 
     </v-row>
