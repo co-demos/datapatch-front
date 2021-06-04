@@ -17,22 +17,28 @@
         </v-icon>
       </v-btn>
       <v-spacer/>
-      <span class="text-h5">
-        <nuxt-link
-          :to="current"
-          class="mr-2 no-decoration"
-          >
+      <nuxt-link
+        :to="current"
+        class="no-decoration"
+        >
+        <span class="text-h5">
           <v-icon
             small
-            class="grey--text"
+            class="grey--text pb-1 mx-2"
             >
             icon-hash
           </v-icon>
-        </nuxt-link>
-        <span class="font-weight-bold">
-          {{ $t(title) }}
+          <span class="font-weight-bold">
+            {{ $t(title) }}
+          </span>
+          <v-icon
+            small
+            class="grey--text pb-1 mx-2"
+            >
+            icon-hash
+          </v-icon>
         </span>
-      </span>
+      </nuxt-link>
       <v-spacer/>
       <v-btn
         icon

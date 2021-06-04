@@ -8,7 +8,7 @@
 
       <v-col 
         cols="11"
-        class="offset-1 align-top text-center pa-0 mt-5 mb-10"
+        class="offset-1 align-top text-center pa-0 mt-6 mb-10"
         >
         <!-- <p class="font-weight-bold grey--text">
           {{ $t('groups.myGroups')}}
@@ -47,7 +47,7 @@
       <!-- MY GROUPS -->
       <v-col 
         cols="10"
-        class="offset-1 mt-2"
+        class="offset-1 mt-6"
         >
         
         <!-- GROUPS / DRAGGABLE -->

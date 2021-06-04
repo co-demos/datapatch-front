@@ -19,7 +19,7 @@
     <v-row
       v-if="grp"
       v-show="!currentLoadingState"
-      class="align-center justify-left mr-2 mb-2"
+      class="align-center justify-left mr-2 mb-2 pt-2"
       >
       <!-- GROUP AVATAR -->
       <!-- <v-col 

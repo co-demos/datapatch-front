@@ -8,7 +8,7 @@
 
       <v-col 
         cols="11"
-        class="offset-1 align-top text-center pa-0 mt-5 mb-10"
+        class="offset-1 align-top text-center pa-0 mt-6 mb-10"
         >
         <SearchAny
           :itemTypes="['workspaces', 'datasets', 'tables']"

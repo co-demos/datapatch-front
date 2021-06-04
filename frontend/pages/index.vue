@@ -1,5 +1,6 @@
 <template>
   <v-layout
+    id="LandingHead"
     column
     justify-center
     align-center
@@ -17,7 +18,6 @@
         :dismissible="true"
       />
       
-      <div id="LandingHead"/>
       <LandingHead/>
 
       <v-divider id="LandingSearch"/>

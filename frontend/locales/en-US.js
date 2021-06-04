@@ -5,7 +5,7 @@ export default {
     introUser: 'Welcome back on Data Patch, {name}',
     pitch: 'Data Patch is (almost) an original and open source alternative to airtable.',
     pitch_bis: "Data Patch allows you to import dataset files, to create new ones, edit them online, collaborate with other users or team, manage schemas, publish via the API or as tables, and finally to engage youur community to enhance the datasets without having them creating an account.",
-    infos: 'For more information on Data Patch, check out the ',
+    infos: 'For more information on Data Patch, <br>check out the ',
     repo: "Github repository",
     testSearch: 'Make a search',
     codemos: "an original and open source project by co-demos",
@@ -415,6 +415,14 @@ export default {
     stepImport: "Import your data",
     stepMeta: "Metadata",
     stepCreateEnd: "Create your table",
+
+    btnSidebar: 'Choose or create a view',
+    btnSettings: 'Table preferences',
+    btnFilter: 'Filter out results',
+    btnUsers: "Manage users' access",
+    btnDownload: 'Download this table or the dataset',
+    btnTablelink: 'Share a link to table',
+    btnTrash: 'Delete this table',
   },
   fields: {
     newField: 'field',

@@ -7,16 +7,25 @@
     >
 
     <!-- TABLE ACTIONS -->
-    <v-btn
+    <v-tooltip 
+      right
       v-for="btn in buttonsLeft"
       :key="btn.icon"
-      text
-      small
       >
-      <v-icon small color="black">
-        {{ btn.icon }}
-      </v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          text
+          small
+          v-bind="attrs"
+          v-on="on"
+          >
+          <v-icon small color="black">
+            {{ btn.icon }}
+          </v-icon>
+        </v-btn>
+      </template>
+      {{ $t(btn.tooltip) }}
+    </v-tooltip>
 
     <v-spacer/>
 
@@ -71,16 +80,25 @@
     </v-text-field>
 
     <!-- DELETE TABLE -->
-    <v-btn
+    <v-tooltip
+      left
       v-for="btn in buttonsRight"
       :key="btn.icon"
-      text
-      small
       >
-      <v-icon small color="black">
-        {{ btn.icon }}
-      </v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          v-bind="attrs"
+          v-on="on"
+          text
+          small
+          >
+          <v-icon small color="black">
+            {{ btn.icon }}
+          </v-icon>
+        </v-btn>
+      </template>
+      {{ $t(btn.tooltip) }}
+    </v-tooltip>
 
   </v-toolbar>
 
@@ -104,15 +122,36 @@
     data () {
       return {
         buttonsLeft: [
-          { icon: 'icon-sidebar' },
-          { icon: 'icon-settings' },
-          { icon: 'icon-filter' },
-          { icon: 'icon-users' },
-          { icon: 'icon-download' },
-          { icon: 'icon-link' },
+          { 
+            icon: 'icon-sidebar',
+            tooltip: 'tables.btnSidebar'
+          },
+          { 
+            icon: 'icon-settings',
+            tooltip: 'tables.btnSettings'
+          },
+          { 
+            icon: 'icon-filter',
+            tooltip: 'tables.btnFilter'
+          },
+          { 
+            icon: 'icon-users',
+            tooltip: 'tables.btnUsers'
+          },
+          { 
+            icon: 'icon-download',
+            tooltip: 'tables.btnDownload'
+          },
+          { 
+            icon: 'icon-link',
+            tooltip: 'tables.btnTablelink'
+          },
         ],
         buttonsRight: [
-          { icon: 'icon-trash-2' },
+          { 
+            icon: 'icon-trash-2',
+            tooltip: 'tables.btnTrash'
+          },
         ],
       }
 
