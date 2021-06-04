@@ -103,19 +103,24 @@
               <p class="subtitle-2 white--text mb-0">
                 {{ $t(`buttons.inviteUser${itemType === 'groups' ? '' : 'Group'}`) }}
               </p>
-              <v-spacer/>
               <v-btn
                 icon
+                absolute
                 small
                 rounded
                 dark
+                right
                 elevation="0"
+                class="flex align-self-center"
                 @click="showSearch = false"
                 >
-                <v-icon>icon-clear</v-icon>
+                <v-icon medium>
+                  icon-clear
+                </v-icon>
               </v-btn>
             </v-row>
           </v-col>
+
           <!-- {{ itemType }} -->
           <v-col cols="12">
             <SearchAny
