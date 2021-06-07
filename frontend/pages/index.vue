@@ -5,6 +5,7 @@
     justify-center
     align-center
     class="my-5 mx-4"
+    dark
     >
   
     <v-flex
@@ -20,19 +21,19 @@
       
       <LandingHead/>
 
-      <v-divider id="LandingSearch"/>
+      <v-divider id="LandingSearch" dark/>
       <LandingSearch/>
 
-      <v-divider id="LandingCarousel"/>
+      <v-divider id="LandingCarousel" dark/>
       <LandingCarousel/>
 
-      <v-divider id="LandingUsecases"/>
+      <v-divider id="LandingUsecases" dark/>
       <LandingUsecases/>
 
-      <v-divider id="LandingRoadmap"/>
+      <v-divider id="LandingRoadmap" dark/>
       <LandingRoadmap/>
 
-      <v-divider id="LandingStack"/>
+      <v-divider id="LandingStack" dark/>
       <LandingStack/>
 
     </v-flex>
@@ -45,6 +46,7 @@
 
   export default {
     name: 'Home',
+    layout: 'layoutLanding',
     components: {
       LandingHead: () => import(/* webpackChunkName: "LandingHead" */ '@/components/landing/LandingHead.vue'),
       LandingSearch: () => import(/* webpackChunkName: "LandingSearch" */ '@/components/landing/LandingSearch.vue'),

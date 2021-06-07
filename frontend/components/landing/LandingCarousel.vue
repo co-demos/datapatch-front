@@ -24,7 +24,7 @@
           >
           <v-sheet
             class="pt-2 px-5"
-            color="secondary"
+            color="primary"
             rounded
             style="height: 100%;"
             >
@@ -51,12 +51,13 @@
     </v-col>
 
     <v-col cols="10" class="text-center mb-0 pb-0">
-      <p>
+      <p class="white--text">
         {{ $t('features.featuresHeader') }}
       </p>
     </v-col>
 
     <v-col cols="5" class="text-caption py-0">
+      <v-card class="pa-3">
       <v-list disabled dense class="">
         <v-list-item
           v-for="feat in featuresLeft"
@@ -74,9 +75,11 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      </v-card>
     </v-col>
 
     <v-col cols="5" class="text-caption py-0">
+      <v-card class="pa-3">
       <v-list disabled dense class="">
         <v-list-item
           v-for="feat in featuresRight"
@@ -93,6 +96,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      </v-card>
     </v-col>
 
   </v-row>

@@ -9,7 +9,7 @@
       <v-btn
         icon
         small
-        color="grey"
+        color="white"
         @click="$vuetify.goTo(top)"
         >
         <v-icon small>
@@ -24,16 +24,16 @@
         <span class="text-h5">
           <v-icon
             small
-            class="grey--text pb-1 mx-2"
+            class="white--text pb-1 mx-2"
             >
             icon-hash
           </v-icon>
-          <span class="font-weight-bold">
+          <span class="font-weight-bold white--text">
             {{ $t(title) }}
           </span>
           <v-icon
             small
-            class="grey--text pb-1 mx-2"
+            class="white--text pb-1 mx-2"
             >
             icon-hash
           </v-icon>
@@ -43,7 +43,7 @@
       <v-btn
         icon
         small
-        color="grey"
+        color="white"
         @click="$vuetify.goTo(up)"
         >
         <v-icon small>
@@ -54,7 +54,7 @@
         v-if="down"
         icon
         small
-        color="grey"
+        color="white"
         @click="$vuetify.goTo(down)"
         >
         <v-icon small>

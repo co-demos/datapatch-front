@@ -9,6 +9,7 @@
       :expand-on-hover="miniVariant"
       fixed
       app
+      style="max-height: 100%"
       >
 
       <MenuList

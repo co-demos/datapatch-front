@@ -90,7 +90,7 @@ export class Workspace {
 
   set randomBasics (value) {
     let iconsList = models.itemPrefsModel.find(pref => pref.name === 'icon').options.items
-    const randomIconIdx = Math.floor(Math.random() * iconsList.length);
+    const randomIconIdx = Math.floor(Math.random() * iconsList.length)
     this.icon = iconsList[randomIconIdx]
   }
 

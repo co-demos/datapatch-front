@@ -2,7 +2,7 @@
 
   <div>
       
-    <v-row class="align-top justify-center my-12">
+    <v-row class="align-top justify-left my-12">
 
       <LandingTitle
         :top="'#LandingHead'"
@@ -12,35 +12,37 @@
         :down="'#LandingRoadmap'"
       />
 
-      <v-col cols="6" class="justify-text">
-        <v-list
-          class="body-2 pt-0"
-          disabled
-          >
-          <v-list-item
-            v-for="usecase in usecases"
-            :key="usecase.text"
+      <v-col cols="4" class="offset-2 justify-text">
+        <v-card class="pa-5">
+          <v-list
+            class="body-2"
+            disabled
             >
-            <v-list-item-icon class="mt-0">
-              <v-icon v-text="usecase.icon" color="primary"/>
-            </v-list-item-icon>
-            <v-list-item-content class="pt-0">
-              {{ $t(usecase.text) }}
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+            <v-list-item
+              v-for="usecase in usecases"
+              :key="usecase.text"
+              >
+              <v-list-item-icon class="mt-0">
+                <v-icon v-text="usecase.icon" color="primary"/>
+              </v-list-item-icon>
+              <v-list-item-content class="pt-0">
+                {{ $t(usecase.text) }}
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
       </v-col>
 
-      <v-col cols="6" class="justify-text">
-        <p class="body-2">
-          {{ $t('usecases.text') }}
-        </p>
-        <p class="body-2">
-          {{ $t('usecases.text_bis') }}
-        </p>
-        <p class="body-2">
-          {{ $t('usecases.text_ter') }}
-        </p>
+      <v-col cols="4" class="justify-text">
+          <p class="body-2 white--text">
+            {{ $t('usecases.text') }}
+          </p>
+          <p class="body-2 white--text">
+            {{ $t('usecases.text_bis') }}
+          </p>
+          <p class="body-2 white--text">
+            {{ $t('usecases.text_ter') }}
+          </p>
       </v-col>
 
     </v-row>
