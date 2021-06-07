@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 
 svg {
@@ -43,12 +43,12 @@ svg {
   word-wrap: normal;
 }
 
-.teal {
+/* .teal {
   fill: #6fdcbf;
 }
 .purple {
   fill: #bc85ff;
-}
+} */
 
 </style>
 
@@ -91,21 +91,21 @@ svg {
         
         <!-- texts -->
         <g v-show="!noText" id="name" opacity="60%">
-          <text class="brand teal" x="67" y="63">data</text>
-          <text class="brand teal" x="68" y="81">patch</text>
+          <text class="brand" x="67" y="63" :style="`fill: ${mainColor};`">{{ customText || 'data' }}</text>
+          <text class="brand" x="68" y="81" :style="`fill: ${mainColor};`">{{ customTextBis || 'patch' }}</text>
         </g>
         
         <g v-show="!noText" id="name2" mask="url(#maskText)">
-          <text class="brand purple" x="67" y="63">data</text>
-          <text class="brand purple" x="68" y="81">patch</text>
+          <text class="brand" x="67" y="63" :style="`fill: ${secondColor};`">{{ customText || 'data' }}</text>
+          <text class="brand" x="68" y="81" :style="`fill: ${secondColor};`">{{ customTextBis || 'patch' }}</text>
         </g>
         
         
         <!-- arcs -->
-        <g id="arcsReveal2" mask="url(#maskArcs2)" class="purple" stroke="#bc85ff" >
+        <g id="arcsReveal2" mask="url(#maskArcs2)" class="" :stroke="secondColor" :style="`fill: ${secondColor};`">
         </g>
 
-        <g id="arcsReveal" mask="url(#maskArcs)" class="teal" stroke="#6fdcbf">
+        <g id="arcsReveal" mask="url(#maskArcs)" class="" :stroke="mainColor" :style="`fill: ${mainColor};`">
 
           <path class="arc" d="M 66.83 105.99 C 52.25 106.3 38.66 98.64 31.37 86.01 C 24.07 73.39 24.22 57.79 31.77 45.31 C 39.31 32.83 53.04 25.44 67.61 26.03"/>
           <path class="arc" d="M 88.42 105.02 C 69.59 115.84 45.72 111.67 31.68 95.1 C 17.63 78.54 17.42 54.31 31.17 37.5 C 44.93 20.69 68.72 16.11 87.74 26.6"/>
@@ -126,7 +126,7 @@ svg {
 <script>
 
   import { gsap } from "gsap"
-
+  import { mapState } from 'vuex'
 
   // cf : https://www.cassie.codes/posts/creating-my-logo-animation/
   // cf : https://css-tricks.com/libraries-for-svg-drawing-animations/
@@ -171,18 +171,33 @@ svg {
       'height',
       'yoyo',
       'repeat',
-      'noText'
+      'noText',
+      'customText',
+      'customTextBis',
+      'customColor',
+      'customColorBis',
     ],
 
     data () {
       return {
         redo: false,
+        mainColor: undefined, 
+        secondColor: undefined, 
       }
     },
 
     beforeMount () {
       this.redo = this.repeat
       this.amount = this.repeat
+      this.mainColor = this.customColor ? this.appThemes.light[this.customColor] : '#6fdcbf' // teal
+      this.secondColor = this.customColorBis? this.appThemes.light[this.customColorBis] : '#bc85ff' // purple
+    },
+
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+        appThemes: (state) => state.appThemes
+      }),
     },
 
     mounted() {

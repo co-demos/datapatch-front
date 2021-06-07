@@ -41,16 +41,23 @@
       <!-- :extension-height="searchHeight" -->
       <!-- :style="`${ searchOpen ? 'box-shadow: 0 20px 10px -2px white !important;' : ''}`" -->
 
-      <v-app-bar-nav-icon
-        small
-        class="ml-2"
-        @click.stop="drawer = !drawer"
-        >
-        <v-icon small>
-          icon-menu
-        </v-icon>
-      </v-app-bar-nav-icon>
-      
+      <v-tooltip right>
+        <template v-slot:activator="{ on, attrs }">
+          <v-app-bar-nav-icon
+            small
+            class="mx-3"
+            v-bind="attrs"
+            v-on="on"
+            @click.stop="drawer = !drawer"
+            >
+            <v-icon small>
+              icon-menu
+            </v-icon>
+          </v-app-bar-nav-icon>
+        </template>
+        {{ $t('buttons.drawer')}}
+      </v-tooltip>
+
       <v-toolbar-title v-if="!noTitle">
         <nuxt-link
           class="white--text link-light"
@@ -200,7 +207,8 @@
     props: [
       'noTitle',
       'noBack',
-      'getDatasetColor'
+      'getDatasetColor',
+      'forceColor'
     ],
     watch: {
       isAuthenticated(next) {
@@ -233,12 +241,12 @@
             { divider: true },
             {
               icon: 'icon-database',
-              title: `pages.myworkspaces`,
+              title: `pages.myWorkspaces`,
               to: '/workspaces'
             },
             {
               icon: 'icon-clipboard',
-              title: `pages.myschemas`,
+              title: `pages.mySchemas`,
               to: '/schemas'
             },
             { divider: true },
@@ -299,7 +307,12 @@
     },
     computed: {
       navbarColor() {
-        let color = this.getDatasetColor ? this.currentDataset.color : 'primary'
+        let color
+        if (this.forceColor) {
+          color = this.forceColor
+        } else {
+          color = this.getDatasetColor ? this.currentDataset.color : 'primary'
+        }
         return color
       },
       ...mapState({

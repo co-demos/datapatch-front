@@ -143,7 +143,8 @@ export class configApp {
         info: env.NUXT_ENV_THEME_LIGHT_info,
         warning: env.NUXT_ENV_THEME_LIGHT_warning,
         error: env.NUXT_ENV_THEME_LIGHT_error,
-        success: env.NUXT_ENV_THEME_LIGHT_success
+        success: env.NUXT_ENV_THEME_LIGHT_success,
+        white: '#fff'
       },
       dark : {
         primary: env.NUXT_ENV_THEME_DARK_primary,
@@ -152,7 +153,8 @@ export class configApp {
         info: env.NUXT_ENV_THEME_DARK_info,
         warning: env.NUXT_ENV_THEME_DARK_warning,
         error: env.NUXT_ENV_THEME_DARK_error,
-        success: env.NUXT_ENV_THEME_DARK_success
+        success: env.NUXT_ENV_THEME_DARK_success,
+        white: '#fff'
       }
     }
   }

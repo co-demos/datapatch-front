@@ -1,7 +1,7 @@
 <template>
-  <v-container class="mt-8">
-    <v-row class="justify-center align-center">
-      <v-col cols="9" class="offset-1">
+  <v-container class="mt-12">
+    <v-row class="justify-left align-center px-12">
+      <v-col cols="10" class="offset-1 px-12">
 
         <v-tabs
           v-model="tab"
@@ -65,19 +65,24 @@
         tab: null,
         items: [
           {
-            icon: 'icon-users',
-            title: `pages.groups`,
-            to: '/groups'
-          },
-          {
             icon: 'icon-apps',
             title: 'pages.workspaces',
             to: '/workspaces'
           },
           {
+            icon: 'icon-users',
+            title: `pages.groups`,
+            to: '/groups'
+          },
+          {
             icon: 'icon-user-plus',
             title: `pages.invitations`,
             to: '/invitations'
+          },
+          {
+            icon: 'icon-mail',
+            title: `pages.messages`,
+            to: '/messages'
           },
         ],
       }

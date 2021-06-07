@@ -4,6 +4,7 @@ export const state = () => ({
   // GLOABAL APP ENV
   appVersion: process.env.CONFIG_APP.appVersion,
   appTitle: process.env.CONFIG_APP.appTitle,
+  appThemes: process.env.CONFIG_APP.vuetifyThemes,
   appRunMode: process.env.MODE_APP,
   log: process.env.LOG,
 

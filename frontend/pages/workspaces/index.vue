@@ -3,12 +3,12 @@
   <v-container class="mb-12">
 
     <v-row
-      class="justify-center align-top"
+      class="justify-left align-top"
       >
 
       <v-col 
-        cols="11"
-        class="offset-1 align-top text-center pa-0 mt-6 mb-10"
+        cols="9"
+        class="offset-2 align-top text-center pa-0 mt-6 mb-10"
         >
         <SearchAny
           :itemTypes="['workspaces', 'datasets', 'tables']"
@@ -48,8 +48,14 @@
       </v-col> -->
 
       <v-col 
-        cols="10"
-        class="offset-1"
+        cols="2"
+        class="mt-6 pa-0"
+        >
+      </v-col>
+
+      <v-col 
+        cols="9"
+        class="pa-0"
         >
 
         <!-- workspace / draggable datasets -->

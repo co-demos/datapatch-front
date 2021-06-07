@@ -53,6 +53,7 @@
 
             <!-- OPEN INVITATION -->
             <v-tooltip
+              v-if="isAuthorizedForItem"
               right
               >
               <template v-slot:activator="{ on, attrs }">
@@ -74,6 +75,32 @@
                 </v-btn>
               </template>
               {{ $t(`buttons.inviteUser${itemType === 'groups' ? '' : 'Group'}`) }}
+            </v-tooltip>
+
+            <!-- OPEN ASK JOIN -->
+            <v-tooltip
+              v-if="!isAuthorizedForItem"
+              right
+              >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  :dark="showAskJoin"
+                  :class="`ml-3 ${showAskJoin ? localItem.color : ''}`"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click.stop="showAskJoin = !showAskJoin"
+                  >
+                  <v-icon
+                    small
+                    :color="showAskJoin ? 'white' : localItem.color"
+                    >
+                    icon-user-plus
+                  </v-icon>
+                </v-btn>
+              </template>
+              {{ $t('buttons.join') }}
             </v-tooltip>
 
             <!-- SUBTITLE MODAL -->
@@ -205,7 +232,7 @@
 
 <script>
 
-  import { mapState } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
   import { FindFieldText } from '@/utils/utilsFields'
 
   export default {
@@ -240,6 +267,7 @@
         localItem: undefined,
         dialog: false,
         showSearch: false,
+        showAskJoin: false,
         tab: null,
         tabsSpaces: [],
         needUpdateStore: false,
@@ -248,7 +276,21 @@
     computed: {
       ...mapState({
         log: (state) => state.log,
+        userData: (state) => state.user.userData,
       }),
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated',
+        currentDataset: 'datasets/getCurrentItem',
+      }),
+      isAuthorizedForItem() {
+        this.log && console.log('\nC-ModalItem > isAuthorizedForItem > this.isAuthenticated :' , this.isAuthenticated)
+        this.log && console.log('C-ModalItem > isAuthorizedForItem > this.userData :' , this.userData)
+        this.log && console.log('C-ModalItem > isAuthorizedForItem > this.localItem :' , this.localItem)
+        let basicAuth = !!this.isAuthenticated && !!this.userData.id
+        let isOwner = this.userData.id === this.localItem.owner_id
+        this.log && console.log('C-ModalItem > isAuthorizedForItem > isOwner :' , isOwner)
+        return basicAuth
+      },
     },
     beforeMount () {
       this.rebuildLocalItem()

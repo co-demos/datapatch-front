@@ -1,14 +1,10 @@
 <template>
   <v-app dark>
 
-    <DefaultNavbar/>
+    <DefaultNavbar :forceColor="'error'"/>
 
-    <!-- <v-main class="mt-5 pt-5"> -->
-    <v-main class="">
-      <!-- {{ $i18n.locale }} -->
-      <v-container>
-        <nuxt />
-      </v-container>
+    <v-main class="error">
+      <nuxt />
     </v-main>
 
     <BasicFooter/>
@@ -18,20 +14,13 @@
 
 <script>
 
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
     BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
   },
-  // head() {
-  //   return {
-  //     htmlAttrs: {
-  //       lang: this.$i18n.locale
-  //     },
-  //   }
-  // },
   computed: {
     ...mapState({
       log: (state) => state.log,

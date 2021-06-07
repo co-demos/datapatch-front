@@ -270,9 +270,9 @@
     <v-expand-transition>
       <v-row
         v-if="model && model.length > 0"
-        class="justify-center"
+        class="justify-left"
         >
-        <v-col cols="12" class="pa-0">
+        <v-col cols="10" class="pa-0 offset-1 px-3">
           <SearchList
             v-model="model"
             :itemTexts="itemTexts"

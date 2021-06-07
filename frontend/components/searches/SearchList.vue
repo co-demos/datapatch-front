@@ -154,7 +154,7 @@
               <v-col
                 v-for="type in itemsTypes"
                 :key="type"
-                cols="2"
+                cols="3"
                 class="pa-0"
                 >
                 <v-checkbox

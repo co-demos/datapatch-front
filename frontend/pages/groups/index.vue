@@ -3,12 +3,12 @@
   <v-container class="mb-12">
 
     <v-row
-      class="justify-center align-top"
+      class="justify-left align-top"
       >
 
       <v-col 
-        cols="11"
-        class="offset-1 align-top text-center pa-0 mt-6 mb-10"
+        cols="10"
+        class="offset-2 align-top text-center pa-0 mt-6 mb-10"
         >
         <!-- <p class="font-weight-bold grey--text">
           {{ $t('groups.myGroups')}}
@@ -45,10 +45,16 @@
         </v-list>
       </v-col> -->
 
+      <v-col 
+        cols="3"
+        class="mt-6 pa-0"
+        >
+      </v-col>
+
       <!-- MY GROUPS -->
       <v-col 
-        cols="10"
-        class="offset-1 mt-6"
+        cols="8"
+        class="mt-6 pa-0"
         >
         
         <!-- GROUPS / DRAGGABLE -->
@@ -64,7 +70,7 @@
           <v-col
             v-for="grp in myGroups"
             :key="`grp-${grp.id}`"
-            class="pt-0 pl-0 pb-6 group"
+            class="pt-0 pl-0 pr-auto pb-6 group"
             cols="6"
             xs="6"
             sm="4"
