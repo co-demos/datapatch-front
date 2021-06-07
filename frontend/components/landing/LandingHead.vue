@@ -76,7 +76,7 @@
     </v-col>
 
     <!-- ANCHOR LINKS -->
-    <v-col cols="10" class="offset-1 pa-0 pt-12 mt-12 mb-5">
+    <v-col cols="8" class="offset-2 pa-0 pt-12 mt-12 mb-5">
       <v-row class="align-center justify-center">
         <v-col
           v-for="link in anchorLinks"
@@ -166,7 +166,7 @@
           'secondary',
           'info',
           'warning',
-          'error',
+          // 'error',
           // 'success',
           // 'white',
         ]

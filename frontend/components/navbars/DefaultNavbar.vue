@@ -1,3 +1,11 @@
+<style scoped>
+  .bottom-border {
+    border-style: solid !important;
+    border-color: white !important;
+    border-width: 2px !important;
+  }
+</style>
+
 <template>
 
   <v-container>
@@ -31,13 +39,14 @@
 
     <v-app-bar
       :color="navbarColor || 'primary'"
-      class="px-4"
+      :class="`px-4`"
       clipped-left
       dark
       fixed
       dense
       flat
       app
+      :style="`${addBorder ? 'border: 1px dashed rgba(255, 255, 255, .3) !important;': ''}`"
       >
       <!-- :extension-height="searchHeight" -->
       <!-- :style="`${ searchOpen ? 'box-shadow: 0 20px 10px -2px white !important;' : ''}`" -->
@@ -59,12 +68,33 @@
         {{ $t('buttons.drawer')}}
       </v-tooltip>
 
-      <v-toolbar-title v-if="!noTitle">
+      <v-toolbar-title>
         <nuxt-link
           class="white--text link-light"
           to="/"
           >
-          {{ title }}
+
+          <span v-if="!noTitle">
+            {{ title }}
+          </span>
+
+          <span v-else>
+            DP
+          </span>
+
+          <!-- <div class="pt-12" v-else>
+            <LogoAnimated
+              :yoyo="true"
+              :repeat="0"
+              :animated="true"
+              :height="'60px'"
+              :customColor="'white'"
+              :customColorBis="'white'"
+              :customTextBis="' '"
+              :customText="' '"
+            />
+          </div> -->
+
         </nuxt-link>
       </v-toolbar-title>
 
@@ -209,7 +239,8 @@
       'noTitle',
       'noBack',
       'getDatasetColor',
-      'forceColor'
+      'forceColor',
+      'addBorder'
     ],
     watch: {
       isAuthenticated(next) {

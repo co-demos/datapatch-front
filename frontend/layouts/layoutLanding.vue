@@ -1,11 +1,22 @@
 <template>
-  <v-app dark>
+  <v-app
+    dark
+    id="topLanding"
+    >
 
-    <DefaultNavbar/>
+    <DefaultNavbar :addBorder="offsetTop > 50"/>
 
-    <v-main class="primary" dark>
-      <v-container>
-        <nuxt />
+    <v-main
+      v-scroll="onScroll"
+      id="landing-main"
+      class="primary"
+      dark
+      >
+      <v-container
+        id="landing-container"
+        >
+        <nuxt
+        />
       </v-container>
     </v-main>
 
@@ -30,10 +41,21 @@ export default {
   //     },
   //   }
   // },
+  data: () => ({
+    offsetTop: 0,
+  }),
   computed: {
     ...mapState({
       log: (state) => state.log,
     }),
+  },
+  methods: {
+    onScroll (e) {
+      // this.log && console.log('\nL-layoutLanding > onScroll > e :', e)
+      // this.log && console.log('L-layoutLanding > onScroll > e.target :', e.target)
+      // this.log && console.log('L-layoutLanding > onScroll > e.target.scrollingElement :', e.target.scrollingElement)
+      this.offsetTop = e.target.scrollingElement.scrollTop
+    },
   },
 }
 </script>

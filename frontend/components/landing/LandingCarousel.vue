@@ -3,7 +3,6 @@
   <v-row class="align-top justify-center my-12">
 
     <LandingTitle
-      :top="'#LandingHead'"
       :title="'features.featuresTitle'"
       :current="'#LandingCarousel'"
       :up="'#LandingSearch'"

@@ -3,7 +3,7 @@ export default {
   datapatch: {
     intro: 'Welcome to Data Patch',
     introUser: 'Welcome back on Data Patch, {name}',
-    pitch: 'Data Patch is (almost) an original and open source alternative to airtable.',
+    pitch: 'Data Patch is (soon) an original, independent and open source alternative to online databse management tools like Airtable or Google Sheet.',
     pitch_bis: "Data Patch allows you to import dataset files, to create new ones, edit them online, collaborate with other users or team, manage schemas, publish via the API or as tables, and finally to engage youur community to enhance the datasets without having them creating an account.",
     infos: 'For more information on Data Patch, <br>check out the ',
     repo: "Github repository",

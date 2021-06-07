@@ -69,11 +69,16 @@
   export default {
     name: 'LandingTitle',
     props: [
-      'top',
+      // 'top',
       'title',
       'current',
       'up',
       'down',
     ],
+    data () {
+      return {
+        top: '#topLanding',
+      }
+    }
   }
 </script>

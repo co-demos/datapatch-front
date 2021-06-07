@@ -5,7 +5,6 @@
     <v-row class="align-top justify-center mt-12">
   
       <LandingTitle
-        :top="'#LandingHead'"
         :title="'roadmap.title'"
         :current="'#LandingRoadmap'"
         :up="'#LandingUsecases'"

@@ -5,7 +5,6 @@
     <v-row class="align-top justify-left my-12">
 
       <LandingTitle
-        :top="'#LandingHead'"
         :title="'usecases.title'"
         :current="'#LandingUsecases'"
         :up="'#LandingCarousel'"

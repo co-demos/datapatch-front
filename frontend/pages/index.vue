@@ -7,6 +7,7 @@
     class="my-5 mx-4"
     dark
     >
+    <!-- v-scroll="onScroll" -->
   
     <v-flex
       xs12
@@ -20,7 +21,9 @@
       />
       
       <LandingHead/>
-
+      
+      <!-- {{ offsetTop }} -->
+      
       <v-divider id="LandingSearch" dark/>
       <LandingSearch/>
 
@@ -63,6 +66,9 @@
         },
       }
     },
+    data: () => ({
+      offsetTop: 0,
+    }),
     beforeMount () {
       this.resetPathList()
     },
@@ -79,7 +85,10 @@
     methods: {
       ...mapActions({
         resetPathList: 'resetPathList',
-      })
+      }),
+      // onScroll (e) {
+      //   this.offsetTop = e.target.scrollTop
+      // },
     }
   }
 </script>

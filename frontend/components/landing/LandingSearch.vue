@@ -8,7 +8,6 @@
       <!-- style="margin: 150px 0 170px 0;" -->
 
       <LandingTitle
-        :top="'#LandingHead'"
         :title="'datapatch.testSearch'"
         :current="'#LandingSearch'"
         :up="'#LandingHead'"
