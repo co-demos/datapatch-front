@@ -334,7 +334,7 @@
             txt: 'username',
             txtBis: 'email',
             defaultIcon:'icon-user',
-            actions: ['addToGroup', 'message'],
+            actions: ['invite', 'message'], //addToGroup
           },
           group: { 
             txt: 'title',

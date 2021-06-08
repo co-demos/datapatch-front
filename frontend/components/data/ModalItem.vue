@@ -61,14 +61,14 @@
                   icon
                   small
                   :dark="showSearch"
-                  :class="`ml-3 ${showSearch ? localItem.color : ''}`"
+                  :class="`ml-3 ${showSearch ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
                   @click.stop="showSearch = !showSearch"
                   >
                   <v-icon
                     small
-                    :color="showSearch ? 'white' : localItem.color"
+                    :color="showSearch ? 'white' : localItem.color || 'grey'"
                     >
                     icon-users
                   </v-icon>
@@ -87,14 +87,14 @@
                   icon
                   small
                   :dark="showAskJoin"
-                  :class="`ml-3 ${showAskJoin ? localItem.color : ''}`"
+                  :class="`ml-3 ${showAskJoin ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
                   @click.stop="showAskJoin = !showAskJoin"
                   >
                   <v-icon
                     small
-                    :color="showAskJoin ? 'white' : localItem.color"
+                    :color="showAskJoin ? 'white' : localItem.color || 'grey'"
                     >
                     icon-user-plus
                   </v-icon>
@@ -122,7 +122,7 @@
       <v-expand-transition>
         <v-row
           v-show="showSearch"
-          :class="`align-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color}`"
+          :class="`align-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color || 'grey'}`"
           dense
           >
           <v-col cols="11" class="offset-1 justify-left">

@@ -233,7 +233,8 @@
       // this.log && console.log(`P-Dataset _id > this.$route :`, this.$route)
       this.dsId = this.$route.params.id
       // this.log && console.log(`P-Dataset _id > this.dsId :`, this.dsId)
-      // this.log && console.log(`P-Dataset _id > this.currentDataset :`, this.currentDataset)
+      this.log && console.log(`P-Dataset _id > this.currentDataset :`, this.currentDataset)
+
       let pathData = {
         text: `${this.currentDataset.title}`,
         noTranslate: true,
@@ -250,6 +251,10 @@
       // )
       // this.setCurrentTables({ tables: this.tablesBlank })
 
+    },
+    mounted () {
+      this.log && console.log(`P-Dataset _id > this.head :`, this.head)
+      // this.head.title = `${this.head.title} - ${this.currentDataset.title}`
     },
     computed: {
       ...mapState({

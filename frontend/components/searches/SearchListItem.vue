@@ -221,7 +221,7 @@
         this.$emit('blur', val)
       },
       canShowButton(name) {
-        this.log && console.log('\nC-SearchListItem > canShowButton > name :' , name)
+        // this.log && console.log('\nC-SearchListItem > canShowButton > name :' , name)
         const btnItemTexts = this.itemTexts[this.item.item_type]
         // this.log && console.log('C-SearchListItem > canShowButton > btnItemTexts :' , btnItemTexts)
         const includes = btnItemTexts.actions.includes(name)
@@ -233,13 +233,13 @@
         let showRules = btnDef.showRules
         // this.log && console.log('C-SearchListItem > canShowButton > showRules :' , showRules)
         if ( !ignore && showRules ) {
-          this.log && console.log('C-SearchListItem > canShowButton > btnDef :' , btnDef)
-          this.log && console.log('C-SearchListItem > canShowButton > this.item :' , this.item)
-          this.log && console.log('C-SearchListItem > canShowButton > this.user :' , this.user)
+          // this.log && console.log('C-SearchListItem > canShowButton > btnDef :' , btnDef)
           let bools = showRules.map( rule => {
             // this.log && console.log('C-SearchListItem > canShowButton > rule :' , rule)
-            let item = name === 'addToGroup' ? this.relatedItem : this.item
-            let user = name === 'addToGroup' ? this.item : this.user
+            let item = name === 'invite' ? this.relatedItem : this.item
+            let user = name === 'invite' ? this.item : this.user
+            // this.log && console.log('C-SearchListItem > canShowButton > item :' , item)
+            // this.log && console.log('C-SearchListItem > canShowButton > user :' , user)
             return rule(item, user)
           })
           // this.log && console.log('C-SearchListItem > canShowButton > bools :' , bools)
@@ -259,18 +259,48 @@
         this.log && console.log('C-SearchListItem > handleAction > this.relatedItem :' , this.relatedItem)
         this.log && console.log('C-SearchListItem > handleAction > this.user :' , this.user)
         
-        let basicAction = {
-          action: val,
-          related_space: this.relatedSpace,
-          invitation_to_item_type: this.relatedItem && this.relatedItem.item_type,
-          invitation_to_item_id: this.relatedItem && this.relatedItem.id,
-          item_id: this.item.id,
-          item_type: this.item.item_type
-        }
-        this.log && console.log('C-SearchListItem > handleAction > basicAction :' , basicAction)
+        let itemType = this.item.item_type
+        // let basicAction = {
+        //   action: val,
+        //   related_space: this.relatedSpace,
+        //   invitation_to_item_type: this.relatedItem && this.relatedItem.item_type,
+        //   invitation_to_item_id: this.relatedItem && this.relatedItem.id,
+        //   item_id: this.item.id,
+        //   item_type: this.item.item_type
+        // }
+        // this.log && console.log('C-SearchListItem > handleAction > basicAction :' , basicAction)
         
+        let targetType = this.relatedItem.item_type
+        let payload = {
+          message: '...',
+          invitation_to_item_type: this.relatedItem.item_type,
+          invitation_to_item_id: this.relatedItem.id,
+          invitor_id: this.user.id,
+          invitees: [ 
+            { 
+              invitee_type: this.item.item_type,
+              invitee_id: this.item.id,
+              invitee_email: this.item.email,
+            }
+          ]
+        }
+        this.log && console.log('C-SearchListItem > handleAction > addToGroup > payload :' , payload)
+        let url = `${this.api[targetType + 's']}/${this.relatedItem.id}/invite`
+
         switch (val) {
-          case 'addToGroup' :
+          // case 'addToGroup' :
+          //   this.log && console.log('C-SearchListItem > handleAction > addToGroup > url :' , url)
+          //   this.$axios.post( url, payload, this.headerUser)
+          //     .then(resp => {
+          //       this.log && console.log('C-SearchListItem > handleAction > resp.data : ', resp.data)
+          //     })
+          //   break
+          case 'invite' :
+            this.log && console.log('C-SearchListItem > handleAction > invite > url :' , url)
+            this.$axios.post( url, payload, this.headerUser)
+              .then(resp => {
+                this.log && console.log('C-SearchListItem > handleAction > resp.data : ', resp.data)
+              })
             break
           case 'message' :
             break
@@ -278,13 +308,10 @@
             break
           case 'join' :
             break
-          case 'invite' :
-            break
           case 'comment' :
             break
           case 'link' :
             const specificPageFor = ['dataset', 'table']
-            let itemType = this.item.item_type
             let to
             if (specificPageFor.includes(itemType)) {
               let addOn = itemType === 'table' ? `dataset/${this.item.dataset_id}/table/${this.item.id}` : `dataset/${this.item.id}`
@@ -292,7 +319,7 @@
             } else {
               to = `/${itemType}s#${this.item.id}`
             }
-            this.log && console.log('C-SearchListItem > handleAction > to :' , to)
+            this.log && console.log('C-SearchListItem > handleAction > link > to :' , to)
             this.$router.push(to)
             this.$emit('closeModal')
             break

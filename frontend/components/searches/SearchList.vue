@@ -47,6 +47,7 @@
               :action="btn"
               :customColor="customColor"
               :outlined="true"
+              :disabled="true"
               @itemAction="handleGroupAction(btn.action)"
             />
           </div>
@@ -279,19 +280,14 @@
             ],
             disabled: true,
           },
-          addToGroup: {
-            action: 'addToGroup',
-            icon: 'icon-user-plus',
-            tooltip: 'buttons.addToGroup',
-            ignoreForSpaces: ['navbar', 'workspaces_list', 'datasets_pages'],
-            showRules: [
-              (item, user) => !( item.owner_id === user.id ) && !( item.users && item.users.find( u => u.email === user.email ) )
-            ]
-          },
-          // share: {
-          //   action: 'share',
-          //   icon: 'icon-share',
-          //   tooltip: 'buttons.share'
+          // addToGroup: {
+          //   action: 'addToGroup',
+          //   icon: 'icon-user-plus',
+          //   tooltip: 'buttons.addToGroup',
+          //   ignoreForSpaces: ['navbar', 'workspaces_list', 'datasets_pages'],
+          //   showRules: [
+          //     (item, user) => !( item.owner_id === user.id ) && !( item.users && item.users.find( u => u.email === user.email ) )
+          //   ]
           // },
           join: {
             action: 'join',
@@ -305,8 +301,19 @@
             action: 'invite',
             icon: 'icon-user-plus',
             tooltip: 'buttons.invite',
+            ignoreForSpaces: ['navbar', 'workspaces_list', 'datasets_pages'],
             showRules: [
-              (item, user) => (item.owner_id === user.id) || (item.authorized_users && item.authorized_users.includes(user.email))
+              (item, user) => {
+                let isOwner = item.owner_id === user.id
+                let isMember = false
+                if (item.item_type === 'group') {
+                  isMember = item.users && item.users.find( u => u.email === user.email)
+                } else {
+                  isMember = item.authorized_users && item.authorized_users.find( email => email === user.email)
+                }
+                return !isOwner && !isMember
+              }
+              // (item, user) => (item.owner_id === user.id) || (item.authorized_users && item.authorized_users.includes(user.email))
             ]
           },
           message: {
