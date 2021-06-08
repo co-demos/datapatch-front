@@ -88,7 +88,7 @@
           flat
           >
 
-          <v-card-title v-if="! myWorkspaces.length">
+          <v-card-title v-if="! myWorkspaces.length" class="justify-center">
             {{ $t('workspaces.defaultHelp') }}
           </v-card-title>
 

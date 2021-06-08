@@ -29,14 +29,19 @@
             :dragging="drag"
           /> -->
         </draggable>
-        
-        <!-- ADD GROUP -->
+      </v-col>
+
+      <!-- ADD INVITATION -->
+      <v-col 
+        cols="11"
+        class="offset-1 text-center"
+        >
         <v-card
           class="mb-5 pb-5 pl-2"
           flat
           >
 
-          <v-card-title v-if="! myInvitations.length">
+          <v-card-title v-if="! myInvitations.length" class="justify-center">
             {{ $t('invitations.defaultHelp') }}
           </v-card-title>
 
@@ -45,10 +50,9 @@
             rounded
             large
             class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
-            color="grey"
             @click="dialog += 1"
             >
-            <span>
+            <span class="grey--text">
               <v-icon class="pb-1 mr-2">
                 icon-plus-circle
               </v-icon>

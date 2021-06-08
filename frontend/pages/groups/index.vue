@@ -108,7 +108,7 @@
           flat
           >
 
-          <v-card-title v-if="!myGroups.length">
+          <v-card-title v-if="!myGroups.length" class="justify-center">
             {{ $t('groups.defaultHelp') }}
           </v-card-title>
 

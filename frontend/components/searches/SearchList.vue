@@ -281,15 +281,6 @@
             ],
             disabled: true,
           },
-          // addToGroup: {
-          //   action: 'addToGroup',
-          //   icon: 'icon-user-plus',
-          //   tooltip: 'buttons.addToGroup',
-          //   ignoreForSpaces: ['navbar', 'workspaces_list', 'datasets_pages'],
-          //   showRules: [
-          //     (item, user) => !( item.owner_id === user.id ) && !( item.users && item.users.find( u => u.email === user.email ) )
-          //   ]
-          // },
           join: {
             action: 'join',
             icon: 'icon-user-check',
@@ -302,7 +293,7 @@
             action: 'invite',
             icon: 'icon-user-plus',
             tooltip: 'buttons.invite',
-            ignoreForSpaces: ['navbar', 'workspaces_list', 'datasets_pages'],
+            ignoreForSpaces: ['landing', 'navbar', 'workspaces_list', 'datasets_pages'],
             showRules: [
               (item, user) => {
                 let isOwner = item.owner_id === user.id
