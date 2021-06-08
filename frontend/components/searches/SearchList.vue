@@ -201,6 +201,7 @@
             :customColor="customColor"
             :relatedSpace="relatedSpace"
             :relatedItem="relatedItem"
+            @removeFromItems="removeFromItems"
             @closeModal="$emit('closeModal')"
           />
         </v-scale-transition>
@@ -390,6 +391,14 @@
         this.log && console.log('C-SearchList > handleAction > this.selected :' , this.selected)
         this.log && console.log('C-SearchList > handleAction > this.relatedSpace :' , this.relatedSpace)
         this.log && console.log('C-SearchList > handleAction > this.relatedItem :' , this.relatedItem)
+      },
+      removeFromItems(val) {
+        // this.log && console.log('\nC-SearchList > removeFromItems > val :' , val)
+        // this.log && console.log('C-SearchList > removeFromItems > this.items :' , this.items)
+        // this.selected = this.selected.filter(item => val.includes(item))
+        let newItems = this.items.filter( item => item !== val)
+        // this.log && console.log('C-SearchList > removeFromItems > this.items :' , this.items)
+        this.handleInput(newItems)
       }
     }
   }

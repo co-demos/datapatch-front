@@ -131,6 +131,7 @@ export default {
     invite: "Inviter une personne ou un groupe",
     message: "Envoyer un message",
     comment: "Commenter",
+    removeFromList: "Enlever de la liste",
   },
   imports: {
     example: 'Exemple',

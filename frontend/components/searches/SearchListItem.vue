@@ -76,15 +76,36 @@
         </v-col>
         
         <!-- ACTION BUTTONS -->
-        <v-col cols="3" class="text-center align-self-center px-1 py-0">
-          <SearchAction
-            v-for="(value, name) in buttons"
-            v-if="canShowButton(name)"
-            :key="name"
-            :action="value"
-            :disabled="isDisabled(name)"
-            @itemAction="handleAction(name)"
-          />
+        <v-col cols="3" class="text-left align-self-center px-1 py-0">
+          <v-row class="align-center ma-0">
+            <v-spacer/>
+            <SearchAction
+              v-for="(value, name) in buttons"
+              v-if="canShowButton(name)"
+              :key="name"
+              :action="value"
+              :disabled="isDisabled(name)"
+              @itemAction="handleAction(name)"
+            />
+            <v-spacer/>
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  x-small
+                  color="grey"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="removeFromItems()"
+                  >
+                  <v-icon size="12">
+                    icon-trash
+                  </v-icon>
+                </v-btn>
+              </template>
+              {{ $t('buttons.removeFromList') }}
+            </v-tooltip>
+          </v-row>
         </v-col>
 
         <!-- CUTTER WITH THIS... YOLO -->
@@ -324,7 +345,11 @@
             this.$emit('closeModal')
             break
         }
+      },
+      removeFromItems() {
+        this.$emit('removeFromItems', this.item )
       }
+
     }
   }
 

@@ -129,6 +129,7 @@ export default {
     invite: "Invite a person or a group",
     message: "Send a message",
     comment: "Comment",
+    removeFromList: "Remove from the list",
   },
   imports: {
     example: 'Example',
