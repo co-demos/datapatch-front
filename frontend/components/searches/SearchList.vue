@@ -200,6 +200,7 @@
             :customColor="customColor"
             :relatedSpace="relatedSpace"
             :relatedItem="relatedItem"
+            @closeModal="$emit('closeModal')"
           />
         </v-scale-transition>
       </draggable>
@@ -273,11 +274,19 @@
             action: 'add',
             icon: 'icon-plus',
             tooltip: 'buttons.add',
+            showRules: [
+              (item, user) => !( item.owner_id === user.id )
+            ],
+            disabled: true,
           },
           addToGroup: {
             action: 'addToGroup',
             icon: 'icon-user-plus',
             tooltip: 'buttons.addToGroup',
+            ignoreForSpaces: ['navbar', 'workspaces_list', 'datasets_pages'],
+            showRules: [
+              (item, user) => !( item.owner_id === user.id ) && !( item.users && item.users.find( u => u.email === user.email ) )
+            ]
           },
           // share: {
           //   action: 'share',
@@ -288,21 +297,32 @@
             action: 'join',
             icon: 'icon-user-check',
             tooltip: 'buttons.join',
+            showRules: [
+              (item, user) => !( item.owner_id === user.id ) && !( item.authorized_users && item.authorized_users.includes(user.email) )
+            ]
           },
           invite: {
             action: 'invite',
             icon: 'icon-user-plus',
             tooltip: 'buttons.invite',
+            showRules: [
+              (item, user) => (item.owner_id === user.id) || (item.authorized_users && item.authorized_users.includes(user.email))
+            ]
           },
           message: {
             action: 'message',
             icon: 'icon-mail',
-            tooltip: 'buttons.message'
+            tooltip: 'buttons.message',
+            showRules: [
+              (item, user) => { return item.item_type === 'user' ? item.id !== user.id : item.owner_id !== user.id }
+            ],
+            disabled: true,
           },
           comment: {
             action: 'comment',
             icon: 'icon-message-square',
-            tooltip: 'buttons.comment'
+            tooltip: 'buttons.comment',
+            disabled: true,
           },
         }
       }

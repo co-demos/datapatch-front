@@ -17,7 +17,7 @@
           :itemTypes="['users', 'groups']"
           :searchLabel="'buttons.searchUserGroup'"
           :searchPlaceholder="'buttons.queryUserGroup'"
-          :relatedSpace="'groups'"
+          :relatedSpace="'groups_list'"
         />
       </v-col>
 
@@ -54,7 +54,7 @@
       <!-- MY GROUPS -->
       <v-col 
         cols="8"
-        class="mt-6 pa-0"
+        class="mt-6 pa-0 ml-5"
         >
         
         <!-- GROUPS / DRAGGABLE -->
@@ -63,7 +63,7 @@
           v-bind="dragOptions"
           draggable=".group"
           group="groups"
-          class="row wrap align-center"
+          class="row wrap align-center justify-center"
           @start="drag=true"
           @end="drag=false; updateGroupPositions()"
           >
@@ -74,7 +74,7 @@
             cols="6"
             xs="6"
             sm="4"
-            md="3"
+            md="4"
             lg="3"
             xl="3"
             >
@@ -117,10 +117,9 @@
             rounded
             large
             class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
-            color="grey"
             @click="dialog += 1"
             >
-            <span>
+            <span class="grey--text">
               <v-icon class="pb-1 mr-2">
                 icon-plus-circle
               </v-icon>

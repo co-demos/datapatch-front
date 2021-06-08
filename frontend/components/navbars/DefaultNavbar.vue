@@ -1,11 +1,3 @@
-<style scoped>
-  .bottom-border {
-    border-style: solid !important;
-    border-color: white !important;
-    border-width: 2px !important;
-  }
-</style>
-
 <template>
 
   <v-container>
@@ -46,7 +38,7 @@
       dense
       flat
       app
-      :style="`${addBorder ? 'border: 1px dashed rgba(255, 255, 255, .3) !important;': ''}`"
+      :style="`${addBorder ? 'border-bottom: 1px dashed rgba(255, 255, 255, .3) !important;': ''}`"
       >
       <!-- :extension-height="searchHeight" -->
       <!-- :style="`${ searchOpen ? 'box-shadow: 0 20px 10px -2px white !important;' : ''}`" -->
@@ -215,6 +207,7 @@
               :customClass="''"
               :customColor="'white'"
               :relatedSpace="'navbar'"
+              @closeModal="searchOpen = false"
             />
           </v-col>
         </v-row>

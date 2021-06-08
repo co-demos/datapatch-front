@@ -52,6 +52,7 @@
           :items="items"
           :search-input.sync="search"
           :label="$t(searchLabel)"
+          :disabled="isLoading"
           multiple
           clearable
 
@@ -82,7 +83,7 @@
             <v-chip
               v-if="item === Object(item)"
               v-bind="attrs"
-              :color="`${item.color}`"
+              :color=" isLoading ? 'grey' : item.color"
               :input-value="selected"
               label
               :small="dense"
@@ -281,6 +282,7 @@
             :filters="{ types: searchTypes, auths: searchAuth  }"
             :relatedSpace="relatedSpace"
             :relatedItem="relatedItem"
+            @closeModal="$emit('closeModal')"
           />
         </v-col>
       </v-row>
@@ -338,7 +340,7 @@
             txt: 'title',
             txtBis: 'description', 
             defaultIcon:'icon-users',
-            actions: ['add', 'join', 'invite', 'message', 'comment'],
+            actions: ['add', 'link', 'join', 'invite', 'message', 'comment'],
           },
           workspace: {
             txt: 'title',
@@ -356,7 +358,7 @@
             txt: 'title',
             txtBis: 'description', 
             defaultIcon:'icon-table',
-            actions: ['add', 'link', 'join', 'invite', 'comment'],
+            actions: ['link', 'join', 'invite', 'comment'],
           },
         },
         showCheckboxes: false,

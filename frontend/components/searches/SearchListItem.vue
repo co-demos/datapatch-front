@@ -74,17 +74,20 @@
             {{ getItemInfos(item, 'txtBis') }}<br>
           </p>
         </v-col>
-
+        
+        <!-- ACTION BUTTONS -->
         <v-col cols="3" class="text-center align-self-center px-1 py-0">
           <SearchAction
             v-for="(value, name) in buttons"
-            v-if="itemTexts[item.item_type].actions.includes(name)"
+            v-if="canShowButton(name)"
             :key="name"
             :action="value"
+            :disabled="isDisabled(name)"
             @itemAction="handleAction(name)"
           />
         </v-col>
 
+        <!-- CUTTER WITH THIS... YOLO -->
         <v-btn
           fab
           absolute
@@ -205,6 +208,7 @@
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        user: (state) => state.user.userData,
       }),
       ...mapGetters({
         headerUser: 'user/headerUser',
@@ -216,11 +220,83 @@
         // this.log && console.log('C-SearchListItem > changeSelection > this.selected :' , this.selected)
         this.$emit('blur', val)
       },
+      canShowButton(name) {
+        this.log && console.log('\nC-SearchListItem > canShowButton > name :' , name)
+        const btnItemTexts = this.itemTexts[this.item.item_type]
+        // this.log && console.log('C-SearchListItem > canShowButton > btnItemTexts :' , btnItemTexts)
+        const includes = btnItemTexts.actions.includes(name)
+        
+        const btnDef = this.buttons[name]
+        const ignore = this.relatedSpace && btnDef.ignoreForSpaces && btnDef.ignoreForSpaces.includes(this.relatedSpace)
+
+        let canShowRules = true
+        let showRules = btnDef.showRules
+        // this.log && console.log('C-SearchListItem > canShowButton > showRules :' , showRules)
+        if ( !ignore && showRules ) {
+          this.log && console.log('C-SearchListItem > canShowButton > btnDef :' , btnDef)
+          this.log && console.log('C-SearchListItem > canShowButton > this.item :' , this.item)
+          this.log && console.log('C-SearchListItem > canShowButton > this.user :' , this.user)
+          let bools = showRules.map( rule => {
+            // this.log && console.log('C-SearchListItem > canShowButton > rule :' , rule)
+            let item = name === 'addToGroup' ? this.relatedItem : this.item
+            let user = name === 'addToGroup' ? this.item : this.user
+            return rule(item, user)
+          })
+          // this.log && console.log('C-SearchListItem > canShowButton > bools :' , bools)
+          canShowRules = bools.every(Boolean)
+        }
+        return includes && !ignore && canShowRules
+      },
+      isDisabled(name) {
+        const btnDef = this.buttons[name]
+        // this.log && console.log('C-SearchListItem > isDisabled > btnDef :' , btnDef)
+        return btnDef.disabled
+      },
       handleAction(val) {
         this.log && console.log('\nC-SearchListItem > handleAction > val :' , val)
         this.log && console.log('C-SearchListItem > handleAction > this.item :' , this.item)
         this.log && console.log('C-SearchListItem > handleAction > this.relatedSpace :' , this.relatedSpace)
         this.log && console.log('C-SearchListItem > handleAction > this.relatedItem :' , this.relatedItem)
+        this.log && console.log('C-SearchListItem > handleAction > this.user :' , this.user)
+        
+        let basicAction = {
+          action: val,
+          related_space: this.relatedSpace,
+          invitation_to_item_type: this.relatedItem && this.relatedItem.item_type,
+          invitation_to_item_id: this.relatedItem && this.relatedItem.id,
+          item_id: this.item.id,
+          item_type: this.item.item_type
+        }
+        this.log && console.log('C-SearchListItem > handleAction > basicAction :' , basicAction)
+        
+        switch (val) {
+          case 'addToGroup' :
+            break
+          case 'message' :
+            break
+          case 'add' :
+            break
+          case 'join' :
+            break
+          case 'invite' :
+            break
+          case 'comment' :
+            break
+          case 'link' :
+            const specificPageFor = ['dataset', 'table']
+            let itemType = this.item.item_type
+            let to
+            if (specificPageFor.includes(itemType)) {
+              let addOn = itemType === 'table' ? `dataset/${this.item.dataset_id}/table/${this.item.id}` : `dataset/${this.item.id}`
+              to = `/${addOn}`
+            } else {
+              to = `/${itemType}s#${this.item.id}`
+            }
+            this.log && console.log('C-SearchListItem > handleAction > to :' , to)
+            this.$router.push(to)
+            this.$emit('closeModal')
+            break
+        }
       }
     }
   }

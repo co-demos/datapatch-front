@@ -109,6 +109,7 @@ export default {
     searchNoData: 'Aucun résultat',
     queryText: "Entrer l'email ou le nom d'un utilisateur, d'un groupe, d'un espace de travail, d'un jeu de données, ... ",
     searchIn: 'Rechercher parmi :',
+    askToJoin: "Demander l'accès à l'élément",
     inviteUser: "Inviter un utilisateur",
     searchUser: 'Rechercher un utilisateur',
     queryUser: "Entrer un nom ou un email",
@@ -197,6 +198,7 @@ export default {
   },
   errors: {
     errorTxt: 'oups',
+    errorCode: 'erreur {code}',
     pageNotFound: "Cette page n'existe pas !<br>(ou pas encore)",
     otherError: "Oups c'est une erreur",
     backHome: "Retour à l'accueil",

@@ -59,7 +59,7 @@ export const itemUsersModel = [
     showField: 'email',
     inModal: true,
     visible: true,
-    readonly: false,
+    readonly: true,
     options: undefined
   },
 ]
@@ -72,7 +72,7 @@ export const itemUsersPendingModel = [
     hint: 'dataPackage.usersHint',
     inModal: true,
     visible: true,
-    readonly: false,
+    readonly: true,
     options: undefined,
     chipColor: 'grey',
   },

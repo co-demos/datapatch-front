@@ -28,7 +28,10 @@
               v-html="$t('errors.otherError')"
             />
             <p>
-              {{ error }}
+              <!-- {{ error }} -->
+              {{ $t('errors.errorCode', {code: error.statusCode} )}}
+              <br>
+              "{{ error.message }}"
             </p>
           </div>
           <br>

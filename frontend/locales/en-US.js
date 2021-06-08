@@ -107,6 +107,7 @@ export default {
     queryText: 'Enter the email or the name of an element (user, group, workspace, dataset, table...)',
     searchNoData: 'No results',
     searchIn: 'Search within :',
+    askToJoin: "Ask for access to the element",
     inviteUser: "Invite an user",
     searchUser: 'Search for an user',
     queryUser: "Enter a name or an email",
@@ -195,6 +196,7 @@ export default {
   },
   errors: {
     errorTxt: 'oops',
+    errorCode: 'error {code}',
     pageNotFound: "This page doesn't exist !<br>(or not yet)",
     otherError: 'An error occurred',
     backHome: "Bring me back home",

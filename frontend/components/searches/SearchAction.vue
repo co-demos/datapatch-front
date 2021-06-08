@@ -18,6 +18,7 @@
         :color="customColor || (outlined ? 'grey' : 'black') "
         :small="outlined"
         :x-small="!outlined"
+        :disabled="disabled"
         v-bind="attrs"
         v-on="on"
         @click.stop="handleAction"
@@ -49,6 +50,7 @@
       'action',
       'customColor',
       'outlined',
+      'disabled',
     ],
     computed: {
       ...mapState({

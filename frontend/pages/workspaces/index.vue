@@ -14,7 +14,7 @@
           :itemTypes="['workspaces', 'datasets', 'tables']"
           :searchLabel="'buttons.searchWorkspaceDataset'"
           :searchPlaceholder="'buttons.queryWorkspaceDataset'"
-          :relatedSpace="'workspaces'"
+          :relatedSpace="'workspaces_list'"
         />
       </v-col>
 
@@ -96,11 +96,10 @@
             text
             rounded
             large
-            class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
-            color="grey"
+            class="text-none pl-2 pr-4 text-h6 font-weight-bold"
             @click="dialog += 1"
             >
-            <span>
+            <span class="grey--text">
               <v-icon class="pb-1 mr-2">
                 icon-plus-circle
               </v-icon>

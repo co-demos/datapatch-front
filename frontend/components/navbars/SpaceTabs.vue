@@ -1,7 +1,7 @@
 <template>
   <v-container class="mt-12">
     <v-row class="justify-left align-center px-12">
-      <v-col cols="10" class="offset-1 px-12">
+      <v-col cols="11" class="offset-1 px-12">
 
         <v-tabs
           v-model="tab"
@@ -10,8 +10,9 @@
           background-color="transparent"
           grow
           dense
+          class="ml-9"
+          icons-and-text
           >
-          <!-- icons-and-text -->
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab
@@ -19,12 +20,12 @@
             :key="space.title"
             :to="space.to"
             >
-            <span class="py-2 text-none">
-              <v-icon small class="mr-3">
-                {{ space.icon }}
-              </v-icon>
+            <span class="text-none">
               {{ $t(space.title) }}
             </span>
+            <v-icon small class="mb-2">
+              {{ space.icon }}
+            </v-icon>
           </v-tab>
 
         </v-tabs>

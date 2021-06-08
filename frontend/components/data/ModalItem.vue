@@ -2,7 +2,7 @@
   <v-dialog
     v-model="dialog"
     overflowed
-    max-width="800"
+    max-width="80%"
     >
     <!-- MODAL TITLE -->
     <v-card>
@@ -160,9 +160,46 @@
               :dense="false"
               :customClass="''"
               :customColor="'white'"
-              :relatedSpace="itemType"
+              :relatedSpace="`${itemType}_modal`"
               :relatedItem="localItem"
+              @closeModal="dialog = false"
             />
+          </v-col>
+        </v-row>
+      </v-expand-transition>
+
+      <!-- INVITE SEARCH USER OR GROUP -->
+      <v-expand-transition>
+        <v-row
+          v-show="showAskJoin"
+          :class="`align-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color}`"
+          dense
+          >
+          <v-col cols="11" class="offset-1 justify-left">
+            <v-row class="ma-0">
+              <p class="subtitle-2 white--text mb-0">
+                {{ $t(`buttons.askToJoin`) }}
+              </p>
+              <v-btn
+                icon
+                absolute
+                small
+                rounded
+                dark
+                right
+                elevation="0"
+                class="flex align-self-center"
+                @click="showAskJoin = false"
+                >
+                <v-icon medium>
+                  icon-clear
+                </v-icon>
+              </v-btn>
+            </v-row>
+          </v-col>
+
+          <v-col cols="12">
+
           </v-col>
         </v-row>
       </v-expand-transition>
@@ -244,6 +281,7 @@
       'itemModel',
       'parentDialog',
       'parentShare',
+      'parentAskJoin',
       'itemType',
       'action',
       'apiUrl',
@@ -259,7 +297,12 @@
         this.dialog = next
       },
       parentShare (next) {
+        this.showAskJoin = false
         this.showSearch = true
+      },
+      parentAskJoin (next) {
+        this.showSearch = false
+        this.showAskJoin = true
       },
     },
     data () {
