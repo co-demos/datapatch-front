@@ -198,7 +198,7 @@
     ],
     head() {
       return {
-        title: `${this.appTitle} - ${this.$t('pages.dataset')}`,
+        title: `${this.appTitle} - ${this.$t('pages.dataset')} ${this.currentDataset ? ': '  + this.currentDataset.title : ''}`,
         htmlAttrs: {
           lang: this.$i18n.locale
         },
@@ -251,10 +251,6 @@
       // )
       // this.setCurrentTables({ tables: this.tablesBlank })
 
-    },
-    mounted () {
-      this.log && console.log(`P-Dataset _id > this.head :`, this.head)
-      // this.head.title = `${this.head.title} - ${this.currentDataset.title}`
     },
     computed: {
       ...mapState({

@@ -2,7 +2,7 @@
   <v-dialog
     v-model="dialog"
     overflowed
-    max-width="80%"
+    max-width="975"
     >
     <!-- MODAL TITLE -->
     <v-card>
@@ -326,12 +326,12 @@
         currentDataset: 'datasets/getCurrentItem',
       }),
       isAuthorizedForItem() {
-        this.log && console.log('\nC-ModalItem > isAuthorizedForItem > this.isAuthenticated :' , this.isAuthenticated)
-        this.log && console.log('C-ModalItem > isAuthorizedForItem > this.userData :' , this.userData)
-        this.log && console.log('C-ModalItem > isAuthorizedForItem > this.localItem :' , this.localItem)
+        // this.log && console.log('\nC-ModalItem > isAuthorizedForItem > this.isAuthenticated :' , this.isAuthenticated)
+        // this.log && console.log('C-ModalItem > isAuthorizedForItem > this.userData :' , this.userData)
+        // this.log && console.log('C-ModalItem > isAuthorizedForItem > this.localItem :' , this.localItem)
         let basicAuth = !!this.isAuthenticated && !!this.userData.id
         let isOwner = this.userData.id === this.localItem.owner_id
-        this.log && console.log('C-ModalItem > isAuthorizedForItem > isOwner :' , isOwner)
+        // this.log && console.log('C-ModalItem > isAuthorizedForItem > isOwner :' , isOwner)
         return basicAuth
       },
     },

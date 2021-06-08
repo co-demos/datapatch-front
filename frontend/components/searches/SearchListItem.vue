@@ -16,7 +16,7 @@
     outlined
     light
     elevation="0"
-    class="mb-2 list-item"
+    :class="`mb-2 list-item ${isLoading ? 'grey' : ''}`"
     >
     <v-container fluid class="pa-0">
       <v-row class="child-flex ma-0 pa-1">
@@ -84,7 +84,7 @@
               v-if="canShowButton(name)"
               :key="name"
               :action="value"
-              :disabled="isDisabled(name)"
+              :disabled="isLoading || isDisabled(name)"
               @itemAction="handleAction(name)"
             />
             <v-spacer/>
@@ -219,6 +219,7 @@
       return {
         fabActivated: false,
         selected: undefined,
+        isLoading: false,
       }
     },
     beforeMount () {
@@ -317,10 +318,12 @@
           //     })
           //   break
           case 'invite' :
+            this.isLoading = true
             this.log && console.log('C-SearchListItem > handleAction > invite > url :' , url)
             this.$axios.post( url, payload, this.headerUser)
               .then(resp => {
                 this.log && console.log('C-SearchListItem > handleAction > resp.data : ', resp.data)
+                this.isLoading = false
               })
             break
           case 'message' :
