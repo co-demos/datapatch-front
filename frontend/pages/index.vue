@@ -24,19 +24,19 @@
       
       <!-- {{ offsetTop }} -->
       
-      <v-divider id="LandingSearch" dark/>
+      <v-divider id="LandingSearch" class="my-12" dark/>
       <LandingSearch/>
 
-      <v-divider id="LandingCarousel" dark/>
+      <v-divider id="LandingCarousel" class="my-12" dark/>
       <LandingCarousel/>
 
-      <v-divider id="LandingUsecases" dark/>
+      <v-divider id="LandingUsecases" class="my-12" dark/>
       <LandingUsecases/>
 
-      <v-divider id="LandingRoadmap" dark/>
+      <v-divider id="LandingRoadmap" class="my-12" dark/>
       <LandingRoadmap/>
 
-      <v-divider id="LandingStack" dark/>
+      <v-divider id="LandingStack" class="my-12" dark/>
       <LandingStack/>
 
     </v-flex>

@@ -2,7 +2,7 @@
 
   <div>
       
-    <v-row class="align-top justify-center mt-12">
+    <v-row class="align-top justify-center my-12">
 
       <LandingTitle
         :title="'stack.title'"

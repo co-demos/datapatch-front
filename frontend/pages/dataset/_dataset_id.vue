@@ -1,3 +1,12 @@
+<style scoped>
+  .no-decoration {
+    text-decoration: none; 
+  }
+  .dataset-title {
+    font-size: 1.5em !important;
+  }
+</style>
+
 <template>
 
   <v-container class="mb-5 px-0 pt-0 mx-0">
@@ -32,12 +41,20 @@
       >
       <v-spacer></v-spacer>
       <v-toolbar-title>
-        <v-icon class="mr-4 pb-1">
+
+        <v-icon class="mr-4 pb-0">
           {{ currentDataset.icon }}
         </v-icon>
-        <span>
-          {{ currentDataset.title }}
-        </span>
+
+        <v-btn
+          class="text-none no-decoration"
+          text
+          @click.stop="dialog = true"
+          >
+          <span class="dataset-title">
+            {{ currentDataset.title }}
+          </span>
+        </v-btn>
 
         <v-menu
           bottom
@@ -153,6 +170,7 @@
       :action="'update'"
       :apiUrl="api.datasets"
       :updateCurrentDataset="true"
+      :noLink="true"
     />
 
     <!-- <ModalShare

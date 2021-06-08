@@ -12,7 +12,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         elevation="0"
-        class="ma-1"
+        class="mr-1"
         icon
         :outlined="outlined"
         :color="customColor || (outlined ? 'grey' : 'black') "

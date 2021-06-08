@@ -120,6 +120,7 @@
       :action="'update'"
       :apiUrl="api.tables"
       :onlyLocalUpdate="fromCreate"
+      :noLink="true"
     />
 
     <!-- <ModalShare

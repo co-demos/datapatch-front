@@ -1,11 +1,20 @@
+<style scoped>
+  .no-decoration {
+    text-decoration: none; 
+  }
+  .no-pointer {
+    pointer-events: none !important;
+  }
+</style>
+
 <template>
   <v-dialog
     v-model="dialog"
     overflowed
-    max-width="975"
+    max-width="1000"
     >
     <!-- MODAL TITLE -->
-    <v-card>
+    <v-card class="pb-8">
       
       <!-- CLOSE MODAL -->
       <v-card-actions class="mr-5 pt-3 pb-0 px-0">
@@ -39,12 +48,16 @@
           <!-- TITLE MODAL -->
           <v-col cols="8">
 
-            <span v-if="itemType !== 'fields'"
-              :class="`${localItem.color || 'black'}--text`"
+            <nuxt-link
+              v-if="itemType !== 'fields'"
+              :class="`text-none no-decoration ${localItem.color || 'black'}--text ${noPointer ? 'no-pointer' : ''}`"
+              :to="getItemLink"
               >
               {{ localItem.title }}
+              <!-- {{ localItem }} -->
               <!-- <br> wsId: {{ fromWorkspace }} -->
-            </span>
+            </nuxt-link>
+
             <span v-if="itemType === 'fields'"
               :class="`'black--text`"
               >
@@ -288,6 +301,7 @@
       'noAvatar',
       'updateCurrentDataset',
       'onlyLocalUpdate',
+      'noLink'
     ],
     watch: {
       item () {
@@ -314,6 +328,7 @@
         tab: null,
         tabsSpaces: [],
         needUpdateStore: false,
+        noPointer: false,
       }
     },
     computed: {
@@ -334,8 +349,17 @@
         // this.log && console.log('C-ModalItem > isAuthorizedForItem > isOwner :' , isOwner)
         return basicAuth
       },
+      getItemLink() {
+        let itemType = this.itemType
+        let url = `/${itemType}/#${this.localItem.id}`
+        if (itemType === 'datasets') {
+          url = `/dataset/${this.localItem.id}`
+        }
+        return url
+      }
     },
     beforeMount () {
+      this.noPointer = this.fromCreate ? true : this.noLink
       this.rebuildLocalItem()
       this.tabsSpaces = Object.keys(this.itemModel)
     },

@@ -11,7 +11,7 @@ export default {
     codemos: "un projet libre et original par co-demos",
   },
   features: {
-    featuresTitle: 'Principales fonctionnalités',
+    featuresTitle: 'Fonctionnalités',
     featuresHeader: 'Les principales fonctionnalités de Data Patch sont les suivantes :',
     
     edit: 'Editer des jeux de données en ligne ;',

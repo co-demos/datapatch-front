@@ -222,6 +222,7 @@
         :itemType="itemType"
         :action="action"
         :apiUrl="apiUrl"
+        :noLink="true"
       />
 
       <!-- DIALOG FOR GROUP INFOS -->

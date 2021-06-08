@@ -10,7 +10,7 @@
       <LandingTitle
         :title="'datapatch.testSearch'"
         :current="'#LandingSearch'"
-        :up="'#LandingHead'"
+        :up="'#topLanding'"
         :down="'#LandingCarousel'"
       />
 

@@ -138,6 +138,7 @@
             :apiUrl="apiUrl"
             @createItem="createGroup"
             @resetEmptyItem="resetEmptyGroup()"
+            :noLink="true"
           />
 
         </v-card>

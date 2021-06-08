@@ -1,8 +1,14 @@
+<style scoped>
+  .call-border {
+    border: 3px solid white !important;
+  }
+</style>
+
 <template>
 
   <v-row 
-    class="align-center justify-left mt-5 mb-12 pb-12"
-    style="height: 85vh;"
+    class="align-center justify-left mt-2 mb-12 pb-12"
+    style="height: 100%;"
     >
 
     <!-- WELCOME MESSAGE -->
@@ -44,10 +50,10 @@
 
       <div class="text-center">
         <v-btn
-        dark
+          dark
           elevation="0"
-          class="font-weight-bold pl-12 pr-6"
-        :color="customColor"
+          class="font-weight-bold pl-12 pr-6 call-border"
+          :color="customColor"
           nuxt
           large
           :to="`/${ isAuthenticated ? 'workspaces' : 'login'}`"
@@ -72,11 +78,11 @@
 
     </v-col>
     
-    <v-col cols="12" class="mt-5">
+    <v-col cols="12" class="mt-1">
     </v-col>
 
     <!-- ANCHOR LINKS -->
-    <v-col cols="8" class="offset-2 pa-0 pt-12 mt-12 mb-5">
+    <v-col cols="8" class="offset-2 pa-0 pt-5 mt-12 mb-5">
       <v-row class="align-center justify-center">
         <v-col
           v-for="link in anchorLinks"

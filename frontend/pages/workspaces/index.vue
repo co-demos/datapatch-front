@@ -118,6 +118,7 @@
             :apiUrl="apiUrl"
             @createItem="createWorkspace"
             @resetEmptyItem="resetEmptyWorkspace()"
+            :noLink="true"
           />
           <!-- :emptyItem="emptyWorkspace" -->
 

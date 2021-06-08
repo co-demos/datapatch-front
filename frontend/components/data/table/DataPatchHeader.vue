@@ -143,6 +143,7 @@
       :apiUrl="api.tables"
       :noAvatar="true"
       :onlyLocalUpdate="onlyLocalUpdate"
+      :noLink="true"
     />
 
   </div>
