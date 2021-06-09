@@ -643,7 +643,7 @@ carto5_	source 3	C</pre>
       // === COPY PASTE DATA ===
       readFromCopyPaste() {
         if (this.copyPasteData) {
-          // this.log && console.log(`C-DatasetImsportData > readFromCopyPaste > ...`)
+          this.log && console.log(`C-DatasetImsportData > readFromCopyPaste > ...`)
           this.loading = true
           this.setImportData(false)
           this.resetCurrentTables()
@@ -659,7 +659,7 @@ carto5_	source 3	C</pre>
           // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableMetadata : `, tableMetadata)
           const tableCopyPaste = this.rawDataToTable(tableMetadata, dataObj)
           setTimeout(() => {
-            // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableCopyPaste : `, tableCopyPaste)
+            this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableCopyPaste : `, tableCopyPaste)
             this.setCurrentTables( { tables: [tableCopyPaste] } )
             this.toggleTablesNeedReload(true)
             this.loading = false

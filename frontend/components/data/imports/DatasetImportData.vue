@@ -502,10 +502,18 @@ carto5_	source 3	C</pre>
       SelectSeparator: () => import(/* webpackChunkName: "SelectSeparator" */ '@/components/data/imports/SelectSeparator.vue'),
     },
     props: [
+      'hidden',
       'datasetItem',
       'importType',
     ],
+    model: {
+      prop: 'hidden',
+      event: 'blur'
+    },
     watch: {
+      loading(val) {
+        this.handleInput(val)
+      },
       importType(next) {
         this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
         this.setImportData(false)
@@ -513,8 +521,15 @@ carto5_	source 3	C</pre>
         if ( next && next === 'blank') {
           // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
           // this.setCurrentTableId(1)
-          this.setCurrentTables({ tables: this.tablesBlank })
-          this.setImportData(true)
+          setTimeout(() => {
+            this.loading = true
+            this.toggleTablesNeedReload(true)
+            this.setCurrentTables({ tables: this.tablesBlank })
+            this.setImportData(true)
+            this.toggleTablesNeedRedraw(true)
+            this.loading = false
+          }, 200)
+
         } else {
           this.toggleTablesNeedReload(true)
         }
@@ -563,7 +578,7 @@ carto5_	source 3	C</pre>
 
       let tablesBlank = CreateBlankTable(this.userId, this.$t('tables.defaultTitle'), this.$t('tables.defaultDescription'))
       this.tablesBlank = tablesBlank
-      this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
+      // this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
       this.resetCurrentTables()
       if (this.importType && this.importType === 'blank') {
         // this.setCurrentTableId(1)
@@ -587,10 +602,15 @@ carto5_	source 3	C</pre>
     methods: {
       ...mapActions({
         toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
+        toggleTablesNeedRedraw: 'tables/toggleTablesNeedRedraw',
         setCurrentTables: 'tables/setCurrentTables',
         // setCurrentTableId: 'tables/setCurrentTableId',
         resetCurrentTables: 'tables/resetCurrentTables',
       }),
+      handleInput(val) {
+        this.$emit('blur', val)
+      },
+
       getImportOptions (type, targetField) {
         let importOptionType = this.importOptions.find(o => o.value === type)
         return importOptionType && importOptionType[targetField]
@@ -660,10 +680,10 @@ carto5_	source 3	C</pre>
           const tableCopyPaste = this.rawDataToTable(tableMetadata, dataObj)
           setTimeout(() => {
             // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableCopyPaste : `, tableCopyPaste)
-            this.setCurrentTables( { tables: [tableCopyPaste] } )
             this.toggleTablesNeedReload(true)
-            this.loading = false
+            this.setCurrentTables( { tables: [tableCopyPaste] } )
             this.setImportData(true)
+            this.loading = false
           }, 200)
         }
       },
@@ -704,10 +724,10 @@ carto5_	source 3	C</pre>
           try {
             const tablesCsv = await this.readCsvFilesAsync()
             // this.log && console.log(`C-DatasetImportData > readCsvFiles > tablesCsv :`, tablesCsv)
-            this.setCurrentTables({tables: tablesCsv})
             this.toggleTablesNeedReload(true)
-            this.loading = false
+            this.setCurrentTables({tables: tablesCsv})
             this.setImportData(true)
+            this.loading = false
           } catch (ex) {
             this.log && console.log(ex)
           }
@@ -740,10 +760,10 @@ carto5_	source 3	C</pre>
                 }) 
               })
             this.log && console.log(`C-DatasetImportData > readExcelFile > tablesExcel :`, tablesExcel)
-            this.setCurrentTables({ tables: tablesExcel })
             this.toggleTablesNeedReload(true)
-            this.loading = false
+            this.setCurrentTables({ tables: tablesExcel })
             this.setImportData(true)
+            this.loading = false
          } catch (ex) {
             this.log && console.log(ex)
           }
@@ -789,10 +809,10 @@ carto5_	source 3	C</pre>
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > dataObj :`, dataObj)
             const tableCsvUrl = this.rawDataToTable(tableMetadata, dataObj[0])
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableCsvUrl :`, tableCsvUrl)
-            this.setCurrentTables({ tables: [tableCsvUrl] })
             this.toggleTablesNeedReload(true)
-            this.loading = false
+            this.setCurrentTables({ tables: [tableCsvUrl] })
             this.setImportData(true)
+            this.loading = false
           } catch (ex) {
             this.log && console.log(ex)
           }
@@ -825,42 +845,13 @@ carto5_	source 3	C</pre>
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
             tablesGsheet.push(table)
           })
-          this.setCurrentTables({ tables: tablesGsheet })
           this.toggleTablesNeedReload(true)
+          this.setCurrentTables({ tables: tablesGsheet })
           this.setImportData(true)
           this.loading = false
         }
 
       },
-
-      // sendTables(tables) {
-      //   let tables = undefined
-      //   switch (this.importType) {
-      //     case 'blank' :
-      //       tables = this.tablesBlank
-      //       break
-      //     case 'copyPaste' :
-      //       tables = this.tablesCopyPaste
-      //       break
-      //     case 'csv' :
-      //       tables = this.tablesCsvFiles
-      //       break
-      //     case 'excel' :
-      //       tables = this.tablesXlsFile
-      //       break
-      //     case 'json' :
-      //       tables = this.tablesJsonFile
-      //       break
-      //     case 'csvGithub' :
-      //       tables = this.tablesCsvGithub
-      //       break
-      //     case 'gSheet' :
-      //       tables = this.tablesGsheetUrl
-      //       break
-      //   }
-      //   this.log && console.log(`C-DatasetImportData > sendValue > tables :`, tables)
-      //   this.$emit('setDataImport', tables)
-      // },
 
       setImportData(bool) {
         // this.log && console.log(`C-DatasetImportData > setImportData > bool :`, bool)

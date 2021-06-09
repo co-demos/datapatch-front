@@ -336,7 +336,9 @@
       // set default tab
       // this.log && console.log(`\nC-DataTables > beforeMount > this.getCurrentTables : `, this.getCurrentTables)
       let hasTables = this.getCurrentTables && this.getCurrentTables.length
+      // this.log && console.log(`C-DataTables > beforeMount > hasTables : `, hasTables)
       this.tab = hasTables && this.getCurrentTableId // this.getCurrentTables[0].id
+      // this.log && console.log(`C-DataTables > beforeMount > this.tab : `, this.tab)
       this.tables = hasTables && [ ...this.getCurrentTables ]
       this.setCurrentTableId(this.tab)
    },
@@ -358,6 +360,8 @@
         api: (state) => state.api,
         itemModel: (state) => state.tables.itemModel,
         itemModelShare: (state) => state.tables.itemModelShare,
+        getCurrentTables: (state) => state.tables.currentTables,
+        getCurrentTableId: (state) => state.tables.currentTableId,
       }),
       ...mapGetters({
         userId: 'user/userId',
@@ -365,9 +369,9 @@
 
         isAuthenticated: 'user/isAuthenticated',
         getTablesNeedReload: 'tables/getTablesNeedReload',
-        getCurrentTables: 'tables/getCurrentTables',
+        // getCurrentTables: 'tables/getCurrentTables',
         getCurrentTable: 'tables/getCurrentTable',
-        getCurrentTableId: 'tables/getCurrentTableId',
+        // getCurrentTableId: 'tables/getCurrentTableId',
         getTableById: 'tables/getTableById',
       })
     },

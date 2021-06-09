@@ -23,7 +23,7 @@
     hide-overlay
     transition="dialog-bottom-transition"
     >
-    <!-- MODAL TITLE -->
+
     <v-card class="">
       
       <!-- CLOSE MODAL -->
@@ -60,8 +60,10 @@
           action: <code>{{ action }}</code><br>
           apiUrl: <code>{{ apiUrl }}</code><br>
           presetCreate: <code>{{ presetCreate }}</code><br>
+          canShowPreview: <code>{{ canShowPreview }}</code><br>
+          isLoading: <code>{{ isLoading }}</code><br>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="3" v-if="true">
           item (prop): <br>
           <code><pre>{{ item }}</pre></code>
         </v-col>
@@ -155,6 +157,7 @@
                 <div v-show="stepInfo.component === 'dataImport'">
                   <div class="mt-5 mb-0">
                     <DatasetImportData
+                      v-model="isLoading"
                       :datasetItem="datasetItem"
                       :importType="importType"
                       @setDataImport="setDataImport"
@@ -201,7 +204,7 @@
 
       <!-- DATA PREVIEW -->
       <v-container 
-        v-if="canShowPreview"
+        v-if="canShowPreview && !isLoading"
         class="pt-1"
         >
         <!-- <v-divider/> -->
@@ -368,6 +371,7 @@
       return {
         dialog: false,
         isActive: false,
+        isLoading: false,
 
         e1: 0,
         tabsSpaces: [],

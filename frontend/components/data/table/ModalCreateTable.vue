@@ -204,8 +204,7 @@
         v-if="canShowPreview"
         class="pt-1"
         >
-        <v-row class="justify-center ma-0"
-          >
+        <v-row class="justify-center ma-0">
           <v-col cols="12" class="px-0 pt-0">
             <DataTables
               :currentDataset="datasetItem"
