@@ -1,8 +1,8 @@
-# DATA PATCH - DMS BACKEND PROJECT
+# DATA PATCH - FRONTEND
 
-A simple boilerplate of a frontend for the API server **[data patch backend][datapatch-back]**. The backend is mainly for [CRUD][CRUD_def] and auth operations, powered by **[FastAPI][fastapi]** framework with a **PostgreSQL** database. 
+Frontend interface for the API server **[data patch backend][datapatch-back]**. The backend is mainly for [CRUD][CRUD_def] and auth operations, powered by **[FastAPI][fastapi]** framework with a **PostgreSQL** database. 
 
-This frontend is developped as an SPA (client-only) app, so it could be developped completely appart from the backend.
+This frontend is developped as an SPA (client-only) app, so it could be developped and maintained completely appart from the backend.
 
 ## Features
 
@@ -15,7 +15,7 @@ The current goal is to make it work with the following generic features, so it c
 - [x] **Tables** pages & components
 - [ ] **Schemas** pages & components
 - [ ] **Fields** pages & components
-- [ ] **Groups** pages & components
+- [x] **Groups** pages & components
 - [ ] **Comments** pages & components
 - [ ] **Notifications** pages & components
 - [ ] **Invitations** pages & components
