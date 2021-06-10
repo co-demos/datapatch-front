@@ -170,7 +170,7 @@
               .put(`${this.apiUrl}/${this.item.id}`, itemPayload, this.headerUser)
               .then(resp => {
                 // this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
-                this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
+                this.$store.dispatch(`${this.itemType}/updateUserItem`, {data: resp.data, temp: this.onlyLocalUpdate})
   
                 if (this.updateCurrentDataset) {
                   this.$store.dispatch(`${this.itemType}/setCurrentItem`, resp.data)

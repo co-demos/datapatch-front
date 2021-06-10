@@ -99,8 +99,8 @@ export const actions = {
   appendUserItem ({ commit }, group) {
     commit('addItem', {space: 'userGroups', item: group})
   },
-  updateUserItem ({ commit }, group) {
-    commit('updateItem', {space: 'userGroups', item: group})
+  updateUserItem ({ commit }, { data }) {
+    commit('updateItem', {space: 'userGroups', item: data})
   },
   removeUserItem ({ commit }, group) {
     commit('removeItem', {space: 'userGroups', item: group})

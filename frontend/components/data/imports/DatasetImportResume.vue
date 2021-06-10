@@ -61,18 +61,19 @@
           <v-col
             cols="8"
             class="pa-1 "
-            v-if="dataImport && getCurrentTables &&  getCurrentTables.length"
+            v-if="dataImport && getCurrentTables &&  getCurrentTables.length > 0"
             >
             <v-list-item
               v-for="table in getCurrentTables"
               :key="table.id"
+              v-if="table"
               class="pl-0"
               >
               <v-list-item-content class="pt-0">
                 <v-list-item-title>
                   {{ table.title }}
                 </v-list-item-title>
-                <v-list-item-subtitle v-if="table.table_fields">
+                <v-list-item-subtitle v-if="table && table.table_fields && table.table_data">
                   {{ table.table_fields.length }}
                   {{ $t('dataPackage.fields').toLowerCase() }} 
                   - 
@@ -125,7 +126,7 @@
 
 <script>
 
-  import { mapState, mapGetters, mapActions } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
 
@@ -153,6 +154,7 @@
         userId: 'user/userId',
         headerUser: 'user/headerUser',
         getCurrentTables: 'tables/getCurrentTables',
+        // getCurrentTables: 'tables/getTempTables',
       }),
     },
     methods: {

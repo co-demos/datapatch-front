@@ -509,14 +509,13 @@ carto5_	source 3	C</pre>
       importType(next) {
         this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
         this.setImportData(false)
-        this.resetCurrentTables()
+        this.resetCurrentTables({temp: true})
         if ( next && next === 'blank') {
           // this.log && console.log(`C-DatasetImportData > watch > importType > next :`, next)
-          // this.setCurrentTableId(1)
-          this.setCurrentTables({ tables: this.tablesBlank })
+          this.setCurrentTables({ tables: this.tablesBlank, temp: true  })
           this.setImportData(true)
         } else {
-          this.toggleTablesNeedReload(true)
+          this.toggleTablesNeedReload({bool: true, temp: true})
         }
       },
     },
@@ -564,13 +563,12 @@ carto5_	source 3	C</pre>
       let tablesBlank = CreateBlankTable(this.userId, this.$t('tables.defaultTitle'), this.$t('tables.defaultDescription'))
       this.tablesBlank = tablesBlank
       this.log && console.log(`C-DatasetImportData > beforeMount > this.tablesBlank :`, this.tablesBlank)
-      this.resetCurrentTables()
+      this.resetCurrentTables({temp: true})
       if (this.importType && this.importType === 'blank') {
-        // this.setCurrentTableId(1)
-        this.setCurrentTables({ tables: this.tablesBlank })
+        this.setCurrentTables({ tables: this.tablesBlank, temp: true  })
         this.setImportData(true)
       } else {
-        this.toggleTablesNeedReload(true)
+        this.toggleTablesNeedReload({bool: true, temp: true})
       }
     },
     computed: {
@@ -588,7 +586,6 @@ carto5_	source 3	C</pre>
       ...mapActions({
         toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
         setCurrentTables: 'tables/setCurrentTables',
-        // setCurrentTableId: 'tables/setCurrentTableId',
         resetCurrentTables: 'tables/resetCurrentTables',
       }),
       getImportOptions (type, targetField) {
@@ -646,7 +643,7 @@ carto5_	source 3	C</pre>
           this.log && console.log(`C-DatasetImsportData > readFromCopyPaste > ...`)
           this.loading = true
           this.setImportData(false)
-          this.resetCurrentTables()
+          this.resetCurrentTables({temp: true})
           const data = this.copyPasteData
           const dataObj = convertCSVToJSON(data, this.copyPasteSeparator)
           // this.log && console.log(`C-DatasetImportData > readFromCopyPaste > data : `, data)
@@ -660,8 +657,8 @@ carto5_	source 3	C</pre>
           const tableCopyPaste = this.rawDataToTable(tableMetadata, dataObj)
           setTimeout(() => {
             this.log && console.log(`C-DatasetImportData > readFromCopyPaste > tableCopyPaste : `, tableCopyPaste)
-            this.setCurrentTables( { tables: [tableCopyPaste] } )
-            this.toggleTablesNeedReload(true)
+            this.setCurrentTables( { tables: [tableCopyPaste], temp: true } )
+            this.toggleTablesNeedReload({bool: true, temp: true})
             this.loading = false
             this.setImportData(true)
           }, 200)
@@ -699,13 +696,13 @@ carto5_	source 3	C</pre>
         if ( this.csvFiles && this.csvFiles.length > 0 ) {
           this.loading = true
           this.setImportData(false)
-          this.resetCurrentTables()
+          this.resetCurrentTables({temp: true})
           // this.log && console.log(`C-DatasetImportData > readCsvFiles > ...`)
           try {
             const tablesCsv = await this.readCsvFilesAsync()
             // this.log && console.log(`C-DatasetImportData > readCsvFiles > tablesCsv :`, tablesCsv)
-            this.setCurrentTables({tables: tablesCsv})
-            this.toggleTablesNeedReload(true)
+            this.setCurrentTables({ tables: tablesCsv, temp: true })
+            this.toggleTablesNeedReload({bool: true, temp: true})
             this.loading = false
             this.setImportData(true)
           } catch (ex) {
@@ -719,7 +716,7 @@ carto5_	source 3	C</pre>
         if (this.xlsFile) {
           this.loading = true
           this.setImportData(false)
-          this.resetCurrentTables()
+          this.resetCurrentTables({temp: true})
           let tablesExcel = []
           try {
             const xlsData = await processFile(this.xlsFile, 'xls')
@@ -740,8 +737,8 @@ carto5_	source 3	C</pre>
                 }) 
               })
             this.log && console.log(`C-DatasetImportData > readExcelFile > tablesExcel :`, tablesExcel)
-            this.setCurrentTables({ tables: tablesExcel })
-            this.toggleTablesNeedReload(true)
+            this.setCurrentTables({ tables: tablesExcel, temp: true })
+            this.toggleTablesNeedReload({bool: true, temp: true})
             this.loading = false
             this.setImportData(true)
          } catch (ex) {
@@ -789,8 +786,8 @@ carto5_	source 3	C</pre>
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > dataObj :`, dataObj)
             const tableCsvUrl = this.rawDataToTable(tableMetadata, dataObj[0])
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > tableCsvUrl :`, tableCsvUrl)
-            this.setCurrentTables({ tables: [tableCsvUrl] })
-            this.toggleTablesNeedReload(true)
+            this.setCurrentTables({ tables: [tableCsvUrl], temp: true })
+            this.toggleTablesNeedReload({bool: true, temp: true})
             this.loading = false
             this.setImportData(true)
           } catch (ex) {
@@ -825,8 +822,8 @@ carto5_	source 3	C</pre>
             // this.log && console.log(`C-DatasetImportData > readCsvFromUrl > table :`, table)
             tablesGsheet.push(table)
           })
-          this.setCurrentTables({ tables: tablesGsheet })
-          this.toggleTablesNeedReload(true)
+          this.setCurrentTables({ tables: tablesGsheet, temp: true })
+          this.toggleTablesNeedReload({bool: true, temp: true})
           this.setImportData(true)
           this.loading = false
         }

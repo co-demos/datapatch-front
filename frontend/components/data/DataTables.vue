@@ -294,7 +294,7 @@
           this.tables = next && next.length && [ ...next ]
           if (!prev) {
             this.tab = next && next.length && next[0].id
-            this.setCurrentTableId(this.tab)
+            this.setCurrentTableId({ tableId: this.tab, temp: this.fromCreate })
           } else {
             this.tab = this.getCurrentTableId
           }
@@ -340,7 +340,7 @@
       this.tab = hasTables && this.getCurrentTableId // this.getCurrentTables[0].id
       // this.log && console.log(`C-DataTables > beforeMount > this.tab : `, this.tab)
       this.tables = hasTables && [ ...this.getCurrentTables ]
-      this.setCurrentTableId(this.tab)
+      this.setCurrentTableId({ tableId: this.tab, ttemp: this.fromCreate })
    },
     computed: {
       dragOptionsTables() {
@@ -360,19 +360,17 @@
         api: (state) => state.api,
         itemModel: (state) => state.tables.itemModel,
         itemModelShare: (state) => state.tables.itemModelShare,
-        getCurrentTables: (state) => state.tables.currentTables,
-        getCurrentTableId: (state) => state.tables.currentTableId,
       }),
       ...mapGetters({
         userId: 'user/userId',
         headerUser: 'user/headerUser',
 
         isAuthenticated: 'user/isAuthenticated',
+
         getTablesNeedReload: 'tables/getTablesNeedReload',
-        // getCurrentTables: 'tables/getCurrentTables',
+        getCurrentTables: 'tables/getCurrentTables',
         getCurrentTable: 'tables/getCurrentTable',
-        // getCurrentTableId: 'tables/getCurrentTableId',
-        getTableById: 'tables/getTableById',
+        getCurrentTableId: 'tables/getCurrentTableId',
       })
     },
     methods: {
@@ -388,7 +386,7 @@
         let datasetId = this.currentDataset.id
         
         if (!this.fromCreate) {
-          this.togggleTablesIsLoading(true)
+          this.togggleTablesIsLoading({bool: true, temp: this.fromCreate})
           const tablemetaId = tableId
           // this.log && console.log('C-DataTables > this.$route : ', this.$route)
           // this.$router.replace({ params: { ...this.$route.params, table_id: tableId } })
@@ -402,11 +400,11 @@
           let table = this.currentDataset.tables.find( t => t.id === tableId)
           table.table_data = tableData
           // this.log && console.log('C-DataTables > changeTab > table : ', table)
-          this.updateTable(table)
+          this.updateTable({ table: table, temp: this.fromCreate })
         }
 
         this.tab = tableId
-        this.setCurrentTableId(tableId)
+        this.setCurrentTableId({ tableId: tableId, temp: this.fromCreate })
       },
       openCreateWithPreset (preset) {
         this.log && console.log("C-DataTables > openCreateWithPreset > preset :", preset)
@@ -415,7 +413,7 @@
       },
       updateTablesOrder() {
         this.log && console.log(`\nC-DataTables > updateTablesOrder > this.tables : `, this.tables)
-        this.setCurrentTables({tables: this.tables, tableId: this.tab})
+        this.setCurrentTables({tables: this.tables, tableId: this.tab, temp: this.fromCreate})
       },
       addTable() {
         let existingIds = this.getCurrentTables.map(t => t.id)
@@ -429,7 +427,7 @@
           false
         )[0]
         // this.log && console.log(`\nC-DataTables > addTable > newTable : `, newTable)
-        this.appendTableStart(newTable)
+        this.appendTableStart({ table: newTable, temp: this.fromCreate })
         this.changeTab(newTable.id)
       },
       deleteTable(table) {
@@ -437,7 +435,7 @@
         // avoid deleting table if this is the only one
         let canDeleteTable = this.getCurrentTables.length > 1
         if (canDeleteTable) {
-          this.removeTable(table)
+          this.removeTable({table: table, temp: this.fromCreate})
           if (this.tab === table.id) {
             let newTab = this.getCurrentTables[0].id
             this.tab = newTab

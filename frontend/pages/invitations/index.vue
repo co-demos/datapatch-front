@@ -90,7 +90,7 @@
 
   export default {
     name: 'Invitations',
-    layout: 'layoutListings',
+    layout: 'layout_listings',
     components: {
       // InvitationItem: () => import(/* webpackChunkName: "InvitationItem" */ '@/components/data/InvitationItem.vue'),
     },

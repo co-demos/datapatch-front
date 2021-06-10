@@ -168,7 +168,7 @@
 
   export default {
     name: 'Groups',
-    layout: 'layoutListings',
+    layout: 'layout_listings',
     components: {
       GroupItem: () => import(/* webpackChunkName: "GroupItem" */ '@/components/data/GroupItem.vue'),
     },

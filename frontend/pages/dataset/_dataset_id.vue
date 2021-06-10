@@ -158,6 +158,7 @@
 
     <DataTables
       :currentDataset="currentDataset"
+      :fromCreate="false"
     />
 
     <!-- DIALOG FOR DATASET INFOS -->
@@ -210,7 +211,7 @@
 
   export default {
     name: 'Dataset',
-    layout: 'layoutDataset',
+    layout: 'layout_dataset',
     middleware: [
       'getDatasetById'
     ],
@@ -262,13 +263,6 @@
       this.pathItems.push(pathData)
       this.updatePath(this.pathItems)
 
-      // this.tablesBlank = CreateBlankTable(
-      //   this.userId,
-      //   this.$t('tables.defaultTitle'),
-      //   this.$t('tables.defaultDescription')
-      // )
-      // this.setCurrentTables({ tables: this.tablesBlank })
-
     },
     computed: {
       ...mapState({
@@ -309,7 +303,7 @@
                 ids: wsPreviousDatasets.filter(ds => ds !==  this.ds.id )
               }
               // this.log && console.log(`...C-Dataset > deleteDataset > ds ${this.ds.id} > payloadWs : `, payloadWs)
-              this.$store.dispatch(`workspaces/updateUserItem`, payloadWs)
+              this.$store.dispatch(`workspaces/updateUserItem`, {data: payloadWs})
               this.$router.push(`/workspaces`)
             }
           })

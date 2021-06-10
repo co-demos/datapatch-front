@@ -495,7 +495,7 @@
             this.$axios
               .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
               .then( respPut => {
-                this.$store.dispatch(`workspaces/updateUserItem`, respPut.data)
+                this.$store.dispatch(`workspaces/updateUserItem`, {data: respPut.data})
 
                 // commented during backend dev / debugging
                 this.$router.push(`/dataset/${respPost.data.id}`)
@@ -520,11 +520,11 @@
               let wsPreviousDatasets = ws.datasets && ws.datasets.ids || []
               // this.log && console.log(`...C-DatasetItem > deleteDataset > ${this.ds.id} > wsPreviousDatasets : `, wsPreviousDatasets)
               let payloadWs = { ...ws }
-              payloadWs.datasets = {
+              payloadWs.data = {
                 ids: wsPreviousDatasets.filter(ds => ds !==  this.ds.id )
               }
               // this.log && console.log(`...C-DatasetItem > deleteDataset > ds ${this.ds.id} > payloadWs : `, payloadWs)
-              this.$store.dispatch(`workspaces/updateUserItem`, payloadWs)
+              this.$store.dispatch(`workspaces/updateUserItem`, {data: payloadWs})
             }
           })
       },

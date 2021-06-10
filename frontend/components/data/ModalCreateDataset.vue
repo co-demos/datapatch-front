@@ -204,7 +204,7 @@
 
       <!-- DATA PREVIEW -->
       <v-container 
-        v-if="canShowPreview && !isLoading"
+        v-if="dialog && canShowPreview && !isLoading"
         class="pt-1"
         >
         <!-- <v-divider/> -->
@@ -229,6 +229,7 @@
                 :fromCreate="true"
                 :noToolbar="true"
               />
+                <!-- :tableStore="'tablesTemp'" -->
             <!-- </v-lazy> -->
           </v-col>
         </v-row class="justify-center mx-5">
@@ -394,6 +395,7 @@
             component: 'dataImport',
             rules: [() => this.visited.includes(1) ? !!this.dataImport : true ]
           },
+
           { 
             title: 'datasets.stepMeta', 
             component: 'datasetMeta',
@@ -413,7 +415,10 @@
       ...mapGetters({
         userId: 'user/userId',
         headerUser: 'user/headerUser',
+
+        // getCurrentTables: 'tablesTemp/getCurrentTables',
         getCurrentTables: 'tables/getCurrentTables',
+
       }),
       canShowPreview () {
         let rightStep = this.e1 === 1 || this.e1 === 3
@@ -423,14 +428,12 @@
     },
     methods: {
       ...mapActions({
-        toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
         toggleTablesNeedRedraw: 'tables/toggleTablesNeedRedraw',
       }),
       addToVisited (n) {
         let inidicesvisited = [ ...this.visited, n]
         this.visited = [ ...new Set(inidicesvisited) ]
-        // this.toggleTablesNeedReload(true)
-        this.toggleTablesNeedRedraw(true)
+        this.toggleTablesNeedRedraw({bool: true, temp: true})
       },
       backStep (n) {
         this.addToVisited(n)

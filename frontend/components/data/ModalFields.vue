@@ -381,10 +381,10 @@
             this.log && console.log('C-ModalFields > updateItem > needUpdateStore > itemPayload :' , itemPayload)
             switch (itemPayload.item_type) {
               case 'table' :
-                this.updateTable(itemPayload)
+                this.updateTable({table: itemPayload, temp: this.onlyLocalUpdate })
                 break
               case 'field' :
-                this.updateColumnInCurrentTableFields(itemPayload)
+                this.updateColumnInCurrentTableFields({ col: itemPayload, temp: this.onlyLocalUpdate })
                 break
             }
           }
@@ -407,7 +407,7 @@
                 this.log && console.log('C-ModalFields > updateItem > resp.data : ', resp.data)
                 
                 if (this.itemType !== 'fields') {
-                  this.$store.dispatch(`${this.itemType}/updateUserItem`, resp.data)
+                  this.$store.dispatch(`${this.itemType}/updateUserItem`, {data: resp.data, temp: this.onlyLocalUpdate})
                 }
                 
                 if (this.updateCurrentDataset) {

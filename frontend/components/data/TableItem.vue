@@ -183,12 +183,11 @@
     beforeMount () {
       // this.log && console.log(`\nC-TableItem > beforeMount > this.tableId : `, this.tableId )
       // this.log && console.log(`C-TableItem > beforeMount > this.getTableMetadataById(this.tableId) : `, this.getTableMetadataById(this.tableId) )
-      // this.table = this.getTableMetadataById(this.tableId)
       this.table = this.getTable
     },
     computed: {
       getTable() {
-        return this.getTableMetadataById(this.tableId)
+        return this.getTableMetadataById(this.tableId, this.fromCreate)
       },
       getDatasetColor() {
         let color = this.fromCreate ? 'primary' : this.currentDataset.color

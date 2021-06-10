@@ -49,7 +49,7 @@
 
   export default {
     name: 'Home',
-    layout: 'layoutLanding',
+    layout: 'layout_landing',
     components: {
       LandingHead: () => import(/* webpackChunkName: "LandingHead" */ '@/components/landing/LandingHead.vue'),
       LandingSearch: () => import(/* webpackChunkName: "LandingSearch" */ '@/components/landing/LandingSearch.vue'),

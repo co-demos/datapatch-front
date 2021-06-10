@@ -88,8 +88,8 @@ export const actions = {
   appendUserItem ({ commit }, invitation) {
     commit('addItem', {space: 'userInvitations', item: invitation})
   },
-  updateUserItem ({ commit }, invitation) {
-    commit('updateItem', {space: 'userInvitations', item: invitation})
+  updateUserItem ({ commit }, {data}) {
+    commit('updateItem', {space: 'userInvitations', item: data})
   },
   removeUserItem ({ commit }, invitation) {
     commit('removeItem', {space: 'userInvitations', item: invitation})

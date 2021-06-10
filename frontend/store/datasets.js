@@ -110,8 +110,8 @@ export const actions = {
   appendUserItem ({ commit }, dataset) {
     commit('addItem', {space: 'userDatasets', item: dataset})
   },
-  updateUserItem ({ commit }, dataset) {
-    commit('updateItem', {space: 'userDatasets', item: dataset})
+  updateUserItem ({ commit }, { data }) {
+    commit('updateItem', {space: 'userDatasets', item: data})
   },
   removeUserItem ({ commit }, dataset) {
     commit('removeItem', {space: 'userDatasets', item: dataset})

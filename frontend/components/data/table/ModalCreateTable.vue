@@ -405,14 +405,12 @@
     },
     methods: {
       ...mapActions({
-        toggleTablesNeedReload: 'tables/toggleTablesNeedReload',
         toggleTablesNeedRedraw: 'tables/toggleTablesNeedRedraw',
       }),
       addToVisited (n) {
         let inidicesvisited = [ ...this.visited, n]
         this.visited = [ ...new Set(inidicesvisited) ]
-        // this.toggleTablesNeedReload(true)
-        this.toggleTablesNeedRedraw(true)
+        this.toggleTablesNeedRedraw({ bool: true, temp: true })
       },
       backStep (n) {
         this.addToVisited(n)

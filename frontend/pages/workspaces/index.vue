@@ -139,7 +139,7 @@
 
   export default {
     name: 'Workspaces',
-    layout: 'layoutListings',
+    layout: 'layout_listings',
     components: {
       WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
       DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),

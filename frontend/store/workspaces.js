@@ -106,8 +106,8 @@ export const actions = {
   appendUserItem ({ commit }, workspace) {
     commit('addItem', {space: 'userWorkspaces', item: workspace})
   },
-  updateUserItem ({ commit }, workspace) {
-    commit('updateItem', {space: 'userWorkspaces', item: workspace})
+  updateUserItem ({ commit }, {data}) {
+    commit('updateItem', {space: 'userWorkspaces', item: {data}})
   },
   removeUserItem ({ commit }, workspace) {
     commit('removeItem', {space: 'userWorkspaces', item: workspace})

@@ -297,18 +297,18 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
       getCurrentTableFields(next, prev) {
         // this.log && console.log(`C-DataPatchTable > watch > getCurrentTableFields > next :`, next)
         if (next && this.tableId) {
-          this.tableHeaders =  [ ...next ]
+          this.tableHeaders = [ ...next ]
         }
       },
       getTablesNeedReload(next) {
-        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedReload > next :`, next)
         if (next && this.tableId) {
-          this.toggleTablesNeedReload(false)
+          this.toggleTablesNeedReload({bool: false, temp: this.onlyLocalUpdate})
           this.resetDisplayedTables()
         }
       },
       getTablesNeedRedraw(next) {
-        this.log && console.log(`C-DataPatchTable > watch > getTablesNeedRedraw > next :`, next)
+        // this.log && console.log(`C-DataPatchTable > watch > getTablesNeedRedraw > next :`, next)
         if (next && this.tableId) {
           // this.resetDisplayedTables()
           this.redrawRows()
@@ -340,7 +340,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
       }
     },
     beforeMount () {
-
+      this.log && console.log(`\nC-DataPatchTable > beforeMount > this.onlyLocalUpdate :`, this.onlyLocalUpdate)
       if (this.tableId) {
         this.resetDisplayedTables()
       }
@@ -366,25 +366,36 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        // isTableLoading: (state) => state[ this.onlyLocalUpdate ? 'tablesTemp' : 'tables' ].isLoading,
         isTableLoading: (state) => state.tables.isLoading,
+        // isTableUserLoading: (state) => state.tables.isLoading,
+        // isTableTempLoading: (state) => state.tablesTemp.isLoading,
         fieldModel: (state) => state.fields.itemModel,
       }),
       ...mapGetters({
         userId: 'user/userId',
         headerUser: 'user/headerUser',
-        
+
         getTablesNeedReload: 'tables/getTablesNeedReload',
         getTablesNeedRedraw: 'tables/getTablesNeedRedraw',
         getCurrentTable: 'tables/getCurrentTable',
-        getTableById: 'tables/getTableById',
-
         getSelectedRowsForCurrentTable: 'tables/getSelectedRowsForCurrentTable',
         getCurrentTable: 'tables/getCurrentTable',
         getCurrentTableFieldsDataLength: 'tables/getCurrentTableFieldsDataLength',
         getCurrentTableFields: 'tables/getCurrentTableFields',
         getCurrentTableRowsLength: 'tables/getCurrentTableRowsLength',
         getCurrentTableRows: 'tables/getCurrentTableRows',
+
       }),
+      // getTablesNeedReload() { return this.tablesNeedReload(this.onlyLocalUpdate) },
+      // getTablesNeedRedraw() { return this.tablesNeedRedraw(this.onlyLocalUpdate) },
+      // getCurrentTable() { return this.currentTable(this.onlyLocalUpdate) },
+      // getSelectedRowsForCurrentTable() { return this.selectedRowsForCurrentTable(this.onlyLocalUpdate) },
+      // getCurrentTable() { return this.currentTable(this.onlyLocalUpdate) },
+      // getCurrentTableFieldsDataLength() { return this.currentTableFieldsDataLength(this.onlyLocalUpdate) },
+      // getCurrentTableFields() { return this.currentTableFields(this.onlyLocalUpdate) },
+      // getCurrentTableRowsLength() { return this.currentTableRowsLength(this.onlyLocalUpdate) },
+      // getCurrentTableRows() { return this.currentTableRows(this.onlyLocalUpdate) },
     },
     methods: {
       ...mapActions({
@@ -420,14 +431,14 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         // this.tableRows = [ ...this.getCurrentTableRows ].splice(paginer.start, paginer.end)
         this.tableRows = [ ...rows ].splice(paginer.start, paginer.end)
         this.log && console.log(`C-DataPatchTable > redrawRows > this.tableRows :`, this.tableRows)
-        this.toggleTablesNeedRedraw(false)
+        this.toggleTablesNeedRedraw({ bool: false, temp: this.onlyLocalUpdate })
       },
       hoverResize(headerId) {
         this.headerResizingId = headerId
       },
       updateHeader(headerData) {
         // this.log && console.log(`\nC-DataPatchTable > updateHeader > headerData : `, headerData)
-        this.updateColumnInCurrentTableFields(headerData)
+        this.updateColumnInCurrentTableFields({ col: headerData, temp: this.onlyLocalUpdate })
       },
       tableMarginLeft () {
         let marginL = 0
@@ -457,10 +468,10 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         // this.log && console.log(`\nC-DataPatchTable > this.tableHeaders :`, this.tableHeaders)
         let filteredHeaders = this.tableHeaders.filter( h => !h.helpHeader  )
         // this.log && console.log(`C-DataPatchTable > filteredHeaders :`, filteredHeaders)
-        this.updateColumnsOrderInTableData(filteredHeaders)
+        this.updateColumnsOrderInTableData({ columns: filteredHeaders, temp: this.onlyLocalUpdate })
       },
       updateRowsOrder() {
-        this.updateRowsOrderInTableData(this.tableRows)
+        this.updateRowsOrderInTableData({ rows: this.tableRows, temp: this.onlyLocalUpdate })
       },
       addColumn(type='str') {
         // this.log && console.log(`\nC-DataPatchTable > addColumn ...`)
@@ -478,7 +489,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         // this.log && console.log(`C-DataPatchTable > addColumn > newHeader.data :`, newHeader.data)
         // this.tableHeaders.splice( this.tableHeaders.length - 1, 0, newHeader.data)
         // this.log && console.log(`C-DataPatchTable > addColumn > this.tableHeaders :`, this.tableHeaders)
-        this.appendColumnToCurrentTableFields(newHeader)
+        this.appendColumnToCurrentTableFields({ newCol: newHeader, temp: this.onlyLocalUpdate })
         this.redrawHeaders()
         setTimeout(() => {
           this.triggerGetColSize *= -1
@@ -486,7 +497,7 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
       },
       deleteColumn(headerData) {
         // this.log && console.log(`\nC-DataPatchTable > deleteColumn : headerData`, headerData)
-        this.deleteColumnInCurrentTableFields(headerData.id)
+        this.deleteColumnInCurrentTableFields({ colId: headerData.id, temp: this.onlyLocalUpdate })
       },
       addRow() {
         // this.log && console.log(`\nC-DataPatchTable > addRow ...`)
@@ -511,11 +522,11 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
             .put( `${this.api.tables}/${this.tableId}/data`, updatePayload, this.headerUser )
             .then( resp => {
               this.log && console.log('C-DataPatchTable > addRow > resp.data : ', resp.data)
-              this.appendRowToCurrentTableData(resp.data)
+              this.appendRowToCurrentTableData({ newRow: resp.data, temp: this.onlyLocalUpdate })
             })
         } else {
           newRow.id = this.getCurrentTableRows.length + 1
-          this.appendRowToCurrentTableData(newRow)
+          this.appendRowToCurrentTableData({ newRow: newRow, temp: this.onlyLocalUpdate })
         }
       },
       toggleSelectRow(rowId) {
@@ -524,7 +535,10 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         } else {
           this.selectedRows = this.selectedRows.filter( r => r !== rowId)
         }
-        this.setSelectedRows({ tableId: this.tableId, rowIds: this.selectedRows})
+        this.setSelectedRows({ 
+          data: { tableId: this.tableId, rowIds: this.selectedRows }, 
+          temp: this.onlyLocalUpdate
+        })
       },
       editRow(rowId) {
         // this.log && console.log(`\nC-DataPatchTable > editRow ...`)
@@ -533,12 +547,12 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
         this.dialogEditRow += 1
       },
       updateCellValue(cellData) {
-        this.log && console.log(`\nC-DataPatchTable > updateCellValue ...`)
-        this.log && console.log(`C-DataPatchTable > updateCellValue > this.tableId : `, this.tableId)
-        this.log && console.log(`C-DataPatchTable > updateCellValue > this.onlyLocalUpdate : `, this.onlyLocalUpdate)
-        this.log && console.log(`C-DataPatchTable > updateCellValue > this.getCurrentTable : `, this.getCurrentTable)
-        this.log && console.log(`C-DataPatchTable > updateCellValue > cellData : `, cellData)
-        this.updateCellValueInTableData(cellData)
+        // this.log && console.log(`\nC-DataPatchTable > updateCellValue ...`)
+        // this.log && console.log(`C-DataPatchTable > updateCellValue > this.tableId : `, this.tableId)
+        // this.log && console.log(`C-DataPatchTable > updateCellValue > this.onlyLocalUpdate : `, this.onlyLocalUpdate)
+        // this.log && console.log(`C-DataPatchTable > updateCellValue > this.getCurrentTable : `, this.getCurrentTable)
+        // this.log && console.log(`C-DataPatchTable > updateCellValue > cellData : `, cellData)
+        this.updateCellValueInTableData({ cellData: cellData, temp: this.onlyLocalUpdate })
         if (!this.onlyLocalUpdate) {
           const updatePayload = {
             update_type: 'cell',
@@ -560,12 +574,12 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
 
       },
       saveItem(rowData) {
-        this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
-        this.log && console.log(`C-DataPatchTable > saveItem > this.tableId : `, this.tableId)
-        this.log && console.log(`C-DataPatchTable > saveItem > this.onlyLocalUpdate : `, this.onlyLocalUpdate)
-        this.log && console.log(`C-DataPatchTable > saveItem > this.getCurrentTable : `, this.getCurrentTable)
-        this.log && console.log(`C-DataPatchTable > saveItem > cellData : `, rowData)
-        this.updateRowInCurrentTableData(rowData)
+        // this.log && console.log(`\nC-DataPatchTable > saveItem ...`)
+        // this.log && console.log(`C-DataPatchTable > saveItem > this.tableId : `, this.tableId)
+        // this.log && console.log(`C-DataPatchTable > saveItem > this.onlyLocalUpdate : `, this.onlyLocalUpdate)
+        // this.log && console.log(`C-DataPatchTable > saveItem > this.getCurrentTable : `, this.getCurrentTable)
+        // this.log && console.log(`C-DataPatchTable > saveItem > cellData : `, rowData)
+        this.updateRowInCurrentTableData({ row: rowData, temp: this.onlyLocalUpdate })
         if (!this.onlyLocalUpdate) {
           const updatePayload = {
             update_type: 'row',
@@ -597,10 +611,10 @@ ${h.fixed ? 'left:' + getHeaderLeft(h) + 'px' : ''}
             .delete( `${this.api.tables}/${this.tableId}/data`, { data: deletePayload, ...this.headerUser } )
             .then( resp => {
               this.log && console.log('C-DataPatchTable > deleteRow > resp.data : ', resp.data)
-              this.deleteRowInCurrentTableData(resp.data.id)
+              this.deleteRowInCurrentTableData({ rowId: resp.data.id, temp: this.onlyLocalUpdate })
             })
         } else {
-          this.deleteRowInCurrentTableData(rowId)
+          this.deleteRowInCurrentTableData({ rowId: rowId, temp: this.onlyLocalUpdate })
         }
       },
     }
