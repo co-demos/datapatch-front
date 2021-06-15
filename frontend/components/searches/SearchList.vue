@@ -39,15 +39,15 @@
           >
           <div
             v-show="btnActions"
-            v-if="actionBtns.length > 0"
+            v-if="groupedActionBtns.length > 0"
             >
             <SearchAction
-              v-for="btn in actionBtns"
+              v-for="btn in groupedActionBtns"
               :key="btn.tooltip"
               :action="btn"
               :customColor="customColor"
               :outlined="true"
-              :disabled="true"
+              :disabled="isLoading || btn.disabled"
               @itemAction="handleGroupAction(btn.action)"
             />
           </div>
@@ -261,6 +261,7 @@
     data () {
       return {
         drag: false,
+        isLoading: false,
         items: [],
         selected: [],
         filterTypes: [],
@@ -269,11 +270,13 @@
         buttons: {
           link: {
             action: 'link',
+            groupAction: false,
             icon: 'icon-external-link',
             tooltip: 'buttons.link',
           },
           add: {
             action: 'add',
+            groupAction: true,
             icon: 'icon-plus',
             tooltip: 'buttons.add',
             showRules: [
@@ -283,14 +286,17 @@
           },
           join: {
             action: 'join',
+            groupAction: true,
             icon: 'icon-user-check',
             tooltip: 'buttons.join',
             showRules: [
               (item, user) => !( item.owner_id === user.id ) && !( item.authorized_users && item.authorized_users.includes(user.email) )
-            ]
+            ],
+            disabled: true,
           },
           invite: {
             action: 'invite',
+            groupAction: true,
             icon: 'icon-user-plus',
             tooltip: 'buttons.invite',
             ignoreForSpaces: ['landing', 'navbar', 'workspaces_list', 'datasets_pages'],
@@ -310,6 +316,7 @@
           },
           message: {
             action: 'message',
+            groupAction: true,
             icon: 'icon-mail',
             tooltip: 'buttons.message',
             showRules: [
@@ -319,6 +326,7 @@
           },
           comment: {
             action: 'comment',
+            groupAction: false,
             icon: 'icon-message-square',
             tooltip: 'buttons.comment',
             disabled: true,
@@ -368,6 +376,10 @@
         actions = actions.map( action => this.buttons[action] )
         return actions
       },
+      groupedActionBtns() {
+        let actions = this.actionBtns.filter(action => !!action.groupAction )
+        return actions
+      },
       filterBtns() {
         let filters = []
         return filters
@@ -382,6 +394,37 @@
         this.log && console.log('C-SearchList > handleAction > this.selected :' , this.selected)
         this.log && console.log('C-SearchList > handleAction > this.relatedSpace :' , this.relatedSpace)
         this.log && console.log('C-SearchList > handleAction > this.relatedItem :' , this.relatedItem)
+
+        switch (val) {
+          case 'invite' :
+            let targetType = this.relatedItem.item_type
+            let payload = {
+              message: '...',
+              invitation_to_item_type: this.relatedItem.item_type,
+              invitation_to_item_id: this.relatedItem.id,
+              // invitor_id: this.user.id,
+              invitees: this.selected.map( selected => { 
+                return { 
+                  invitee_type: selected.item_type,
+                  invitee_id: selected.id,
+                  invitee_email: selected.email,
+                }
+              })
+            }
+            this.log && console.log('C-SearchList > handleAction > addToGroup > payload :' , payload)
+            let url = `${this.api[targetType + 's']}/${this.relatedItem.id}/invite`
+            this.isLoading = true
+            this.log && console.log('C-SearchList > handleAction > invite > url :' , url)
+            this.$axios.post( url, payload, this.headerUser)
+              .then(resp => {
+                this.log && console.log('C-SearchList > handleAction > resp.data : ', resp.data)
+                this.isLoading = false
+              })
+              .catch(error => {
+                this.isLoading = false
+              })
+            break
+        }
       },
       removeFromItems(val) {
         // this.log && console.log('\nC-SearchList > removeFromItems > val :' , val)

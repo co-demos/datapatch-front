@@ -300,7 +300,7 @@
               message: '...',
               invitation_to_item_type: this.relatedItem.item_type,
               invitation_to_item_id: this.relatedItem.id,
-              invitor_id: this.user.id,
+              // invitor_id: this.user.id,
               invitees: [ 
                 { 
                   invitee_type: this.item.item_type,
@@ -316,6 +316,9 @@
             this.$axios.post( url, payload, this.headerUser)
               .then(resp => {
                 this.log && console.log('C-SearchListItem > handleAction > resp.data : ', resp.data)
+                this.isLoading = false
+              })
+              .catch(error => {
                 this.isLoading = false
               })
             break
