@@ -297,6 +297,11 @@
           case 'invite' :
             let targetType = this.relatedItem.item_type
             let payload = {
+              message_title: this.$t('invitations.messageTitle', {
+                username: this.user.username,
+                itemTitle: this.relatedItem.title,
+                itemtype: this.$t(`dataPackage.${this.relatedItem.item_type}`),
+              }),
               message: '...',
               invitation_to_item_type: this.relatedItem.item_type,
               invitation_to_item_id: this.relatedItem.id,

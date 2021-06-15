@@ -10,7 +10,7 @@ export class Group {
     description='My group description',
     creationDate=undefined,
     users=[],
-    users_pending=[],
+    pending_users=[],
     id=undefined,
     color='black',
     icon='icon-users',
@@ -25,7 +25,7 @@ export class Group {
     this.description = description
 
     this.users = users
-    this.users_pending = users_pending
+    this.pending_users = pending_users
 
     this.creationDate = creationDate
 
@@ -47,7 +47,7 @@ export class Group {
       description: this.description,
 
       users: this.users,
-      users_pending: this.users_pending,
+      pending_users: this.pending_users,
 
       creationDate: this.creationDate,
 

@@ -363,6 +363,7 @@ export default {
     selectItemType: "Select the invitation type",
     deleteInvitation: 'Delete this invitation',
     deleteInvitationConfirm: 'Are you sure you want to delete this invitation ?',
+    messageTitle: '{username} has invited you to join "{itemTitle}" ({itemtype})',
   },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',

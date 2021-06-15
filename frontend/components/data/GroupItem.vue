@@ -96,7 +96,7 @@
                     {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
                   </p>
                   <p class="caption pa-0 ma-0 text-lowercase font-italic">
-                    {{ grp.users_pending.length }} {{ $tc('groups.memberPending', grp.users_pending.length) }}
+                    {{ grp.pending_users ? grp.pending_users.length : 0 }} {{ $tc('groups.memberPending', grp.pending_users ? grp.pending_users.length : 0) }}
                   </p>
                 </v-col>
 

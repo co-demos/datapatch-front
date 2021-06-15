@@ -66,7 +66,7 @@ export const itemUsersModel = [
 
 export const itemUsersPendingModel = [ 
   {
-    name: 'users_pending',
+    name: 'pending_users',
     field: 'combobox',
     label: 'dataPackage.usersPending',
     hint: 'dataPackage.usersHint',

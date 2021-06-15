@@ -293,9 +293,6 @@
       }),
     },
     methods: {
-      // ...mapActions({
-      //   updateCellValueInTableData: 'tables/updateCellValueInTableData',
-      // }),
       getTextJustify(head) {
         // this.log && head.field_type === 'int' && console.log(`C-DataPatchCell > cleanTableHeaders > head : `, head)
         let justify = 'left'
@@ -340,7 +337,6 @@
           headerCode: this.header.field_code,
           value: e
         }
-        // this.updateCellValueInTableData(cellData)
         this.$emit('updateCellValue', cellData)
       },
       selectRow() {
