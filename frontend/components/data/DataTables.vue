@@ -287,23 +287,28 @@
     ],
     watch: {
       getCurrentTables(next, prev) {
-        // this.log && console.log(`\C-DataTables > watch > getCurrentTables > next :`, next)
-        // this.log && console.log(`C-DataTables > watch > getCurrentTables > prev :`, prev)
-        // this.log && console.log(`C-DataTables > watch > getCurrentTables > this.getCurrentTableId :`, this.getCurrentTableId)
+        this.log && console.log(`\C-DataTables > watch > getCurrentTables > next :`, next)
+        this.log && console.log(`C-DataTables > watch > getCurrentTables > prev :`, prev)
+        this.log && console.log(`C-DataTables > watch > getCurrentTables > this.getCurrentTableId :`, this.getCurrentTableId)
         if (next) {
+          this.log && console.log(`C-DataTables > watch > getCurrentTables > next (A) ...`)
           this.tables = next && next.length && [ ...next ]
           if (!prev) {
+            this.log && console.log(`C-DataTables > watch > getCurrentTables > A > !prev ...`)
             this.tab = next && next.length && next[0].id
-            this.setCurrentTableId({ tableId: this.tab, temp: this.fromCreate })
+            // this.setCurrentTableId({ tableId: this.tab, temp: this.fromCreate })
+            this.setCurrentTableId({ tableId: this.getCurrentTableId, temp: this.fromCreate })
           } else {
+            this.log && console.log(`C-DataTables > watch > getCurrentTables > A > prev ...`)
             this.tab = this.getCurrentTableId
           }
         } else {
+          this.log && console.log(`C-DataTables > watch > getCurrentTables > !next (B) ...`)
           this.tables = undefined
           this.tab = undefined
         }
-        // this.log && console.log(`C-DataTables > watch > getCurrentTables > this.tab :`, this.tab)
-        // this.log && console.log(`C-DataTables > watch > getCurrentTables > this.getCurrentTableId :`, this.getCurrentTableId)
+        this.log && console.log(`C-DataTables > watch > getCurrentTables > this.tab :`, this.tab)
+        this.log && console.log(`C-DataTables > watch > getCurrentTables > this.getCurrentTableId :`, this.getCurrentTableId)
       },
     },
     data () {
