@@ -684,7 +684,7 @@
               invitation_to_item_type: this.relatedItem.item_type,
               invitation_to_item_id: this.relatedItem.id,
               // invitor_id: this.user.id,
-              invitees: this.selectionFiltered('invite')
+              invitees: this.selectionFiltered
                 .map( selected => {
                   return { 
                     invitee_type: selected.item_type,
