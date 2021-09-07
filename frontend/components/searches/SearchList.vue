@@ -48,7 +48,7 @@
               :customColor="customColor"
               :outlined="true"
               :disabled="isLoading || btn.disabled"
-              @itemAction="handleGroupAction(btn.action)"
+              @itemAction="handleModal({action: btn.action, isGroupedAction: true})"
             />
           </div>
           <p
@@ -104,9 +104,17 @@
     <!-- DEBUGGING -->
     <v-col cols="12" v-if="false">
       <p class="font-weight-bold">from SearchList</p>
-      - hidden: <code>{{ hidden }}</code><br><br>
+      <!-- - user: <code>{{ user }}</code><br><br> -->
+      <!-- - hidden: <code>{{ hidden }}</code><br><br> -->
       - selected: <code>{{ selected }}</code><br><br>
       - selectedTypes : <code>{{ selectedTypes }}</code><br><br>
+
+      - preselectedAction : <code>{{ preselectedAction }}</code><br>
+      - showMessageBox : <code>{{ showMessageBox }}</code><br>
+      - showAuthBoxes : <code>{{ showAuthBoxes }}</code><br>
+      - auth : <code>{{ auth }}</code><br><br>
+      - selectionFiltered : <code>{{ selectionFiltered.length }}</code><br>
+
       <!-- - filters: <code>{{ filters }}</code><br><br> -->
     </v-col>
 
@@ -177,8 +185,211 @@
       </v-col>
     </v-expand-transition>
 
-    <!-- SELECTION IIEMS -->
-    <v-col cols="12" class="pa-0 mt-2 mb-6">
+    <!-- ACTION DIALOG -->
+    <v-expand-transition>
+
+      <v-card
+        v-show="showMessageBox && preselectedAction"
+        outlined
+        light
+        elevation="0"
+        class="my-2 pa-3"
+        :style="'width: 100%'"
+        >
+
+        <!-- CLOSE MODAL -->
+        <v-card-actions class="mr-3 px-0 pb-0">
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            small
+            rounded
+            elevation="0"
+            @click="closeMessageBox()"
+            >
+            <v-icon>icon-clear</v-icon>
+          </v-btn>
+        </v-card-actions>
+
+        <v-card-title class="py-0 mt-n5 mb-5 justify-center">
+          {{ $t(`buttons.${this.preselectedAction}`) }}
+        </v-card-title>
+
+        <!-- REPEAT USERS / GROUPS -->
+        <v-row
+          class="ma-0 mb-2"
+          >
+          <v-col cols="3" class="offset-1">
+            {{ $t('invitations.invitees') }}
+          </v-col>
+          <v-col 
+            cols="7"
+            v-if="selectionFiltered && selectionFiltered.length"
+            class="pt-1 pb-0"
+            >
+            <SearchItemChip
+              v-for="item in selectionFiltered"
+              :key="`${item.item_type}_${item.id}`"
+              :item="item"
+              :dense="true"
+              :isLoading="isLoading"
+              :itemIcon="item.icon || itemTexts[item.item_type].defaultIcon"
+              :itemTxt="getItemInfos(item, 'txt')"
+              @selectItem="unselectItem(item)"
+            />
+          </v-col>
+          <v-col 
+            v-else
+            cols="7"
+            class=""
+            >
+            <span
+              class="grey--text font-italic"
+              >
+              {{ $t('errors.emptySelection') }}
+            </span>
+          </v-col>
+        </v-row>
+
+        <!-- ACTION / AUTHS -->
+        <v-row
+          v-if="showAuthBoxes"
+          class="ma-0 mb-2"
+          >
+          <v-col cols="3" class="offset-1">
+            {{ $t('tabs.auth') }}
+          </v-col>
+          <v-col 
+            cols="7"
+            class="py-0"
+            >
+            <v-row class="ml-1 mb-1 align-top justify-left">
+              <v-radio-group
+                v-model="auth"
+                >
+                <v-radio
+                  v-for="authChoice in authChoices"
+                  :key="authChoices.name"
+                  :value="authChoice.name"
+                  >
+                  <template v-slot:label>
+                    <b>{{ $t(authChoice.role) }}</b> : 
+                    {{ $t(authChoice.label) }}
+                    <v-tooltip
+                      top
+                      >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          class="mx-2"
+                          color="grey"
+                          dark
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
+                          >
+                          icon-info
+                        </v-icon>
+                      </template>
+                      <span>
+                        {{ $t(`${authChoice.role}Help`) }}
+                      </span>
+                    </v-tooltip>
+                  </template>
+                </v-radio>
+              </v-radio-group>
+            </v-row>
+          </v-col>
+        </v-row>
+
+        <!-- ACTION / MESSAGE -->
+        <v-row
+          class="ma-0"
+          >
+          <v-col cols="3" class="offset-1">
+            {{ $t('dataPackage.title') }}
+          </v-col>
+          <v-col 
+            cols="7"
+            class="py-0 mb-2"
+            >
+            <v-text-field
+              filled
+              hide-details="auto"
+              clearable
+              v-model="messageTitle"
+              dense
+            />
+          </v-col>
+        </v-row>
+
+        <v-row
+          class="ma-0 pt-2"
+          >
+          <v-col cols="3" class="offset-1">
+            {{ $t('dataPackage.message') }}
+          </v-col>
+          <v-col 
+            cols="7"
+            class="py-0 mb-2"
+            >
+            <v-textarea
+              filled
+              rows="3"
+              class="mb-2"
+              hide-details="auto"
+              clearable
+              v-model="message"
+              dense
+            />
+          </v-col>
+        </v-row>
+
+        <!-- ACTION / BUTTONS -->
+        <v-row class="ma-0">
+          <v-col cols="3" class="offset-1">
+            <v-btn
+              color="grey darken-1"
+              class="px-3"
+              dark
+              large
+              block
+              tile
+              elevation="0"
+              @click="closeMessageBox()"
+              >
+              {{ $t('buttons.cancel') }}
+            </v-btn>
+          </v-col>
+          <v-col cols="7">
+            <v-btn
+              :color="selectionFiltered.length < 1 ? '' : 'primary darken-1'"
+              class="px-3"
+              :dark="selectionFiltered.length > 0 "
+              block
+              large
+              tile
+              elevation="0"
+              :disabled="selectionFiltered.length < 1"
+              @click="handleGroupAction(preselectedAction)"
+              >
+              {{ $t(`buttons.${preselectedAction}`) }}
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-card-actions class="mr-5 pb-5">
+          <v-spacer></v-spacer>
+        </v-card-actions>
+
+      </v-card>
+    </v-expand-transition>
+
+    <!-- SELECTION ITEMS -->
+    <v-col
+      v-show="showListItems"
+      cols="12"
+      class="pa-0 mt-2 mb-6"
+      >
       <draggable
         v-model="items"
         v-bind="dragOptions"
@@ -203,6 +414,7 @@
             :relatedItem="relatedItem"
             @removeFromItems="removeFromItems"
             @closeModal="$emit('closeModal')"
+            @selectActionType="handleModal"
           />
         </v-scale-transition>
       </draggable>
@@ -223,6 +435,7 @@
 <script>
 
   import { mapState, mapGetters } from 'vuex'
+  import { AuthLevelsChoices } from '@/utils/utilsAuths.js'
 
   export default {
     name: 'SearchList',
@@ -239,6 +452,7 @@
     components: {
       SearchListItem: () => import(/* webpackChunkName: "SearchListItem" */ '@/components/searches/SearchListItem.vue'),
       SearchAction: () => import(/* webpackChunkName: "SearchAction" */ '@/components/searches/SearchAction.vue'),
+      SearchItemChip: () => import(/* webpackChunkName: "SearchItemChip" */ '@/components/searches/SearchItemChip.vue'),
     },
     model: {
       prop: 'hidden',
@@ -264,9 +478,23 @@
         isLoading: false,
         items: [],
         selected: [],
+        selectedAlone: [],
         filterTypes: [],
         btnActions: true,
         btnFilters: false,
+
+        showListItems: true,
+        showMessageBox: false,
+        showAuthBoxes: false,
+
+        preselectedAction: 'invite',
+
+        messageTitle: "",
+        message: "",
+
+        auth: 'read',
+        authChoices: AuthLevelsChoices,
+
         buttons: {
           link: {
             action: 'link',
@@ -383,11 +611,61 @@
       filterBtns() {
         let filters = []
         return filters
-      }
+      },
+      filterPeoplerGroupFromSelected() {
+        const canBeInvited = ['user', 'group']
+        let filtered = this.selected.filter( selected => canBeInvited.includes(selected.item_type) )
+        // filter out current user
+        let filteredUsers = filtered.filter( selected => selected.item_type === 'user' && selected.id !== this.user.id )
+        let filteredGroups = filtered.filter( selected => selected.item_type === 'group' )
+        return [ ...filteredUsers, ...filteredGroups ]
+      },
+      filterCommentable() {
+        const canBeCommented = ['workspace', 'group', 'dataset', 'table']
+        let filtered = this.selected.filter( selected => canBeCommented.includes(selected.item_type) )
+        return filtered
+      },
+      filterJoinable() {
+        const canBeCommented = ['workspace', 'group', 'dataset', 'table']
+        let filtered = this.selected.filter( selected => canBeCommented.includes(selected.item_type) )
+        return filtered
+      },
+      peopleGroupICanInvite() {
+        let filtered = this.filterPeoplerGroupFromSelected
+        // this.log && console.log('\nC-SearchList > peopleGroupICanInvite > filtered :' , filtered)
+        //   const correctType = canBeInvited.includes(selected.item_type)
+        //   let notOwner
+        //   if ( selected.item_type === 'user' ) {
+        //     notOwner = selected.email !== this.user.email
+        //   } else {
+        //     notOwner = selected.owner
+        //   }
+        //   const boolArray = [correctType, notOwner]
+        //   return boolArray.every(v => v === true)
+        // })
+        return filtered
+      },
+      selectionFiltered() {
+        switch (this.preselectedAction) {
+          case 'invite' :
+            return this.peopleGroupICanInvite
+          case 'message' :
+            return this.filterPeoplerGroupFromSelected
+          case 'add' :
+            break
+          case 'join' :
+            return this.filterJoinable
+          case 'comment' :
+            return this.filterCommentable
+        }
+      },
     },
     methods: {
       handleInput(val) {
         this.$emit('blur', val)
+      },
+      unselectItem(item) {
+        this.selected = this.selected.filter( selected => selected.id !== item.id && selected.type !== item.item_type)
       },
       handleGroupAction(val) {
         this.log && console.log('\nC-SearchList > handleAction > val :' , val)
@@ -398,23 +676,22 @@
         switch (val) {
           case 'invite' :
             let targetType = this.relatedItem.item_type
+            let auths = AuthLevelsChoices.find( auth => auth.name = this.auth )
             let payload = {
-              message_title: this.$t('invitations.messageTitle', {
-                username: this.user.username,
-                itemTitle: this.relatedItem.title,
-                itemtype: this.$t(`dataPackage.${this.relatedItem.item_type}`),
-              }),
-              message: '...',
+              message_title: this.message_title,
+              message: this.message,
+              auths: auths,
               invitation_to_item_type: this.relatedItem.item_type,
               invitation_to_item_id: this.relatedItem.id,
               // invitor_id: this.user.id,
-              invitees: this.selected.map( selected => { 
-                return { 
-                  invitee_type: selected.item_type,
-                  invitee_id: selected.id,
-                  invitee_email: selected.email,
-                }
-              })
+              invitees: this.selectionFiltered('invite')
+                .map( selected => {
+                  return { 
+                    invitee_type: selected.item_type,
+                    invitee_id: selected.id,
+                    invitee_email: selected.email,
+                  }
+                })
             }
             this.log && console.log('C-SearchList > handleAction > addToGroup > payload :' , payload)
             let url = `${this.api[targetType + 's']}/${this.relatedItem.id}/invite`
@@ -429,6 +706,14 @@
                 this.isLoading = false
               })
             break
+          case 'message' :
+            break
+          case 'add' :
+            break
+          case 'join' :
+            break
+          case 'comment' :
+            break
         }
       },
       removeFromItems(val) {
@@ -438,6 +723,44 @@
         let newItems = this.items.filter( item => item !== val)
         // this.log && console.log('C-SearchList > removeFromItems > this.items :' , this.items)
         this.handleInput(newItems)
+      },
+
+      closeMessageBox() {
+        this.showListItems = true
+        this.showMessageBox = false
+        this.showAuthBoxes = false
+      },
+
+      handleModal(val) {
+        this.log && console.log('\nC-SearchList > handleModal > val :' , val)
+        let action = val.action
+
+        this.showListItems = false
+        this.preselectedAction = action
+
+        if ( !val.isGroupedAction ) {
+          this.selected = [ val.item ]
+        }
+
+        const openMessage = ['invite', 'comment', 'message', 'join']
+
+        if ( openMessage.includes(action) ) {
+          this.showMessageBox = true
+        }
+
+        if ( action === 'invite' ) {
+          this.showAuthBoxes = true
+
+          this.messageTitle = this.$t('invitations.messageTitle', {
+            itemTitle: this.relatedItem.title,
+          })
+          this.message = this.$t('invitations.messageDefault', {
+            username: this.user.username,
+            itemTitle: this.relatedItem.title,
+            itemtype: this.$t(`dataPackage.${this.relatedItem.item_type}`),
+          })
+        }
+
       }
     }
   }

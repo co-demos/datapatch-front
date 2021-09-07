@@ -201,6 +201,7 @@ export default {
     pageNotFound: "This page doesn't exist !<br>(or not yet)",
     otherError: 'An error occurred',
     backHome: "Bring me back home",
+    emptySelection: "No element is selected"
   },
   login: {
     in: 'Log in',
@@ -285,6 +286,18 @@ export default {
     manage: 'Manage',
     manageTooltip: 'Who can manage this object (invitations, delete the object, change permissions...)',
   },
+  roles: {
+    reader: 'Reader',
+    commenter: 'Commenter',
+    patcher: 'Patcher',
+    writer: 'Writer',
+    manager: 'Manager',
+    readerHelp: 'Can only read the data',
+    commenterHelp: 'Can read and add comments to the data',
+    patcherHelp: 'Can read, comment and propose to patch the data',
+    writerHelp: 'Can read, comment, patch, and write directly in the data',
+    managerHelp: 'Can read, comment, patch, write, and manage the metadata (manage the invited people, delete the data...)',
+  },
   share: {
     invitePrefs: 'Invitate group or people to contribute',
     sharePrefs: 'Sharing preferences',
@@ -354,6 +367,7 @@ export default {
     deleteGroupConfirm: 'Are you sure you want to delete this group ?',
   },
   invitations: {
+    invitees: 'Invitees',
     defaultHelp: 'You can now create a new invitation to begin ...',
     defaultTitle: 'My new invitation',
     defaultMessage: 'My invitation message',
@@ -363,7 +377,8 @@ export default {
     selectItemType: "Select the invitation type",
     deleteInvitation: 'Delete this invitation',
     deleteInvitationConfirm: 'Are you sure you want to delete this invitation ?',
-    messageTitle: '{username} has invited you to join "{itemTitle}" ({itemtype})',
+    messageTitle: 'Invitation to join "{itemTitle}"',
+    messageDefault: '{username} has invited you to join "{itemTitle}" ({itemtype})',
   },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',

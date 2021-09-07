@@ -80,7 +80,7 @@
           
           <!-- SELECTION -->
           <template v-slot:selection="{ attrs, item, parent, selected }" class="py-2">
-            <v-chip
+            <!-- <v-chip
               v-if="item === Object(item)"
               v-bind="attrs"
               :color=" isLoading ? 'grey' : item.color"
@@ -123,7 +123,20 @@
                 icon-clear
               </v-icon>
 
-            </v-chip>
+            </v-chip> -->
+
+            <SearchItemChip
+              v-if="item === Object(item)"
+              v-bind="attrs"
+              :input-value="selected"
+              :item="item"
+              :dense="dense"
+              :isLoading="isLoading"
+              :itemIcon="item.icon || itemTexts[item.item_type].defaultIcon"
+              :itemTxt="getItemInfos(item, 'txt')"
+              @selectItem="parent.selectItem(item)"
+            />
+
           </template>
 
           <!-- LIST OF SELECTABLE ITEMS -->
@@ -315,6 +328,7 @@
       SearchItemTypes: () => import(/* webpackChunkName: "SearchItemTypes" */ '@/components/searches/SearchItemTypes.vue'),
       SearchAuthLevel: () => import(/* webpackChunkName: "SearchAuthLevel" */ '@/components/searches/SearchAuthLevel.vue'),
       SearchList: () => import(/* webpackChunkName: "SearchList" */ '@/components/searches/SearchList.vue'),
+      SearchItemChip: () => import(/* webpackChunkName: "SearchItemChip" */ '@/components/searches/SearchItemChip.vue'),
     },
     data () {
       return {

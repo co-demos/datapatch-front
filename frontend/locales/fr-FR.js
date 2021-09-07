@@ -203,6 +203,7 @@ export default {
     pageNotFound: "Cette page n'existe pas !<br>(ou pas encore)",
     otherError: "Oups c'est une erreur",
     backHome: "Retour à l'accueil",
+    emptySelection: "Aucun élément sélectionné"
   },
   login: {
     in: 'Se connecter',
@@ -288,6 +289,18 @@ export default {
     manage: 'Permission de gérer',
     manageTooltip: "Qui peut gérer cet objet (invitations, suppression de l'objet, changer les permissions...)",
   },
+  roles: {
+    reader: 'Lecteur',
+    commenter: 'Commentateur',
+    patcher: 'Proposant',
+    writer: 'Rédacteur',
+    manager: 'Manager',
+    readerHelp: 'Peut uniquement lire',
+    commenterHelp: 'Peut lire et apporter des commentaires',
+    patcherHelp: 'Peut lire, commenter et proposer des améliorations',
+    writerHelp: 'Peut lire, commenter, proposer des améliorations, et écrire directement dans les données',
+    managerHelp: 'Peut lire, commenter, proposer des améliorations, écrire, et gérer les métadonnées (gestion des invités et autorisation de supprimer les données...)',
+  },
   share: {
     invitePrefs: 'Inviter un groupe ou des personnes à contribuer',
     sharePrefs: 'Préférences de partage',
@@ -357,6 +370,7 @@ export default {
     deleteGroupConfirm: 'Etes-vous sûr.e de vouloir supprimer ce groupe ?',
   },
   invitations: {
+    invitees: 'Invité.e.s',
     defaultHelp: 'Vous pouvez désormais créer une nouvelle invitation ...',
     defaultTitle: 'Ma nouvelle invitation',
     defaultMessage: 'Mon invitation',
@@ -366,7 +380,8 @@ export default {
     selectItemType: "Sélectionner le type d'invitation",
     deleteInvitation: 'Supprimer cette invitation',
     deleteInvitationConfirm: 'Etes-vous sûr.e de vouloir supprimer cette invitation ?',
-    messageTitle: '{username} vous a inivté à rejoindre "{itemTitle}" ({itemtype})',
+    messageTitle: 'Invitation à rejoindre "{itemTitle}"',
+    messageDefault: '{username} vous a invité à rejoindre "{itemTitle}" ({itemtype})',
   },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
