@@ -108,7 +108,7 @@
       <!-- - hidden: <code>{{ hidden }}</code><br><br> -->
       - selected: <code>{{ selected }}</code><br><br>
       - selectedTypes : <code>{{ selectedTypes }}</code><br><br>
-
+      - authChoices: <code><pre>{{ authChoices }}</pre></code><br>
       - preselectedAction : <code>{{ preselectedAction }}</code><br>
       - showMessageBox : <code>{{ showMessageBox }}</code><br>
       - showAuthBoxes : <code>{{ showAuthBoxes }}</code><br>
@@ -212,6 +212,13 @@
         </v-card-actions>
 
         <v-card-title class="py-0 mt-n5 mb-5 justify-center">
+          <v-icon
+            small
+            class="mr-4"
+            color="grey"
+            >
+            {{ actionIcon }}
+          </v-icon>
           {{ $t(`buttons.${this.preselectedAction}`) }}
         </v-card-title>
 
@@ -220,7 +227,8 @@
           class="ma-0 mb-2"
           >
           <v-col cols="3" class="offset-1">
-            {{ $t('invitations.invitees') }}
+            <!-- {{ $t('invitations.invitees') }} -->
+            {{ $tc(selectionLabelBox, selectionFiltered.length) }}
           </v-col>
           <v-col 
             cols="7"
@@ -254,7 +262,7 @@
         <!-- ACTION / AUTHS -->
         <v-row
           v-if="showAuthBoxes"
-          class="ma-0 mb-2"
+          class="mx-0 my-2"
           >
           <v-col cols="3" class="offset-1">
             {{ $t('tabs.auth') }}
@@ -269,7 +277,7 @@
                 >
                 <v-radio
                   v-for="authChoice in authChoices"
-                  :key="authChoices.name"
+                  :key="authChoices.role"
                   :value="authChoice.name"
                   >
                   <template v-slot:label>
@@ -345,7 +353,7 @@
         </v-row>
 
         <!-- ACTION / BUTTONS -->
-        <v-row class="ma-0">
+        <v-row class="mx-0 my-4">
           <v-col cols="3" class="offset-1">
             <v-btn
               color="grey darken-1"
@@ -357,6 +365,11 @@
               elevation="0"
               @click="closeMessageBox()"
               >
+              <v-icon
+                class="mr-4"
+                >
+                icon-clear
+              </v-icon>
               {{ $t('buttons.cancel') }}
             </v-btn>
           </v-col>
@@ -372,14 +385,16 @@
               :disabled="selectionFiltered.length < 1"
               @click="handleGroupAction(preselectedAction)"
               >
+              <v-icon
+                small
+                class="mr-4"
+                >
+                {{ actionIcon }}
+              </v-icon>
               {{ $t(`buttons.${preselectedAction}`) }}
             </v-btn>
           </v-col>
         </v-row>
-
-        <v-card-actions class="mr-5 pb-5">
-          <v-spacer></v-spacer>
-        </v-card-actions>
 
       </v-card>
     </v-expand-transition>
@@ -493,7 +508,7 @@
         message: "",
 
         auth: 'read',
-        authChoices: AuthLevelsChoices,
+        authChoices: undefined,
 
         buttons: {
           link: {
@@ -507,6 +522,7 @@
             groupAction: true,
             icon: 'icon-plus',
             tooltip: 'buttons.add',
+            labelbox: '',
             showRules: [
               (item, user) => !( item.owner_id === user.id )
             ],
@@ -517,6 +533,7 @@
             groupAction: true,
             icon: 'icon-user-check',
             tooltip: 'buttons.join',
+            labelbox: '',
             showRules: [
               (item, user) => !( item.owner_id === user.id ) && !( item.authorized_users && item.authorized_users.includes(user.email) )
             ],
@@ -527,6 +544,7 @@
             groupAction: true,
             icon: 'icon-user-plus',
             tooltip: 'buttons.invite',
+            labelbox: 'invitations.invitees',
             ignoreForSpaces: ['landing', 'navbar', 'workspaces_list', 'datasets_pages'],
             showRules: [
               (item, user) => {
@@ -546,17 +564,19 @@
             groupAction: true,
             icon: 'icon-mail',
             tooltip: 'buttons.message',
+            labelbox: 'messages.recipients',
             showRules: [
               (item, user) => { return item.item_type === 'user' ? item.id !== user.id : item.owner_id !== user.id }
             ],
-            disabled: true,
+            disabled: false,
           },
           comment: {
             action: 'comment',
             groupAction: false,
             icon: 'icon-message-square',
             tooltip: 'buttons.comment',
-            disabled: true,
+            labelbox: 'messages.recipients',
+            disabled: false,
           },
         }
       }
@@ -564,6 +584,7 @@
     beforeMount () {
       this.items = this.hidden.filter( i => i && !i.header )
       this.filterTypes = this.itemsTypes
+      this.authChoices = [...AuthLevelsChoices]
     },
     computed: {
       dragOptions() {
@@ -645,6 +666,14 @@
         // })
         return filtered
       },
+      actionIcon() {
+        let btn = this.buttons[this.preselectedAction]
+        return btn.icon
+      },
+      selectionLabelBox() {
+        let btn = this.buttons[this.preselectedAction]
+        return btn.labelbox
+      },
       selectionFiltered() {
         switch (this.preselectedAction) {
           case 'invite' :
@@ -673,14 +702,18 @@
         this.log && console.log('C-SearchList > handleAction > this.relatedSpace :' , this.relatedSpace)
         this.log && console.log('C-SearchList > handleAction > this.relatedItem :' , this.relatedItem)
 
+        let payload = {}
+
         switch (val) {
           case 'invite' :
             let targetType = this.relatedItem.item_type
-            let auths = AuthLevelsChoices.find( auth => auth.name = this.auth )
-            let payload = {
-              message_title: this.message_title,
+            // this.log && console.log('C-SearchList > handleAction > invite > this.auth :' , this.auth)
+            // this.log && console.log('C-SearchList > handleAction > invite > this.authChoices :' , this.authChoices)
+            let authObj = this.authChoices.find( auth => auth.name === this.auth )
+            payload = {
+              title: this.messageTitle,
               message: this.message,
-              auths: auths,
+              auths: authObj.auths,
               invitation_to_item_type: this.relatedItem.item_type,
               invitation_to_item_id: this.relatedItem.id,
               // invitor_id: this.user.id,
@@ -693,7 +726,7 @@
                   }
                 })
             }
-            this.log && console.log('C-SearchList > handleAction > addToGroup > payload :' , payload)
+            this.log && console.log('C-SearchList > handleAction > invite > payload :' , payload)
             let url = `${this.api[targetType + 's']}/${this.relatedItem.id}/invite`
             this.isLoading = true
             this.log && console.log('C-SearchList > handleAction > invite > url :' , url)
@@ -707,6 +740,19 @@
               })
             break
           case 'message' :
+            payload = {
+              title: this.messageTitle,
+              message: this.message,
+              recipients: this.selectionFiltered
+                .map( selected => {
+                  return { 
+                    recipient_type: selected.item_type,
+                    recipient_id: selected.id,
+                    recipient_email: selected.email,
+                  }
+                })
+            }
+            this.log && console.log('C-SearchList > handleAction > message > payload :' , payload)
             break
           case 'add' :
             break
@@ -750,7 +796,6 @@
 
         if ( action === 'invite' ) {
           this.showAuthBoxes = true
-
           this.messageTitle = this.$t('invitations.messageTitle', {
             itemTitle: this.relatedItem.title,
           })

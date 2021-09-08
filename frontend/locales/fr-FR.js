@@ -369,8 +369,11 @@ export default {
     deleteGroup: 'Supprimer ce groupe',
     deleteGroupConfirm: 'Etes-vous sûr.e de vouloir supprimer ce groupe ?',
   },
+  messages: {
+    recipients: 'Destinataire | Destinataires',
+  },
   invitations: {
-    invitees: 'Invité.e.s',
+    invitees: 'Invité.e | Invité.e.s',
     defaultHelp: 'Vous pouvez désormais créer une nouvelle invitation ...',
     defaultTitle: 'Ma nouvelle invitation',
     defaultMessage: 'Mon invitation',

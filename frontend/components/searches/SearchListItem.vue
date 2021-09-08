@@ -229,7 +229,7 @@
     computed: {
       ...mapState({
         log: (state) => state.log,
-        api: (state) => state.api,
+        // api: (state) => state.api,
         user: (state) => state.user.userData,
       }),
       ...mapGetters({
@@ -282,16 +282,6 @@
         this.log && console.log('C-SearchListItem > handleAction > this.user :' , this.user)
         
         let itemType = this.item.item_type
-        // let basicAction = {
-        //   action: val,
-        //   related_space: this.relatedSpace,
-        //   invitation_to_item_type: this.relatedItem && this.relatedItem.item_type,
-        //   invitation_to_item_id: this.relatedItem && this.relatedItem.id,
-        //   item_id: this.item.id,
-        //   item_type: this.item.item_type
-        // }
-        // this.log && console.log('C-SearchListItem > handleAction > basicAction :' , basicAction)
-        
         let payload = {
           action: val,
           item: this.item
@@ -300,45 +290,6 @@
         switch (val) {
           case 'invite' :
             this.$emit('selectActionType', payload)
-
-            // let targetType = this.relatedItem.item_type
-            // let payload = {
-            //   message_title: this.$t('invitations.messageTitle', {
-            //     username: this.user.username,
-            //     itemTitle: this.relatedItem.title,
-            //     itemtype: this.$t(`dataPackage.${this.relatedItem.item_type}`),
-            //   }),
-            //   message: '...',
-            //   auths: {
-            //     read: true,
-            //     comment: true,
-            //     patch: true,
-            //     write: true,
-            //     manage: false,
-            //   },
-            //   invitation_to_item_type: this.relatedItem.item_type,
-            //   invitation_to_item_id: this.relatedItem.id,
-            //   // invitor_id: this.user.id,
-            //   invitees: [ 
-            //     { 
-            //       invitee_type: this.item.item_type,
-            //       invitee_id: this.item.id,
-            //       invitee_email: this.item.email,
-            //     }
-            //   ]
-            // }
-            // this.log && console.log('C-SearchListItem > handleAction > addToGroup > payload :' , payload)
-            // let url = `${this.api[targetType + 's']}/${this.relatedItem.id}/invite`
-            // this.isLoading = true
-            // this.log && console.log('C-SearchListItem > handleAction > invite > url :' , url)
-            // this.$axios.post( url, payload, this.headerUser)
-            //   .then(resp => {
-            //     this.log && console.log('C-SearchListItem > handleAction > resp.data : ', resp.data)
-            //     this.isLoading = false
-            //   })
-            //   .catch(error => {
-            //     this.isLoading = false
-            //   })
             break
           case 'message' :
             this.$emit('selectActionType', payload)
@@ -353,7 +304,6 @@
             this.$emit('selectActionType', payload)
             break
           case 'link' :
-            // this.$emit('selectActionType', 'link')
             const specificPageFor = ['dataset', 'table']
             let to
             if (specificPageFor.includes(itemType)) {
