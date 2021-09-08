@@ -9,15 +9,15 @@ export const state = () => ({
   loadingItem: undefined,
 
   userInvitations: [],
-  // sharedInvitations: [],
+  sharedInvitations: [],
 
-  itemModel: {
-    infos: emptyInvitation.infos,
-  },
-  itemModelMeta: {
-    infos: emptyInvitation.infos,
-    meta: emptyInvitation.meta
-  },
+  // itemModel: {
+  //   infos: emptyInvitation.infos,
+  // },
+  // itemModelMeta: {
+  //   infos: emptyInvitation.infos,
+  //   meta: emptyInvitation.meta
+  // },
 
 })
 
@@ -34,12 +34,12 @@ export const getters = {
   getUserItemById: (state) => (id) => {
     return state.userInvitations.find( invitation => invitation.id === id)
   },
-  // getSharedItems: (state) => {
-  //   return state.sharedInvitations
-  // },
-  // getSharedItemById: (state) => (id) => {
-  //   return state.sharedInvitations.find( invitation => invitation.id === id)
-  // },
+  getSharedItems: (state) => {
+    return state.sharedInvitations
+  },
+  getSharedItemById: (state) => (id) => {
+    return state.sharedInvitations.find( invitation => invitation.id === id)
+  },
 }
 
 export const mutations = {
@@ -95,16 +95,16 @@ export const actions = {
     commit('removeItem', {space: 'userInvitations', item: invitation})
   },
 
-  // populateSharedItems ({ commit }, invitations) {
-  //   commit('setItems', {space: 'sharedInvitations', items: invitations})
-  // },
-  // appendSharedItem ({ commit }, invitation) {
-  //   commit('addItem', {space: 'sharedInvitations', item: invitation})
-  // },
-  // updateSharedItem ({ commit }, invitation) {
-  //   commit('updateItem', {space: 'sharedInvitations', item: invitation})
-  // },
-  // removeSharedItem ({ commit }, invitation) {
-  //   commit('removeItem', {space: 'sharedInvitations', item: invitation})
-  // },
+  populateSharedItems ({ commit }, invitations) {
+    commit('setItems', {space: 'sharedInvitations', items: invitations})
+  },
+  appendSharedItem ({ commit }, invitation) {
+    commit('addItem', {space: 'sharedInvitations', item: invitation})
+  },
+  updateSharedItem ({ commit }, invitation) {
+    commit('updateItem', {space: 'sharedInvitations', item: invitation})
+  },
+  removeSharedItem ({ commit }, invitation) {
+    commit('removeItem', {space: 'sharedInvitations', item: invitation})
+  },
 }

@@ -385,6 +385,8 @@ export default {
     deleteInvitationConfirm: 'Etes-vous sûr.e de vouloir supprimer cette invitation ?',
     messageTitle: 'Invitation à rejoindre "{itemTitle}"',
     messageDefault: '{username} vous a invité à rejoindre "{itemTitle}" ({itemtype})',
+    userInvitationsSent: 'Invitations envoyées',
+    userInvitationsReceived: 'Invitations reçues',
   },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
