@@ -12,7 +12,7 @@
     elevation="0"
     outlined
     flat
-    :class="`mb-2 py-3 ${hover ? 'add-border' : ''}`"
+    :class="`invit mb-2 py-3 ${hover ? 'add-border' : ''}`"
     :color="`${hover ? 'white' : 'grey lighten-4'}`"
     @mouseover="hover = true"
     @mouseleave="hover = false"

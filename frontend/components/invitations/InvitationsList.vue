@@ -31,12 +31,21 @@
         <div
           v-if="filteredInvits.length > 0"
           >
-          <InvitationItem
-            v-for="invit in filteredInvits"
-            :key="invit.id"
-            :invit="invit"
-            :invitType="invitType"
-          />
+          <!-- <draggable
+            v-model="filteredInvits"
+            v-bind="dragOptions"
+            draggable=".invit"
+            group="invitsGroup"
+            @start="drag=true"
+            @end="drag=false"
+            > -->
+            <InvitationItem
+              v-for="invit in filteredInvits"
+              :key="invit.id"
+              :invit="invit"
+              :invitType="invitType"
+            />
+          <!-- </draggable> -->
         </div>
         <p v-else>
           {{ $t('buttons.searchNoData') }}
@@ -66,6 +75,7 @@
     ],
     data() {
       return {
+        drag: false,
         filters: {
           status: 'all',
           itemType: 'all',
@@ -83,6 +93,14 @@
         isAuthenticated: 'user/isAuthenticated',
         userId: 'user/userId',
       }),
+      dragOptions() {
+        return {
+          animation: 200,
+          group: "invitsGroup",
+          disabled: false,
+          ghostClass: "ghost"
+        }
+      },
       filteredInvits() {
         let invits = this.invits
           // filter by status
