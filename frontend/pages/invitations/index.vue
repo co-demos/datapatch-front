@@ -1,37 +1,89 @@
 <template>
 
-  <v-container class="mb-12 mt-6 mx-12">
+  <v-container class="mb-12 mt-6 mx-0">
 
     <v-row
       fill-height
-      class="justify-center align-top"
+      class="justify-center align-top mb-10"
       >
-
       <v-col 
-        cols="5"
-        class="offset-1"
+        :cols="cols/2"
+        :class="`offset-${offsetCols}`"
         >
-        <p class="text-center">
+        <v-btn 
+          block
+          rounded
+          elevation="0"
+          dark
+          :color="invitType === 'sent' ? 'grey lighten-1' : 'primary'"
+          class="text-center"
+          @click="invitType = 'received'"
+          >
           {{ $t('invitations.userInvitationsReceived')}}
-        </p>
-        <p>
-          <code><pre>{{ userInvitations }}</pre></code>
-        </p>
+        </v-btn>
       </v-col>
-
       <v-col 
-        cols="5"
+        :cols="cols/2"
         class=""
         >
-        <p class="text-center">
+        <v-btn 
+          block
+          rounded
+          elevation="0"
+          dark
+          :color="invitType === 'sent' ? 'primary' : 'grey lighten-1'"
+          class="text-center"
+          @click="invitType = 'sent'"
+          >
           {{ $t('invitations.userInvitationsSent')}}
-        </p>
-        <p>
-          <code><pre>{{ sharedInvitations }}</pre></code>
-        </p>
+        </v-btn>
       </v-col>
-
     </v-row>
+
+    <InvitationsList
+      v-show="invitType === 'sent'"
+      :invits="userInvitations"
+      :invitType="'sent'"
+      :cols="cols"
+      :offsetCols="offsetCols"
+    />
+
+    <InvitationsList
+      v-show="invitType === 'received'"
+      :invits="sharedInvitations"
+      :invitType="'received'"
+      :cols="cols"
+      :offsetCols="offsetCols"
+    />
+
+    <!-- <v-row
+      class="justify-center"
+      >
+      <v-col 
+        cols="10"
+        class="offset-1"
+        >
+        <InvitationsFilters
+          :invitType="invitType"
+        />
+      </v-col>
+    </v-row>
+
+    <v-row
+      class="justify-center"
+      >
+      <v-col 
+        cols="10"
+        class="offset-1"
+        >
+        <InvitationItem
+          v-for="invit in shownInvits"
+          :key="invit.id"
+          :invit="invit"
+          :invitType="invitType"
+        />
+      </v-col>
+    </v-row> -->
 
   </v-container>
 
@@ -41,7 +93,7 @@
 
   import { mapState, mapGetters, mapActions } from 'vuex'
   // import { Invitation } from '@/utils/utilsInvitations'
-  import { mapOrder } from '@/utils/utilsFunctions'
+  // import { mapOrder } from '@/utils/utilsFunctions'
 
   export default {
     name: 'Invitations',
@@ -50,6 +102,9 @@
       'getUserInvitations'
     ],
     components: {
+      InvitationsList: () => import(/* webpackChunkName: "InvitationsList" */ '@/components/invitations/InvitationsList.vue'),
+      // InvitationsFilters: () => import(/* webpackChunkName: "InvitationsFilters" */ '@/components/invitations/InvitationsFilters.vue'),
+      // InvitationItem: () => import(/* webpackChunkName: "InvitationItem" */ '@/components/invitations/InvitationItem.vue'),
     },
     head() {
       return {
@@ -61,7 +116,9 @@
     },
     data () {
       return {
-        dialog: 0,
+        invitType: 'received',
+        cols: 10,
+        offsetCols: 1,
         pathItems: [
           { 
             text: 'pages.invitations',
@@ -96,7 +153,14 @@
         userInvitations: 'invitations/getUserItems',
         sharedInvitations: 'invitations/getSharedItems',
         headerUser: 'user/headerUser'
-      })
+      }),
+      // shownInvits() {
+      //   if (this.invitType === 'sent') {
+      //     return this.userInvitations
+      //   } else {
+      //     return this.sharedInvitations
+      //   }
+      // }
     },
     methods: {
       ...mapActions({

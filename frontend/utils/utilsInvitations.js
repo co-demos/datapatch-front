@@ -4,18 +4,43 @@ export const ItemTypesOptions = [
   {
     name: 'workspace',
     label: 'dataPackage.workspace',
+    icon: 'icon-apps'
   },
   {
     name: 'dataset',
     label: 'dataPackage.dataset',
+    icon: 'icon-database'
   },
   {
     name: 'group',
     label: 'dataPackage.group',
+    icon: 'icon-users'
   },
   {
     name: 'table',
     label: 'dataPackage.table',
+    icon: 'icon-table'
+  },
+]
+
+export const InvitationStatuses = [
+  { 
+    name: 'pending', 
+    color: 'orange',
+    icon: 'icon-spinner3',
+    label: 'invitations.pending' 
+  },
+  { 
+    name: 'accepted', 
+    color: 'green',
+    icon: 'icon-check-circle1',
+    label: 'invitations.accepted' 
+  },
+  { 
+    name: 'refused', 
+    color: 'red',
+    icon: 'icon-x-circle',
+    label: 'invitations.refused' 
   },
 ]
 

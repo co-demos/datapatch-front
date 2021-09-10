@@ -18,10 +18,21 @@
 
       <v-col cols="10" class="mb-12">
         <v-card class="pa-10">
-          <v-row class="justify-center">
+          <!-- <v-row class="justify-center"> -->
+
+          <draggable
+            v-model="items"
+            v-bind="dragOptions"
+            draggable=".tech"
+            group="techs"
+            class="row align-center justify-center"
+            @start="drag=true"
+            @end="drag=false"
+            >
+
             <v-col
               cols="3"
-              class="pa-5 align-center text-center"
+              class="pa-5 align-center text-center tech"
               v-for="item in items"
               :key='item.name'
               >
@@ -41,7 +52,10 @@
                 -->
               </a>
             </v-col>
-          </v-row>
+
+          </draggable>
+
+          <!-- </v-row> -->
         </v-card>
       </v-col>
   
@@ -58,6 +72,7 @@
     props: [],
     data () {
       return {
+        drag: false,
         items: [
           {
             name: 'Fast API',
@@ -118,6 +133,14 @@
       }
     },
     computed: {
+      dragOptions() {
+        return {
+          animation: 200,
+          group: "techs",
+          disabled: false,
+          ghostClass: "ghost"
+        }
+      },
       ...mapState({
         log: (state) => state.log,
         userData: (state) =>  state.user.userData,
