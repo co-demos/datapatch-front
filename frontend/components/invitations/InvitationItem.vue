@@ -375,14 +375,28 @@
         let url = `${this.api.invitations}/${this.invit.id}`
         this.isLoading = true
         this.log && console.log('C-InvitationItem > handleAction > invite > url :' , url)
-        this.$axios.post( url, payload, this.headerUser)
-          .then(resp => {
-            this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
-            this.isLoading = false
-          })
-          .catch(error => {
-            this.isLoading = false
-          })
+
+        if (this.invitType === 'received') {
+          // accept/refuse invitation
+          this.$axios.post( url, payload, this.headerUser)
+            .then(resp => {
+              this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
+              this.isLoading = false
+            })
+            .catch(error => {
+              this.isLoading = false
+            })
+        } else {
+          // update invitation
+          this.$axios.put( url, payload, this.headerUser)
+            .then(resp => {
+              this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
+              this.isLoading = false
+            })
+            .catch(error => {
+              this.isLoading = false
+            })
+        }
       }
     }
   }
