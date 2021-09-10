@@ -21,6 +21,7 @@
 
       <!-- status -->
       <v-col cols="3" class="text-center">
+
         <v-chip
           text-color="white"
           :color="statusColor"
@@ -52,7 +53,6 @@
               </v-icon>
             </v-btn>
           </template>
-
           <span>
             {{ $t('invitations.details') }}
           </span>
@@ -60,7 +60,7 @@
 
       </v-col>
 
-      <!-- to item -->
+      <!-- item invited to -->
       <v-col cols="4">
         <v-icon
           small
@@ -72,31 +72,9 @@
         <code>{{ invit.invitation_to_item_id }}</code>
       </v-col>
 
-      <!-- SHOW DETAILS -->
-
 
       <!-- auths -->
       <v-col cols="2" class="text-center">
-
-        <!-- <v-row
-          v-for="authLevel in authChoices"
-          :key="authLevel.name"
-          >
-          <span>
-            <v-icon 
-              x-small 
-              class="mr-2 pb-1"
-              :color="invit.auths[authLevel.name]? 'green' : 'grey'"
-              >
-              {{ authLevel.icon }}
-            </v-icon>
-          </span>
-          <span 
-            :class="`text-body-2 ${ invit.auths[authLevel.name]? '' : 'grey--text text-decoration-line-through'}`"
-            >
-            {{ $t(authLevel.label) }}
-          </span>
-        </v-row> -->
 
         <span
           v-for="authLevel in authChoices"
@@ -110,7 +88,7 @@
                 v-on="on"
                 small 
                 class="mr-2 pb-1"
-                :color="invit.auths[authLevel.name]? 'green' : 'grey'"
+                :color="invit.auths[authLevel.name]? 'green' : 'grey lighten-2'"
                 >
                 {{ authLevel.icon }}
               </v-icon>
@@ -189,43 +167,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
-        <!-- </v-btn-toggle> -->
-
-        <!-- <v-select
-          class="mx-2"
-          :items="btnActions"
-          item-value="action"
-          :loading="isLoading"
-          hide-details
-          color="primary"
-          :label="$t('buttons.chooseAction')"
-          >
-          <template v-slot:item="{ item }">
-            <span>
-              <v-icon 
-                small 
-                class="mr-2"
-                >
-                {{ item.icon }}
-              </v-icon>
-              {{ $t(item.label) }}
-            </span>
-          </template>
-          <template v-slot:selection="{ item }">
-            <span>
-              <v-icon 
-                small 
-                class="mr-2"
-                >
-                {{ item.icon }}
-              </v-icon>
-              <span class="">
-                {{ $t(item.label) }}
-              </span>
-            </span>
-          </template>
-        </v-select> -->
 
       </v-col>
 
