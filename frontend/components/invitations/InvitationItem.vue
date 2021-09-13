@@ -4,6 +4,12 @@
     border: thin solid lightGrey !important;
   }
 
+  .disabledBtn {
+    /* background-color: rgba(255, 255, 255, 0.7) !important; */
+    background-color: white !important;
+    pointer-events: none;
+  }
+
 </style>
 
 <template>
@@ -17,6 +23,7 @@
     @mouseover="hover = true"
     @mouseleave="hover = false"
     >
+
     <v-row class="ma-0 align-center">
 
       <!-- status -->
@@ -121,21 +128,28 @@
           dense
           block
           elevation="0"
-          :color="btnActionColor"
+          :class="`${btnIsDisabled ? 'disabledBtn' : '' }`"
+          :color="btnIsDisabled ? 'grey' : btnActionColor"
           :loading="isLoading"
-          :disabled="isLoading"
           @click="handleAction()"
           >
-          <v-icon small color="white" class="pr-2">
+          <v-icon
+            small
+            :color="`${ btnIsDisabled ? 'grey lighten-1' : 'white'}`"
+            class="pr-2"
+            >
             {{ btnActionIcon }}
           </v-icon>
-          {{ $t(btnActionLabel) }}
+          <span :class="`${ btnIsDisabled ? 'grey--text text--lighten-1' : ''}`">
+            {{ $t(btnActionLabel) }}
+          </span>
         </v-btn>
       </v-col>
       <v-col cols="1" class="align-center justify-center pl-0">
         <v-menu
           open-on-hover
           offset-y
+          :disabled="btnIsDisabled"
           >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -144,6 +158,7 @@
               dense
               color="black"
               class="px-0"
+              :disabled="btnIsDisabled"
               v-bind="attrs"
               v-on="on"
               >
@@ -177,16 +192,19 @@
     <v-expand-transition>
       <v-row v-show="showDetails" class="ma-0 mtt-3 align-center">
         
+        <!-- DEBUGGING -->
+        <v-col cols="6">
+          invit : <code>{{ invit }}</code>
+        </v-col>
+
         <!-- sender -->
-        <v-col cols="4">
+        <v-col cols="3">
           {{ $t('invitations.sentBy', { username : invit.owner_id } ) }}
-          <!-- <code>{{ invit.owner_id }}</code><br> -->
         </v-col>
 
         <!-- date -->
-        <v-col cols="4">
+        <v-col cols="3">
           {{ $t('invitations.sentDate', { date : invit.created_date} ) }}
-          <!-- <code>{{ invit.created_date }}</code> -->
         </v-col>
 
       </v-row>
@@ -255,6 +273,11 @@
         ]
       }
     },
+    beforeMount () {
+      this.authChoices = [...AuthLevelsChoices]
+      // choose default action for invitations
+      this.action = this.invitType === 'sent' ? 'edit' : 'accept'
+    },
     computed: {
       ...mapState({
         log: (state) => state.log,
@@ -298,12 +321,10 @@
       btnActionColor() {
         let actionSelected = this.btnAction
         return actionSelected.color
+      },
+      btnIsDisabled() {
+        return this.isloading || this.invit.invitation_status !== 'pending'
       }
-    },
-    beforeMount () {
-      this.authChoices = [...AuthLevelsChoices]
-      // choose default action for invitations
-      this.action = this.invitType === 'sent' ? 'edit' : 'accept'
     },
     methods: {
       handleAction() {
@@ -322,6 +343,7 @@
           this.$axios.post( url, payload, this.headerUser)
             .then(resp => {
               this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
+              this.$store.dispatch(`invitations/updateSharedItem`, {data: resp.data})
               this.isLoading = false
             })
             .catch(error => {

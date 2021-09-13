@@ -18,6 +18,7 @@
     "gsap": "file:gsap-bonus.tgz",
     "nuxt": "^2.0.0",
     "nuxt-i18n": "^6.23.0",
+    "nuxt-socket-io": "^1.1.23",
     "standard": "^16.0.3",
     "vue-draggable-resizable": "^2.3.0",
     "vuedraggable": "^2.24.3",

@@ -133,6 +133,20 @@
     beforeMount () {
       this.updatePath(this.pathItems)
     },
+    mounted() {
+
+      this.socket = this.$nuxtSocket({
+        name: 'main', // Use socket "home"
+        path: '/ws/socket.io',
+        transport: ['websocket', 'polling'],
+      })
+      // this.log && console.log("\nP-Invitations > mounted > this.socket - A : ", this.socket)
+      
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("P-Invitations > mounted > this.socket - handshake > data : ", data)
+      })
+
+    },
     watch: {
       userInvitations (next) {
         this.log && console.log("P-Invitations > watch > userInvitations > next : ", next)

@@ -98,6 +98,8 @@ export default {
     '~/plugins/globalComponents',
     { src: '~/plugins/axios', mode: 'client' },
 
+    // { src: '~/plugins/socket.js', mode: 'client' },
+
     { src: '~/plugins/draggable.js', mode: 'client' },
 
     // { src: '~/plugins/columns-resizable.js', mode: 'client' },
@@ -132,6 +134,9 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
+    
+    'nuxt-socket-io',
+
     ['cookie-universal-nuxt', {
       alias: 'cookies'
     }],
@@ -141,7 +146,18 @@ export default {
     }],
   ],
 
-  
+  io: {
+    // module options
+    sockets: [
+      {
+        name: 'main',
+        default: true,
+        // url: 'http://localhost:8000',
+        url: config.backendApi.socketio,
+      },
+    ]
+  },
+
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module

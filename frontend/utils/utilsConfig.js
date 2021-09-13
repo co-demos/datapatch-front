@@ -95,6 +95,15 @@ export const chooseApiBackend = (ENVPROD, env) => {
   }
 }
 
+// export const chooseSocketServer = (ENVPROD, env) => {
+//   if (ENVPROD === 'dev') {
+//     return env.NUXT_API_ROOT_WS_DEV
+//   }
+//   else if (ENVPROD === 'prod') {
+//     return env.NUXT_API_ROOT_WS_PROD
+//   }
+// }
+
 export class configApp {
   constructor (RUN_MODE, env) {
     this.appVersion = env.npm_package_version;
@@ -134,7 +143,10 @@ export class configApp {
     this.apiUrlFields = `${this.apiUrlBackendPrefix}${env.NUXT_API_FIELDS}`;
     this.apiUrlComments = `${this.apiUrlBackendPrefix}${env.NUXT_API_COMMENTS}`;
     this.apiUrlNotifications = `${this.apiUrlBackendPrefix}${env.NUXT_API_NOTIFICATIONS}`;
-    
+
+    // API BACKEND
+    // this.apiWsBackend = chooseSocketServer(RUN_MODE, env);
+
     this.vuetifyThemes = {
       light : {
         primary: env.NUXT_ENV_THEME_LIGHT_primary,
@@ -177,6 +189,9 @@ export class configApp {
       fields: this.apiUrlFields,
       comments: this.apiUrlComments,
       notifications: this.apiUrlNotifications,
+
+      socketio: this.apiUrlBackend,
+
     }
   }
 
