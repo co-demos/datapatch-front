@@ -40,6 +40,13 @@
 
     <MenuList
       v-if="isAuthenticated"
+      :items="itemsUserInfos"
+    />
+
+    <v-divider class="bg-white" v-if="isAuthenticated"/>
+
+    <MenuList
+      v-if="isAuthenticated"
       :items="itemsUser"
     />
 
@@ -52,6 +59,7 @@
 
   </v-menu>
 </template>
+
 <script>
 
 import { mapState, mapGetters } from 'vuex'
@@ -73,17 +81,24 @@ export default {
           to: '/sign'
         },
       ],
-      itemsUser:  [
+      itemsUserInfos:  [
         {
           icon: 'icon-user',
           title: 'pages.me',
           to: '/me'
         },
-        {
-          icon: 'icon-bell',
-          title: 'pages.notifications',
-          to: '/notifications'
-        },
+      ],
+      itemsUser:  [
+        // {
+        //   icon: 'icon-user',
+        //   title: 'pages.me',
+        //   to: '/me'
+        // },
+        // {
+        //   icon: 'icon-bell',
+        //   title: 'pages.notifications',
+        //   to: '/notifications'
+        // },
         {
           icon: 'icon-users',
           title: 'pages.groups',

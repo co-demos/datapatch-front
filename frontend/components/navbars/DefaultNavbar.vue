@@ -223,6 +223,7 @@
   import { mapState, mapGetters } from 'vuex'
 
   export default {
+    name: 'DefaultNavbar',
     components: {
       Languages: () => import('@/components/buttons/Languages.vue'),
       NotificationsButton: () => import('@/components/buttons/NotificationsButton.vue'),
@@ -330,6 +331,27 @@
         }
       }
     },
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })      
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nC-NotificationsButton > mounted > this.socket - handshake > data : ", data)
+        this.log && console.log("C-NotificationsButton > mounted > this.socket - handshake > this.userData : ", this.userData)
+        if (this.userData.id) {
+          this.socket.emit('join_own_room', {
+            sid: data.sid,
+            user_email: this.userData.email,
+            user_id: this.userData.id
+          })
+        }
+      })
+      this.socket.on('own_room', (data) => {
+        this.log && console.log("\nC-NotificationsButton > mounted > this.socket - own_room > data : ", data)
+      })
+    },
     computed: {
       navbarColor() {
         let color
@@ -341,10 +363,12 @@
         return color
       },
       ...mapState({
-        log: (state) =>  state.log
+        log: (state) =>  state.log,
+        userData: (state) =>  state.user.userData,
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
+        userId: 'user/userId',
         currentDataset: 'datasets/getCurrentItem',
       })
     }

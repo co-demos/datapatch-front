@@ -278,10 +278,18 @@
       // choose default action for invitations
       this.action = this.invitType === 'sent' ? 'edit' : 'accept'
     },
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+    },
     computed: {
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        user: (state) =>  state.user.userData,
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
@@ -327,6 +335,18 @@
       }
     },
     methods: {
+      ioBroadcastAction(ioData) {
+        this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
+        let payload = {
+          from_user_email: this.user.email,
+          item_type: 'invitation',
+          item_id: ioData.id,
+          // target_rooms: ioData.owner_email,
+          action: ioData.invitation_status
+        }
+        this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
+        this.socket.emit('broadcast_action', payload)
+      },
       handleAction() {
         this.log && console.log("C-InvitationItem > handleAction > this.action : ", this.action)
         let payload = {
@@ -338,18 +358,23 @@
         this.isLoading = true
         this.log && console.log('C-InvitationItem > handleAction > invite > url :' , url)
 
+        // for responses
         if (this.invitType === 'received') {
           // accept/refuse invitation
           this.$axios.post( url, payload, this.headerUser)
             .then(resp => {
               this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
               this.$store.dispatch(`invitations/updateSharedItem`, {data: resp.data})
+              this.ioBroadcastAction( resp.data )
               this.isLoading = false
             })
             .catch(error => {
               this.isLoading = false
             })
-        } else {
+        } 
+        
+        // for updates
+        else {
           // update invitation
           this.$axios.put( url, payload, this.headerUser)
             .then(resp => {
@@ -360,7 +385,7 @@
               this.isLoading = false
             })
         }
-      }
+      },
     }
   }
 </script>

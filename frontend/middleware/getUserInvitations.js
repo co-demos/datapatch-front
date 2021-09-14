@@ -23,7 +23,6 @@ export default function ({
     // log && console.log("MW-getUserInvitations > HAS tokenAccess ... ")
     
     let config = new configHeaders(tokenAccess)
-    // store.dispatch('tables/resetCurrentTables', {temp: false})
 
     let initInvitations = $axios
       .get(`${api.users}/me/invitations`, config.headers)

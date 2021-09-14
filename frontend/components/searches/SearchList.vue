@@ -586,6 +586,13 @@
       this.filterTypes = this.itemsTypes
       this.authChoices = [...AuthLevelsChoices]
     },
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+    },
     computed: {
       dragOptions() {
         return {
@@ -696,6 +703,20 @@
       unselectItem(item) {
         this.selected = this.selected.filter( selected => selected.id !== item.id && selected.type !== item.item_type)
       },
+      ioBroadcastAction(ioData) {
+        this.log && console.log('\nC-SearchList > ioBroadcastAction > ioData :' , ioData)
+        this.log && console.log('C-SearchList > ioBroadcastAction > this.user :' , this.user)
+        this.log && console.log('C-SearchList > ioBroadcastAction > this.relatedItem :' , this.relatedItem)
+        let payload = {
+          from_user_email: this.user.email,
+          item_type: this.relatedItem.item_type,
+          item_id: this.relatedItem.id,
+          target_rooms: ioData.target_rooms,
+          action: ioData.action
+        }
+        this.log && console.log('C-SearchList > ioBroadcastAction > payload :' , payload)
+        this.socket.emit('broadcast_action', payload)
+      },
       handleGroupAction(val) {
         this.log && console.log('\nC-SearchList > handleAction > val :' , val)
         this.log && console.log('C-SearchList > handleAction > this.selected :' , this.selected)
@@ -703,6 +724,7 @@
         this.log && console.log('C-SearchList > handleAction > this.relatedItem :' , this.relatedItem)
 
         let payload = {}
+        let ioData = { action: val, target_rooms: [] }
 
         switch (val) {
           case 'invite' :
@@ -734,6 +756,8 @@
               .then(resp => {
                 this.log && console.log('C-SearchList > handleAction > resp.data : ', resp.data)
                 this.isLoading = false
+                ioData.target_rooms = payload.invitees.map( invitee => invitee.invitee_email )
+                this.ioBroadcastAction(ioData)
               })
               .catch(error => {
                 this.isLoading = false
@@ -753,6 +777,8 @@
                 })
             }
             this.log && console.log('C-SearchList > handleAction > message > payload :' , payload)
+            // ADD AXIOS LOGIC HERE FOR MESSAGES
+            // ...
             break
           case 'add' :
             break

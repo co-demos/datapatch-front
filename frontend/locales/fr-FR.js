@@ -250,6 +250,14 @@ export default {
     verifyOk2: 'Votre compte est maintenant actif.',
     failVerify: 'Echec de la vérification...',
   },
+  notifications: {
+    yourNotifs: 'Vos notifications',
+    notifsCount: "Vous n'avez pas de nouvelles notifications | Vous avez {count} nouvelle notification | Vous avez {count} nouvelles notifications",
+    userInvitationsResp: 'pas de nouvelles invitations | Vous avez {count} nouvelle invitation | Vous avez {count} nouvelles invitations',
+    userMessagesReceived: 'pas de nouveaux messages | Vous avez {count} nouveau message | Vous avez {count} nouveaux messages',
+    userModerationResp:  'pas de nouvelles demandes de modération | Vous avez {count} nouvelle demande de modération | Vous avez {count} nouvelles demandes de modération',
+    userCommentResp: 'pas de nouveaux commentaires | Vous avez {count} nouveau commentaire | Vous avez {count} nouveaux commentaires',
+  },
   me: {
     save: 'Enregistrer mes changements',
     deleteMe: 'Supprimer mon compte',

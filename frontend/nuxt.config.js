@@ -68,7 +68,8 @@ export default {
     middleware: [
       'resetDialogs',
       'checkUserAccessToken',
-      'populateUserItems'
+      'populateUserItems',
+      'getUserInvitations'
     ]
   },
 

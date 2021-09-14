@@ -40,6 +40,9 @@ export const getters = {
   getSharedItemById: (state) => (id) => {
     return state.sharedInvitations.find( invitation => invitation.id === id)
   },
+  getSharedItemsPending: (state) => {
+    return state.sharedInvitations.filter( item => item.invitation_status === 'pending' )
+  },
 }
 
 export const mutations = {

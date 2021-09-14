@@ -98,9 +98,9 @@
   export default {
     name: 'Invitations',
     layout: 'layout_listings',
-    middleware: [
-      'getUserInvitations'
-    ],
+    // middleware: [
+    //   'getUserInvitations'
+    // ],
     components: {
       InvitationsList: () => import(/* webpackChunkName: "InvitationsList" */ '@/components/invitations/InvitationsList.vue'),
       // InvitationsFilters: () => import(/* webpackChunkName: "InvitationsFilters" */ '@/components/invitations/InvitationsFilters.vue'),
@@ -138,12 +138,7 @@
       this.socket = this.$nuxtSocket({
         name: 'main', // Use socket "home"
         path: '/ws/socket.io',
-        transport: ['websocket', 'polling'],
-      })
-      // this.log && console.log("\nP-Invitations > mounted > this.socket - A : ", this.socket)
-      
-      this.socket.on('handshake', (data) => {
-        this.log && console.log("P-Invitations > mounted > this.socket - handshake > data : ", data)
+        transport: ['websocket'],
       })
 
     },
@@ -168,13 +163,6 @@
         sharedInvitations: 'invitations/getSharedItems',
         headerUser: 'user/headerUser'
       }),
-      // shownInvits() {
-      //   if (this.invitType === 'sent') {
-      //     return this.userInvitations
-      //   } else {
-      //     return this.sharedInvitations
-      //   }
-      // }
     },
     methods: {
       ...mapActions({

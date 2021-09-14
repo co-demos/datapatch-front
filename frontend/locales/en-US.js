@@ -248,6 +248,14 @@ export default {
     verifyOk2: 'Your account is now activated.s',
     failVerify: 'Verification failed...',
   },
+  notifications: {
+    yourNotifs: 'Your notifications',
+    notifsCount: "You have don't have new notifications | You have {count} new notification | You have {count} new notifications",
+    userInvitationsResp: 'no new invitations | You have {count} invitation | You have {count} invitations',
+    userMessagesReceived: 'no new messages | You have {count} message | You have {count} messages',
+    userModerationResp:  'no new moderations | You have {count} moderation | You have {count} moderations',
+    userCommentResp: 'no new comments | You have {count} comment | You have {count} comments',
+  },
   me: {
     save: 'Save my changes',
     deleteMe: 'Delete my account',
