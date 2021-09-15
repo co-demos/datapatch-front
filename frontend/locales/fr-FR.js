@@ -289,6 +289,7 @@ export default {
     share: 'Partage',
   },
   auth: {
+    authLevels: "Niveaux d'autorisation",
     authTypesRead: 'Niveaux de permission en lecture',
     ownerOnly: 'Propriétaire uniquement',
     ownerOnlyHelp: "Seul le propriétaire de cet objet a l'accès",
@@ -414,9 +415,9 @@ export default {
     pending: 'En attente',
     accepted: 'Acceptée',
     refused: 'Refusée',
-    sentBy: 'Envoyée par {username}',
-    sentDate: 'Envoyée le {date}',
-    sentTime: 'à {time}',
+    sentBy: 'Envoyée par :<br>{username}',
+    sentDate: 'Envoyée le :<br>{date}',
+    sentTime: "Heure de l'envoi : <br>{time}",
     details: "Détails de l'invitation"
   },
   workspaces: {

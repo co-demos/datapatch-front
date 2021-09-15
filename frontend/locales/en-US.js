@@ -287,6 +287,7 @@ export default {
     share: 'Sharing',
   },
   auth: {
+    authLevels: "Auth levels",
     authTypesRead: 'Auth levels for reading',
     ownerOnly: 'Owner only',
     ownerOnlyHelp: 'Only owner is authorized',
@@ -411,9 +412,9 @@ export default {
     pending: 'Pending',
     accepted: 'Accepted',
     refused: 'Refused',
-    sentBy: 'Sent by {username}',
-    sentDate: 'Sent the {date}',
-    sentTime: 'at {time}',
+    sentBy: 'Sent by : <br>{username}',
+    sentDate: 'Sent date : <br>{date}',
+    sentTime: 'Time of send : <br>{time}',
     details: 'Invitations details',
   },
   workspaces: {
