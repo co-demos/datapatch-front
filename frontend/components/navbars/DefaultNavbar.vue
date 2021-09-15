@@ -98,6 +98,23 @@
 
       <Languages/>
 
+      <!-- DEBUGGING / TEST IO -->
+      <!-- <v-btn
+        elevation="0"
+        class="ml-5 mr-3"
+        fab
+        x-small
+        :color="searchOpen ? 'white' : 'transparent'"
+        @click.stop="ioBroadcastAction({target_email: 'jparis.py@gmail.com'})"
+        >
+        <v-icon
+          :class="searchOpen ? 'primary--text' : ''"
+          small
+          >
+          icon-mail
+        </v-icon>
+      </v-btn> -->
+
       <NotificationsButton v-if="isAuthenticated"/>
 
       <UserButton/>
@@ -128,33 +145,6 @@
           {{ $t('workspaces.searchDataset') }}
         </span>
       </v-tooltip>
-
-      <!-- <template
-        v-slot:extension
-        v-if="searchOpen"
-        >
-        <v-row
-          class="align-center justify-center ma-0"
-          >
-          <v-col
-            cols="10"
-            class=""
-            :height="searchHeight"
-            >
-            <SearchAny
-              :itemTypes="['users', 'groups', 'workspaces', 'datasets', 'tables']"
-              :searchLabel="'buttons.searchText'"
-              :searchPlaceholder="'buttons.queryText'"
-              :flat="true"
-              :solo="true"
-              :light="true"
-              :dense="false"
-              :customClass="''"
-              :customColor="'white'"
-            />
-          </v-col>
-        </v-row>
-      </template> -->
 
     </v-app-bar>
 
@@ -336,20 +326,23 @@
         name: 'main',
         path: '/ws/socket.io',
         transport: ['websocket'],
-      })      
+      })
       this.socket.on('handshake', (data) => {
         this.log && console.log("\nC-NotificationsButton > mounted > this.socket - handshake > data : ", data)
-        this.log && console.log("C-NotificationsButton > mounted > this.socket - handshake > this.userData : ", this.userData)
-        if (this.userData.id) {
+        this.log && console.log("C-NotificationsButton > mounted > this.socket - handshake > this.user : ", this.user)
+        if (this.user.id) {
           this.socket.emit('join_own_room', {
             sid: data.sid,
-            user_email: this.userData.email,
-            user_id: this.userData.id
+            user_email: this.user.email,
+            user_id: this.user.id
           })
         }
       })
       this.socket.on('own_room', (data) => {
         this.log && console.log("\nC-NotificationsButton > mounted > this.socket - own_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nC-NotificationsButton > mounted > this.socket - action_message > data : ", data)
       })
     },
     computed: {
@@ -364,13 +357,27 @@
       },
       ...mapState({
         log: (state) =>  state.log,
-        userData: (state) =>  state.user.userData,
+        user: (state) =>  state.user.userData,
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
         userId: 'user/userId',
         currentDataset: 'datasets/getCurrentItem',
       })
+    },
+    methods: {
+      // ioBroadcastAction(ioData) {
+      //   this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
+      //   let payload = {
+      //     from_user_email: this.user.email,
+      //     item_type: 'invitation',
+      //     item_id: 1,
+      //     target_rooms: [ ioData.target_email ],
+      //     action: 'comment'
+      //   }
+      //   this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
+      //   this.socket.emit('broadcast_action', payload)
+      // },
     }
   }
 </script>

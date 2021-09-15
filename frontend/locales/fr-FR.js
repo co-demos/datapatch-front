@@ -416,6 +416,7 @@ export default {
     refused: 'Refusée',
     sentBy: 'Envoyée par {username}',
     sentDate: 'Envoyée le {date}',
+    sentTime: 'à {time}',
     details: "Détails de l'invitation"
   },
   workspaces: {

@@ -69,14 +69,25 @@
 
       <!-- item invited to -->
       <v-col cols="4">
-        <v-icon
-          small
-          class="mr-2"
-          >
-          {{ itemTypeIcon }}
-        </v-icon>
-        {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
-        <code>{{ invit.invitation_to_item_id }}</code>
+
+        <p class="text-center mb-1">
+          <v-icon
+            small
+            class="mr-2"
+            >
+            {{ itemTypeIcon }}
+          </v-icon>
+          <span class="grey--text">
+            {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
+          </span>
+        </p>
+
+        <!-- <code>{{ invit.invitation_to_item_id }}</code> -->
+        <p class="text-center font-weight-bold mb-0">
+          {{ invit.invitation_item.title }}
+        </p>
+
+
       </v-col>
 
 
@@ -188,23 +199,37 @@
 
     </v-row>
 
-    <!-- DETAILS -->
+    <!-- INVITATION DETAILS -->
     <v-expand-transition>
-      <v-row v-show="showDetails" class="ma-0 mtt-3 align-center">
+      <v-row v-show="showDetails" class="ma-0 mt-3 align-top">
         
-        <!-- DEBUGGING -->
-        <v-col cols="6">
-          invit : <code>{{ invit }}</code>
+        <!-- sender / time -->
+        <v-col cols="3">
+          <p>
+            {{ $t('invitations.sentBy', { username : invitSender } ) }}
+          </p>
+          <p>
+            {{ $t('invitations.sentDate', { date : invitSentDate.date } ) }}<br>
+            {{ $t('invitations.sentTime', { time : invitSentDate.time } ) }}
+          </p>
         </v-col>
 
-        <!-- sender -->
-        <v-col cols="3">
-          {{ $t('invitations.sentBy', { username : invit.owner_id } ) }}
+        <!-- item -->
+        <v-col cols="4">
+          item : <code>{{ invit.invitation_item }}</code>
+          <!-- owner : <code>{{ invit.owner }}</code><br>  -->
         </v-col>
 
-        <!-- date -->
-        <v-col cols="3">
-          {{ $t('invitations.sentDate', { date : invit.created_date} ) }}
+        <!-- auths -->
+        <v-col cols="2">
+          <!-- locale : <code>{{ $i18n.locale }}</code><br> -->
+          auths : <code>{{ invit.auths }}</code>
+        </v-col>
+
+        <!-- response -->
+        <v-col cols="2">
+          <!-- owner : <code>{{ invit.owner }}</code><br>
+          {{ $t('invitations.sentBy', { username : invitSender } ) }} -->
         </v-col>
 
       </v-row>
@@ -309,6 +334,18 @@
       itemTypeIcon() {
         let itemType = ItemTypesOptions.find( type => type.name === this.invit.invitation_to_item_type )
         return itemType.icon
+      },
+      invitSender() {
+        let name = this.invit.owner.name
+        let surname = this.invit.owner.surname
+        let email = this.invit.owner.email
+        return `${name} ${surname} (${email})`
+      },
+      invitSentDate() {
+        let date = new Date(this.invit.created_date)
+        let invitDate =  date.toLocaleDateString(this.$i18n.locale)
+        let invitTime =  date.toLocaleTimeString(this.$i18n.locale)
+        return { date: invitDate, time: invitTime }
       },
       btnActions() {
         let actions = this.invitActions.filter( act => act.for.includes(this.invitType) )

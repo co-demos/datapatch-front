@@ -117,8 +117,8 @@
     data () {
       return {
         invitType: 'received',
-        cols: 10,
-        offsetCols: 1,
+        cols: 11,
+        offsetCols: 0,
         pathItems: [
           { 
             text: 'pages.invitations',

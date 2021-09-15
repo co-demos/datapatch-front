@@ -413,6 +413,7 @@ export default {
     refused: 'Refused',
     sentBy: 'Sent by {username}',
     sentDate: 'Sent the {date}',
+    sentTime: 'at {time}',
     details: 'Invitations details',
   },
   workspaces: {
