@@ -10,6 +10,10 @@
     pointer-events: none;
   }
 
+  .border-dash {
+    border-style: dashed;
+  }
+
 </style>
 
 <template>
@@ -26,9 +30,33 @@
 
     <v-row class="ma-0 align-center">
 
+      <!-- item invited to -->
+      <v-col 
+        cols="1"
+        @click="showDetails = !showDetails"
+        >
+        <p class="text-center mb-1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                small
+                class="mr-2"
+                >
+                {{ itemTypeIcon }}
+              </v-icon>
+            </template>
+            <span class="grey--text">
+              {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
+            </span>
+          </v-tooltip>
+        </p>
+      </v-col>
+
       <!-- status -->
       <v-col
-        cols="3"
+        cols="2"
         class="text-center"
         >
         <v-chip
@@ -73,24 +101,39 @@
       <!-- item invited to -->
       <v-col 
         cols="4"
+        class="align-center py-0"
         @click="showDetails = !showDetails"
         >
-        <p class="text-center mb-1">
-          <v-icon
-            small
-            class="mr-2"
-            >
-            {{ itemTypeIcon }}
-          </v-icon>
-          <span class="grey--text">
-            {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
-          </span>
-        </p>
+        <!-- <p class="text-center mb-1">
+            </template>
+            <span class="grey--text">
+              {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
+            </span>
+        </p> -->
 
         <!-- <code>{{ invit.invitation_to_item_id }}</code> -->
-        <p class="text-center font-weight-bold mb-0">
-          {{ invit.invitation_item.title }}
-        </p>
+        <v-row class="align-center font-weight-bold ma-0 pl-4">
+          
+          <v-col cols="2" class="pa-0">
+            <ItemAvatar
+              :item="invit.invitation_item"
+              :heightAvatar="30"
+            />
+          </v-col>
+
+          <v-col cols="10" class="pa-0 pt-1">
+            <!-- <v-icon
+              small
+              class="mr-2"
+              :color="invit.invitation_item.color"
+              >
+              {{ invit.invitation_item.icon }}
+            </v-icon> -->
+            <span>
+              {{ invit.invitation_item.title }}
+            </span>
+          </v-col>
+        </v-row>
       </v-col>
 
 
@@ -204,83 +247,125 @@
 
     <!-- INVITATION DETAILS -->
     <v-expand-transition>
-      <div v-show="showDetails" class="pt-3">
-        <v-divider/>
+      <div v-show="showDetails" class="pt-6 px-10">
 
-        <v-row  class="ma-0 mt-3 align-top">
-          <!-- sender / time -->
-          <v-col cols="4" class="pl-4 text-center">
-            <p v-html="$t('invitations.sentBy', { username : invitSender } )"/>
+        <v-divider class="border-dash"/>
+
+        <!-- auth details -->
+        <v-row  class="ma-0 mt-3 align-top justify-center pb-3">
+          <v-col cols="3" class="text-center align-center grey--text">
+            {{ $t('auth.authLevels') }} :
           </v-col>
-          <v-col cols="4" class="pl-4 text-center">
-           <p>
-              <span v-html="$t('invitations.sentDate', { date : invitSentDate.date } )"/>
+          <v-col cols="9" class="text-left align-center">
+            <v-row>
+              <v-col
+                v-for="authLevel in authChoices"
+                :key="authLevel.name"
+                v-if="invit.auths[authLevel.name]"
+                cols="4"
+                class="pr-1"
+                >
+                <span>
+                  <v-icon 
+                    x-small 
+                    class="mr-2"
+                    :color="invit.auths[authLevel.name]? 'green' : 'grey lighten-2'"
+                    >
+                    {{ authLevel.icon }}
+                  </v-icon>
+                  <span 
+                    :class="`text-body-2 ${ invit.auths[authLevel.name]? '' : 'text-decoration-line-through grey--text'}`"
+                    >
+                    {{ $t(authLevel.label) }}
+                  </span>
+                </span>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+
+        <!-- message -->
+        <v-divider class="border-dash"/>
+        <v-row  class="ma-0 mt-3 align-top">
+          <v-col cols="3" class="grey--text">
+            <p class="text-center mb-2">
+              {{ $t('dataPackage.message') }} :
             </p>
           </v-col>
-          <v-col cols="4" class="pl-4 text-center">
-            <p>
-              <span v-html="$t('invitations.sentTime', { time : invitSentDate.time } )"/>
+          <v-col cols="9">
+            <p class="mb-2">
+              {{ invit.message }}
             </p>
           </v-col>
         </v-row>
 
-        <v-divider/>
-
+        <!-- item details -->
+        <v-divider class="border-dash"/>
         <v-row  class="ma-0 mt-3 align-top">
-          
-          <!-- sender / time -->
-          <v-col cols="3" class="pl-4 text-center">
-            <!-- <p v-html="$t('invitations.sentBy', { username : invitSender } )"/>
-            <p>
-              <span v-html="$t('invitations.sentDate', { date : invitSentDate.date } )"/>
-            </p>
-            <p>
-              <span v-html="$t('invitations.sentTime', { time : invitSentDate.time } )"/>
-            </p> -->
-          </v-col>
-
-          <!-- item details -->
-          <v-col cols="4">
-            <!-- invitation_item : <code>{{ invit.invitation_item }}</code> -->
-            <p class="text-center">
+          <v-col cols="3" class="grey--text">
+            <p class="text-center mb-2">
               {{ $t('dataPackage.description') }} :
             </p>
-            <p>
+          </v-col>
+          <v-col cols="9">
+            <p class="mb-2">
               {{ invit.invitation_item.description }}
             </p>
           </v-col>
+        </v-row>
 
-          <!-- auths -->
-          <v-col cols="3" class="offset-1">
-            <!-- locale : <code>{{ $i18n.locale }}</code><br> -->
-            <!-- auths : <code>{{ invit.auths }}</code> -->
-            <p class="text-center">
-              {{ $t('auth.authLevels') }}
-            </p>
-            <p
-              v-for="authLevel in authChoices"
-              :key="authLevel.name"
-              class="pl-4 mb-1"
-              >
-              <span>
-                <v-icon 
-                  x-small 
-                  class="mr-2"
-                  :color="invit.auths[authLevel.name]? 'green' : 'grey lighten-2'"
-                  >
-                  {{ authLevel.icon }}
-                </v-icon>
-                <span 
-                  :class="`text-body-2 ${ invit.auths[authLevel.name]? '' : 'text-decoration-line-through grey--text'}`"
-                  >
-                  {{ $t(authLevel.label) }}
-                </span>
+        <!-- invit details -->
+        <v-divider class="border-dash"/>
+        <v-row  class="ma-0 mt-3 align-top justify-center">
+          <v-col cols="3" class="pl-4 text-center">
+            <p>
+              <span class="grey--text">
+              {{ $t( `dataPackage.itemTypeSingular`) }} : 
+              </span>
+              <br>
+              <v-icon
+                small
+                class="mr-2"
+                >
+                {{ itemTypeIcon }}
+              </v-icon>
+              <span class="">
+                {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
               </span>
             </p>
-
           </v-col>
 
+          <v-col cols="4" class="pl-4 text-center">
+            <span class="grey--text">
+              {{ $t('invitations.sentBy') }} :
+            </span>
+            <br>
+            {{ invitSender }}
+          </v-col>
+
+          <v-col cols="2" class="pl-4 text-center">
+            <!-- <p>
+              <span v-html="$t('invitations.sentDate', { date : invitSentDate.date } )"/>
+            </p> -->
+            <span class="grey--text">
+              {{ $t('invitations.sentDate') }} :
+            </span>
+            <br>
+            {{ invitSentDate.date }}
+          </v-col>
+
+          <v-col cols="3" class="pl-4 text-center">
+            <!-- <p>
+              <span v-html="$t('invitations.sentTime', { time : invitSentDate.time } )"/>
+            </p> -->
+            <span class="grey--text">
+              {{ $t('invitations.sentTime') }} :
+            </span>
+            <br>
+            {{ invitSentDate.time }}
+          </v-col>
         </v-row>
+
       </div>
     </v-expand-transition>
 

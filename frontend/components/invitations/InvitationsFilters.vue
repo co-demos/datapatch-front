@@ -5,16 +5,16 @@
     >
 
     <v-col 
-      cols="2" 
-      class="pa-0 text-left grey--text text-caption pr-2"
-      >
-      {{ $t('invitations.status') }}
-    </v-col>
-    <v-col 
       cols="3" 
       class="pa-0 text-left grey--text text-caption"
       >
       {{ $t('dataPackage.itemType') }}
+    </v-col>
+    <v-col 
+      cols="2" 
+      class="pa-0 text-left grey--text text-caption pr-2"
+      >
+      {{ $t('invitations.status') }}
     </v-col>
     <v-col 
       cols="4" 
@@ -29,8 +29,39 @@
       {{ $t('sorts.sortResults') }}
     </v-col>
 
+    <!-- select itemType -->
+    <v-col cols="3" class="pa-0 pr-2">
+      <v-select
+        :items="itemTypesList"
+        v-model="itemType"
+        item-value="name" 
+        class="pt-0"
+        hide-details
+        @change="handleInput"
+        >
+        <template v-slot:item="{ item }">
+          <span>
+            <v-icon small class="mr-2">
+              {{ item.icon }}
+            </v-icon>
+            {{ $t(item.label) }}
+          </span>
+        </template>
+        <template v-slot:selection="{ item }">
+          <span>
+            <v-icon small class="mr-2">
+              {{ item.icon }}
+            </v-icon>
+            <span class="text-body-2">
+              {{ $t(item.label) }}
+            </span>
+          </span>
+        </template>
+      </v-select>
+    </v-col>
+
     <!-- select status -->
-    <v-col cols="2" class="pa-0 pr-2">
+    <v-col cols="2" class="pa-0">
       <v-select
         :items="statusList"
         v-model="status"
@@ -58,36 +89,6 @@
               class="mr-2"
               :color="item.color"
               >
-              {{ item.icon }}
-            </v-icon>
-            <span class="text-body-2">
-              {{ $t(item.label) }}
-            </span>
-          </span>
-        </template>
-      </v-select>
-    </v-col>
-
-    <!-- select itemType -->
-    <v-col cols="3" class="pa-0">
-      <v-select
-        :items="itemTypesList"
-        v-model="itemType"
-        item-value="name" 
-        class="pt-0"
-        hide-details
-        @change="handleInput"
-        >
-        <template v-slot:item="{ item }">
-          <span>
-            <v-icon small class="mr-2">
-              {{ item.icon }}
-            </v-icon>
-            {{ $t(item.label) }}
-          </span>        </template>
-        <template v-slot:selection="{ item }">
-          <span>
-            <v-icon small class="mr-2">
               {{ item.icon }}
             </v-icon>
             <span class="text-body-2">

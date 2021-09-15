@@ -99,7 +99,7 @@
       <Languages/>
 
       <!-- DEBUGGING / TEST IO -->
-      <!-- <v-btn
+      <v-btn
         elevation="0"
         class="ml-5 mr-3"
         fab
@@ -113,7 +113,7 @@
           >
           icon-mail
         </v-icon>
-      </v-btn> -->
+      </v-btn>
 
       <NotificationsButton v-if="isAuthenticated"/>
 
@@ -366,18 +366,18 @@
       })
     },
     methods: {
-      // ioBroadcastAction(ioData) {
-      //   this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
-      //   let payload = {
-      //     from_user_email: this.user.email,
-      //     item_type: 'invitation',
-      //     item_id: 1,
-      //     target_rooms: [ ioData.target_email ],
-      //     action: 'comment'
-      //   }
-      //   this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
-      //   this.socket.emit('broadcast_action', payload)
-      // },
+      ioBroadcastAction(ioData) {
+        this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
+        let payload = {
+          from_user_email: this.user.email,
+          item_type: 'invitation',
+          item_id: 1,
+          target_rooms: [ ioData.target_email ],
+          action: 'comment'
+        }
+        this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
+        this.socket.emit('broadcast_action', payload)
+      },
     }
   }
 </script>

@@ -328,6 +328,7 @@ export default {
     sharePrefs: 'Préférences de partage',
   },
   dataPackage: {
+    itemTypeSingular: "Type d'élément", 
     itemType: "Types d'élément", 
     group: 'Groupe', 
     groups: 'Groupes', 
@@ -415,9 +416,9 @@ export default {
     pending: 'En attente',
     accepted: 'Acceptée',
     refused: 'Refusée',
-    sentBy: 'Envoyée par :<br>{username}',
-    sentDate: 'Envoyée le :<br>{date}',
-    sentTime: "Heure de l'envoi : <br>{time}",
+    sentBy: 'Envoyée par',
+    sentDate: 'Envoyée le',
+    sentTime: "Heure de l'envoi",
     details: "Détails de l'invitation"
   },
   workspaces: {
