@@ -143,6 +143,7 @@ export default {
     byDate: 'by date',
     byUser: 'by user',
     byStatus: 'by status',
+    byItemType: 'by item type',
   },
   imports: {
     example: 'Example',
@@ -415,6 +416,7 @@ export default {
     accepted: 'Accepted',
     refused: 'Refused',
     sentBy: 'Sent by',
+    sentTo: 'Sent to',
     sentDate: 'Sent date',
     sentTime: 'Time of send',
     details: 'Invitations details',

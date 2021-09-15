@@ -757,6 +757,7 @@
               .then(resp => {
                 this.log && console.log('C-SearchList > handleAction > resp.data : ', resp.data)
                 this.isLoading = false
+                this.closeMessageBox()
                 ioData.target_rooms = payload.invitees.map( invitee => invitee.invitee_email )
                 ioData.callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
                 this.ioBroadcastAction(ioData)

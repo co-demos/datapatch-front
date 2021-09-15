@@ -231,7 +231,7 @@
         let sorts = [
           { name: 'created_date', label: 'sorts.byDate' },
           { name: 'invitation_status', label: 'sorts.byStatus' },
-          // { name: 'invitee', label: 'sorts.byUser' },
+          { name: 'invitee', label: 'sorts.byUser' },
           { name: 'invitation_to_item_type', label: 'sorts.byItemType' },
         ]
         return sorts

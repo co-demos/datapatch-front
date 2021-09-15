@@ -418,6 +418,7 @@ export default {
     accepted: 'Acceptée',
     refused: 'Refusée',
     sentBy: 'Envoyée par',
+    sentTo: 'Envoyée à',
     sentDate: 'Envoyée le',
     sentTime: "Heure de l'envoi",
     details: "Détails de l'invitation"

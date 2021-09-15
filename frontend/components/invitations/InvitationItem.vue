@@ -339,11 +339,20 @@
           </v-col>
 
           <v-col cols="4" class="pl-4 text-center">
-            <span class="grey--text">
-              {{ $t('invitations.sentBy') }} :
+            <span v-if="invitType === 'received'">
+              <span class="grey--text">
+                {{ $t('invitations.sentBy') }} :
+              </span>
+              <br>
+              {{ invitSender }}
             </span>
-            <br>
-            {{ invitSender }}
+            <span v-if="invitType === 'sent'">
+              <span class="grey--text">
+                {{ $t('invitations.sentTo') }} :
+              </span>
+              <br>
+              {{ invit.invitee }}
+            </span>
           </v-col>
 
           <v-col cols="2" class="pl-4 text-center">
