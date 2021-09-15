@@ -27,11 +27,14 @@
     <v-row class="ma-0 align-center">
 
       <!-- status -->
-      <v-col cols="3" class="text-center">
-
+      <v-col
+        cols="3"
+        class="text-center"
+        >
         <v-chip
           text-color="white"
           :color="statusColor"
+          @click="showDetails = !showDetails"
           >
           <v-icon 
             small
@@ -68,8 +71,10 @@
       </v-col>
 
       <!-- item invited to -->
-      <v-col cols="4">
-
+      <v-col 
+        cols="4"
+        @click="showDetails = !showDetails"
+        >
         <p class="text-center mb-1">
           <v-icon
             small
@@ -86,8 +91,6 @@
         <p class="text-center font-weight-bold mb-0">
           {{ invit.invitation_item.title }}
         </p>
-
-
       </v-col>
 
 
