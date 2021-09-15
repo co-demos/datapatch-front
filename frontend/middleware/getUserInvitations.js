@@ -15,6 +15,7 @@ export default function ({
   // console.log("MW-getUserInvitations > route : ", route)
 
   const api = store.state.api
+  const user = store.state.user.userData
 
   let tokenAccess = store.getters['user/isAuthenticated']
   // log && console.log("MW-getUserInvitations > tokenAccess : ", tokenAccess)
@@ -30,8 +31,11 @@ export default function ({
         log && console.log('MW-getUserInvitations > B1 > resp.data : ', resp.data)
         let invitations = resp.data
 
-        let invitSent = invitations.invitations_sent
-        let invitReceived = invitations.invitations_received
+        // let invitSent = invitations.invitations_sent
+        // let invitReceived = invitations.invitations_received
+        let invitSent = invitations.filter( invit => invit.owner_id === user.id )
+        let invitReceived = invitations.filter( invit => invit.owner_id !== user.id )
+
         console.log("MW-getUserInvitations > invitSent : ", invitSent)
         console.log("MW-getUserInvitations > invitReceived : ", invitReceived)
 

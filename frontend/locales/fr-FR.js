@@ -145,6 +145,7 @@ export default {
     byDate: 'par date',
     byUser: 'par utilisateur',
     byStatus: 'par statut',
+    byItemType: "par type d'objet",
   },
   imports: {
     example: 'Exemple',

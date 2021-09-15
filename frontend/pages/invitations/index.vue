@@ -168,6 +168,7 @@
       ...mapActions({
         updatePath: 'updateCrumbsPath',
       }),
+
     }
   }
 

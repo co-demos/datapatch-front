@@ -36,6 +36,7 @@
         @click="showDetails = !showDetails"
         >
         <p class="text-center mb-1">
+          <!-- <code>{{ invit.id }}</code> -->
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
@@ -178,7 +179,7 @@
 
       </v-col>
 
-      <!-- ACCEPT / REFUSE -->
+      <!-- ACTION : ACCEPT / REFUSE / ... -->
       <v-col cols="2" class="align-center justify-center pr-0">
         <v-btn
           dark
@@ -202,6 +203,8 @@
           </span>
         </v-btn>
       </v-col>
+
+      <!-- ACTION CHOICES -->
       <v-col cols="1" class="align-center justify-center pl-0">
         <v-menu
           open-on-hover
@@ -512,8 +515,10 @@
           from_user_email: this.user.email,
           item_type: 'invitation',
           item_id: ioData.id,
-          // target_rooms: ioData.owner_email,
-          action: ioData.invitation_status
+          target_rooms: [ioData.owner.email],
+          // action: ioData.invitation_status,
+          action: this.action,
+          callback: { item_type: 'invitation', method: 'get' }
         }
         this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
         this.socket.emit('broadcast_action', payload)

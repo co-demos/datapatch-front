@@ -29,7 +29,7 @@
         :class="`offset-${offsetCols}`"
         >
         <div
-          v-if="filteredInvits.length > 0"
+          v-if="filteredInvits().length > 0"
           >
           <!-- <draggable
             v-model="filteredInvits"
@@ -40,7 +40,7 @@
             @end="drag=false"
             > -->
             <InvitationItem
-              v-for="invit in filteredInvits"
+              v-for="invit in filteredInvits()"
               :key="invit.id"
               :invit="invit"
               :invitType="invitType"
@@ -60,6 +60,7 @@
 <script>
 
   import { mapState, mapGetters } from 'vuex'
+  import { mapOrder } from '@/utils/utilsFunctions'
 
   export default {
     name: 'InvitationsList',
@@ -80,7 +81,7 @@
           status: 'all',
           itemType: 'all',
           sortType: 'date',
-          sortOrder: 'asc',
+          sortOrder: 'desc',
           search: null,
         },
       }
@@ -101,28 +102,52 @@
           ghostClass: "ghost"
         }
       },
+    },
+    methods: {
       filteredInvits() {
-        let invits = this.invits
+        // this.log && console.log("\nC-InvitationsList > filteredInvits > this.invits : ", this.invits)
+        // this.log && console.log("C-InvitationsList > filteredInvits > this.filters : ", this.filters)
+        let invits = this.invits ? this.invits : []
+        // let invits = [ ...this.invits  ]
+        // this.log && console.log("C-InvitationsList > filteredInvits > invits.length : ", invits.length )
+        if (invits.length > 0 ) {
           // filter by status
-          .filter( inv => { 
-            if ( this.filters.status !== 'all' ) {
-              return inv.invitation_status === this.filters.status
-            } else {
-              return true
-            }
-          })
-          // filter by itemType
-          .filter( inv => { 
-            if ( this.filters.itemType !== 'all' ) {
-              return inv.invitation_to_item_type === this.filters.itemType
-            } else {
-              return true
-            }
-          })
-          // search
-        // sort by
+          invits = invits
+            .filter( inv => { 
+              if ( this.filters.status !== 'all' ) {
+                return inv.invitation_status === this.filters.status
+              } else {
+                return true
+              }
+            })
+            // filter by itemType
+            .filter( inv => { 
+              if ( this.filters.itemType !== 'all' ) {
+                return inv.invitation_to_item_type === this.filters.itemType
+              } else {
+                return true
+              }
+            })
 
-        // sort order
+          // search
+          // TO DO
+
+          // sort by
+          const sortField = this.filters.sortType
+          invits = invits.sort((a, b) => {
+            if (a[sortField] < b[sortField]) return -1
+            return a[sortField] > b[sortField] ? 1 : 0
+          })
+
+          // sort order
+          // this.log && console.log("C-InvitationsList > filteredInvits > invits - before order : ", invits)
+          if ( this.filters.sortOrder === 'desc' ) {
+            invits.reverse()
+          }
+          // this.log && console.log("C-InvitationsList > filteredInvits > invits - after order : ", invits)
+
+        }
+
         return invits
       }
     }

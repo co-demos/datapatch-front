@@ -6,19 +6,19 @@
 
     <v-col 
       cols="3" 
-      class="pa-0 text-left grey--text text-caption"
-      >
-      {{ $t('dataPackage.itemType') }}
-    </v-col>
-    <v-col 
-      cols="2" 
-      class="pa-0 text-left grey--text text-caption pr-2"
+      class="pa-0 text-left grey--text text-caption pr-3"
       >
       {{ $t('invitations.status') }}
     </v-col>
     <v-col 
-      cols="4" 
-      class="pa-0 text-left grey--text text-caption px-4"
+      cols="3" 
+      class="pa-0 text-left grey--text text-caption pr-3"
+      >
+      {{ $t('dataPackage.itemType') }}
+    </v-col>
+    <v-col 
+      cols="3" 
+      class="pa-0 text-left grey--text text-caption pr-3"
       >
       {{ $t('invitations.search') }}
     </v-col>
@@ -29,39 +29,8 @@
       {{ $t('sorts.sortResults') }}
     </v-col>
 
-    <!-- select itemType -->
-    <v-col cols="3" class="pa-0 pr-2">
-      <v-select
-        :items="itemTypesList"
-        v-model="itemType"
-        item-value="name" 
-        class="pt-0"
-        hide-details
-        @change="handleInput"
-        >
-        <template v-slot:item="{ item }">
-          <span>
-            <v-icon small class="mr-2">
-              {{ item.icon }}
-            </v-icon>
-            {{ $t(item.label) }}
-          </span>
-        </template>
-        <template v-slot:selection="{ item }">
-          <span>
-            <v-icon small class="mr-2">
-              {{ item.icon }}
-            </v-icon>
-            <span class="text-body-2">
-              {{ $t(item.label) }}
-            </span>
-          </span>
-        </template>
-      </v-select>
-    </v-col>
-
     <!-- select status -->
-    <v-col cols="2" class="pa-0">
+    <v-col cols="3" class="pa-0 pr-3">
       <v-select
         :items="statusList"
         v-model="status"
@@ -99,8 +68,39 @@
       </v-select>
     </v-col>
 
+    <!-- select itemType -->
+    <v-col cols="3" class="pa-0 pr-3">
+      <v-select
+        :items="itemTypesList"
+        v-model="itemType"
+        item-value="name" 
+        class="pt-0"
+        hide-details
+        @change="handleInput"
+        >
+        <template v-slot:item="{ item }">
+          <span>
+            <v-icon small class="mr-2">
+              {{ item.icon }}
+            </v-icon>
+            {{ $t(item.label) }}
+          </span>
+        </template>
+        <template v-slot:selection="{ item }">
+          <span>
+            <v-icon small class="mr-2">
+              {{ item.icon }}
+            </v-icon>
+            <span class="text-body-2">
+              {{ $t(item.label) }}
+            </span>
+          </span>
+        </template>
+      </v-select>
+    </v-col>
+
     <!-- search -->
-    <v-col cols="4" class="pa-0 px-4">
+    <v-col cols="3" class="pa-0 pr-3">
       <v-text-field
         v-model="search"
         hide-details
@@ -197,7 +197,7 @@
         isLoading: false,
         status: 'all',
         itemType: 'all',
-        sortType: 'date',
+        sortType: 'created_date',
         sortOrder: 'desc',
         search: null,
       }
@@ -229,9 +229,10 @@
       },
       sortsList() {
         let sorts = [
-          { name: 'date', label: 'sorts.byDate' },
-          { name: 'status', label: 'sorts.byUser' },
-          { name: 'user', label: 'sorts.byStatus' },
+          { name: 'created_date', label: 'sorts.byDate' },
+          { name: 'invitation_status', label: 'sorts.byStatus' },
+          // { name: 'invitee', label: 'sorts.byUser' },
+          { name: 'invitation_to_item_type', label: 'sorts.byItemType' },
         ]
         return sorts
       },

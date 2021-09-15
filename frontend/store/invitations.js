@@ -41,7 +41,12 @@ export const getters = {
     return state.sharedInvitations.find( invitation => invitation.id === id)
   },
   getSharedItemsPending: (state) => {
-    return state.sharedInvitations.filter( item => item.invitation_status === 'pending' )
+    console.log('S-invitations > populateSharedItems > state.sharedInvitations : ', state.sharedInvitations)
+    if ( state.sharedInvitations.length > 0 ) {
+      return state.sharedInvitations.filter( item => item.invitation_status === 'pending' )
+    } else {
+      return []
+    } 
   },
 }
 
@@ -55,6 +60,7 @@ export const mutations = {
   },
 
   setItems (state, {space, items}) {
+    console.log('S-invitations > setItems > items : ', items)
     state[space] = items
   },
   addItem (state, {space, item}) {
@@ -99,13 +105,15 @@ export const actions = {
   },
 
   populateSharedItems ({ commit }, invitations) {
+    console.log('S-invitations > populateSharedItems > invitations : ', invitations)
     commit('setItems', {space: 'sharedInvitations', items: invitations})
   },
   appendSharedItem ({ commit }, invitation) {
     commit('addItem', {space: 'sharedInvitations', item: invitation})
   },
-  updateSharedItem ({ commit }, invitation) {
-    commit('updateItem', {space: 'sharedInvitations', item: invitation})
+  updateSharedItem ({ commit }, {data}) {
+    console.log('S-invitations > populateSharedItems > data : ', data)
+    commit('updateItem', {space: 'sharedInvitations', item: data})
   },
   removeSharedItem ({ commit }, invitation) {
     commit('removeItem', {space: 'sharedInvitations', item: invitation})

@@ -343,6 +343,12 @@
       })
       this.socket.on('action_message', (data) => {
         this.log && console.log("\nC-NotificationsButton > mounted > this.socket - action_message > data : ", data)
+        if (data.callback.method === 'get' && !data.callback.get_list ) {
+          this.getItem(data)
+        }
+        if (data.callback.method === 'get' && data.callback.get_list ) {
+          this.getItems(data)
+        }
       })
     },
     computed: {
@@ -358,26 +364,63 @@
       ...mapState({
         log: (state) =>  state.log,
         user: (state) =>  state.user.userData,
+        api: (state) => state.api,
       }),
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
         userId: 'user/userId',
         currentDataset: 'datasets/getCurrentItem',
+        headerUser: 'user/headerUser'
       })
     },
     methods: {
       ioBroadcastAction(ioData) {
+        // FOR TESTING PURPOSES
         this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
         let payload = {
           from_user_email: this.user.email,
           item_type: 'invitation',
-          item_id: 1,
+          item_id: 40,
           target_rooms: [ ioData.target_email ],
-          action: 'comment'
+          action: 'accept',
+          callback: { item_type: 'item', method: 'get', get_list: false }
         }
         this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
         this.socket.emit('broadcast_action', payload)
       },
+      getItem(data) {
+        this.log && console.log("\nC-NotificationsButton > getItem > data : ", data)
+        const itemTypePlural = `${data.callback.item_type}s`
+        const url = data.callback.url ? data.callback.url : `${this.api[itemTypePlural]}/${data.item_id}`
+        this.$axios.get( url, this.headerUser )
+          .then(resp => {
+            this.log && console.log('C-NotificationsButton > getItem > resp.data : ', resp.data)
+            let isCurrentUserOwner = resp.data.owner_id === this.user.id ? 'updateUserItem' : 'updateSharedItem'
+            this.log && console.log('C-NotificationsButton > getItem > isCurrentUserOwner : ', isCurrentUserOwner)
+            this.$store.dispatch(`${itemTypePlural}/${isCurrentUserOwner}`, {data: resp.data})
+            this.isLoading = false
+          })
+          .catch(error => {
+            this.isLoading = false
+          })
+      },
+      getItems(data) {
+        this.log && console.log("\nC-NotificationsButton > getItems > data : ", data)
+        const itemTypePlural = `${data.callback.item_type}s`
+        const url = data.callback.url ? data.callback.url : `${this.api[itemTypePlural]}`
+        this.$axios.get( url, this.headerUser )
+          .then(resp => {
+            this.log && console.log('C-NotificationsButton > getItems > resp.data : ', resp.data)
+            let itemsUser = resp.data.filter( item => item.owner_id === this.user.id )
+            let itemsShared = resp.data.filter( item => item.owner_id !== this.user.id )
+            this.$store.dispatch(`${itemTypePlural}/populateUserItems`, itemsUser )
+            this.$store.dispatch(`${itemTypePlural}/populateSharedItems`, itemsShared )
+            this.isLoading = false
+          })
+          .catch(error => {
+            this.isLoading = false
+          })
+      }
     }
   }
 </script>
