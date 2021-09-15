@@ -247,12 +247,12 @@
 
     <!-- INVITATION DETAILS -->
     <v-expand-transition>
-      <div v-show="showDetails" class="pt-6 px-10">
+      <div v-show="showDetails" class="pt-3 px-10">
 
         <v-divider class="border-dash"/>
 
         <!-- auth details -->
-        <v-row  class="ma-0 mt-3 align-top justify-center pb-3">
+        <v-row  class="ma-0 mt-3 align-center justify-center pb-3">
           <v-col cols="3" class="text-center align-center grey--text">
             {{ $t('auth.authLevels') }} :
           </v-col>
@@ -263,7 +263,7 @@
                 :key="authLevel.name"
                 v-if="invit.auths[authLevel.name]"
                 cols="4"
-                class="pr-1"
+                class="pr-1 py-1"
                 >
                 <span>
                   <v-icon 
