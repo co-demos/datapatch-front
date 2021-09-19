@@ -106,7 +106,11 @@
         fab
         x-small
         :color="searchOpen ? 'white' : 'transparent'"
-        @click.stop="ioBroadcastAction({target_email: 'jparis.py@gmail.com'})"
+        @click.stop="ioBroadcastAction(
+          {}, // ioData - item
+          [ 'jparis.py@gmail.com' ], // rooms
+          { item_type: 'item', method: 'get', get_list: false } // callback
+        )"
         >
         <v-icon
           :class="searchOpen ? 'primary--text' : ''"
@@ -375,16 +379,16 @@
       })
     },
     methods: {
-      ioBroadcastAction(ioData) {
+      ioBroadcastAction(ioData, rooms, callback) {
         // FOR TESTING PURPOSES
         this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
         let payload = {
           from_user_email: this.user.email,
           item_type: 'invitation',
           item_id: 40,
-          target_rooms: [ ioData.target_email ],
+          target_rooms: rooms,
           action: 'accept',
-          callback: { item_type: 'item', method: 'get', get_list: false }
+          callback: callback
         }
         this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
         this.socket.emit('broadcast_action', payload)

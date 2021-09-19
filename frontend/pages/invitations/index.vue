@@ -17,7 +17,7 @@
           dark
           :color="invitType === 'sent' ? 'grey lighten-1' : 'primary'"
           class="text-center"
-          @click="invitType = 'received'"
+          @click="changeActiveInvitationType('received')"
           >
           {{ $t('invitations.userInvitationsReceived')}}
         </v-btn>
@@ -33,7 +33,7 @@
           dark
           :color="invitType === 'sent' ? 'primary' : 'grey lighten-1'"
           class="text-center"
-          @click="invitType = 'sent'"
+          @click="changeActiveInvitationType('sent')"
           >
           {{ $t('invitations.userInvitationsSent')}}
         </v-btn>
@@ -116,7 +116,7 @@
     },
     data () {
       return {
-        invitType: 'received',
+        invitType: undefined,
         cols: 11,
         offsetCols: 0,
         pathItems: [
@@ -132,15 +132,18 @@
     },
     beforeMount () {
       this.updatePath(this.pathItems)
+      if( this.$route.query.invitType ) {
+        this.changeActiveInvitationType( this.$route.query.invitType )
+      } else {
+        this.changeActiveInvitationType('received')
+      }
     },
     mounted() {
-
-      this.socket = this.$nuxtSocket({
-        name: 'main', // Use socket "home"
-        path: '/ws/socket.io',
-        transport: ['websocket'],
-      })
-
+      // this.socket = this.$nuxtSocket({
+      //   name: 'main', // Use socket "home"
+      //   path: '/ws/socket.io',
+      //   transport: ['websocket'],
+      // })
     },
     watch: {
       userInvitations (next) {
@@ -168,7 +171,23 @@
       ...mapActions({
         updatePath: 'updateCrumbsPath',
       }),
-
+      params(data) {
+        return Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&');
+      },
+      changeActiveInvitationType(invitType) {
+        this.log && console.log("P-Invitations > changeActiveInvitationType > invitType : ", invitType)
+        this.invitType = invitType
+        this.log && console.log("P-Invitations > changeActiveInvitationType > this.$route : ", this.$route)
+        
+        // change url without reloading page
+        let queries = JSON.parse(JSON.stringify(this.$route.query))
+        queries.invitType = invitType
+        // this.$router.push({ path: this.$route.path, query: { ...this.$route.query, invitType: invitType }})
+        // this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, invitType: invitType }})
+        // this.$router.replace({ query: { ...this.$route.query, invitType: invitType }})
+        // this.$router.replace({ query: queries })
+        history.replaceState({}, null, `${this.$route.path}?${this.params(queries)}` )
+      }
     }
   }
 

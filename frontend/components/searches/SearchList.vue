@@ -703,7 +703,7 @@
       unselectItem(item) {
         this.selected = this.selected.filter( selected => selected.id !== item.id && selected.type !== item.item_type)
       },
-      ioBroadcastAction(ioData) {
+      ioBroadcastAction(ioData, rooms, callback) {
         this.log && console.log('\nC-SearchList > ioBroadcastAction > ioData :' , ioData)
         this.log && console.log('C-SearchList > ioBroadcastAction > this.user :' , this.user)
         this.log && console.log('C-SearchList > ioBroadcastAction > this.relatedItem :' , this.relatedItem)
@@ -711,9 +711,9 @@
           from_user_email: this.user.email,
           item_type: this.relatedItem.item_type,
           item_id: this.relatedItem.id,
-          target_rooms: ioData.target_rooms,
+          target_rooms: rooms,
           action: ioData.action,
-          callback: ioData.callback
+          callback: callback
         }
         this.log && console.log('C-SearchList > ioBroadcastAction > payload :' , payload)
         this.socket.emit('broadcast_action', payload)
@@ -758,9 +758,9 @@
                 this.log && console.log('C-SearchList > handleAction > resp.data : ', resp.data)
                 this.isLoading = false
                 this.closeMessageBox()
-                ioData.target_rooms = payload.invitees.map( invitee => invitee.invitee_email )
-                ioData.callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
-                this.ioBroadcastAction(ioData)
+                let rooms = payload.invitees.map( invitee => invitee.invitee_email )
+                let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
+                this.ioBroadcastAction(ioData, rooms, callback)
               })
               .catch(error => {
                 this.isLoading = false

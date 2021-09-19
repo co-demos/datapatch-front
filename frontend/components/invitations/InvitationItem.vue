@@ -232,6 +232,7 @@
               v-for="item in btnActions"
               :key="item.action"
               @click="action = item.action"
+              :disabled="item.disabled"
               >
               <v-list-item-title>
                 <v-icon x-small class="pr-2">
@@ -425,7 +426,8 @@
             label: 'buttons.comment', 
             color: 'primary',
             icon: 'icon-message-square', 
-            for: ['sent', 'received'] 
+            for: ['sent', 'received'],
+            disabled: true
           },
           { 
             action: 'refuse', 
@@ -518,16 +520,15 @@
       }
     },
     methods: {
-      ioBroadcastAction(ioData) {
+      ioBroadcastAction(ioData, rooms, callback ) {
         this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
         let payload = {
           from_user_email: this.user.email,
           item_type: 'invitation',
           item_id: ioData.id,
-          target_rooms: [ioData.owner.email],
-          // action: ioData.invitation_status,
+          target_rooms: rooms,
           action: this.action,
-          callback: { item_type: 'invitation', method: 'get' }
+          callback: callback
         }
         this.log && console.log("C-InvitationItem > ioBroadcastAction > payload : ", payload)
         this.socket.emit('broadcast_action', payload)
@@ -542,34 +543,72 @@
         let url = `${this.api.invitations}/${this.invit.id}`
         this.isLoading = true
         this.log && console.log('C-InvitationItem > handleAction > invite > url :' , url)
+        
+        const respActions = [ 'accept', 'refuse' ] 
 
-        // for responses
-        if (this.invitType === 'received') {
-          // accept/refuse invitation
+        // shared's invitations => accept/refuse
+        if (this.invitType === 'received' && respActions.includes(this.action) ) {
           this.$axios.post( url, payload, this.headerUser)
             .then(resp => {
-              this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
-              this.$store.dispatch(`invitations/updateSharedItem`, {data: resp.data})
-              this.ioBroadcastAction( resp.data )
-              this.isLoading = false
-            })
-            .catch(error => {
-              this.isLoading = false
-            })
-        } 
-        
-        // for updates
-        else {
-          // update invitation
-          this.$axios.put( url, payload, this.headerUser)
-            .then(resp => {
-              this.log && console.log('C-InvitationItem > handleAction > resp.data : ', resp.data)
+              this.log && console.log('C-InvitationItem > handleAction > accept/refuse > resp.data : ', resp.data)
+              this.$store.dispatch(`invitations/updateSharedItem`, { data: resp.data })
+              let rooms = [ resp.data.owner.email ]
+              let callback = { item_type: 'invitation', method: 'get' }
+              this.ioBroadcastAction( resp.data, rooms, callback )
               this.isLoading = false
             })
             .catch(error => {
               this.isLoading = false
             })
         }
+
+        // user's invitations => remove
+        if (this.invitType === 'sent' && this.action === 'remove' ) {
+          this.$axios.delete( url, this.headerUser)
+            .then(resp => {
+              this.log && console.log('C-InvitationItem > handleAction > remove > resp.data : ', resp.data)
+              this.$store.dispatch(`invitations/removeSharedItem`, {data: resp.data})
+              let rooms = [ resp.data.invitee ]
+              let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
+              this.ioBroadcastAction( resp.data, rooms, callback )
+              this.isLoading = false
+            })
+            .catch(error => {
+              this.isLoading = false
+            })
+        } 
+
+        // user's invitations => edit
+        if (this.invitType === 'sent' && this.action === 'edit' ) {
+          this.$axios.put( url, payload, this.headerUser)
+            .then(resp => {
+              this.log && console.log('C-InvitationItem > handleAction > edit > resp.data : ', resp.data)
+              let rooms = [ resp.data.invitee ]
+              let callback = { item_type: 'invitation', method: 'get' }
+              this.ioBroadcastAction( resp.data, rooms,  callback )
+              this.isLoading = false
+            })
+            .catch(error => {
+              this.isLoading = false
+            })
+        }
+
+        // user's invitations => comment
+        if (this.action === 'comment' ) {
+          // update invitation
+          this.$axios.put( url, payload, this.headerUser)
+            .then(resp => {
+              this.log && console.log('C-InvitationItem > handleAction > comment > resp.data : ', resp.data)
+              let rooms = this.invitType === 'sent' ? [ resp.data.invitee ] : [ resp.data.owner.email ]
+              let callback = { item_type: 'invitation', method: 'get' }
+              this.ioBroadcastAction( resp.data, rooms, callback )
+              this.isLoading = false
+            })
+            .catch(error => {
+              this.isLoading = false
+            })
+        }
+
       },
     }
   }
