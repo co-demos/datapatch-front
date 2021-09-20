@@ -2,7 +2,7 @@
 
   <div>
 
-    <v-row class="align-top justify-center mt-12">
+    <v-row class="LandingRoadmap align-top justify-center mt-12">
   
       <LandingTitle
         :title="'roadmap.title'"

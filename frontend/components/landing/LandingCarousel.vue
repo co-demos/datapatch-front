@@ -1,6 +1,6 @@
 <template>
 
-  <v-row class="align-top justify-center my-12">
+  <v-row class="LandingCarousel align-top justify-center my-12">
 
     <LandingTitle
       :title="'features.featuresTitle'"

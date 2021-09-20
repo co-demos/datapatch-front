@@ -395,6 +395,7 @@ export default {
     recipients: 'Recipient | Recipients',
   },
   invitations: {
+    invitTitle: 'Invitation title',
     invitees: 'Invitee | Invitees',
     defaultHelp: 'You can now create a new invitation to begin ...',
     defaultTitle: 'My new invitation',

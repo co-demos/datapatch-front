@@ -8,6 +8,7 @@
 
   <v-tooltip
     top
+    class="SearchAction"
     >
     <template v-slot:activator="{ on, attrs }">
       <v-btn

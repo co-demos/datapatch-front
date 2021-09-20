@@ -13,7 +13,7 @@
 <template>
 
   <v-card
-    :class="`mb-12 px-3 pt-2 pb-3 workspace ${dragging ? 'ws-active' : 'ws-normal'}`"
+    :class="`WorkspaceItem mb-12 px-3 pt-2 pb-3 workspace ${dragging ? 'ws-active' : 'ws-normal'}`"
     flat
     min-height="140"
     >

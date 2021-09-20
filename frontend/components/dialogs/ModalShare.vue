@@ -3,6 +3,7 @@
     v-model="dialog"
     overflowed
     max-width="800"
+    class="ModalShare"
     >
     <!-- MODAL TITLE -->
     <v-card>

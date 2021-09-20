@@ -1,6 +1,7 @@
 <template>
   <div
     style="height: 100vh;"
+    class="LandingSearch"
     >
     <v-row
       class="align-top justify-center mt-12"

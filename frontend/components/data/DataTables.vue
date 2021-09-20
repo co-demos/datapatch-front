@@ -35,7 +35,7 @@
 
 <template>
 
-  <div>
+  <div class="DataTables">
 
     <!-- DEBUGGING -->
     <v-row class="text-caption mb-3" v-if="false">

@@ -1,5 +1,5 @@
 <template>
-  <v-row class="align-top justify-center ma-0 mt-3">
+  <v-row class="SearchList align-top justify-center ma-0 mt-3">
 
     <!-- HEADER + BTNS -->
     <v-col cols="12" class="mb-0 pa-0">

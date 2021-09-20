@@ -22,7 +22,7 @@
     elevation="0"
     outlined
     flat
-    :class="`invit mb-2 py-3 ${hover ? 'add-border' : ''}`"
+    :class="`InvitationItem invit mb-2 py-3 ${hover ? 'add-border' : ''}`"
     :color="`${hover ? 'white' : 'grey lighten-4'}`"
     @mouseover="hover = true"
     @mouseleave="hover = false"
@@ -36,7 +36,7 @@
         @click="showDetails = !showDetails"
         >
         <p class="text-center mb-1">
-          <!-- <code>{{ invit.id }}</code> -->
+          <code>{{ invit.id }}</code>
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
@@ -136,7 +136,6 @@
           </v-col>
         </v-row>
       </v-col>
-
 
       <!-- auths -->
       <v-col cols="2" class="text-center">
@@ -260,8 +259,11 @@
           <v-col cols="3" class="text-center align-center grey--text">
             {{ $t('auth.authLevels') }} :
           </v-col>
+
+          <!-- editable -->
           <v-col cols="9" class="text-left align-center">
-            <v-row>
+            
+            <v-row v-show="!editMode">
               <v-col
                 v-for="authLevel in authChoices"
                 :key="authLevel.name"
@@ -285,7 +287,74 @@
                 </span>
               </v-col>
             </v-row>
+
+            <v-row v-show="editMode" class="mt-0 align-center">
+              <!-- {{ authEdit }}<br> -->
+              <v-radio-group
+                v-model="authEdit"
+                class="mt-0 mb-2 ml-3"
+                hide-details
+                @change="updateItem('auths', authEdit)"
+                >
+                <v-radio
+                  v-for="authChoice in authChoices"
+                  :key="authChoices.role"
+                  :value="authChoice.name"
+                  >
+                  <template v-slot:label>
+                    <b>{{ $t(authChoice.role) }}</b> : 
+                    {{ $t(authChoice.label) }}
+                    <v-tooltip
+                      top
+                      >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          class="mx-2"
+                          color="grey"
+                          dark
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
+                          >
+                          icon-info
+                        </v-icon>
+                      </template>
+                      <span>
+                        {{ $t(`${authChoice.role}Help`) }}
+                      </span>
+                    </v-tooltip>
+                  </template>
+                </v-radio>
+              </v-radio-group>
+            </v-row>
+
           </v-col>
+        </v-row>
+
+        <!-- invit title -->
+        <v-divider class="border-dash"/>
+        <v-row  class="ma-0 mt-3 align-top">
+          <v-col cols="3" class="grey--text">
+            <p class="text-center mb-2">
+              {{ $t('invitations.invitTitle') }} :
+            </p>
+          </v-col>
+
+          <!-- editable -->
+          <v-col cols="9">
+            <p class="mb-2" v-show="!editMode">
+              {{ invit.title }}
+            </p>
+            <v-text-field
+              v-show="editMode"
+              class="mb-2"
+              outlined
+              hide-details
+              v-model="titleEdit"
+              @input="updateItemDebounced('title', titleEdit)"
+            />
+          </v-col>
+
         </v-row>
 
         <!-- message -->
@@ -296,10 +365,21 @@
               {{ $t('dataPackage.message') }} :
             </p>
           </v-col>
+
+          <!-- editable -->
           <v-col cols="9">
-            <p class="mb-2">
+            <p class="mb-2" v-show="!editMode">
               {{ invit.message }}
             </p>
+            <v-textarea
+              v-show="editMode"
+              class="mb-2"
+              outlined
+              hide-details
+              auto-grow
+              v-model="messageEdit"
+              @input="updateItemDebounced('message', messageEdit)"
+            />
           </v-col>
         </v-row>
 
@@ -390,7 +470,7 @@
 
   import { mapState, mapGetters } from 'vuex'
   import { ItemTypesOptions, InvitationStatuses } from '@/utils/utilsInvitations'
-  import { AuthLevelsChoices } from '@/utils/utilsAuths'
+  import { AuthLevelsChoices, GetAuthObject } from '@/utils/utilsAuths'
 
   export default {
     name: 'InvitationItem',
@@ -443,13 +523,27 @@
             icon: 'icon-trash-2', 
             for: ['sent'] 
           },
-        ]
+        ],
+        editMode: false,
+        // invitEdit: {},
+        authEdit: undefined,
+        titleEdit: undefined,
+        messageEdit: undefined
       }
     },
     beforeMount () {
       this.authChoices = [...AuthLevelsChoices]
+      
       // choose default action for invitations
       this.action = this.invitType === 'sent' ? 'edit' : 'accept'
+
+      // populate edit data
+      // this.invitEdit = { ...this.invit }
+      // this.log && console.log("C-InvitationItem > beforeMount > this.invit.auths : ", this.invit.auths)
+      this.authEdit = GetAuthObject( this.invit.auths ).name
+      // this.log && console.log("C-InvitationItem > beforeMount > this.authEdit : ", this.authEdit)
+      this.titleEdit = this.invit.title
+      this.messageEdit =this.invit.message
     },
     mounted() {
       this.socket = this.$nuxtSocket({
@@ -520,6 +614,39 @@
       }
     },
     methods: {
+      updateItemDebounced(field, val) {
+        // cancel pending call
+        clearTimeout(this._timerId)
+
+        // delay new call 500ms
+        this._timerId = setTimeout(() => {
+          this.updateItem(field, val)
+        }, 500)
+      },
+      updateItem(field, val) {
+        this.log && console.log("\nC-InvitationItem > updateItem > field : ", field)
+        this.log && console.log("C-InvitationItem > updateItem > val : ", val)
+        let url = `${this.api.invitations}/${this.invit.id}`
+        if ( field === 'auths' ) {
+          let authObj = this.authChoices.find( auth => auth.name === val )
+          val = authObj.auths
+        }
+        let payload = { ...this.invit }
+        payload[ field ] = val 
+        this.isLoading = true
+        this.$axios.put( url, payload, this.headerUser)
+          .then(resp => {
+            this.log && console.log('C-InvitationItem > updateItem > edit > resp.data : ', resp.data)
+            this.$store.dispatch(`invitations/updateUserItem`, { data: resp.data })
+            let rooms = [ resp.data.invitee ]
+            let callback = { item_type: 'invitation', method: 'get' }
+            this.ioBroadcastAction( resp.data, rooms,  callback )
+            this.isLoading = false
+          })
+          .catch(error => {
+            this.isLoading = false
+          })
+      },
       ioBroadcastAction(ioData, rooms, callback ) {
         this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
         let payload = {
@@ -544,9 +671,9 @@
         this.isLoading = true
         this.log && console.log('C-InvitationItem > handleAction > invite > url :' , url)
         
-        const respActions = [ 'accept', 'refuse' ] 
 
         // shared's invitations => accept/refuse
+        const respActions = [ 'accept', 'refuse' ] 
         if (this.invitType === 'received' && respActions.includes(this.action) ) {
           this.$axios.post( url, payload, this.headerUser)
             .then(resp => {
@@ -567,7 +694,7 @@
           this.$axios.delete( url, this.headerUser)
             .then(resp => {
               this.log && console.log('C-InvitationItem > handleAction > remove > resp.data : ', resp.data)
-              this.$store.dispatch(`invitations/removeSharedItem`, {data: resp.data})
+              this.$store.dispatch(`invitations/removeUserItem`, { data: resp.data })
               let rooms = [ resp.data.invitee ]
               let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
               this.ioBroadcastAction( resp.data, rooms, callback )
@@ -580,17 +707,21 @@
 
         // user's invitations => edit
         if (this.invitType === 'sent' && this.action === 'edit' ) {
-          this.$axios.put( url, payload, this.headerUser)
-            .then(resp => {
-              this.log && console.log('C-InvitationItem > handleAction > edit > resp.data : ', resp.data)
-              let rooms = [ resp.data.invitee ]
-              let callback = { item_type: 'invitation', method: 'get' }
-              this.ioBroadcastAction( resp.data, rooms,  callback )
-              this.isLoading = false
-            })
-            .catch(error => {
-              this.isLoading = false
-            })
+          this.showDetails = true
+          this.isLoading = false
+          this.editMode = !this.editMode
+          // this.$axios.put( url, payload, this.headerUser)
+          //   .then(resp => {
+          //     this.log && console.log('C-InvitationItem > handleAction > edit > resp.data : ', resp.data)
+          //     this.$store.dispatch(`invitations/updateUserItem`, { data: resp.data })
+          //     let rooms = [ resp.data.invitee ]
+          //     let callback = { item_type: 'invitation', method: 'get' }
+          //     this.ioBroadcastAction( resp.data, rooms,  callback )
+          //     this.isLoading = false
+          //   })
+          //   .catch(error => {
+          //     this.isLoading = false
+          //   })
         }
 
         // user's invitations => comment

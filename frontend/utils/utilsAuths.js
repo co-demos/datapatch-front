@@ -265,3 +265,18 @@ export const AuthLevelsChoices = [
   ...AuthModelsWriteBasics,
   ...AuthsModelsManageBasics,
 ]
+
+export const GetAuthObject = ( authsObj ) => {
+  // console.log("\nU-utilsAuths > GetAuthObject > authsObj : ", authsObj)
+  let authResult = AuthLevelsChoices.find( auth => {
+    let readBool = auth.auths.read === authsObj.read
+    let commentBool = auth.auths.comment === authsObj.comment
+    let patchBool = auth.auths.patch === authsObj.patch
+    let writeBool = auth.auths.write === authsObj.write
+    let manageBool = auth.auths.manage === authsObj.manage
+    let bools = [ readBool, commentBool, patchBool, writeBool, manageBool ]
+    return bools.every( Boolean )
+  })
+  // console.log("U-utilsAuths > GetAuthObject > authResult : ", authResult)
+  return authResult
+}

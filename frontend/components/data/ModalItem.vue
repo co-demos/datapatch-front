@@ -12,6 +12,7 @@
     v-model="dialog"
     overflowed
     max-width="1000"
+    class="ModalItem"
     >
     <!-- MODAL TITLE -->
     <v-card class="pb-8">

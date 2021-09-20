@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="SearchItemType">
 
     <!-- <code>hidden: {{ hidden }}</code><br> -->
     <!-- <code>model: {{ model }}</code> -->

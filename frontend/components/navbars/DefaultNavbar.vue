@@ -1,6 +1,6 @@
 <template>
 
-  <v-container>
+  <v-container class="DefaultNavbar">
 
     <v-navigation-drawer
       v-model="drawer"

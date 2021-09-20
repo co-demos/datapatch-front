@@ -57,7 +57,7 @@ svg {
   
   <a
     text
-    class="text-none"
+    class="LogoAnimated text-none"
     >
     <div 
       class="logo-container pa-5"

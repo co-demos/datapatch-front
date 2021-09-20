@@ -4,7 +4,7 @@
   }
 </style>
 <template>
-  <v-col cols="12" class="text-center mb-10 pb-0">
+  <v-col cols="12" class="LandingTitle text-center mb-10 pb-0">
     <v-row class="ma-0">
       <v-btn
         icon

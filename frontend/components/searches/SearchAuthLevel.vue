@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="SearchAuthLevel">
 
     <!-- <code>hidden: {{ hidden }}</code><br> -->
     <!-- <code>model: {{ model }}</code> -->

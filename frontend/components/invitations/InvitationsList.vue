@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="InvitationsList">
     <v-row
       class="justify-center my-5"
       >

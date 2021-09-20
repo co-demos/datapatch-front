@@ -2,7 +2,7 @@
 
   <div>
       
-    <v-row class="align-top justify-left my-12">
+    <v-row class="LandingUseCases align-top justify-left my-12">
 
       <LandingTitle
         :title="'usecases.title'"

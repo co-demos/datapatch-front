@@ -7,7 +7,7 @@
 <template>
 
   <v-row 
-    class="align-center justify-left mt-2 mb-12 pb-12"
+    class="LandingHead align-center justify-left mt-2 mb-12 pb-12"
     style="height: 100%;"
     >
 

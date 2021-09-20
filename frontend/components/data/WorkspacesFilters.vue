@@ -1,7 +1,7 @@
 <template>
 
   <v-row
-    class="InvitationsFilter px-5 align-center justify-center"
+    class="px-5 align-center justify-center"
     >
 
     <v-col 
@@ -183,7 +183,7 @@
   import { ItemTypesOptions, InvitationStatuses } from '@/utils/utilsInvitations'
 
   export default {
-    name: 'InvitationsFilters',
+    name: 'WorkspacesFilters',
     props: [
       'hidden',
       'invitType'
@@ -230,7 +230,7 @@
       sortsList() {
         let sorts = [
           { name: 'created_date', label: 'sorts.byDate' },
-          { name: 'invitation_status', label: 'sorts.byStatus' },
+          // { name: 'invitation_status', label: 'sorts.byStatus' },
           { name: 'invitee', label: 'sorts.byUser' },
           { name: 'invitation_to_item_type', label: 'sorts.byItemType' },
         ]
@@ -249,8 +249,8 @@
     },
     methods: {
       handleInput(val) {
-        this.log && console.log("C-InvitationsFilters > handleInput > val : ", val)
-        this.log && console.log("C-InvitationsFilters > handleInput > this.filters : ", this.filters)
+        this.log && console.log("C-WorkspacesFilters > handleInput > val : ", val)
+        this.log && console.log("C-WorkspacesFilters > handleInput > this.filters : ", this.filters)
         this.$emit('blur', this.filters)
       }
     }

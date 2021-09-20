@@ -14,7 +14,7 @@
 </style>
 
 <template>
-  <div>
+  <div class="GroupItem">
 
     <v-row
       v-if="grp"

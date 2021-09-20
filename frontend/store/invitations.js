@@ -100,8 +100,8 @@ export const actions = {
   updateUserItem ({ commit }, {data}) {
     commit('updateItem', {space: 'userInvitations', item: data})
   },
-  removeUserItem ({ commit }, invitation) {
-    commit('removeItem', {space: 'userInvitations', item: invitation})
+  removeUserItem ({ commit }, data) {
+    commit('removeItem', {space: 'userInvitations', item: datta})
   },
 
   populateSharedItems ({ commit }, invitations) {
@@ -115,7 +115,7 @@ export const actions = {
     console.log('S-invitations > populateSharedItems > data : ', data)
     commit('updateItem', {space: 'sharedInvitations', item: data})
   },
-  removeSharedItem ({ commit }, invitation) {
-    commit('removeItem', {space: 'sharedInvitations', item: invitation})
+  removeSharedItem ({ commit }, data) {
+    commit('removeItem', {space: 'sharedInvitations', item: data})
   },
 }

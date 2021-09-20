@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mt-12">
+  <v-container class="SpaceTabs mt-12">
     <v-row class="justify-left align-center px-12">
       <v-col cols="11" class="offset-1 px-12">
 

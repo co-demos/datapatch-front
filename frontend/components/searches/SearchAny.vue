@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <v-form ref="form">
+  <v-form ref="form" class="SearchAny">
 
     <v-row class="justify-center align-center">
       

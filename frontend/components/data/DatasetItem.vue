@@ -14,7 +14,7 @@
 </style>
 
 <template>
-  <div>
+  <div class="DatasetItem">
 
     <v-row
       v-if="ds"

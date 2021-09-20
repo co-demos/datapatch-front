@@ -16,7 +16,7 @@
     outlined
     light
     elevation="0"
-    :class="`mb-2 list-item ${isLoading ? 'grey lighten-1' : ''}`"
+    :class="`SearchListItem mb-2 list-item ${isLoading ? 'grey lighten-1' : ''}`"
     >
     <v-container fluid class="pa-0">
       <v-row class="child-flex ma-0 pa-1">

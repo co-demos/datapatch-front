@@ -1,6 +1,6 @@
 <template>
 
-  <v-container fluid pb-0>
+  <v-container fluid pb-0 class="ModalFields">
     <!-- <pre>{{ itemModel }}</pre> -->
     <v-row
       v-for="model in itemModel"
