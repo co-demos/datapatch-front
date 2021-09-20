@@ -420,7 +420,8 @@ export default {
     sentTo: 'Sent to',
     sentDate: 'Sent date',
     sentTime: 'Time of send',
-    details: 'Invitations details',
+    details: 'Invitation details',
+    detailsClose: 'Close invitation details panel',
   },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',

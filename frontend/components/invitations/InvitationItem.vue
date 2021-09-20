@@ -14,6 +14,17 @@
     border-style: dashed;
   }
 
+  .rounded-left{
+    border-top-left-radius: 28px;
+    border-bottom-left-radius: 28px;
+  }
+
+  .rounded-right{
+    border-bottom-right-radius: 28px;
+    border-top-right-radius: 28px;
+
+  }
+
 </style>
 
 <template>
@@ -22,7 +33,7 @@
     elevation="0"
     outlined
     flat
-    :class="`InvitationItem invit mb-2 py-3 ${hover ? 'add-border' : ''}`"
+    :class="`InvitationItem invit py-3 ${hover ? 'add-border' : ''} mb-2`"
     :color="`${hover ? 'white' : 'grey lighten-4'}`"
     @mouseover="hover = true"
     @mouseleave="hover = false"
@@ -36,7 +47,8 @@
         @click="showDetails = !showDetails"
         >
         <p class="text-center mb-1">
-          <code>{{ invit.id }}</code>
+          <!-- DEBUGGING -->
+          <!-- <code>{{ invit.id }}</code> -->
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
@@ -184,20 +196,21 @@
           dark
           dense
           block
+          tile
           elevation="0"
-          :class="`${btnIsDisabled ? 'disabledBtn' : '' }`"
+          :class="`${btnIsDisabled ? 'disabledBtn rounded-right' : '' } rounded-left`"
           :color="btnIsDisabled ? 'grey' : btnActionColor"
           :loading="isLoading"
           @click="handleAction()"
           >
           <v-icon
             small
-            :color="`${ btnIsDisabled ? 'grey lighten-1' : 'white'}`"
+            :color="`${ btnIsDisabled ? 'grey lighten-2' : 'white'}`"
             class="pr-2"
             >
             {{ btnActionIcon }}
           </v-icon>
-          <span :class="`${ btnIsDisabled ? 'grey--text text--lighten-1' : ''}`">
+          <span :class="`${ btnIsDisabled ? 'grey--text text--lighten-2' : ''}`">
             {{ $t(btnActionLabel) }}
           </span>
         </v-btn>
@@ -208,16 +221,16 @@
         <v-menu
           open-on-hover
           offset-y
-          :disabled="btnIsDisabled"
+          :v-show="!btnIsDisabled"
           >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               dark
-              icon
               dense
-              color="black"
-              class="px-0"
+              color="grey lighten-2"
+              class="px-0 rounded-right"
               :disabled="btnIsDisabled"
+              elevation="0"
               v-bind="attrs"
               v-on="on"
               >
@@ -253,10 +266,42 @@
       <div v-show="showDetails" class="pt-3 px-10">
 
         <v-divider class="border-dash"/>
+        <v-row  class="ma-0 mt-3 align-center">
+          <v-col cols="12" class="pa-0 text-right">
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  class="mr-n6"
+                  @click="showDetails = false"
+                  v-bind="attrs"
+                  v-on="on"
+                  >
+                  <v-icon small>
+                    icon-clear
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>
+                {{ $t('invitations.detailsClose') }}
+              </span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
 
         <!-- auth details -->
-        <v-row  class="ma-0 mt-3 align-center justify-center pb-3">
+        <v-row  class="ma-0 mt-n5 align-center justify-center pb-3">
           <v-col cols="3" class="text-center align-center grey--text">
+
+            <v-icon v-show="editMode"
+              small 
+              class="mr-2"
+              color="grey"
+              >
+              icon-edit
+            </v-icon>
+            
             {{ $t('auth.authLevels') }} :
           </v-col>
 
@@ -333,9 +378,16 @@
 
         <!-- invit title -->
         <v-divider class="border-dash"/>
-        <v-row  class="ma-0 mt-3 align-top">
+        <v-row  class="ma-0 mt-3 align-center">
           <v-col cols="3" class="grey--text">
             <p class="text-center mb-2">
+              <v-icon v-show="editMode"
+                small 
+                class="mr-2"
+                color="grey"
+                >
+                icon-edit
+              </v-icon>
               {{ $t('invitations.invitTitle') }} :
             </p>
           </v-col>
@@ -362,6 +414,13 @@
         <v-row  class="ma-0 mt-3 align-top">
           <v-col cols="3" class="grey--text">
             <p class="text-center mb-2">
+              <v-icon v-show="editMode"
+                small 
+                class="mr-2"
+                color="grey"
+                >
+                icon-edit
+              </v-icon>
               {{ $t('dataPackage.message') }} :
             </p>
           </v-col>

@@ -422,7 +422,8 @@ export default {
     sentTo: 'Envoyée à',
     sentDate: 'Envoyée le',
     sentTime: "Heure de l'envoi",
-    details: "Détails de l'invitation"
+    details: "Détails de l'invitation",
+    detailsClose: "Fermer le panneau des détails de l'invitation",
   },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
