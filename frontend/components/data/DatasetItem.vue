@@ -137,7 +137,7 @@
                 </v-col>
 
                 <!-- DATASET TITLE -->
-                <v-col cols="9" class="align-center pl-0 py-1">
+                <v-col cols="9" class="align-center pl-1 py-1">
                   <p
                     :class="`text-body-2 ${hover ? 'font-weight-bold black' : 'grey-darken-1' }--text pa-0 ma-0`"
                     >

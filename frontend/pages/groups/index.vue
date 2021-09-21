@@ -53,7 +53,7 @@
       >
 
       <!-- DEBUGGING -->
-      <v-col cols="12" class="mb-4" v-if="true">
+      <v-col cols="12" class="mb-4" v-if="false">
         filters : <code>{{ filters }}</code>
       </v-col>
 
@@ -67,97 +67,139 @@
         />
       </v-col>
 
-      <!-- MY GROUPS -->
+      <!-- GROUPS / DRAGGABLE -->
       <v-col 
         cols="8"
         class="mt-6 pa-0 ml-5"
         >
         
-        <!-- GROUPS / DRAGGABLE -->
-        <draggable
-          v-model="myGroups"
-          v-bind="dragOptions"
-          draggable=".group"
-          group="groups"
-          class="row wrap align-center justify-center"
-          @start="drag=true"
-          @end="drag=false; updateGroupPositions()"
-          >
-          <v-col
-            v-for="grp in myGroups"
-            :key="`grp-${grp.id}`"
-            class="pt-0 pl-0 pr-auto pb-6 group"
-            cols="6"
-            xs="6"
-            sm="4"
-            md="4"
-            lg="3"
-            xl="3"
+        <!-- MY GROUPS -->
+        <v-expand-transition>
+          <div v-show="filters.userItems">
+            <draggable
+              v-model="myGroups"
+              v-bind="dragOptions"
+              draggable=".group"
+              group="groups"
+              class="row wrap align-center justify-center"
+              @start="drag=true"
+              @end="drag=false; updateGroupPositions()"
+              >
+              <v-col
+                v-for="grp in myGroups"
+                :key="`grp-${grp.id}`"
+                class="pt-0 pl-0 pr-auto pb-6 group"
+                cols="6"
+                xs="6"
+                sm="4"
+                md="4"
+                lg="3"
+                xl="3"
+                >
+                <GroupItem
+                  :groupId="grp.id"
+                  :group="grp"
+                  :apiUrl="apiUrl"
+                  :action="'update'"
+                  :dragging="drag"
+                />
+                <!-- <div
+                  v-for="grp in myGroups"
+                  :key="grp.id"
+                  class="group mb-3"
+                >
+                <code>{{ grp }}</code>
+                </div> -->
+              </v-col>
+            </draggable>
+          </div>
+        </v-expand-transition>
+
+        <!-- SHARED GROUPS -->
+        <v-expand-transition>
+          <div v-show="filters.sharedItems">
+            <draggable
+              v-model="openGroups"
+              v-bind="dragOptions"
+              draggable=".group"
+              group="groups"
+              class="row wrap align-center justify-center"
+              @start="drag=true"
+              @end="drag=false; updateGroupPositions()"
+              >
+              <v-col
+                v-for="grp in openGroups"
+                :key="`grp-${grp.id}`"
+                class="pt-0 pl-0 pr-auto pb-6 group"
+                cols="6"
+                xs="6"
+                sm="4"
+                md="4"
+                lg="3"
+                xl="3"
+                >
+                <GroupItem
+                  :groupId="grp.id"
+                  :group="grp"
+                  :apiUrl="apiUrl"
+                  :action="'update'"
+                  :dragging="drag"
+                />
+                <!-- <div
+                  v-for="grp in openGroups"
+                  :key="grp.id"
+                  class="group mb-3"
+                >
+                <code>{{ grp }}</code>
+                </div> -->
+              </v-col>
+            </draggable>
+          </div>
+        </v-expand-transition>
+
+        <!-- ADD GROUP -->
+        <v-row class="justify-center mt-6">
+          <v-card
+            class="mb-5 pb-5"
+            flat
             >
-            <GroupItem
-              :groupId="grp.id"
-              :group="grp"
+
+            <v-card-title v-if="!myGroups.length" class="justify-center">
+              {{ $t('groups.defaultHelp') }}
+            </v-card-title>
+
+            <v-btn 
+              text
+              rounded
+              large
+              class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
+              @click="dialog += 1"
+              >
+              <span class="grey--text">
+                <v-icon class="pb-1 mr-2">
+                  icon-plus-circle
+                </v-icon>
+                {{ $t('groups.addGroup') }}
+              </span>
+            </v-btn>
+
+            <!-- DIALOG FOR NEW GROUP INFOS -->
+            <ModalItem
+              :item="newGroup"
+              :noAvatar="false"
+              :itemModel="itemModelNew"
+              :parentDialog="dialog"
+              :itemType="itemType"
+              :action="'create'"
               :apiUrl="apiUrl"
-              :action="'update'"
-              :dragging="drag"
+              @createItem="createGroup"
+              @resetEmptyItem="resetEmptyGroup()"
+              :noLink="true"
             />
-            <!-- <div
-              v-for="grp in myGroups"
-              :key="grp.id"
-              class="group mb-3"
-            >
-            <code>{{ grp }}</code>
-            </div> -->
-          </v-col>
-        </draggable>
 
-      </v-col>
+          </v-card>
+        </v-row>
 
-      <!-- ADD GROUP -->
-      <v-col 
-        cols="11"
-        class="offset-1 text-center"
-        >
-
-        <v-card
-          class="mb-5 pb-5"
-          flat
-          >
-
-          <v-card-title v-if="!myGroups.length" class="justify-center">
-            {{ $t('groups.defaultHelp') }}
-          </v-card-title>
-
-          <v-btn 
-            text
-            rounded
-            large
-            class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
-            @click="dialog += 1"
-            >
-            <span class="grey--text">
-              <v-icon class="pb-1 mr-2">
-                icon-plus-circle
-              </v-icon>
-              {{ $t('groups.addGroup') }}
-            </span>
-          </v-btn>
-
-          <!-- DIALOG FOR NEW GROUP INFOS -->
-          <ModalItem
-            :item="newGroup"
-            :noAvatar="false"
-            :itemModel="itemModelNew"
-            :parentDialog="dialog"
-            :itemType="itemType"
-            :action="'create'"
-            :apiUrl="apiUrl"
-            @createItem="createGroup"
-            @resetEmptyItem="resetEmptyGroup()"
-            :noLink="true"
-          />
-
-        </v-card>
       </v-col>
 
       <!-- SHARED GROUPS -->
@@ -213,6 +255,7 @@
         newGroup: undefined,
         // emptyGroup: undefined,
         myGroups: [],
+        openGroups: [],
         leftMenu: [
           {
             text: 'groups.myGroups',
@@ -278,6 +321,7 @@
         updatePath: 'updateCrumbsPath',
       }),
       orderGroups() {
+        this.openGroups = [...this.sharedGroups]
         // this.log && console.log("\nP-Groups > orderGroups > this.userGroups : ", this.userGroups)
         // this.log && console.log("P-Groups > orderGroups > this.uxGroups : ", this.uxGroups)
         if (this.uxGroups && this.uxGroups.groups_order) {

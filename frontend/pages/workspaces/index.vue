@@ -55,7 +55,7 @@
       >
 
       <!-- DEBUGGING -->
-      <v-col cols="12" class="mb-4" v-if="true">
+      <v-col cols="12" class="mb-4" v-if="false">
         filters : <code>{{ filters }}</code>
       </v-col>
 
@@ -74,71 +74,100 @@
         class="pa-0"
         >
 
-        <!-- workspace / draggable datasets -->
-        <draggable
-          v-model="myWorkspaces"
-          v-bind="dragOptions"
-          draggable=".workspace"
-          group="workspaces"
-          @start="drag=true"
-          @end="drag=false; updateWorkspacePositions()"
-          >
-          <!-- <transition-group type="transition" :name="!drag ? 'flip-list' : null"> -->
-          <WorkspaceItem
-            v-for="ws in myWorkspaces"
-            :key="ws.id"
-            :workspace="ws"
-            :apiUrl="apiUrl"
-            :dragging="drag"
-          />
-          <!-- </transition-group> -->
-        </draggable>
-      </v-col>
+        <!-- MY WORKSPACES -->
+        <v-expand-transition>
+          <div v-show="filters.userItems">
 
-      <!-- ADD WORKSPACE -->
-      <v-col 
-        cols="12"
-        >
-        <v-card
-          class="mb-5 pb-5 pl-2 text-center"
-          flat
-          >
+            <!-- workspace / draggable datasets -->
+            <draggable
+              v-model="myWorkspaces"
+              v-bind="dragOptions"
+              draggable=".workspace"
+              group="workspaces"
+              @start="drag=true"
+              @end="drag=false; updateWorkspacePositions()"
+              >
+              <!-- <transition-group type="transition" :name="!drag ? 'flip-list' : null"> -->
+              <WorkspaceItem
+                v-for="ws in myWorkspaces"
+                :key="ws.id"
+                :workspace="ws"
+                :apiUrl="apiUrl"
+                :dragging="drag"
+              />
+              <!-- </transition-group> -->
+            </draggable>
+          </div>
+        </v-expand-transition>
+        
+        <!-- SHARED WORKSPACES -->
+        <v-expand-transition>
+          <div v-show="filters.sharedItems">
 
-          <v-card-title v-if="! myWorkspaces.length" class="justify-center">
-            {{ $t('workspaces.defaultHelp') }}
-          </v-card-title>
+            <!-- workspace / draggable datasets -->
+            <draggable
+              v-model="openWorkspaces"
+              v-bind="dragOptions"
+              draggable=".workspace"
+              group="workspaces"
+              @start="drag=true"
+              @end="drag=false; updateWorkspacePositions()"
+              >
+              <!-- <transition-group type="transition" :name="!drag ? 'flip-list' : null"> -->
+              <WorkspaceItem
+                v-for="ws in openWorkspaces"
+                :key="ws.id"
+                :workspace="ws"
+                :apiUrl="apiUrl"
+                :dragging="drag"
+              />
+              <!-- </transition-group> -->
+            </draggable>
+          </div>
+        </v-expand-transition>
 
-          <v-btn 
-            text
-            rounded
-            large
-            class="text-none pl-2 pr-4 text-h6 font-weight-bold"
-            @click="dialog += 1"
+        <!-- ADD WORKSPACE -->
+        <v-row class="justify-center mt-6">
+          <v-card
+            class="mb-5 pb-5 pl-2 text-center"
+            flat
             >
-            <span class="grey--text">
-              <v-icon class="pb-1 mr-2">
-                icon-plus-circle
-              </v-icon>
-              {{ $t('workspaces.addWorkspace') }}
-            </span>
-          </v-btn>
 
-          <!-- DIALOG FOR NEW WORKSPACE INFOS -->
-          <ModalItem
-            :item="newWorkspace"
-            :noAvatar="true"
-            :itemModel="itemModel"
-            :parentDialog="dialog"
-            :itemType="itemType"
-            :action="'create'"
-            :apiUrl="apiUrl"
-            @createItem="createWorkspace"
-            @resetEmptyItem="resetEmptyWorkspace()"
-            :noLink="true"
-          />
-          <!-- :emptyItem="emptyWorkspace" -->
+            <v-card-title v-if="! myWorkspaces.length" class="justify-center">
+              {{ $t('workspaces.defaultHelp') }}
+            </v-card-title>
 
-        </v-card>
+            <v-btn 
+              text
+              rounded
+              large
+              class="text-none pl-2 pr-4 text-h6 font-weight-bold"
+              @click="dialog += 1"
+              >
+              <span class="grey--text">
+                <v-icon class="pb-1 mr-2">
+                  icon-plus-circle
+                </v-icon>
+                {{ $t('workspaces.addWorkspace') }}
+              </span>
+            </v-btn>
+
+            <!-- DIALOG FOR NEW WORKSPACE INFOS -->
+            <ModalItem
+              :item="newWorkspace"
+              :noAvatar="true"
+              :itemModel="itemModel"
+              :parentDialog="dialog"
+              :itemType="itemType"
+              :action="'create'"
+              :apiUrl="apiUrl"
+              @createItem="createWorkspace"
+              @resetEmptyItem="resetEmptyWorkspace()"
+              :noLink="true"
+            />
+            <!-- :emptyItem="emptyWorkspace" -->
+          </v-card>
+        </v-row>
 
       </v-col>
     </v-row>
@@ -185,6 +214,7 @@
         newWorkspace: undefined,
         emptyWorkspace: undefined,
         myWorkspaces: [],
+        openWorkspaces: [],
         filters: {
           userItems: true,
           sharedItems: true,
@@ -239,6 +269,7 @@
         updatePath: 'updateCrumbsPath',
       }),
       orderWorkspaces() {
+        this.openWorkspaces = [...this.sharedWorkspaces]
         if (this.uxWorkspaces && this.uxWorkspaces.workspaces_order) {
           const workspaces_order = this.uxWorkspaces.workspaces_order
           this.myWorkspaces = mapOrder( [...this.userWorkspaces], workspaces_order, 'id')
