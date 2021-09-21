@@ -49,6 +49,7 @@ export const getters = {
     return state.sharedGroups
   },
   getSharedItemById: (state) => (id) => {
+    console.log('S-groups > getSharedItemById > state.sharedGroups : ', state.sharedGroups)
     return state.sharedGroups.find( group => group.id === id)
   },
 }

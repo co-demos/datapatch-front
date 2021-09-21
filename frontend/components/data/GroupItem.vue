@@ -15,7 +15,7 @@
 
 <template>
   <div class="GroupItem">
-
+   <!-- {{ grp }} - {{ groupId }} -->
     <v-row
       v-if="grp"
       v-show="!currentLoadingState"
@@ -66,7 +66,7 @@
             @mouseleave="hover = false"
             >
             <!-- :color="`${hover ? 'white' : 'grey lighten-4'}`" -->
-            <v-card-actions class="pa-0">
+            <v-card-actions class="pa-0 pb-3">
 
               <v-row
                 class="align-center wrap justify-left flex-grow-1"
@@ -111,12 +111,14 @@
 
                 <!-- GROUP SUBTITLE -->
                 <v-col
+                  v-if="false"
                   cols="12" 
                   :class="`align-center text-center px-3 pt-2 pb-4 ${hover ? 'black' : 'white' }--text`"
                   >
                   <v-divider 
                     :class="`mb-3 ${hover ? grp.color : 'white'}`"
                   />
+                  <!-- NEED DEBUG -->
                   <p class="caption pa-0 ma-0 text-lowercase font-italic">
                     {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
                   </p>
@@ -348,17 +350,23 @@
     },
     mounted () {
       // this.log && console.log(`\nC-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
-      // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.group :`, this.group)
+      this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.group :`, this.group)
+      this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
+      this.apiUrl =  this.api[this.itemType]
 
       if (this.action === 'update') {
         // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
         setTimeout(() => {
-          this.grp = this.getUserGroupById(this.groupId)
-          // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.grp :`, this.grp)
+          if ( !this.isShared ) {
+            this.grp = this.getUserGroupById(this.groupId)
+          } else {
+            this.grp = this.getSharedGroupById(this.groupId)
+          }
+          // this.grp = this.isShared ? this.getSharedGroupById(this.groupId) : this.getUserGroupById(this.groupId)
+          this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.grp :`, this.grp)
           this.isLoading = false
         }, 200)
       }
-      this.apiUrl =  this.api[this.itemType]
     },
     computed: {
       ...mapState({
@@ -372,6 +380,7 @@
       ...mapGetters({
         userId: 'user/userId',
         getUserGroupById: 'groups/getUserItemById',
+        getSharedGroupById: 'groups/getSharedItemById',
         // getLoading: 'groups/getLoadingById',
         headerUser: 'user/headerUser'
       }),

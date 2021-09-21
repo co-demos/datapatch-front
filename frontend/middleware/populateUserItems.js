@@ -104,7 +104,7 @@ export default function ({
       const initSharedRequest = $axios
         .get(`${api.users}/me/shared`, config.headers)
         .then(resp => {
-          // log && console.log('MW-populateUserItems > me/shared > resp.data : ', resp.data)
+          log && console.log('MW-populateUserItems > me/shared > resp.data : ', resp.data)
           // 1bis. set user data if necessary
           const sharedData = resp.data
           store.dispatch('groups/populateSharedItems', sharedData.shared_groups)

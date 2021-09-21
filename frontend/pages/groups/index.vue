@@ -116,6 +116,7 @@
           </div>
         </v-expand-transition>
 
+
         <!-- SHARED GROUPS -->
         <v-expand-transition>
           <div v-show="filters.sharedItems">
@@ -130,7 +131,7 @@
               >
               <v-col
                 v-for="grp in openGroups"
-                :key="`grp-${grp.id}`"
+                :key="grp.id"
                 class="pt-0 pl-0 pr-auto pb-6 group"
                 cols="6"
                 xs="6"
