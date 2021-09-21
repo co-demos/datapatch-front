@@ -102,6 +102,7 @@
                   :apiUrl="apiUrl"
                   :action="'update'"
                   :dragging="drag"
+                  :isShared="false"
                 />
                 <!-- <div
                   v-for="grp in myGroups"
@@ -144,6 +145,7 @@
                   :apiUrl="apiUrl"
                   :action="'update'"
                   :dragging="drag"
+                  :isShared="true"
                 />
                 <!-- <div
                   v-for="grp in openGroups"

@@ -325,6 +325,7 @@ export default {
   share: {
     invitePrefs: 'Invitate group or people to contribute',
     sharePrefs: 'Sharing preferences',
+    shared: 'shared',
   },
   dataPackage: {
     itemTypeSingular: "Element type", 

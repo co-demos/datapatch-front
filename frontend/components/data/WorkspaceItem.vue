@@ -32,6 +32,7 @@
       >
       
       <v-toolbar-title class="text-h6 px-0 font-weight-black">
+
         <v-icon 
           v-if="ws.icon"
           :color="ws.color || 'black'"
@@ -39,16 +40,33 @@
           >
           {{ ws.icon}}
         </v-icon>
+
         <v-btn
           text
           class="text-none"
           @click.stop="dialog += 1"
           >
+
+          <v-chip
+            v-if="isShared"
+            class="mr-3"
+            small
+            color="success"
+            outlined
+            >
+            <v-icon x-small class="mr-2 pb-1">
+              icon-users
+            </v-icon>
+            {{ $t('share.shared') }}
+          </v-chip>
+
+          <!-- ws.id: {{ ws.id }} -  -->
           <span :class="`${ws.color || 'black'}--text`">
-            <!-- ws.id: {{ ws.id }} -  -->
             {{ ws.title }}
           </span>
+
         </v-btn>
+
       </v-toolbar-title>
 
       <v-menu
@@ -98,7 +116,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-divider/>
+          <v-divider></v-divider>
 
           <v-list-item
             @click.stop="dialogShare += 1; dialog += 1"
@@ -116,7 +134,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-divider/>
+          <v-divider></v-divider>
 
           <v-list-item
             @click.stop="dialogDelete += 1"
@@ -284,7 +302,8 @@
     props: [
       'workspace',
       'apiUrl',
-      'dragging'
+      'dragging',
+      'isShared'
     ],
     data () {
       return {

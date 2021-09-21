@@ -94,6 +94,7 @@
                 :workspace="ws"
                 :apiUrl="apiUrl"
                 :dragging="drag"
+                :isShared="false"
               />
               <!-- </transition-group> -->
             </draggable>
@@ -120,6 +121,7 @@
                 :workspace="ws"
                 :apiUrl="apiUrl"
                 :dragging="drag"
+                :isShared="true"
               />
               <!-- </transition-group> -->
             </draggable>

@@ -77,12 +77,37 @@
                   cols="12"
                   :class="`px-2 pt-3 pb-0 ma-0 ${hover ? grp.color : 'white' }--text`"
                   >
+
+
                   <p
                     :class="`text-center text-body-2 font-weight-bold mb-0`"
                     >
-                    {{ grp.title }} 
+
+                    {{ grp.title }}
+
+                    <span
+                      v-if="isShared"
+                      >
+                      <v-chip
+                        class="my-2"
+                        small
+                        :color="hover ? grp.color : 'white'"
+                        :outlined="!hover"
+                        >
+                        <v-icon x-small class="mr-2 pb-1 white--text">
+                          icon-users
+                        </v-icon>
+                        <span class="white--text">
+                          {{ $t('share.shared') }}
+                        </span>
+                      </v-chip>
+                      <br>
+                    </span>
+
                   </p>
                 </v-col>
+
+                <!-- GROUP SHARED -->
 
                 <!-- GROUP SUBTITLE -->
                 <v-col
@@ -280,7 +305,8 @@
       'group',
       'fromWorkspace',
       'action',
-      'isAlone'
+      'isAlone',
+      'isShared',
     ],
     data () {
       return {

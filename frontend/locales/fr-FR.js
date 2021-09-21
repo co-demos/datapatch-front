@@ -327,6 +327,7 @@ export default {
   share: {
     invitePrefs: 'Inviter un groupe ou des personnes à contribuer',
     sharePrefs: 'Préférences de partage',
+    shared: 'partagé',
   },
   dataPackage: {
     itemTypeSingular: "Type d'élément", 
