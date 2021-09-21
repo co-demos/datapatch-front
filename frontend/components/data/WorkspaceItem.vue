@@ -39,10 +39,16 @@
           >
           {{ ws.icon}}
         </v-icon>
-        <span :class="`${ws.color || 'black'}--text`">
-          <!-- ws.id: {{ ws.id }} -  -->
-          {{ ws.title }}
-        </span>
+        <v-btn
+          text
+          class="text-none"
+          @click.stop="dialog += 1"
+          >
+          <span :class="`${ws.color || 'black'}--text`">
+            <!-- ws.id: {{ ws.id }} -  -->
+            {{ ws.title }}
+          </span>
+        </v-btn>
       </v-toolbar-title>
 
       <v-menu

@@ -18,6 +18,20 @@
         />
       </v-col>
 
+      <v-col 
+        cols="9"
+        class="offset-2 align-top text-center pa-0 mt-6 mb-10"
+        >
+        <WorkspacesFilters
+          v-model="filters"
+        />
+      </v-col>
+      <!-- DEBUGGING -->
+      <v-col cols="9" class="offset-2 mb-4" v-if="false">
+        filters : <code>{{ filters }}</code>
+      </v-col>
+      
+      <!-- DEBUGGING -->
       <!-- <v-col cols="2" class=""> -->
         <!-- uxWorkspaces : <code><pre>{{ uxWorkspaces }}</pre></code><hr> -->
         <!-- myWorkspaces : <code><pre>{{ myWorkspaces }}</pre></code><hr> -->
@@ -141,6 +155,7 @@
     name: 'Workspaces',
     layout: 'layout_listings',
     components: {
+      WorkspacesFilters: () => import(/* webpackChunkName: "WorkspacesFilters" */ '@/components/data/WorkspacesFilters.vue'),
       WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
       DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
     },
@@ -168,6 +183,13 @@
         newWorkspace: undefined,
         emptyWorkspace: undefined,
         myWorkspaces: [],
+        filters: {
+          userItems: true,
+          sharedItems: true,
+          sortType: 'date',
+          sortOrder: 'desc',
+          search: null,
+        },
       }
     },
     beforeMount () {

@@ -432,6 +432,7 @@ export default {
     prefsWorkspace: 'Workspace preferences',
     renameWorkspace: 'Rename the workspace',
     addWorkspace: 'Add a workspace',
+    searchWorkspace: 'Search for a workspace',
     searchDataset: 'Search a dataset',
     addDataset: 'Add a dataset',
     editWorkspace: 'Edit workspace infos',

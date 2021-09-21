@@ -66,7 +66,7 @@
       >
 
       <v-list-item 
-        to="/invitations"
+        to="/invitations?invitType=received"
         router
         exact
         >

@@ -37,7 +37,7 @@
         item-value="name"
         class="pt-0"
         hide-details
-        @change="handleInput"
+        @change="handleInput()"
         >
         <template v-slot:item="{ item }">
           <span>
@@ -76,7 +76,7 @@
         item-value="name" 
         class="pt-0"
         hide-details
-        @change="handleInput"
+        @change="handleInput()"
         >
         <template v-slot:item="{ item }">
           <span>
@@ -104,7 +104,7 @@
       <v-text-field
         v-model="search"
         hide-details
-        @change="handleInput"
+        @input="handleInput()"
         class="pt-0"
         clearable
         single-line
@@ -126,7 +126,7 @@
         item-value="name" 
         class="pt-0"
         hide-details
-        @change="handleInput"
+        @change="handleInput()"
         >
         <template v-slot:item="{ item }">
           {{ $t(item.label) }}
@@ -142,7 +142,7 @@
     <v-col cols="1" class="pa-0 pl-2">
       <v-btn-toggle
         v-model="sortOrder"
-        @change="handleInput"
+        @change="handleInput()"
         class="pt-0"
         mandatory
         dense
@@ -248,9 +248,9 @@
       }
     },
     methods: {
-      handleInput(val) {
-        this.log && console.log("C-InvitationsFilters > handleInput > val : ", val)
-        this.log && console.log("C-InvitationsFilters > handleInput > this.filters : ", this.filters)
+      handleInput() {
+        // this.log && console.log("C-InvitationsFilters > handleInput > val : ", val)
+        // this.log && console.log("C-InvitationsFilters > handleInput > this.filters : ", this.filters)
         this.$emit('blur', this.filters)
       }
     }

@@ -48,7 +48,7 @@
         >
         <p class="text-center mb-1">
           <!-- DEBUGGING -->
-          <!-- <code>{{ invit.id }}</code> -->
+          <code>{{ invit.id }}</code>
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon

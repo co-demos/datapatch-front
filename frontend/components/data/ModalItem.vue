@@ -219,18 +219,21 @@
       </v-expand-transition>
 
       <!-- DEBUGGING -->
-      <v-row class="text-caption" v-if="false">
+      <v-row class="text-caption" v-if="true">
         <v-col cols="12">
           <h5>
             <hr> DEBUG FROM : ModalItem
           </h5>
         </v-col>
         <v-col cols="12">
+          userData : <code>{{ userData }}</code><hr>
+          GetUserAuthOnItem : <code>{{ getUserAuths }}</code><hr>
           itemType : <code>{{ itemType }}</code><br>
           action : <code>{{ action }}</code><br>
           onlyLocalUpdate : <code>{{ onlyLocalUpdate }}</code><hr>
           localItem.title : <code>{{ localItem && localItem.title }}</code><hr>
-          itemModel : <code>{{ itemModel }}</code><hr>
+          localItem.authorized_users : <code>{{ localItem && localItem.authorized_users }}</code><hr>
+          <!-- itemModel : <code>{{ itemModel }}</code><hr> -->
           <!-- <span v-if="itemType === 'fields'">
             localItem.data : <code>{{ localItem.data }}</code><br>
           </span> -->
@@ -285,6 +288,7 @@
 
   import { mapState, mapGetters } from 'vuex'
   import { FindFieldText } from '@/utils/utilsFields'
+  import { GetUserAuthOnItem } from '@/utils/utilsAuths'
 
   export default {
 
@@ -357,6 +361,11 @@
           url = `/dataset/${this.localItem.id}`
         }
         return url
+      },
+      getUserAuths () {
+        if ( this.localItem ) {
+          return GetUserAuthOnItem( this.userData, this.localItem )
+        }
       }
     },
     beforeMount () {

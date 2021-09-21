@@ -434,6 +434,7 @@ export default {
     prefsWorkspace: "Préférences de l'espace de travail",
     renameWorkspace: "Renommer l'espace de travail",
     addWorkspace: 'Créer un espace de travail',
+    searchWorkspace: 'Rechercher un espace de travail',
     searchDataset: 'Rechercher une base de données',
     addDataset: 'Ajouter une base de données',
     editWorkspace: "Editer les informations de l'espace de travail",

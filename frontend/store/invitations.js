@@ -72,10 +72,10 @@ export const mutations = {
     state[space] = [ ...state[space].map(obj => obj.id !== item.id ? obj : {...obj, ...item})]
   },
   removeItem (state, {space, item}) {
-    // console.log('S-invitations > removeItem > space : ', space)
-    // console.log('S-invitations > removeItem > item : ', item)
+    console.log('S-invitations > removeItem > space : ', space)
+    console.log('S-invitations > removeItem > item : ', item)
     let removeIndex = state[space].findIndex(invitation => invitation.id == item.id)
-    // console.log('S-invitations > removeItem > removeIndex : ', removeIndex)
+    console.log('S-invitations > removeItem > removeIndex : ', removeIndex)
     state[space].splice(removeIndex, 1)
     // console.log('S-invitations > removeItem > state[space] : ', state[space])
   },
@@ -87,10 +87,6 @@ export const actions = {
     commit('setIsLoading', bool)
   },
 
-  // populateUserUX ({ commit }, ux_prefs) {
-  //   commit('setItems', {space: 'uxInvitations', items: ux_prefs})
-  // },
-
   populateUserItems ({ commit }, invitations) {
     commit('setItems', {space: 'userInvitations', items: invitations})
   },
@@ -100,8 +96,8 @@ export const actions = {
   updateUserItem ({ commit }, {data}) {
     commit('updateItem', {space: 'userInvitations', item: data})
   },
-  removeUserItem ({ commit }, data) {
-    commit('removeItem', {space: 'userInvitations', item: datta})
+  removeUserItem ({ commit }, {data}) {
+    commit('removeItem', {space: 'userInvitations', item: data})
   },
 
   populateSharedItems ({ commit }, invitations) {
@@ -115,7 +111,7 @@ export const actions = {
     console.log('S-invitations > populateSharedItems > data : ', data)
     commit('updateItem', {space: 'sharedInvitations', item: data})
   },
-  removeSharedItem ({ commit }, data) {
+  removeSharedItem ({ commit }, {data}) {
     commit('removeItem', {space: 'sharedInvitations', item: data})
   },
 }

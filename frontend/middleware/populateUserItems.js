@@ -57,23 +57,24 @@ export default function ({
         .get(`${api.users}/me/`, config.headers)
         .then(resp => {
           // log && console.log('MW-populateUserItems > B > me > resp.data : ', resp.data)
-          // if ( !isUserPopulated ) {
-            // 1bis. set user data if necessary
-            store.dispatch('user/authenticateUser', {access_token: accessTokenCookie, token_type: 'Bearer'})
-            const userData = resp.data
-            store.dispatch('user/populateUser', userData)
-            store.dispatch('groups/populateUserItems', userData.groups)
-            store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
-            store.dispatch('datasets/populateUserItems', userData.my_datasets)
-            store.dispatch('workspaces/populateUserUX', userData.ux_workspaces)
-            i18n.setLocale(userData.locale)
-            return
-          // }
+          // 1bis. set user data if necessary
+          store.dispatch('user/authenticateUser', { access_token: accessTokenCookie, token_type: 'Bearer' })
+          
+          const userData = resp.data
+          store.dispatch('user/populateUser', userData)
+
+          store.dispatch('groups/populateUserItems', userData.groups)
+          store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
+          store.dispatch('datasets/populateUserItems', userData.my_datasets)
+
+          store.dispatch('workspaces/populateUserUX', userData.ux_workspaces)
+          i18n.setLocale(userData.locale)
+          return
 
         })
         .catch(error => {
           // 2. refresh access_token if refresh_token is still valid
-          log && console.log('MW-populateUserItems > C > error > error : ', error)
+          log && console.log('MW-populateUserItems > me > error : ', error)
           // let refreshTokenCookie = $cookies.get('refresh_token')
           // // log && console.log("MW-populateUserItems > C > refreshTokenCookie : ", refreshTokenCookie)
           // let configRefresh = new configHeaders(refreshTokenCookie)
@@ -98,7 +99,25 @@ export default function ({
           return
         })
       promisesArray.push(initUserRequest)
-
+      
+      // get data shared with user
+      const initSharedRequest = $axios
+        .get(`${api.users}/me/shared`, config.headers)
+        .then(resp => {
+          // log && console.log('MW-populateUserItems > me/shared > resp.data : ', resp.data)
+          // 1bis. set user data if necessary
+          const sharedData = resp.data
+          store.dispatch('groups/populateSharedItems', sharedData.shared_groups)
+          store.dispatch('workspaces/populateSharedItems', sharedData.shared_workspaces)
+          store.dispatch('datasets/populateSharedItems', sharedData.shared_datasets)
+          return
+        })
+        .catch(error => {
+          log && console.log('MW-populateUserItems > > me/shared > error > error : ', error)
+          return
+        })
+      promisesArray.push(initSharedRequest)
+    
       // WAIT FOR ALL PROMISES TO RETURN
       // log && console.log('\n')
       return Promise.all(promisesArray)

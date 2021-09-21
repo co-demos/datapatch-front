@@ -280,3 +280,56 @@ export const GetAuthObject = ( authsObj ) => {
   // console.log("U-utilsAuths > GetAuthObject > authResult : ", authResult)
   return authResult
 }
+
+export const CheckAuthLevel = (itemAuth, user, item, inAuthorizedAuths) =>  {
+  
+  let allowedDefault
+
+  // default auths
+
+  switch (itemAuth) {
+    case 'owner-only': 
+      allowedDefault = user.id === item.owner_id
+      break
+
+    case 'owner+groups':
+      let isOwner = user.id === item.owner_id
+      allowedDefault = !!user.id
+      break
+
+    case 'owner+groups+users':
+      allowedDefault = !!user.id
+      break
+
+    case 'public': 
+      allowedDefault = true
+      break
+  }
+
+  // overide defaults if user is in authorized_users
+  if (!allowedDefault) {
+    return inAuthorizedAuths
+  } else {
+    return allowedDefault
+  }
+
+}
+
+export const GetUserAuthOnItem = ( userData, item) => {
+  
+  // console.log("\nU-UteilsAuths > GetUserAuthOnItem > userData : ", userData)
+  // console.log("U-UteilsAuths > GetUserAuthOnItem > item : ", item)
+  let userId = userData.id
+
+  let isInAuthorized = item.authorized_users && item.authorized_users.find( user => user.user_email === userData.email )
+  let inAuthorizedAuths = isInAuthorized && isInAuthorized.auths
+
+  let userAuthsOnItem = {
+    read: CheckAuthLevel(item.read, userData, item, inAuthorizedAuths && inAuthorizedAuths.read ),
+    comment: CheckAuthLevel(item.comment, userData, item, inAuthorizedAuths && inAuthorizedAuths.comment ),
+    patch: CheckAuthLevel(item.patch, userData, item, inAuthorizedAuths && inAuthorizedAuths.patch ),
+    write: CheckAuthLevel(item.write, userData, item, inAuthorizedAuths && inAuthorizedAuths.write ),
+    manage: CheckAuthLevel(item.manage, userData, item, inAuthorizedAuths && inAuthorizedAuths.manage ),
+  }
+  return userAuthsOnItem
+}
