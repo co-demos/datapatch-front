@@ -3,12 +3,12 @@
   <v-container class="mb-12">
 
     <v-row
-      class="justify-left align-top"
+      class="justify-center align-top"
       >
 
       <v-col 
-        cols="10"
-        class="offset-2 align-top text-center pa-0 mt-6 mb-10"
+        cols="8"
+        class="align-top text-center pa-0 mt-6 mb-10"
         >
         <!-- <p class="font-weight-bold grey--text">
           {{ $t('groups.myGroups')}}
@@ -44,11 +44,27 @@
           </v-list-item>
         </v-list>
       </v-col> -->
+    
+    </v-row>
+
+      
+    <v-row
+      class="justify-left align-top"
+      >
+
+      <!-- DEBUGGING -->
+      <v-col cols="12" class="mb-4" v-if="true">
+        filters : <code>{{ filters }}</code>
+      </v-col>
 
       <v-col 
-        cols="3"
+        cols="2"
         class="mt-6 pa-0"
         >
+        <ItemsFilters
+          v-model="filters"
+          :itemsType="itemType"
+        />
       </v-col>
 
       <!-- MY GROUPS -->
@@ -170,6 +186,7 @@
     name: 'Groups',
     layout: 'layout_listings',
     components: {
+      ItemsFilters: () => import(/* webpackChunkName: "ItemsFilters" */ '@/components/data/ItemsFilters.vue'),
       GroupItem: () => import(/* webpackChunkName: "GroupItem" */ '@/components/data/GroupItem.vue'),
     },
     head() {
@@ -207,7 +224,14 @@
             textBis: 'groups.sharedGroups',
             anchor: '#sharedGroups'
           }
-        ]
+        ],
+        filters: {
+          userItems: true,
+          sharedItems: true,
+          sortType: 'date',
+          sortOrder: 'desc',
+          search: null,
+        },
       }
     },
     beforeMount () {

@@ -428,6 +428,7 @@ export default {
     defaultTitle: 'My new workspace',
     defaultDescription: 'My workspace description',
     myWorkspaces: 'My workspaces',
+    sharedWorkspaces: 'Shared workspaces',
     inviteWorkspace: 'Invite people or group',
     prefsWorkspace: 'Workspace preferences',
     renameWorkspace: 'Rename the workspace',

@@ -63,7 +63,7 @@ export default function ({
           const userData = resp.data
           store.dispatch('user/populateUser', userData)
 
-          store.dispatch('groups/populateUserItems', userData.groups)
+          store.dispatch('groups/populateUserItems', userData.my_groups)
           store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
           store.dispatch('datasets/populateUserItems', userData.my_datasets)
 

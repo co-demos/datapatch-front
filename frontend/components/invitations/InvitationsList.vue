@@ -16,7 +16,7 @@
     </v-row>
 
     <!-- DEBUGGING -->
-    <div class="justify-center" v-if="true">
+    <div class="justify-center" v-if="false">
       <span>filters : <code>{{ filters }}</code></span><br>
       <!-- <span>filteredInvits : <code>{{ filteredInvits.length }}</code></span> -->
     </div>

@@ -1,3 +1,7 @@
+<style>
+
+</style>
+
 <template>
   <v-app dark>
 
@@ -7,7 +11,7 @@
 
     <v-main class="mt-0 pt-0">
       <!-- {{ $i18n.locale }} -->
-      <v-container>
+      <v-container class="">
         <nuxt />
       </v-container>
     </v-main>

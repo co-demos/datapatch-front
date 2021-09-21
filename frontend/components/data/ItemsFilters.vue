@@ -1,47 +1,63 @@
 <template>
 
   <v-row
-    class="align-center justify-center"
+    class="ItemsFilters align-center"
     >
 
     <!-- checkboxes -->
     <v-col 
-      cols="4" 
-      class="py-0 text-left grey--text text-caption px-1"
+      cols="12" 
+      class="py-0 ml-n2 text-left grey--text text-caption px-1 mx-0"
       >
       <!-- select user items -->
-      <v-row class="">
+      <!-- <v-row class="flex-grow-1"> -->
         <v-checkbox
           class="my-1 mx-3"
           off-icon="icon-square"
           on-icon="icon-check-square"
-          :label="$t('pages.myWorkspaces')"
           hide-details="auto"
           v-model="userItems"
           dense
           @change="handleInput()"
-        />
-      </v-row>
+          >
+          <template v-slot:label>
+            <span 
+              :class="`caption ${ userItems ? 'primary' : 'grey' }--text`"
+              >
+              {{ $t(userItemText) }}
+            </span>
+          </template>
+        </v-checkbox>
+      <!-- </v-row> -->
+      
+      <br>
 
       <!-- select shared items -->
-      <v-row class="">
+      <!-- <v-row class=""> -->
         <v-checkbox
           class="my-1 mx-3"
           off-icon="icon-square"
           on-icon="icon-check-square"
-          :label="$t('pages.workspacesOpen')"
           hide-details="auto"
           v-model="sharedItems"
           dense
           @change="handleInput()"
-        />
-      </v-row>
+          >
+          <template v-slot:label>
+            <span 
+              :class="`caption ${ sharedItems ? 'primary' : 'grey' }--text`"
+              >
+              {{ $t(sharedItemText) }}
+            </span>
+          </template>
+        </v-checkbox>
+      <!-- </v-row> -->
 
     </v-col>
 
 
     <!-- search -->
-    <v-col 
+    <!-- <v-col 
       cols="4" 
       class="py-0 text-left grey--text text-caption px-1"
       >
@@ -69,7 +85,7 @@
         </v-col>
       </v-row>
 
-    </v-col>
+    </v-col> -->
 
 
     <!-- select order -->
@@ -78,7 +94,7 @@
       class="py-0 text-left grey--text text-caption px-1"
       >
 
-      <v-row>
+      <!-- <v-row>
         {{ $t('sorts.sortResults') }}
       </v-row>
 
@@ -132,7 +148,7 @@
           </v-btn-toggle>
 
         </v-col>
-      </v-row>
+      </v-row> -->
 
     </v-col>
 
@@ -147,9 +163,10 @@
   // import { ItemTypesOptions, InvitationStatuses } from '@/utils/utilsInvitations'
 
   export default {
-    name: 'WorkspacesFilters',
+    name: 'ItemsFilters',
     props: [
       'hidden',
+      'itemsType',
     ],
     model: {
       prop: 'hidden',
@@ -167,6 +184,16 @@
         sortType: 'created_date',
         sortOrder: 'desc',
         search: null,
+        itemsTypeTexts: {
+          workspaces: {
+            userItem: 'workspaces.myWorkspaces',
+            sharedItems: 'workspaces.sharedWorkspaces',
+          },
+          groups: {
+            userItem: 'groups.myGroups',
+            sharedItems: 'groups.sharedGroups',
+          }
+        }
       }
     },
     beforeMount () {
@@ -181,6 +208,15 @@
         userId: 'user/userId',
       }),
 
+      refTexts() {
+        return this.itemsTypeTexts[this.itemsType]
+      },
+      userItemText() {
+        return this.refTexts.userItem
+      },
+      sharedItemText() {
+        return this.refTexts.sharedItems
+      },
       // statusList() {
       //   let statuses = [
       //     { name: 'all', label: 'invitations.all', icon: 'icon-minus-circle' },
@@ -218,8 +254,8 @@
     },
     methods: {
       handleInput() {
-        // this.log && console.log("C-WorkspacesFilters > handleInput > val : ", val)
-        // this.log && console.log("C-WorkspacesFilters > handleInput > this.filters : ", this.filters)
+        // this.log && console.log("C-ItemsFilters > handleInput > val : ", val)
+        // this.log && console.log("C-ItemsFilters > handleInput > this.filters : ", this.filters)
         this.$emit('blur', this.filters)
       }
     }

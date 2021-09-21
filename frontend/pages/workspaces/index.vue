@@ -1,14 +1,14 @@
 <template>
 
-  <v-container class="mb-12">
+  <v-container class="mb-12 Workspaces">
 
     <v-row
-      class="justify-left align-top"
+      class="justify-center align-top"
       >
 
       <v-col 
-        cols="9"
-        class="offset-2 align-top text-center pa-0 mt-6 mb-10"
+        cols="8"
+        class="align-top text-center pa-0 mt-6 mb-10"
         >
         <SearchAny
           :itemTypes="['workspaces', 'datasets', 'tables']"
@@ -16,19 +16,6 @@
           :searchPlaceholder="'buttons.queryWorkspaceDataset'"
           :relatedSpace="'workspaces_list'"
         />
-      </v-col>
-
-      <v-col 
-        cols="9"
-        class="offset-2 align-top text-center pa-0 mt-6 mb-10"
-        >
-        <WorkspacesFilters
-          v-model="filters"
-        />
-      </v-col>
-      <!-- DEBUGGING -->
-      <v-col cols="9" class="offset-2 mb-4" v-if="false">
-        filters : <code>{{ filters }}</code>
       </v-col>
       
       <!-- DEBUGGING -->
@@ -60,15 +47,30 @@
           </v-col>
         </v-row>
       </v-col> -->
+    </v-row>
 
-      <v-col 
-        cols="2"
-        class="mt-6 pa-0"
-        >
+    <v-row
+      class="justify-left align-top px-1"
+      dense
+      >
+
+      <!-- DEBUGGING -->
+      <v-col cols="12" class="mb-4" v-if="true">
+        filters : <code>{{ filters }}</code>
       </v-col>
 
       <v-col 
-        cols="9"
+        cols="2"
+        class="mt-12 pa-0 mx-0 pt-6"
+        >
+        <ItemsFilters
+          v-model="filters"
+          :itemsType="itemType"
+        />
+      </v-col>
+
+      <v-col 
+        cols="8"
         class="pa-0"
         >
 
@@ -155,7 +157,7 @@
     name: 'Workspaces',
     layout: 'layout_listings',
     components: {
-      WorkspacesFilters: () => import(/* webpackChunkName: "WorkspacesFilters" */ '@/components/data/WorkspacesFilters.vue'),
+      ItemsFilters: () => import(/* webpackChunkName: "ItemsFilters" */ '@/components/data/ItemsFilters.vue'),
       WorkspaceItem: () => import(/* webpackChunkName: "WorkspaceItem" */ '@/components/data/WorkspaceItem.vue'),
       DatasetItem: () => import(/* webpackChunkName: "DatasetItem" */ '@/components/data/DatasetItem.vue'),
     },

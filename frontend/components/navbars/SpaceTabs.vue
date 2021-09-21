@@ -1,7 +1,7 @@
 <template>
   <v-container class="SpaceTabs mt-12">
-    <v-row class="justify-left align-center px-12">
-      <v-col cols="11" class="offset-1 px-12">
+    <v-row class="justify-center align-center">
+      <v-col cols="12" class="px-12">
 
         <v-tabs
           v-model="tab"
@@ -10,10 +10,11 @@
           background-color="transparent"
           grow
           dense
-          class="ml-9"
+          class=""
           icons-and-text
           >
-          <v-tabs-slider></v-tabs-slider>
+          
+          <v-tabs-slider/>
 
           <v-tab
             v-for="space in items"
