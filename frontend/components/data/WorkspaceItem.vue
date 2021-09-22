@@ -1,19 +1,22 @@
-<style>
-.ws-normal {
-  border: thin solid white !important;
-}
-.ws-active {
-  border: thin solid silver !important;
-}
-.new-item  {
-  /* min-height: 70px; */
-}
+<style scoped>
+  .workspace {
+    border-radius: 10px !important;
+  }
+  .ws-normal {
+    border: thin solid white !important;
+  }
+  .ws-active {
+    border: thin solid silver !important;
+  }
+  .new-item  {
+    /* min-height: 70px; */
+  }
 </style>
 
 <template>
 
   <v-card
-    :class="`WorkspaceItem mb-12 px-3 pt-2 pb-3 workspace ${dragging ? 'ws-active' : 'ws-normal'}`"
+    :class="`WorkspaceItem workspace mb-8 pl-3 pr-6 pt-2 pb-6 white ${dragging ? 'ws-active' : 'ws-normal'}`"
     flat
     min-height="140"
     >
@@ -36,7 +39,7 @@
         <v-icon 
           v-if="ws.icon"
           :color="ws.color || 'black'"
-          class="pb-1 mr-4"
+          class="pb-1 mr-4 ml-4"
           >
           {{ ws.icon}}
         </v-icon>
@@ -51,8 +54,10 @@
             v-if="isShared"
             class="mr-3"
             small
+            label
             color="success"
             outlined
+            style="background-color: white!important"
             >
             <v-icon x-small class="mr-2 pb-1">
               icon-users
@@ -327,8 +332,8 @@
         this.getDatasets(next)
       },
       datasets(next, prev) {
-        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > next : `, next)
-        // this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
+        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > next : `, next)
+        this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
         this.ws.datasets = { ids: next }
         this.updateDatasetsPositions()
       }
@@ -396,12 +401,12 @@
         //   })
       },
       updateDatasetsPositions() {
-        // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > updateDatasetsPositions > this.datasets : `, this.datasets)
+        this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > updateDatasetsPositions > this.datasets : `, this.datasets)
         let payloadWs = { ...this.ws }
         payloadWs.datasets = {
           ids: [ ...new Set(this.datasets) ]
         }
-        // this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > payloadWs : ', payloadWs)
+        this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > payloadWs : ', payloadWs)
         this.$axios
           .put(`${this.api.workspaces}/${this.ws.id}`, payloadWs, this.headerUser)
           // .then( resp => {

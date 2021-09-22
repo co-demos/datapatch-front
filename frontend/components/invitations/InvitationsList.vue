@@ -41,7 +41,7 @@
             > -->
             <InvitationItem
               v-for="invit in filteredInvits()"
-              :key="invit.id"
+              :key="`${invitType}-${invit.id}`"
               :invit="invit"
               :invitType="invitType"
             />

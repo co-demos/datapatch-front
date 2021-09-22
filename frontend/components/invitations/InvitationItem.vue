@@ -33,11 +33,12 @@
     elevation="0"
     outlined
     flat
-    :class="`InvitationItem invit py-3 ${hover ? 'add-border' : ''} mb-2`"
-    :color="`${hover ? 'white' : 'grey lighten-4'}`"
+    :class="`InvitationItem invit py-3 ${hover ? 'add-border' : ''} mb-4`"
     @mouseover="hover = true"
     @mouseleave="hover = false"
+    color="white"
     >
+    <!-- :color="`${hover ? 'white' : 'grey lighten-4'}`" -->
 
     <v-row class="ma-0 align-center">
 
@@ -117,12 +118,6 @@
         class="align-center py-0"
         @click="showDetails = !showDetails"
         >
-        <!-- <p class="text-center mb-1">
-            </template>
-            <span class="grey--text">
-              {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
-            </span>
-        </p> -->
 
         <!-- <code>{{ invit.invitation_to_item_id }}</code> -->
         <v-row class="align-center font-weight-bold ma-0 pl-4">
@@ -135,13 +130,6 @@
           </v-col>
 
           <v-col cols="10" class="pa-0 pt-1">
-            <!-- <v-icon
-              small
-              class="mr-2"
-              :color="invit.invitation_item.color"
-              >
-              {{ invit.invitation_item.icon }}
-            </v-icon> -->
             <span>
               {{ invit.invitation_item.title }}
             </span>
@@ -258,7 +246,6 @@
 
       </v-col>
 
-
     </v-row>
 
     <!-- INVITATION DETAILS -->
@@ -266,6 +253,8 @@
       <div v-show="showDetails" class="pt-3 px-10">
 
         <v-divider class="border-dash"/>
+
+        <!-- close panel btn -->
         <v-row  class="ma-0 mt-3 align-center">
           <v-col cols="12" class="pa-0 text-right">
             <v-tooltip top>
@@ -334,7 +323,6 @@
             </v-row>
 
             <v-row v-show="editMode" class="mt-0 align-center">
-              <!-- {{ authEdit }}<br> -->
               <v-radio-group
                 v-model="authEdit"
                 class="mt-0 mb-2 ml-3"
@@ -459,13 +447,16 @@
 
         <!-- invit details -->
         <v-divider class="border-dash"/>
-        <v-row  class="ma-0 mt-3 align-top justify-center">
-          <v-col cols="3" class="pl-4 text-center">
-            <p>
-              <span class="grey--text">
-              {{ $t( `dataPackage.itemTypeSingular`) }} : 
+        <v-row  class="ma-0 mt-4 align-center justify-center">
+
+          <!-- item infos -->
+          <v-col cols="3" class="pa-1 text-center">
+            <p class="mb-1">
+              <span class="grey--text mb-2">
+                {{ $t( `dataPackage.itemTypeSingular`) }} : 
               </span>
-              <br>
+            </p>
+            <p class="mb-1">
               <v-icon
                 small
                 class="mr-2"
@@ -478,43 +469,91 @@
             </p>
           </v-col>
 
-          <v-col cols="4" class="pl-4 text-center">
+          <!-- invitee infos -->
+          <v-col cols="4" class="pa-1 text-center">
             <span v-if="invitType === 'received'">
               <span class="grey--text">
                 {{ $t('invitations.sentBy') }} :
               </span>
               <br>
-              {{ invitSender }}
+              <span v-html="invitSender"/>
             </span>
             <span v-if="invitType === 'sent'">
               <span class="grey--text">
                 {{ $t('invitations.sentTo') }} :
               </span>
               <br>
-              {{ invit.invitee }}
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    text
+                    rounded
+                    small
+                    class="text-none"
+                    v-bind="attrs"
+                    v-on="on"
+                    >
+                    <v-icon
+                      small
+                      color="black"
+                      class="mr-3"
+                      >
+                      {{ inviteeIcon }}
+                    </v-icon>
+                    <span class="black--text body-2">
+                      {{ invit.invitee }}
+                    </span>
+                  </v-btn>
+                </template>
+                {{ $t( sentToUserTypeText ) }}
+              </v-tooltip>
             </span>
           </v-col>
 
-          <v-col cols="2" class="pl-4 text-center">
-            <!-- <p>
-              <span v-html="$t('invitations.sentDate', { date : invitSentDate.date } )"/>
-            </p> -->
-            <span class="grey--text">
-              {{ $t('invitations.sentDate') }} :
-            </span>
-            <br>
-            {{ invitSentDate.date }}
-          </v-col>
+          <!-- invit infos -->
+          <v-col cols="5" class="pa-1 text-lleft">
+            <p v-if="invitType === 'received' " class="mb-1">
+              <span class="grey--text pr-0">
+                {{ $t('invitations.sentTo') }} :
+              </span>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    text
+                    rounded
+                    x-small
+                    class="text-none"
+                    v-bind="attrs"
+                    v-on="on"
+                    >
+                    <v-icon
+                      small
+                      color="black"
+                      class="mr-3"
+                      >
+                      {{ inviteeIcon }}
+                    </v-icon>
+                    <span class="black--text body-2 pb-1">
+                      {{ invit.invitee }}
+                    </span>
+                  </v-btn>
+                </template>
+                {{ $t( sentToUserTypeText ) }}
+              </v-tooltip>
+            </p>
+            <p class="mb-1">
+              <span class="grey--text pr-2">
+                {{ $t('invitations.sentDate') }} :
+              </span>
+              {{ invitSentDate.date }}
+            </p>
+            <p class="mb-1">
+              <span class="grey--text pr-2">
+                {{ $t('invitations.sentTime') }} :
+              </span>
+              {{ invitSentDate.time }}
+            </p>
 
-          <v-col cols="3" class="pl-4 text-center">
-            <!-- <p>
-              <span v-html="$t('invitations.sentTime', { time : invitSentDate.time } )"/>
-            </p> -->
-            <span class="grey--text">
-              {{ $t('invitations.sentTime') }} :
-            </span>
-            <br>
-            {{ invitSentDate.time }}
           </v-col>
         </v-row>
 
@@ -640,7 +679,15 @@
         let name = this.invit.owner.name
         let surname = this.invit.owner.surname
         let email = this.invit.owner.email
-        return `${name} ${surname} (${email})`
+        return `${name} ${surname} <br><i>${email}</i>`
+      },
+      inviteeIcon() {
+        let inviteeIcon =  this.invit.invitee_type === 'group' ? 'icon-users' : 'icon-user'
+        return inviteeIcon
+      },
+      sentToUserTypeText() {
+        let sentToTypeText = this.invit.invitee_type === 'group' ? 'invitations.sentToGroup' : 'invitations.sentToUser'
+        return sentToTypeText
       },
       invitSentDate() {
         let date = new Date(this.invit.created_date)

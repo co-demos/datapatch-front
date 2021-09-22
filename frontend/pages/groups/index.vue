@@ -161,9 +161,9 @@
         </v-expand-transition>
 
         <!-- ADD GROUP -->
-        <v-row class="justify-center mt-6">
+        <v-row class="justify-center mt-12 py-6">
           <v-card
-            class="mb-5 pb-5"
+            class="mb-5 pa-0 text-center transparent"
             flat
             >
 
@@ -172,11 +172,13 @@
             </v-card-title>
 
             <v-btn 
-              text
               rounded
-              large
-              class="text-none pl-2 pr-4 text-h6 font-weight-bold" 
+              x-large
+              class="text-none pl-4 pr-10 text-h6 font-weight-bold"
               @click="dialog += 1"
+              color="white"
+              rounded
+              elevation="0"
               >
               <span class="grey--text">
                 <v-icon class="pb-1 mr-2">

@@ -7,7 +7,8 @@ export const AuthsOptions = [
   },
   {
     name: 'owner+groups',
-    label: 'auth.groups',
+    // label: 'auth.groups',
+    label: 'auth.groupsAndShared',
     tooltip: 'auth.groupsHelp',
     help: 'Owner and invited groups or users are authorized',
   },

@@ -34,7 +34,7 @@ export default function ({
         // let invitSent = invitations.invitations_sent
         // let invitReceived = invitations.invitations_received
         let invitSent = invitations.filter( invit => invit.owner_id === user.id )
-        let invitReceived = invitations.filter( invit => invit.owner_id !== user.id )
+        let invitReceived = invitations.filter( invit => invit.invitee === user.email )
 
         console.log("MW-getUserInvitations > invitSent : ", invitSent)
         console.log("MW-getUserInvitations > invitReceived : ", invitReceived)

@@ -219,19 +219,23 @@
       </v-expand-transition>
 
       <!-- DEBUGGING -->
-      <v-row class="text-caption" v-if="true">
+      <v-row class="text-caption" v-if="false">
         <v-col cols="12">
           <h5>
             <hr> DEBUG FROM : ModalItem
           </h5>
         </v-col>
         <v-col cols="12">
+          localItem.id : <code>{{ localItem && localItem.id }}</code><hr>
+          <span v-if="itemType === 'workspaces'">
+            localItem.datasets : <code>{{ localItem && localItem.datasets }}</code><hr>
+          </span>
           userData : <code>{{ userData }}</code><hr>
           GetUserAuthOnItem : <code>{{ getUserAuths }}</code><hr>
           itemType : <code>{{ itemType }}</code><br>
           action : <code>{{ action }}</code><br>
           onlyLocalUpdate : <code>{{ onlyLocalUpdate }}</code><hr>
-          localItem.title : <code>{{ localItem && localItem.title }}</code><hr>
+          <!-- localItem.title : <code>{{ localItem && localItem.title }}</code><hr> -->
           localItem.authorized_users : <code>{{ localItem && localItem.authorized_users }}</code><hr>
           <!-- itemModel : <code>{{ itemModel }}</code><hr> -->
           <!-- <span v-if="itemType === 'fields'">

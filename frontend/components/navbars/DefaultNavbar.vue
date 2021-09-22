@@ -417,7 +417,11 @@
           .then(resp => {
             this.log && console.log('C-NotificationsButton > getItems > resp.data : ', resp.data)
             let itemsUser = resp.data.filter( item => item.owner_id === this.user.id )
-            let itemsShared = resp.data.filter( item => item.owner_id !== this.user.id )
+            if (itemTypePlural === 'invitations' ) {
+              let itemsShared = resp.data.filter( item => item.invitee === this.user.email )
+            } else {
+              let itemsShared = resp.data.filter( item => item.owner_id !== this.user.id )
+            }
             this.$store.dispatch(`${itemTypePlural}/populateUserItems`, itemsUser )
             this.$store.dispatch(`${itemTypePlural}/populateSharedItems`, itemsShared )
             this.isLoading = false

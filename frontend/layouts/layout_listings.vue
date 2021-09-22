@@ -1,9 +1,12 @@
 <style>
-
+  .custom-white {
+    /* background-color: rgb(252, 252, 252); */
+    background-color: rgb(248, 248, 248) !important;
+  }
 </style>
 
 <template>
-  <v-app dark>
+  <v-app dark class="custom-white">
 
     <DefaultNavbar/>
 

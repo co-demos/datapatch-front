@@ -76,7 +76,9 @@
 
         <!-- MY WORKSPACES -->
         <v-expand-transition>
-          <div v-show="filters.userItems">
+          <div 
+            v-show="filters.userItems"
+            >
 
             <!-- workspace / draggable datasets -->
             <draggable
@@ -87,7 +89,6 @@
               @start="drag=true"
               @end="drag=false; updateWorkspacePositions()"
               >
-              <!-- <transition-group type="transition" :name="!drag ? 'flip-list' : null"> -->
               <WorkspaceItem
                 v-for="ws in myWorkspaces"
                 :key="ws.id"
@@ -96,14 +97,15 @@
                 :dragging="drag"
                 :isShared="false"
               />
-              <!-- </transition-group> -->
             </draggable>
           </div>
         </v-expand-transition>
         
         <!-- SHARED WORKSPACES -->
         <v-expand-transition>
-          <div v-show="filters.sharedItems">
+          <div
+            v-show="filters.sharedItems"
+            >
 
             <!-- workspace / draggable datasets -->
             <draggable
@@ -114,7 +116,6 @@
               @start="drag=true"
               @end="drag=false; updateWorkspacePositions()"
               >
-              <!-- <transition-group type="transition" :name="!drag ? 'flip-list' : null"> -->
               <WorkspaceItem
                 v-for="ws in openWorkspaces"
                 :key="ws.id"
@@ -123,15 +124,14 @@
                 :dragging="drag"
                 :isShared="true"
               />
-              <!-- </transition-group> -->
             </draggable>
           </div>
         </v-expand-transition>
 
         <!-- ADD WORKSPACE -->
-        <v-row class="justify-center mt-6">
+        <v-row class="justify-center mt-12 py-6">
           <v-card
-            class="mb-5 pb-5 pl-2 text-center"
+            class="mb-5 pa-0 text-center transparent"
             flat
             >
 
@@ -140,11 +140,12 @@
             </v-card-title>
 
             <v-btn 
-              text
-              rounded
-              large
-              class="text-none pl-2 pr-4 text-h6 font-weight-bold"
+              x-large
+              class="text-none pl-4 pr-10 text-h6 font-weight-bold"
               @click="dialog += 1"
+              color="white"
+              rounded
+              elevation="0"
               >
               <span class="grey--text">
                 <v-icon class="pb-1 mr-2">

@@ -40,50 +40,25 @@
       </v-col>
     </v-row>
 
-    <InvitationsList
-      v-show="invitType === 'sent'"
-      :invits="userInvitations"
-      :invitType="'sent'"
-      :cols="cols"
-      :offsetCols="offsetCols"
-    />
+    <v-slide-x-transition>
+      <InvitationsList
+        v-show="invitType === 'received'"
+        :invits="sharedInvitations"
+        :invitType="'received'"
+        :cols="cols"
+        :offsetCols="offsetCols"
+      />
+    </v-slide-x-transition>
 
-    <InvitationsList
-      v-show="invitType === 'received'"
-      :invits="sharedInvitations"
-      :invitType="'received'"
-      :cols="cols"
-      :offsetCols="offsetCols"
-    />
-
-    <!-- <v-row
-      class="justify-center"
-      >
-      <v-col 
-        cols="10"
-        class="offset-1"
-        >
-        <InvitationsFilters
-          :invitType="invitType"
-        />
-      </v-col>
-    </v-row>
-
-    <v-row
-      class="justify-center"
-      >
-      <v-col 
-        cols="10"
-        class="offset-1"
-        >
-        <InvitationItem
-          v-for="invit in shownInvits"
-          :key="invit.id"
-          :invit="invit"
-          :invitType="invitType"
-        />
-      </v-col>
-    </v-row> -->
+    <v-slide-x-reverse-transition>
+      <InvitationsList
+        v-show="invitType === 'sent'"
+        :invits="userInvitations"
+        :invitType="'sent'"
+        :cols="cols"
+        :offsetCols="offsetCols"
+      />
+    </v-slide-x-reverse-transition>
 
   </v-container>
 

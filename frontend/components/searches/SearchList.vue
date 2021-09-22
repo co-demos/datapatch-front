@@ -35,7 +35,7 @@
         <!-- GROUPED ACTIONS -->
         <v-col 
           cols="5"
-          :class="`pa-0 text-left`"
+          :class="`pa-0 pl-3 text-left`"
           >
           <div
             v-show="btnActions"
@@ -118,12 +118,12 @@
       <!-- - filters: <code>{{ filters }}</code><br><br> -->
     </v-col>
 
-    <v-expand-transition>
-      <v-col
-        v-show="btnActions || btnFilters"
-        cols"12"
-        >
+    <v-col
+      cols="12"
+      >
+      <v-expand-transition>
         <v-row
+          v-show="btnActions || btnFilters"
           class="ma-0 mb-2"
           >
           <!-- GROUPED ACTIONS -->
@@ -163,7 +163,7 @@
               <v-col
                 v-for="type in itemsTypes"
                 :key="type"
-                cols="3"
+                cols="4"
                 class="pa-0"
                 >
                 <v-checkbox
@@ -182,8 +182,8 @@
             </v-row>
           </v-col>
         </v-row>
-      </v-col>
-    </v-expand-transition>
+      </v-expand-transition>
+    </v-col>
 
     <!-- ACTION DIALOG -->
     <v-expand-transition>
