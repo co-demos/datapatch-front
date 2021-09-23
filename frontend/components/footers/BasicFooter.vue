@@ -12,23 +12,36 @@
       tile
       dense
       width="100%"
-      class="text-center grey lighten-3"
+      class="text-center grey lighten-3 pt-3"
       >
 
       <v-card-text class="py-2">
-        <v-btn
+
+        <v-tooltip         
           v-for="item in items"
           :key="item.name"
-          class="mx-4"
-          color="black"
-          icon
-          :href="item.url"
-          target="_blank"
+          top
           >
-          <v-icon size="20px">
-            {{ item.icon }}
-          </v-icon>
-        </v-btn>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              color="black"
+              icon
+              :href="item.url"
+              target="_blank"
+              v-bind="attrs"
+              v-on="on"
+              >
+              <v-icon 
+                size="20px"
+                >
+                {{ item.icon }}
+              </v-icon>
+            </v-btn>
+          </template>
+          {{ $t(item.text) }}
+        </v-tooltip>
+
       </v-card-text>
 
       <!-- <v-divider></v-divider> -->
@@ -63,15 +76,23 @@ export default {
       fixed: false,
       items: [
         { 
-          name: 'co-demos',
+          name: 'Co-demos on Github',
           icon: 'icon-github',
-          url: 'https://github.com/co-demos'
+          url: 'https://github.com/co-demos/datapatch-front',
+          text: "footer.github"
         },
         { 
-          name: 'twitter',
+          name: 'Twitter',
           icon: 'icon-twitter',
-          url: 'https://twitter.com/jparis_py'
+          url: 'https://twitter.com/jparis_py',
+          text: "footer.twitter"
         },
+        {
+          name: 'Tipee',
+          icon: 'icon-credit-card',
+          url: 'https://fr.tipeee.com/data-patch',
+          text: "footer.tipee"
+        }
       ]
     }
   }

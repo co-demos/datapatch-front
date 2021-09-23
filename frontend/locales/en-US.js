@@ -10,6 +10,11 @@ export default {
     testSearch: 'Make a search',
     codemos: "an original and open source project by co-demos",
   },
+  footer: {
+    github: "Data Patch repo on Github",
+    twitter: "Contact the lead developer on Twitter",
+    tipee: "Help us out on our Tipee crowdfunding page !"
+  },
   features: {
     featuresTitle: 'Main features',
     featuresHeader: 'The main features of Data Patch are the following :',

@@ -10,6 +10,11 @@ export default {
     testSearch: 'Faire une recherche',
     codemos: "un projet libre et original par co-demos",
   },
+  footer: {
+    github: "Le code source de Data Patch sur Github",
+    twitter: "Contactez le développeur principal sur Twittter",
+    tipee: "Aidez-nous en allant sur notre page Tipee !"
+  },
   features: {
     featuresTitle: 'Fonctionnalités',
     featuresHeader: 'Les principales fonctionnalités de Data Patch sont les suivantes :',
