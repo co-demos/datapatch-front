@@ -74,91 +74,71 @@
         >
         
         <!-- MY GROUPS -->
-        <v-expand-transition>
-          <div v-show="filters.userItems">
-            <draggable
-              v-model="myGroups"
-              v-bind="dragOptions"
-              draggable=".group"
-              group="groups"
-              class="row wrap align-center justify-center"
-              @start="drag=true"
-              @end="drag=false; updateGroupPositions()"
-              >
-              <v-col
-                v-for="grp in myGroups"
-                :key="`grp-${grp.id}`"
-                class="pt-0 pl-0 pr-auto pb-6 group"
-                cols="6"
-                xs="6"
-                sm="4"
-                md="4"
-                lg="3"
-                xl="3"
-                >
-                <GroupItem
-                  :groupId="grp.id"
-                  :group="grp"
-                  :apiUrl="apiUrl"
-                  :action="'update'"
-                  :dragging="drag"
-                  :isShared="false"
-                />
-                <!-- <div
-                  v-for="grp in myGroups"
-                  :key="grp.id"
-                  class="group mb-3"
-                >
-                <code>{{ grp }}</code>
-                </div> -->
-              </v-col>
-            </draggable>
-          </div>
-        </v-expand-transition>
-
+        <draggable
+          v-model="myGroups"
+          v-bind="dragOptions"
+          draggable=".group"
+          group="groups"
+          class="row wrap align-center justify-center"
+          @start="drag=true"
+          @end="drag=false; updateGroupPositions()"
+          >
+          <v-col
+            v-for="grp in myGroups"
+            :key="`grp-${grp.id}`"
+            class="pt-0 pl-0 pr-auto pb-6 group"
+            cols="6"
+            xs="6"
+            sm="4"
+            md="4"
+            lg="3"
+            xl="3"
+            >
+            <GroupItem
+              :groupId="grp.id"
+              :group="grp"
+              :apiUrl="apiUrl"
+              :action="'update'"
+              :dragging="drag"
+              :isShared="false"
+              :canShow="filters.userItems"
+            />
+          </v-col>
+        </draggable>
 
         <!-- SHARED GROUPS -->
-        <v-expand-transition>
-          <div v-show="filters.sharedItems">
-            <draggable
-              v-model="openGroups"
-              v-bind="dragOptions"
-              draggable=".group"
-              group="groups"
-              class="row wrap align-center justify-center"
-              @start="drag=true"
-              @end="drag=false; updateGroupPositions()"
-              >
-              <v-col
-                v-for="grp in openGroups"
-                :key="grp.id"
-                class="pt-0 pl-0 pr-auto pb-6 group"
-                cols="6"
-                xs="6"
-                sm="4"
-                md="4"
-                lg="3"
-                xl="3"
-                >
-                <GroupItem
-                  :groupId="grp.id"
-                  :group="grp"
-                  :apiUrl="apiUrl"
-                  :action="'update'"
-                  :dragging="drag"
-                  :isShared="true"
-                />
-                <!-- <div
-                  v-for="grp in openGroups"
-                  :key="grp.id"
-                  class="group mb-3"
-                >
-                <code>{{ grp }}</code>
-                </div> -->
-              </v-col>
-            </draggable>
-          </div>
-        </v-expand-transition>
+        <draggable
+          v-model="openGroups"
+          v-bind="dragOptions"
+          draggable=".group"
+          group="groups"
+          class="row wrap align-center justify-center"
+          @start="drag=true"
+          @end="drag=false; updateGroupPositions()"
+          >
+          <v-col
+            v-for="grp in openGroups"
+            :key="grp.id"
+            class="pt-0 pl-0 pr-auto pb-6 group"
+            cols="6"
+            xs="6"
+            sm="4"
+            md="4"
+            lg="3"
+            xl="3"
+            >
+            <GroupItem
+              :groupId="grp.id"
+              :group="grp"
+              :apiUrl="apiUrl"
+              :action="'update'"
+              :dragging="drag"
+              :isShared="true"
+              :canShow="filters.sharedItems"
+            />
+          </v-col>
+        </draggable>
+
 
         <!-- ADD GROUP -->
         <v-row class="justify-center mt-12 py-6">

@@ -14,281 +14,287 @@
 </style>
 
 <template>
-  <div class="GroupItem">
-   <!-- {{ grp }} - {{ groupId }} -->
-    <v-row
-      v-if="grp"
-      v-show="!currentLoadingState"
-      class="align-center justify-left mr-2 mb-2 pt-2"
+  <v-scale-transition>
+    <div
+      v-show="canShow"
+      class="GroupItem"
       >
-      <!-- GROUP AVATAR -->
-      <!-- <v-col 
-        cols="2"
-        class="pa-0 text-center"
+      <!-- {{ grp }} - {{ groupId }} -->
+      <v-row
+        v-if="grp"
+        v-show="!currentLoadingState"
+        class="align-center justify-left mr-2 mb-2 pt-2"
         >
-        <ItemAvatar
-          :item="grp"
-          :hover="hover"
-          :heightAvatar="heightAvatar"
-          :customClass="'border-white'"
-        />
-      </v-col> -->
+        <!-- GROUP AVATAR -->
+        <!-- <v-col 
+          cols="2"
+          class="pa-0 text-center"
+          >
+          <ItemAvatar
+            :item="grp"
+            :hover="hover"
+            :heightAvatar="heightAvatar"
+            :customClass="'border-white'"
+          />
+        </v-col> -->
 
-      <!-- GROUP CARD -->
-      <v-col
-        v-if="action === 'update'"
-        cols="11"
-        class="pr-0"
-        >
-        <v-badge
-          bordered
-          :color="grp.color"
-          :icon="grp.icon"
-          overlap
-          left
-          tile
-          style="width: 100% !important;"
+        <!-- GROUP CARD -->
+        <v-col
+          v-if="action === 'update'"
+          cols="11"
+          class="pr-0"
           >
-        <a
-          @click.stop="dialog += 1"
-          class="ml-0 no-decoration text-none"
-          >
-        <!-- <nuxt-link
-          :to="`/groups/${grp.id}`" 
-          class="ml-0 no-decoration text-none"
-          >-->
-          <v-card 
-            flat
-            outlined
-            :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
-            :color="`${hover ? 'white' : grp.color}`"
-            @mouseover="hover = true"
-            @mouseleave="hover = false"
+          <v-badge
+            bordered
+            :color="grp.color"
+            :icon="grp.icon"
+            overlap
+            left
+            tile
+            style="width: 100% !important;"
             >
-            <!-- :color="`${hover ? 'white' : 'grey lighten-4'}`" -->
-            <v-card-actions class="pa-0 pb-3">
+          <a
+            @click.stop="dialog += 1"
+            class="ml-0 no-decoration text-none"
+            >
+          <!-- <nuxt-link
+            :to="`/groups/${grp.id}`" 
+            class="ml-0 no-decoration text-none"
+            >-->
+            <v-card 
+              flat
+              outlined
+              :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
+              :color="`${hover ? 'white' : grp.color}`"
+              @mouseover="hover = true"
+              @mouseleave="hover = false"
+              >
+              <!-- :color="`${hover ? 'white' : 'grey lighten-4'}`" -->
+              <v-card-actions class="pa-0 pb-3">
 
-              <v-row
-                class="align-center wrap justify-left flex-grow-1"
-                >
-                
-                <!-- GROUP TTTLE -->
-                <v-col 
-                  cols="12"
-                  :class="`px-2 pt-3 pb-0 ma-0 ${hover ? grp.color : 'white' }--text`"
+                <v-row
+                  class="align-center wrap justify-left flex-grow-1"
                   >
-
-
-                  <p
-                    :class="`text-center text-body-2 font-weight-bold mb-0`"
+                  
+                  <!-- GROUP TTTLE -->
+                  <v-col 
+                    cols="12"
+                    :class="`px-2 pt-3 pb-0 ma-0 ${hover ? grp.color : 'white' }--text`"
                     >
 
-                    {{ grp.title }}
 
-                    <span
-                      v-if="isShared"
+                    <p
+                      :class="`text-center text-body-2 font-weight-bold mb-0`"
                       >
-                      <v-chip
-                        class="my-2"
-                        small
-                        :color="hover ? grp.color : 'white'"
-                        :outlined="!hover"
+
+                      {{ grp.title }}
+
+                      <span
+                        v-if="isShared"
                         >
-                        <v-icon x-small class="mr-2 pb-1 white--text">
-                          icon-users
-                        </v-icon>
-                        <span class="white--text">
-                          {{ $t('share.shared') }}
-                        </span>
-                      </v-chip>
-                      <br>
-                    </span>
+                        <v-chip
+                          class="my-2"
+                          small
+                          :color="hover ? grp.color : 'white'"
+                          :outlined="!hover"
+                          >
+                          <v-icon x-small class="mr-2 pb-1 white--text">
+                            icon-users
+                          </v-icon>
+                          <span class="white--text">
+                            {{ $t('share.shared') }}
+                          </span>
+                        </v-chip>
+                        <br>
+                      </span>
 
-                  </p>
-                </v-col>
+                    </p>
+                  </v-col>
 
-                <!-- GROUP SHARED -->
+                  <!-- GROUP SHARED -->
 
-                <!-- GROUP SUBTITLE -->
-                <v-col
-                  v-if="false"
-                  cols="12" 
-                  :class="`align-center text-center px-3 pt-2 pb-4 ${hover ? 'black' : 'white' }--text`"
-                  >
-                  <v-divider 
-                    :class="`mb-3 ${hover ? grp.color : 'white'}`"
-                  />
-                  <!-- NEED DEBUG -->
-                  <p class="caption pa-0 ma-0 text-lowercase font-italic">
-                    {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
-                  </p>
-                  <p class="caption pa-0 ma-0 text-lowercase font-italic">
-                    {{ grp.pending_users ? grp.pending_users.length : 0 }} {{ $tc('groups.memberPending', grp.pending_users ? grp.pending_users.length : 0) }}
-                  </p>
-                </v-col>
+                  <!-- GROUP SUBTITLE -->
+                  <v-col
+                    v-if="false"
+                    cols="12" 
+                    :class="`align-center text-center px-3 pt-2 pb-4 ${hover ? 'black' : 'white' }--text`"
+                    >
+                    <v-divider 
+                      :class="`mb-3 ${hover ? grp.color : 'white'}`"
+                    />
+                    <!-- NEED DEBUG -->
+                    <p class="caption pa-0 ma-0 text-lowercase font-italic">
+                      {{ grp.users.length }} {{ $tc('groups.member', grp.users.length) }}
+                    </p>
+                    <p class="caption pa-0 ma-0 text-lowercase font-italic">
+                      {{ grp.pending_users ? grp.pending_users.length : 0 }} {{ $tc('groups.memberPending', grp.pending_users ? grp.pending_users.length : 0) }}
+                    </p>
+                  </v-col>
 
-              </v-row>
+                </v-row>
 
-            </v-card-actions>
-            
-          </v-card>
-        </a>
-        </v-badge>
-      </v-col>
+              </v-card-actions>
+              
+            </v-card>
+          </a>
+          </v-badge>
+        </v-col>
 
-      <!-- GROUP BTNS -->
-      <v-col 
-        v-if="action === 'update'"
-        cols="1"
-        class="ma-0 pa-0"
-        >
-        <v-menu
-          bottom
-          open-on-hover
+        <!-- GROUP BTNS -->
+        <v-col 
+          v-if="action === 'update'"
+          cols="1"
+          class="ma-0 pa-0"
           >
-          <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
-            <v-btn
-              x-small
-              icon
-              class="pl-0 tex-none"
-              v-bind="{...attrsMenu}"
-              v-on="{...onMenu}"
-              @click.stop="dialog += 1"
-              >
-              <v-icon small>
-                icon-more-vertical
-                <!-- icon-chevron-down1 -->
-              </v-icon>
-            </v-btn>
-          </template>
-
-          <v-list dense>
-          
-            <v-subheader class="pa-5 text-uppercase">
-              {{ $t('groups.prefsGroup') }}
-            </v-subheader>
-
-            <v-list-item
-              @click.stop="dialog += 1"
-              >
-              <v-list-item-action>
+          <v-menu
+            bottom
+            open-on-hover
+            >
+            <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
+              <v-btn
+                x-small
+                icon
+                class="pl-0 tex-none"
+                v-bind="{...attrsMenu}"
+                v-on="{...onMenu}"
+                @click.stop="dialog += 1"
+                >
                 <v-icon small>
-                  icon-hash
+                  icon-more-vertical
+                  <!-- icon-chevron-down1 -->
                 </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ $t('groups.editGroup') }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+              </v-btn>
+            </template>
 
-            <v-divider/>
+            <v-list dense>
+            
+              <v-subheader class="pa-5 text-uppercase">
+                {{ $t('groups.prefsGroup') }}
+              </v-subheader>
 
-            <v-list-item
-              @click.stop="dialogShare += 1; dialog += 1"
-              >
-              <v-list-item-action>
-                <v-icon small>
-                  icon-user-plus
-                </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ $t('groups.inviteGroup') }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+              <v-list-item
+                @click.stop="dialog += 1"
+                >
+                <v-list-item-action>
+                  <v-icon small>
+                    icon-hash
+                  </v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t('groups.editGroup') }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
 
-            <v-list-item
-              @click.stop="dialog += 1"
-              >
-              <v-list-item-action>
-                <v-icon small>
-                  icon-user-check
-                </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ $t('groups.askJoinGroup') }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+              <v-divider/>
 
-            <v-divider/>
+              <v-list-item
+                @click.stop="dialogShare += 1; dialog += 1"
+                >
+                <v-list-item-action>
+                  <v-icon small>
+                    icon-user-plus
+                  </v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t('groups.inviteGroup') }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
 
-            <v-list-item
-              @click.stop="dialogDelete += 1"
-              >
-              <!-- @click.stop="deleteGroup()" -->
-              <v-list-item-action>
-                <v-icon small>
-                  icon-trash-2
-                </v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ $t('groups.deleteGroup') }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+              <v-list-item
+                @click.stop="dialog += 1"
+                >
+                <v-list-item-action>
+                  <v-icon small>
+                    icon-user-check
+                  </v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t('groups.askJoinGroup') }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
 
-          </v-list>
+              <v-divider/>
 
-        </v-menu>
-      </v-col>
-      
-      <!-- DIALOG FOR GROUP INFOS -->
-      <ModalItem
-        v-if="grp"
-        :parentDialog="dialog"
-        :parentShare="dialogShare"
-        :item="group"
-        :fromWorkspace="fromWorkspace"
-        :itemModel="itemModelMeta"
-        :itemType="itemType"
-        :action="action"
-        :apiUrl="apiUrl"
-        :noLink="true"
-      />
+              <v-list-item
+                @click.stop="dialogDelete += 1"
+                >
+                <!-- @click.stop="deleteGroup()" -->
+                <v-list-item-action>
+                  <v-icon small>
+                    icon-trash-2
+                  </v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t('groups.deleteGroup') }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
 
-      <!-- DIALOG FOR GROUP INFOS -->
-      <!-- <ModalShare
-        v-if="grp"
-        :parentDialog="dialogShare"
-        :item="group"
-        :fromWorkspace="fromWorkspace"
-        :itemModel="itemModelShare"
-        :itemType="itemType"
-        :action="action"
-        :apiUrl="apiUrl"
-      /> -->
+            </v-list>
 
-      <!-- DIALOG FOR GROUP DELETE -->
-      <ModalDelete
-        v-if="grp"
-        :parentDialog="dialogDelete"
-        :confirmDeleteTitle="$t('groups.deleteGroup')"
-        :confirmDeleteMsg="$t('groups.deleteGroupConfirm')"
-        :itemToDelete="group"
-        @confirmDelete="deleteGroup()"
-      />
-
-    </v-row>
-
-    <v-row
-      v-show="currentLoadingState"
-      class="ma-0 align-center"
-      >
-      <v-col cols="12" class="pa-0 ma-0 ml-2">
-        <v-skeleton-loader
-          type="image"
-          max-height="50px"
+          </v-menu>
+        </v-col>
+        
+        <!-- DIALOG FOR GROUP INFOS -->
+        <ModalItem
+          v-if="grp"
+          :parentDialog="dialog"
+          :parentShare="dialogShare"
+          :item="group"
+          :fromWorkspace="fromWorkspace"
+          :itemModel="itemModelMeta"
+          :itemType="itemType"
+          :action="action"
+          :apiUrl="apiUrl"
+          :noLink="true"
         />
-      </v-col>
-    </v-row>
 
-  </div>
+        <!-- DIALOG FOR GROUP INFOS -->
+        <!-- <ModalShare
+          v-if="grp"
+          :parentDialog="dialogShare"
+          :item="group"
+          :fromWorkspace="fromWorkspace"
+          :itemModel="itemModelShare"
+          :itemType="itemType"
+          :action="action"
+          :apiUrl="apiUrl"
+        /> -->
+
+        <!-- DIALOG FOR GROUP DELETE -->
+        <ModalDelete
+          v-if="grp"
+          :parentDialog="dialogDelete"
+          :confirmDeleteTitle="$t('groups.deleteGroup')"
+          :confirmDeleteMsg="$t('groups.deleteGroupConfirm')"
+          :itemToDelete="group"
+          @confirmDelete="deleteGroup()"
+        />
+
+      </v-row>
+
+      <v-row
+        v-show="currentLoadingState"
+        class="ma-0 align-center"
+        >
+        <v-col cols="12" class="pa-0 ma-0 ml-2">
+          <v-skeleton-loader
+            type="image"
+            max-height="50px"
+          />
+        </v-col>
+      </v-row>
+
+    </div>
+  </v-scale-transition>
+
 </template>
 
 
@@ -309,6 +315,7 @@
       'action',
       'isAlone',
       'isShared',
+      'canShow'
     ],
     data () {
       return {

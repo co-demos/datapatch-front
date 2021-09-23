@@ -15,279 +15,283 @@
 
 <template>
 
-  <v-card
-    :class="`WorkspaceItem workspace mb-8 pl-3 pr-6 pt-2 pb-6 white ${dragging ? 'ws-active' : 'ws-normal'}`"
-    flat
-    min-height="140"
-    >
-    <!-- @mouseover="hover = true"
-    @mouseleave="hover = false" -->
-
-    <!-- <v-row>
-      <code><pre>{{ ws }}</pre></code>  
-    </v-row> -->
-
-    <!-- workspace / toolbar -->
-    <v-toolbar
-      class="mb-5 mx-n1"
-      dense
+  <v-scale-transition>
+    <v-card
+      :class="`WorkspaceItem workspace mb-8 pl-3 pr-6 pt-2 pb-6 white ${dragging ? 'ws-active' : 'ws-normal'}`"
       flat
+      min-height="140"
+      v-show="canShow"
       >
-      
-      <v-toolbar-title class="text-h6 px-0 font-weight-black">
+      <!-- @mouseover="hover = true"
+      @mouseleave="hover = false" -->
 
-        <v-icon 
-          v-if="ws.icon"
-          :color="ws.color || 'black'"
-          class="pb-1 mr-4 ml-4"
-          >
-          {{ ws.icon}}
-        </v-icon>
+      <!-- <v-row>
+        <code><pre>{{ ws }}</pre></code>  
+      </v-row> -->
 
-        <v-btn
-          text
-          class="text-none"
-          @click.stop="dialog += 1"
-          >
-
-          <v-chip
-            v-if="isShared"
-            class="mr-3"
-            small
-            label
-            color="success"
-            outlined
-            style="background-color: white!important"
-            >
-            <v-icon x-small class="mr-2 pb-1">
-              icon-users
-            </v-icon>
-            {{ $t('share.shared') }}
-          </v-chip>
-
-          <!-- ws.id: {{ ws.id }} -  -->
-          <span :class="`${ws.color || 'black'}--text`">
-            {{ ws.title }}
-          </span>
-
-        </v-btn>
-
-      </v-toolbar-title>
-
-      <v-menu
-        bottom
-        open-on-hover
+      <!-- workspace / toolbar -->
+      <v-toolbar
+        class="mb-5 mx-n1"
+        dense
+        flat
         >
-        <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
-          <v-btn 
-            icon
-            x-small
-            class="ml-4"
-            v-bind="{...attrsMenu}"
-            v-on="{...onMenu}"
-            @click.stop="dialog += 1"
-           >
-            <v-icon small>
-              icon-more-vertical
-            </v-icon>
-          </v-btn>
-        </template>
+        
+        <v-toolbar-title class="text-h6 px-0 font-weight-black">
 
-        <!-- <MenuList
-          :items="itemsSettings"
+          <v-icon 
+            v-if="ws.icon"
+            :color="ws.color || 'black'"
+            class="pb-1 mr-4 ml-4"
+            >
+            {{ ws.icon}}
+          </v-icon>
+
+          <v-btn
+            text
+            class="text-none"
+            @click.stop="dialog += 1"
+            >
+
+            <v-chip
+              v-if="isShared"
+              class="mr-3"
+              small
+              label
+              color="success"
+              outlined
+              style="background-color: white!important"
+              >
+              <v-icon x-small class="mr-2 pb-1">
+                icon-users
+              </v-icon>
+              {{ $t('share.shared') }}
+            </v-chip>
+
+            <!-- ws.id: {{ ws.id }} -  -->
+            <span :class="`${ws.color || 'black'}--text`">
+              {{ ws.title }}
+            </span>
+
+          </v-btn>
+
+        </v-toolbar-title>
+
+        <v-menu
+          bottom
+          open-on-hover
+          >
+          <template v-slot:activator="{ on: onMenu, attrs: attrsMenu }">
+            <v-btn 
+              icon
+              x-small
+              class="ml-4"
+              v-bind="{...attrsMenu}"
+              v-on="{...onMenu}"
+              @click.stop="dialog += 1"
+            >
+              <v-icon small>
+                icon-more-vertical
+              </v-icon>
+            </v-btn>
+          </template>
+
+          <!-- <MenuList
+            :items="itemsSettings"
+            :itemType="itemType"
+            :apiUrl="apiUrl"
+            :action="'update'"
+          /> -->
+
+          <v-list dense>
+          
+            <v-subheader class="pa-5 text-uppercase">
+              {{ $t('workspaces.prefsWorkspace') }}
+            </v-subheader>
+
+            <v-list-item
+              @click.stop="dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-hash
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('workspaces.editWorkspace') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-list-item
+              @click.stop="dialogShare += 1; dialog += 1"
+              >
+              <!-- @click.stop="shareWorkspace()" -->
+              <v-list-item-action>
+                <v-icon small>
+                  icon-user-plus
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('workspaces.inviteWorkspace') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-list-item
+              @click.stop="dialogDelete += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-trash-2
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('workspaces.deleteWorkspace') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+
+        </v-menu>
+
+
+        <!-- DIALOG FOR WORKSPACE INFOS UPDATE -->
+        <ModalItem
+          :item="ws"
+          :noAvatar="true"
+          :itemModel="itemModel"
+          :parentDialog="dialog"
+          :parentShare="dialogShare"
           :itemType="itemType"
           :apiUrl="apiUrl"
           :action="'update'"
+        />
+
+        <!-- DIALOG FOR WORKSPACE INFOS -->
+        <!-- <ModalShare
+          v-if="ws"
+          :parentDialog="dialogShare"
+          :item="ws"
+          :itemModel="itemModelShare"
+          :itemType="itemType"
+          :action="'update'"
+          :apiUrl="apiUrl"
         /> -->
 
-        <v-list dense>
-        
-          <v-subheader class="pa-5 text-uppercase">
-            {{ $t('workspaces.prefsWorkspace') }}
-          </v-subheader>
-
-          <v-list-item
-            @click.stop="dialog += 1"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-hash
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('workspaces.editWorkspace') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-item
-            @click.stop="dialogShare += 1; dialog += 1"
-            >
-            <!-- @click.stop="shareWorkspace()" -->
-            <v-list-item-action>
-              <v-icon small>
-                icon-user-plus
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('workspaces.inviteWorkspace') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-item
-            @click.stop="dialogDelete += 1"
-            >
-            <v-list-item-action>
-              <v-icon small>
-                icon-trash-2
-              </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t('workspaces.deleteWorkspace') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-        </v-list>
-
-      </v-menu>
-
-
-      <!-- DIALOG FOR WORKSPACE INFOS UPDATE -->
-      <ModalItem
-        :item="ws"
-        :noAvatar="true"
-        :itemModel="itemModel"
-        :parentDialog="dialog"
-        :parentShare="dialogShare"
-        :itemType="itemType"
-        :apiUrl="apiUrl"
-        :action="'update'"
-      />
-
-      <!-- DIALOG FOR WORKSPACE INFOS -->
-      <!-- <ModalShare
-        v-if="ws"
-        :parentDialog="dialogShare"
-        :item="ws"
-        :itemModel="itemModelShare"
-        :itemType="itemType"
-        :action="'update'"
-        :apiUrl="apiUrl"
-      /> -->
-
-      <!-- DIALOG FOR WORKSPACE DELETE -->
-      <ModalDelete
-        :parentDialog="dialogDelete"
-        :confirmDeleteTitle="$t('workspaces.deleteWorkspace')"
-        :confirmDeleteMsg="$t('workspaces.deleteWorkspaceConfirm')"
-        :itemToDelete="ws"
-        @confirmDelete="deleteWorkspace()"
-      />
-
-      <!-- <v-spacer/>
-
-      <v-tooltip 
-        left
-        >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn 
-            icon
-            small
-            class="pl-2 pr-2 mr-n2"
-            v-bind="attrs"
-            v-on="on"
-            >
-            <v-icon small>
-              icon-search1
-            </v-icon>
-          </v-btn>
-        </template>
-        <span>
-          {{ $t('workspaces.searchDataset') }}
-        </span>
-      </v-tooltip> -->
-
-    </v-toolbar>
-
-    <!-- DEBUGGING -->
-    <!-- <v-row class="pl-5 mb-8">
-      <v-col>
-        datasets: <code>{{ datasets }}</code>
-      </v-col>
-      <v-col>
-        ws.datasets: <code>{{ ws.datasets }}</code>
-      </v-col>
-    </v-row> -->
-    
-    <draggable
-      v-model="datasets"
-      v-bind="dragOptions"
-      draggable=".dataset"
-      group="datasets"
-      class="row wrap align-center"
-      @start="drag=true"
-      @end="drag=false"
-      >
-
-      <!-- existing datasets / draggable datasets -->
-      <v-col
-        v-for="dsId in datasets"
-        :key="`ds-${dsId}`"
-        class="pt-0 dataset"
-        cols="12"
-        xs="12"
-        sm="6"
-        md="6"
-        lg="4"
-        xl="4"
-        >
-        <!-- <code>{{ dsId }}</code> -->
-        <DatasetItem
-          v-show="!isWorkspacesLoading"
-          :datasetId="dsId"
-          :fromWorkspace="ws.id"
-          :action="'update'"
-        />
-        
-        <v-skeleton-loader
-          v-show="isWorkspacesLoading"
-          class="ml-2 mr-0 my-3"
-          max-width="300"
-          type="text"
+        <!-- DIALOG FOR WORKSPACE DELETE -->
+        <ModalDelete
+          :parentDialog="dialogDelete"
+          :confirmDeleteTitle="$t('workspaces.deleteWorkspace')"
+          :confirmDeleteMsg="$t('workspaces.deleteWorkspaceConfirm')"
+          :itemToDelete="ws"
+          @confirmDelete="deleteWorkspace()"
         />
 
-      </v-col>
+        <!-- <v-spacer/>
+
+        <v-tooltip 
+          left
+          >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn 
+              icon
+              small
+              class="pl-2 pr-2 mr-n2"
+              v-bind="attrs"
+              v-on="on"
+              >
+              <v-icon small>
+                icon-search1
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>
+            {{ $t('workspaces.searchDataset') }}
+          </span>
+        </v-tooltip> -->
+
+      </v-toolbar>
+
+      <!-- DEBUGGING -->
+      <!-- <v-row class="pl-5 mb-8">
+        <v-col>
+          datasets: <code>{{ datasets }}</code>
+        </v-col>
+        <v-col>
+          ws.datasets: <code>{{ ws.datasets }}</code>
+        </v-col>
+      </v-row> -->
       
-      <!-- add new dataset -->
-      <v-col
-        class="pt-0 pl-4 new-item align-center"
-        cols="12"
-        xs="12"
-        sm="6"
-        md="6"
-        lg="4"
-        xl="3"
+      <draggable
+        v-model="datasets"
+        v-bind="dragOptions"
+        draggable=".dataset"
+        group="datasets"
+        class="row wrap align-center"
+        @start="drag=true"
+        @end="drag=false"
         >
-        <DatasetItem
-          v-show="!isWorkspacesLoading"
-          :fromWorkspace="ws.id"
-          :action="'create'"
-          :isAlone="!Boolean(datasets.length)"
-        />
-      </v-col>
 
-    </draggable>
+        <!-- existing datasets / draggable datasets -->
+        <v-col
+          v-for="dsId in datasets"
+          :key="`ds-${dsId}`"
+          class="pt-0 dataset"
+          cols="12"
+          xs="12"
+          sm="6"
+          md="6"
+          lg="4"
+          xl="4"
+          >
+          <!-- <code>{{ dsId }}</code> -->
+          <DatasetItem
+            v-show="!isWorkspacesLoading"
+            :datasetId="dsId"
+            :fromWorkspace="ws.id"
+            :action="'update'"
+          />
+          
+          <v-skeleton-loader
+            v-show="isWorkspacesLoading"
+            class="ml-2 mr-0 my-3"
+            max-width="300"
+            type="text"
+          />
 
-  </v-card>
+        </v-col>
+        
+        <!-- add new dataset -->
+        <v-col
+          class="pt-0 pl-4 new-item align-center"
+          cols="12"
+          xs="12"
+          sm="6"
+          md="6"
+          lg="4"
+          xl="3"
+          >
+          <DatasetItem
+            v-show="!isWorkspacesLoading"
+            :fromWorkspace="ws.id"
+            :action="'create'"
+            :isAlone="!Boolean(datasets.length)"
+          />
+        </v-col>
+
+      </draggable>
+
+    </v-card>
+  </v-scale-transition>
+
 </template>
 
 
@@ -308,7 +312,8 @@
       'workspace',
       'apiUrl',
       'dragging',
-      'isShared'
+      'isShared',
+      'canShow'
     ],
     data () {
       return {

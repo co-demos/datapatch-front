@@ -75,58 +75,46 @@
         >
 
         <!-- MY WORKSPACES -->
-        <v-expand-transition>
-          <div 
-            v-show="filters.userItems"
-            >
-
-            <!-- workspace / draggable datasets -->
-            <draggable
-              v-model="myWorkspaces"
-              v-bind="dragOptions"
-              draggable=".workspace"
-              group="workspaces"
-              @start="drag=true"
-              @end="drag=false; updateWorkspacePositions()"
-              >
-              <WorkspaceItem
-                v-for="ws in myWorkspaces"
-                :key="ws.id"
-                :workspace="ws"
-                :apiUrl="apiUrl"
-                :dragging="drag"
-                :isShared="false"
-              />
-            </draggable>
-          </div>
-        </v-expand-transition>
+        <!-- workspace / draggable datasets -->
+        <draggable
+          v-model="myWorkspaces"
+          v-bind="dragOptions"
+          draggable=".workspace"
+          group="workspaces"
+          @start="drag=true"
+          @end="drag=false; updateWorkspacePositions()"
+          >
+          <WorkspaceItem
+            v-for="ws in myWorkspaces"
+            :key="ws.id"
+            :workspace="ws"
+            :apiUrl="apiUrl"
+            :dragging="drag"
+            :isShared="false"
+            :canShow="filters.userItems"
+          />
+        </draggable>
         
         <!-- SHARED WORKSPACES -->
-        <v-expand-transition>
-          <div
-            v-show="filters.sharedItems"
-            >
-
-            <!-- workspace / draggable datasets -->
-            <draggable
-              v-model="openWorkspaces"
-              v-bind="dragOptions"
-              draggable=".workspace"
-              group="workspaces"
-              @start="drag=true"
-              @end="drag=false; updateWorkspacePositions()"
-              >
-              <WorkspaceItem
-                v-for="ws in openWorkspaces"
-                :key="ws.id"
-                :workspace="ws"
-                :apiUrl="apiUrl"
-                :dragging="drag"
-                :isShared="true"
-              />
-            </draggable>
-          </div>
-        </v-expand-transition>
+        <!-- workspace / draggable datasets -->
+        <draggable
+          v-model="openWorkspaces"
+          v-bind="dragOptions"
+          draggable=".workspace"
+          group="workspaces"
+          @start="drag=true"
+          @end="drag=false; updateWorkspacePositions()"
+          >
+          <WorkspaceItem
+            v-for="ws in openWorkspaces"
+            :key="ws.id"
+            :workspace="ws"
+            :apiUrl="apiUrl"
+            :dragging="drag"
+            :isShared="true"
+            :canShow="filters.sharedItems"
+          />
+        </draggable>
 
         <!-- ADD WORKSPACE -->
         <v-row class="justify-center mt-12 py-6">
