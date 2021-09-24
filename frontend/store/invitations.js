@@ -1,6 +1,6 @@
-import { Invitation } from '@/utils/utilsInvitations.js' 
+// import { Invitation } from '@/utils/utilsInvitations.js' 
 
-let emptyInvitation = new Invitation()
+// let emptyInvitation = new Invitation()
 
 export const state = () => ({
   // uxInvitations: {},

@@ -401,6 +401,8 @@ export default {
   },
   messages: {
     recipients: 'Recipient | Recipients',
+    userMessagesSent: 'Messages sent',
+    userMessagesReceived: 'Messages received',
   },
   invitations: {
     invitTitle: 'Invitation title',

@@ -42,12 +42,11 @@
     <v-row class="ma-0 align-center">
 
       <!-- item invited to -->
-      <v-col 
+      <!-- <v-col 
         cols="1"
         @click="showDetails = !showDetails"
         >
         <p class="text-center mb-1">
-          <!-- DEBUGGING -->
           <code>{{ invit.id }}</code>
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
@@ -65,29 +64,64 @@
             </span>
           </v-tooltip>
         </p>
-      </v-col>
+      </v-col> -->
 
       <!-- status -->
       <v-col
-        cols="2"
-        class="text-center"
+        cols="3"
+        class="text-left pr-0"
         >
-        <v-chip
-          text-color="white"
-          :color="statusColor"
-          @click="showDetails = !showDetails"
-          >
-          <v-icon 
-            small
-            class="mr-2"
-            >
-            {{ statusIcon }}
-          </v-icon>
-          {{ $t( `invitations.${invit.invitation_status}`) }}
-        </v-chip>
+        <!-- <code>{{ invit.id }}</code> -->
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="ml-3"
+              @click="showDetails = !showDetails"
+              >
+              {{ itemTypeIcon }}
+            </v-icon>
+          </template>
+          <span class="grey--text">
+            {{ $t( `dataPackage.${invit.invitation_to_item_type}`) }}
+          </span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip
+              text-color="white"
+              :color="statusColor"
+              @click="showDetails = !showDetails"
+              class="ml-4"
+              v-bind="attrs"
+              v-on="on"
+              >
+              <v-icon 
+                small
+                class="mr-2"
+                >
+                {{ statusIcon }}
+              </v-icon>
+              {{ $t( `invitations.${invit.invitation_status}`) }}
+              <v-icon
+                small
+                color="white"
+                class="ml-3"
+                >
+                icon-info1
+              </v-icon>
+            </v-chip>
+          </template>
+          <span>
+            {{ $t('invitations.details') }}
+          </span>
+         </v-tooltip>
 
         <!-- show details -->
-        <v-tooltip top>
+        <!-- <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn 
               v-bind="attrs"
@@ -107,7 +141,7 @@
           <span>
             {{ $t('invitations.details') }}
           </span>
-        </v-tooltip>
+        </v-tooltip> -->
 
       </v-col>
 
@@ -137,7 +171,11 @@
       </v-col>
 
       <!-- auths -->
-      <v-col cols="2" class="text-center">
+      <v-col
+        cols="2"
+        class="text-center"
+        @click="showDetails = !showDetails"
+        >
 
         <span
           v-for="authLevel in authChoices"
@@ -337,7 +375,7 @@
                     <b>{{ $t(authChoice.role) }}</b> : 
                     {{ $t(authChoice.label) }}
                     <v-tooltip
-                      top
+                      right
                       >
                       <template v-slot:activator="{ on, attrs }">
                         <v-icon

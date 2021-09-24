@@ -15,14 +15,14 @@
           rounded
           elevation="0"
           dark
-          :color="invitType === 'sent' ? 'grey lighten-1' : 'primary'"
+          :color="msgType === 'sent' ? 'grey lighten-1' : 'primary'"
           class="text-center text-none"
-          @click="changeActiveInvitationType('received')"
+          @click="changeActiveMessageType('received')"
           >
           <v-icon small class="mr-3">
             icon-inbox
           </v-icon>
-          {{ $t('invitations.userInvitationsReceived')}}
+          {{ $t('messages.userMessagesReceived')}}
         </v-btn>
       </v-col>
       <v-col 
@@ -34,23 +34,23 @@
           rounded
           elevation="0"
           dark
-          :color="invitType === 'sent' ? 'primary' : 'grey lighten-1'"
+          :color="msgType === 'sent' ? 'primary' : 'grey lighten-1'"
           class="text-center text-none"
-          @click="changeActiveInvitationType('sent')"
+          @click="changeActiveMessageType('sent')"
           >
           <v-icon small class="mr-3">
             icon-send
           </v-icon>
-          {{ $t('invitations.userInvitationsSent')}}
+          {{ $t('messages.userMessagesSent')}}
         </v-btn>
       </v-col>
     </v-row>
 
-    <v-slide-x-transition>
+    <!-- <v-slide-x-transition>
       <InvitationsList
-        v-show="invitType === 'received'"
-        :invits="sharedInvitations"
-        :invitType="'received'"
+        v-show="msgType === 'received'"
+        :invits="sharedMessages"
+        :msgType="'received'"
         :cols="cols"
         :offsetCols="offsetCols"
       />
@@ -58,13 +58,13 @@
 
     <v-slide-x-reverse-transition>
       <InvitationsList
-        v-show="invitType === 'sent'"
-        :invits="userInvitations"
-        :invitType="'sent'"
+        v-show="msgType === 'sent'"
+        :invits="userMessages"
+        :msgType="'sent'"
         :cols="cols"
         :offsetCols="offsetCols"
       />
-    </v-slide-x-reverse-transition>
+    </v-slide-x-reverse-transition> -->
 
   </v-container>
 
@@ -77,19 +77,19 @@
   // import { mapOrder } from '@/utils/utilsFunctions'
 
   export default {
-    name: 'Invitations',
+    name: 'Messages',
     layout: 'layout_listings',
     // middleware: [
     //   'getUserInvitations'
     // ],
     components: {
-      InvitationsList: () => import(/* webpackChunkName: "InvitationsList" */ '@/components/invitations/InvitationsList.vue'),
+      // InvitationsList: () => import(/* webpackChunkName: "InvitationsList" */ '@/components/invitations/InvitationsList.vue'),
       // InvitationsFilters: () => import(/* webpackChunkName: "InvitationsFilters" */ '@/components/invitations/InvitationsFilters.vue'),
       // InvitationItem: () => import(/* webpackChunkName: "InvitationItem" */ '@/components/invitations/InvitationItem.vue'),
     },
     head() {
       return {
-        title: `${this.appTitle} - ${this.$t('pages.invitations')}`,
+        title: `${this.appTitle} - ${this.$t('pages.messages')}`,
         htmlAttrs: {
           lang: this.$i18n.locale
         },
@@ -97,26 +97,26 @@
     },
     data () {
       return {
-        invitType: undefined,
+        msgType: undefined,
         cols: 11,
         offsetCols: 0,
         pathItems: [
           { 
-            text: 'pages.invitations',
+            text: 'pages.messages',
             disabled: true,
-            to: '/invitations',
+            to: '/messages',
           }
         ],
-        itemType: 'invitations',
+        itemType: 'messages',
         isLoading: false,
       }
     },
     beforeMount () {
       this.updatePath(this.pathItems)
-      if( this.$route.query.invitType ) {
-        this.changeActiveInvitationType( this.$route.query.invitType )
+      if( this.$route.query.msgType ) {
+        this.changeActiveMessageType( this.$route.query.msgType )
       } else {
-        this.changeActiveInvitationType('received')
+        this.changeActiveMessageType('received')
       }
     },
     mounted() {
@@ -127,11 +127,11 @@
       // })
     },
     watch: {
-      userInvitations (next) {
-        this.log && console.log("P-Invitations > watch > userInvitations > next : ", next)
+      userMessages (next) {
+        this.log && console.log("P-Messages > watch > userMessages > next : ", next)
       },
-      sharedInvitations (next) {
-        this.log && console.log("P-Invitations > watch > sharedInvitations > next : ", next)
+      sharedMessages (next) {
+        this.log && console.log("P-Messages > watch > sharedMessages > next : ", next)
       },
     },
     computed: {
@@ -143,8 +143,8 @@
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
         userId: 'user/userId',
-        userInvitations: 'invitations/getUserItems',
-        sharedInvitations: 'invitations/getSharedItems',
+        userMessages: 'messages/getUserItems',
+        sharedMessages: 'messages/getSharedItems',
         headerUser: 'user/headerUser'
       }),
     },
@@ -155,17 +155,17 @@
       params(data) {
         return Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&');
       },
-      changeActiveInvitationType(invitType) {
-        this.log && console.log("P-Invitations > changeActiveInvitationType > invitType : ", invitType)
-        this.invitType = invitType
-        this.log && console.log("P-Invitations > changeActiveInvitationType > this.$route : ", this.$route)
+      changeActiveMessageType(msgType) {
+        this.log && console.log("P-Messages > changeActiveMessageType > msgType : ", msgType)
+        this.msgType = msgType
+        this.log && console.log("P-Messages > changeActiveMessageType > this.$route : ", this.$route)
         
         // change url without reloading page
         let queries = JSON.parse(JSON.stringify(this.$route.query))
-        queries.invitType = invitType
-        // this.$router.push({ path: this.$route.path, query: { ...this.$route.query, invitType: invitType }})
-        // this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, invitType: invitType }})
-        // this.$router.replace({ query: { ...this.$route.query, invitType: invitType }})
+        queries.msgType = msgType
+        // this.$router.push({ path: this.$route.path, query: { ...this.$route.query, msgType: msgType }})
+        // this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, msgType: msgType }})
+        // this.$router.replace({ query: { ...this.$route.query, msgType: msgType }})
         // this.$router.replace({ query: queries })
         history.replaceState({}, null, `${this.$route.path}?${this.params(queries)}` )
       }

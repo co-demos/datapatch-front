@@ -403,6 +403,8 @@ export default {
   },
   messages: {
     recipients: 'Destinataire | Destinataires',
+    userMessagesSent: 'Messages envoyés',
+    userMessagesReceived: 'Messages reçus',
   },
   invitations: {
     invitTitle: "Titre de l'invitation",

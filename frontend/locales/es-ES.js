@@ -401,8 +401,10 @@ export default {
     deleteGroup: 'Suprimir este grupo',
     deleteGroupConfirm: 'Estas seguro.a que quire suprimir este grupo ?',
   },
-  mensajes: {
+  messages: {
     recipients: 'Destinario | Destinarios',
+    userMessagesSent: 'Mensajes mandados',
+    userMessagesReceived: 'Mensajes recibidos',
   },
   invitations: {
     invitTitle: "Titulo de la invitacion",
