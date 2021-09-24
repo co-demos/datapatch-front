@@ -52,6 +52,7 @@ export const state = () => ({
     description: undefined,
     locale: undefined,
     avatar: undefined,
+    read: undefined,
     groups: [],
   },
   auth: {
@@ -84,6 +85,7 @@ export const getters = {
       description: state.userData.description,
       locale: state.userData.locale,
       avatar: state.userData.avatar,
+      read: state.userData.read,
     }
     return basicInfos
   }
@@ -100,11 +102,11 @@ export const mutations = {
     state.userData.locale = userData.locale
   },
   setUserData (state, userData) {
-    // console.log('S-user > setUserData > userData : ', userData)
+    console.log('S-user > setUserData > userData : ', userData)
     state.userData.id = userData.id
     state.userData.email = userData.email
     state.userData.locale = userData.locale
-    state.userData.groups = userData.groups
+    // state.userData.groups = userData.groups
   },
   setUserBasicInfos (state, userData) {
     state.userData.username = userData.username
@@ -113,6 +115,7 @@ export const mutations = {
     state.userData.description = userData.description
     state.userData.locale = userData.locale
     state.userData.avatar = userData.avatar
+    state.userData.read = userData.read
   },
   
 }

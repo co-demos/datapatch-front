@@ -271,6 +271,7 @@ export default {
     email: 'Email',
     description: 'Description',
     avatar: 'Avatar',
+    visibility: 'Visibility',
   },
   rules: {
     valEnter: 'Please enter a value',

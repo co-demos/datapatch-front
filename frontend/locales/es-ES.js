@@ -273,6 +273,7 @@ export default {
     email: 'Email',
     description: 'Descripcion',
     avatar: 'Avatar',
+    visibility: 'Visibilidad',
   },
   rules: {
     valEnter: "Entrar un valor",

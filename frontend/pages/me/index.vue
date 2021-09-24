@@ -3,11 +3,12 @@
 
     <v-row
       fill-height
-      class="justify-center align-center"
+      class="justify-center align-center mb-12"
       >
 
       <v-col 
         cols="6"
+        class="mb-12"
         >
         
         <!-- <div>
@@ -19,7 +20,7 @@
         <v-card 
           elevation="0"
           class="pa-5 mt-4"
-          color="grey lighten-2"
+          color="grey lighten-4"
           >
 
           <v-card-title class="justify-center">
@@ -47,30 +48,56 @@
           <!-- avatar -->
           <v-card-actions>
             <v-list-item class="grow">
-
               <v-row
-                align="center"
-                justify="center"
+                class="align-center justify-left"
                 >
-                <v-avatar color="grey">
-                  <v-img
-                    class="elevation-6"
-                    alt=""
-                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                  ></v-img>
-                </v-avatar>
-                <div>
-                  <v-file-input
-                    class="ml-3"
-                    v-model="avatar"
-                    hide-input
-                    :disabled="isLoading"
-                    :loading="isLoading"
-                    :label="$t('me.avatar')"
-                    :placeholder="$t('me.avatar')"
-                    prepend-icon="icon-camera"
-                    ></v-file-input>
-                  </div>
+
+                <v-col
+                  cols="6"
+                  class="offset-3 pl-12"
+                  >
+                  <v-row class="justify-center align-center">
+                    <v-avatar color="grey">
+                      <v-img
+                        class="elevation-6"
+                        alt=""
+                        src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                      ></v-img>
+                    </v-avatar>
+                    <div>
+                      <v-file-input
+                        class="ml-3 pt-0 mt-0"
+                        v-model="avatar"
+                        hide-input
+                        :disabled="isLoading"
+                        :loading="isLoading"
+                        :label="$t('me.avatar')"
+                        :placeholder="$t('me.avatar')"
+                        prepend-icon="icon-camera"
+                        />
+                    </div>
+                  </v-row>
+                </v-col>
+
+                <v-col
+                 cols="3"
+                 class="align-center"
+                 >
+                  <v-switch
+                    v-model="editMode"
+                    inset
+                    color="purple"
+                    hide-details
+                    class="mt-0 mb-1"
+                    >
+                    <template v-slot:label>
+                      <span :class="`${editMode ? 'font-weight-black primary--text' : ''}`">
+                        {{ $t('buttons.edit') }}
+                      </span>
+                    </template>
+                  </v-switch>
+                </v-col>
+                 
               </v-row>
             </v-list-item>
           </v-card-actions>
@@ -82,45 +109,60 @@
               v-model="username"
               outlined
               background-color="white"
-              single-line
-              clearable
-              :disabled="isLoading"
-              :readonly="isLoading"
+              :clearable="editMode"
+              :disabled="isLoading || !editMode"
+              :readonly="isLoading || !editMode"
               :loading="isLoading"
               :label="$t('me.username')"
               :placeholder="$t('me.username')"
-              prepend-inner-icon="icon-user"
-              ></v-text-field>
+              >
+              <!-- prepend-inner-icon="icon-user" -->
+              <template v-slot:prepend-inner>
+                <v-icon small class="mr-3 pb-0">
+                  icon-user
+                </v-icon>
+              </template>
+            </v-text-field>
 
             <!-- name -->
             <v-text-field
               v-model="name"
               outlined
               background-color="white"
-              single-line
-              clearable
-              :disabled="isLoading"
-              :readonly="isLoading"
+              :clearable="editMode"
+              :disabled="isLoading || !editMode"
+              :readonly="isLoading || !editMode"
               :loading="isLoading"
               :label="$t('me.name')"
               :placeholder="$t('me.name')"
-              prepend-inner-icon="icon-user"
-              ></v-text-field>
+              >
+              <!-- prepend-inner-icon="icon-user" -->
+              <template v-slot:prepend-inner>
+                <v-icon small class="mr-3 pb-0">
+                  icon-user
+                </v-icon>
+              </template>
+            </v-text-field>
 
             <!-- surname -->
             <v-text-field
               v-model="surname"
               outlined
               background-color="white"
-              single-line
-              clearable
-              :disabled="isLoading"
-              :readonly="isLoading"
+              :clearable="editMode"
+              :disabled="isLoading || !editMode"
+              :readonly="isLoading || !editMode"
               :loading="isLoading"
               :label="$t('me.surname')"
               :placeholder="$t('me.surname')"
-              prepend-inner-icon="icon-user"
-              ></v-text-field>
+              >
+              <!-- prepend-inner-icon="icon-user" -->
+              <template v-slot:prepend-inner>
+                <v-icon small class="mr-3 pb-0">
+                  icon-user
+                </v-icon>
+              </template>
+            </v-text-field>
 
             <!-- email -->
             <!-- <v-text-field
@@ -139,25 +181,102 @@
               v-model="description"
               outlined
               background-color="white"
-              single-line
+              :disabled="isLoading || !editMode"
+              :readonly="isLoading || !editMode"
+              :loading="isLoading"
               :label="$t('me.description')"
               :placeholder="$t('me.description')"
-              prepend-inner-icon="icon-file-text"
-              ></v-textarea>
+              >
+              <!-- prepend-inner-icon="icon-file-text" -->
+              <template v-slot:prepend-inner>
+                <v-icon small class="mr-3 pb-0">
+                  icon-file-text
+                </v-icon>
+              </template>
+            </v-textarea>
+
+            <!-- visibility -->
+            <v-select
+              v-model="visibility"
+              :items="readChoices"
+              item-value="name"
+              outlined
+              background-color="white"
+              :disabled="isLoading || !editMode"
+              :readonly="isLoading || !editMode"
+              :loading="isLoading"
+              :label="$t('me.visibility')"
+              :placeholder="$t('me.visibility')"
+              >
+              <!-- prepend-inner-icon="icon-eye" -->
+              <template v-slot:prepend-inner>
+                <v-icon small class="mr-3 pt-1">
+                  icon-eye
+                </v-icon>
+              </template>
+
+              <template v-slot:item="{ item, index }">
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    {{ $t(item.label) }}
+                    <v-icon
+                      class="mx-2"
+                      color="grey"
+                      dark
+                      x-small
+                      v-bind="attrs"
+                      v-on="on"
+                      >
+                      icon-info
+                    </v-icon>
+                  </template>
+                  <span>
+                    {{ $t(item.tooltip) }}
+                  </span>
+                </v-tooltip>
+              </template>
+
+              <template v-slot:selection="{ item, index }">
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    {{ $t(item.label) }}
+                    <v-icon
+                      class="mx-2"
+                      color="grey"
+                      dark
+                      x-small
+                      v-bind="attrs"
+                      v-on="on"
+                      >
+                      icon-info
+                    </v-icon>
+                  </template>
+                  <span>
+                    {{ $t(item.tooltip) }}
+                  </span>
+                </v-tooltip>
+              </template>
+
+            </v-select>
+
 
             <!-- save changes -->
-            <v-btn
-              color="primary"
-              block
-              large
-              elevation="0"
-              tile
-              dark
-              class="mr-4"
-              @click="saveUserinfos()"
-              >
-              {{ $t('me.save') }}
-            </v-btn>
+            <v-expand-transition>
+              <v-btn
+                v-show="editMode"
+                color="primary"
+                :disabled="!editMode"
+                block
+                large
+                elevation="0"
+                tile
+                dark
+                class="mr-4"
+                @click="saveUserinfos()"
+                >
+                {{ $t('me.save') }}
+              </v-btn>
+            </v-expand-transition>
             
             <br>
 
@@ -168,10 +287,11 @@
         <!-- delete user -->
         <v-btn
           block
-          diabled
+          :disabled="!editMode"
           large
           elevation="0"
           text
+          color="warning"
           class="mt-5 text-none"
           @click="deleteUser"
           >
@@ -189,6 +309,7 @@
 <script>
 
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { AuthsOptionsUser } from '@/utils/utilsAuths'
 
 export default {
   
@@ -217,12 +338,15 @@ export default {
       ],
       itemType: 'users',
       apiUrl: undefined,
+      editMode: false,
       username: '',
       name: '',
       surname: '',
       email: '',
       avatar: '',
       description: '',
+      visibility: '',
+      readChoices: []
     }
   },
   computed: {
@@ -240,7 +364,7 @@ export default {
   },
   beforeMount() {
     this.updatePath(this.pathItems)
-    // this.log && console.log("P-me/index > this.user :", this.user)
+    this.log && console.log("P-me/index > this.user :", this.user)
     // this.log && console.log("P-me/index > this.userBasicInfos :", this.userBasicInfos)
     this.name = this.user.name
     this.username = this.user.username
@@ -248,6 +372,8 @@ export default {
     this.email = this.user.email
     this.avatar = this.user.avatar
     this.description = this.user.description
+    this.visibility = this.user.read
+    this.readChoices = [ ...AuthsOptionsUser ]
   },
   methods: {
     ...mapActions({
@@ -260,6 +386,7 @@ export default {
       userBasicInfos.name = this.name
       userBasicInfos.surname = this.surname
       userBasicInfos.description = this.description
+      userBasicInfos.read = this.visibility
       this.$axios
         .put(`${this.api.users}/me/`, userBasicInfos, this.headerUser)
         .then(resp => {

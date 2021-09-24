@@ -26,6 +26,8 @@ export const AuthsOptions = [
   },
 ]
 
+export const AuthsOptionsUser = [ ...AuthsOptions ].filter( auth => auth.name !== 'owner+groups' )
+
 export const AuthsModelsRead = [
   {
     name: 'read',
