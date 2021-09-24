@@ -86,6 +86,7 @@
                   <v-switch
                     v-model="editMode"
                     inset
+                    :ripple="false"
                     color="purple"
                     hide-details
                     class="mt-0 mb-1"

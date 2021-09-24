@@ -62,8 +62,8 @@
 
       <v-card-text class="pt-0">
         ©
-        <span class="ml-1">
-          2021-{{ new Date().getFullYear() }}
+        <span class="ml-0">
+          {{ new Date().getFullYear() }}
         </span>
 
         <span
