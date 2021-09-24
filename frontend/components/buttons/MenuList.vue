@@ -13,6 +13,7 @@
       :class="item.addClass ? item.addClass : '' "
       :router="!item.divider && !!item.to"
       :exact="!item.divider && !!item.to"
+      :disabled="item.disabled"
       >
 
       <v-list-item-action>

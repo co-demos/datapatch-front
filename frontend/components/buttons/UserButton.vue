@@ -109,6 +109,11 @@ export default {
           title: 'pages.invitations',
           to: '/invitations'
         },
+        {
+          icon: 'icon-mail',
+          title: 'pages.messages',
+          to: '/messages'
+        },
       ],
       itemsUserLogout:  [
         {

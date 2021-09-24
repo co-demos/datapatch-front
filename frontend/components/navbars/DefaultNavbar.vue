@@ -254,7 +254,8 @@
           {
             icon: 'icon-info1',
             title: `pages.documentation`,
-            to: '/documentation'
+            to: '/documentation',
+            disabled: true
           },
       ],
         itemsUser: {
@@ -268,18 +269,8 @@
             {
               icon: 'icon-clipboard',
               title: `pages.mySchemas`,
-              to: '/schemas'
-            },
-            { divider: true },
-            {
-              icon: 'icon-user',
-              title: 'pages.me',
-              to: '/me'
-            },
-            {
-              icon: 'icon-bell',
-              title: 'pages.notifications',
-              to: '/notifications'
+              to: '/schemas',
+              disabled: true
             },
             { divider: true },
             {
@@ -292,7 +283,23 @@
               title: 'pages.invitations',
               to: '/invitations'
             },
+            {
+              icon: 'icon-mail',
+              title: 'pages.messages',
+              to: '/messages'
+            },
             { divider: true },
+            {
+              icon: 'icon-user',
+              title: 'pages.me',
+              to: '/me'
+            },
+            // {
+            //   icon: 'icon-bell',
+            //   title: 'pages.notifications',
+            //   to: '/notifications'
+            // },
+            // { divider: true },
             {
               icon: 'icon-log-out',
               title: 'login.out',
