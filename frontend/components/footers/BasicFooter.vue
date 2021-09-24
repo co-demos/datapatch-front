@@ -70,13 +70,24 @@
           v-for="item in infos"
           :key="item.to"
           >
-          - 
+          <span class="mx-2">
+            -
+          </span> 
           <nuxt-link
+            v-if="item.to"
             :to="item.to"
             class="grey--text"
             >
             {{ $t(item.text) }}
           </nuxt-link>
+          <a
+            v-if="item.url"
+            :href="item.url"
+            target="_blank"
+            class="grey--text"
+            >
+            {{ $t(item.text) }}
+          </a>
         </span>
 
       </v-card-text>
@@ -114,6 +125,12 @@
           }
         ],
         infos: [
+          { 
+            name: 'datapatch',
+            icon: 'icon-app',
+            url: 'https://wiki.resilience-territoire.ademe.fr/wiki/Data_Patch',
+            text: 'datapatch.ademe'
+          },
           { 
             name: 'legal',
             icon: 'icon-gavel',
