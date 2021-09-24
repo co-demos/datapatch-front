@@ -47,32 +47,33 @@
       <!-- <v-divider></v-divider> -->
 
       <v-card-text class="pt-0 pb-1">
-        <strong>
+        <span class="font-weight-bold">
           Data Patch
-        </strong>
-        - 
+        </span>
+        <v-icon small class="mx-2">
+          icon-minus1
+        </v-icon> 
         <span>
           {{ $t('datapatch.codemos') }}
         </span>
-        <!-- - 
-        <span>
+        <v-icon small class="mx-2">
+          icon-minus1
+        </v-icon>
+        ©
+        <span class="font-weight-bold">
           {{ new Date().getFullYear() }}
-        </span> -->
+        </span>
       </v-card-text>
 
       <v-card-text class="pt-0">
-        ©
-        <span class="ml-0">
-          {{ new Date().getFullYear() }}
-        </span>
 
         <span
-          v-for="item in infos"
-          :key="item.to"
+          v-for="(item, index) in infos"
+          :key="item.name"
           >
-          <span class="mx-2">
-            -
-          </span> 
+          <v-icon v-if="index" small class="mx-2">
+            icon-minus1
+          </v-icon> 
           <nuxt-link
             v-if="item.to"
             :to="item.to"
