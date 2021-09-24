@@ -27,6 +27,10 @@
         :items="itemsUser.notConnected"
       />
 
+      <MenuList
+        :items="itemsLegal"
+      />
+
     </v-navigation-drawer>
 
     <v-app-bar
@@ -245,6 +249,7 @@
         fixed: false,
         searchHeight: "600px",
         searchOpen: false,
+
         items: [
           {
             icon: 'icon-home',
@@ -257,12 +262,16 @@
             to: '/documentation',
             disabled: true
           },
+        ],
+        itemsLegal: [
+          { divider: true },
           {
             icon: 'icon-gavel',
             title: `pages.legal`,
             to: '/legal',
           },
-      ],
+        ],
+
         itemsUser: {
           connected: [
             { divider: true },

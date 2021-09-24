@@ -10,73 +10,74 @@
 
 <template>
 
-  <v-container class="mb-12 mt-6 mx-6 pb-12">
+  <v-row class="mb-12 mt-6 mx-6 pb-12 justify-center">
+    <v-col cols="9">
 
-    <p class="text-center text-h4 white--text font-weight-bold">
-      {{ $t('pages.legal') }}
-    </p>
+      <p class="text-center text-h4 white--text font-weight-bold">
+        {{ $t('pages.legal') }}
+      </p>
 
-    <v-divider class="my-12 border-dash"/>
+      <v-divider class="my-12 border-dash"/>
 
-    <p class="text-left text-h6 white--text mb-6">
-      {{ $t('legal.editorInfos') }} : 
-    </p>
-    <p 
-      v-for="item in itemsEditor"
-      :key="`editor-${item.textLabel}`"
-      class="white--text ml-12"
-      >
-      <span class="mr-4 font-italic">
-        {{ $t(item.textLabel) }} :
-      </span>
-      <span class="font-weight-black">
-        <a
-          v-if="item.isLink"
-          :href="item.textContent"
-          target="_blank"
-          class="white--text"
-          >
-          {{ item.textContent }}
-        </a>
-        <span v-else>
-          {{ item.textContent }}
+      <p class="text-left text-h6 white--text mb-6">
+        {{ $t('legal.editorInfos') }} : 
+      </p>
+      <p 
+        v-for="item in itemsEditor"
+        :key="`editor-${item.textLabel}`"
+        class="white--text ml-12"
+        >
+        <span class="mr-4 font-italic">
+          {{ $t(item.textLabel) }} :
         </span>
-      </span>
-    </p>
-
-    <v-divider class="my-12 border-dash"/>
-
-    <p class="text-left text-h6 white--text mb-6">
-      {{ $t('legal.providerInfos') }} : 
-    </p>
-    <p 
-      v-for="item in itemsProvider"
-      :key="`provider-${item.textLabel}`"
-      class="white--text ml-12"
-      >
-      <span class="mr-4 font-italic">
-        {{ $t(item.textLabel) }} :
-      </span>
-      <span class="font-weight-black">
-        <a
-          v-if="item.isLink"
-          :href="item.textContent"
-          target="_blank"
-          class="white--text"
-          >
-          {{ item.textContent }}
-        </a>
-        <span v-else>
-          {{ item.textContent }}
+        <span class="font-weight-black">
+          <a
+            v-if="item.isLink"
+            :href="item.textContent"
+            target="_blank"
+            class="white--text"
+            >
+            {{ item.textContent }}
+          </a>
+          <span v-else>
+            {{ item.textContent }}
+          </span>
         </span>
-      </span>
-    </p>
+      </p>
 
-    <v-divider class="my-12 border-dash"/>
+      <v-divider class="my-12 border-dash"/>
 
+      <p class="text-left text-h6 white--text mb-6">
+        {{ $t('legal.providerInfos') }} : 
+      </p>
+      <p 
+        v-for="item in itemsProvider"
+        :key="`provider-${item.textLabel}`"
+        class="white--text ml-12"
+        >
+        <span class="mr-4 font-italic">
+          {{ $t(item.textLabel) }} :
+        </span>
+        <span class="font-weight-black">
+          <a
+            v-if="item.isLink"
+            :href="item.textContent"
+            target="_blank"
+            class="white--text"
+            >
+            {{ item.textContent }}
+          </a>
+          <span v-else>
+            {{ item.textContent }}
+          </span>
+        </span>
+      </p>
 
-  <br>
-  </v-container>
+      <v-divider class="my-12 border-dash"/>
+
+    </v-col>
+    <br>
+  </v-row>
 
 </template>
 

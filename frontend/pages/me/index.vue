@@ -110,7 +110,6 @@
               v-model="username"
               outlined
               background-color="white"
-              :clearable="editMode"
               :disabled="isLoading || !editMode"
               :readonly="isLoading || !editMode"
               :loading="isLoading"
@@ -119,7 +118,11 @@
               >
               <!-- prepend-inner-icon="icon-user" -->
               <template v-slot:prepend-inner>
-                <v-icon small class="mr-3 pb-0">
+                <v-icon 
+                  small 
+                  :color="editMode ? 'grey' : 'grey lighten-2'"
+                  class="mr-3 pb-0" 
+                  >
                   icon-user
                 </v-icon>
               </template>
@@ -130,7 +133,6 @@
               v-model="name"
               outlined
               background-color="white"
-              :clearable="editMode"
               :disabled="isLoading || !editMode"
               :readonly="isLoading || !editMode"
               :loading="isLoading"
@@ -139,7 +141,11 @@
               >
               <!-- prepend-inner-icon="icon-user" -->
               <template v-slot:prepend-inner>
-                <v-icon small class="mr-3 pb-0">
+                <v-icon 
+                  small 
+                  :color="editMode ? 'grey' : 'grey lighten-2'"
+                  class="mr-3 pb-0" 
+                  >
                   icon-user
                 </v-icon>
               </template>
@@ -150,7 +156,6 @@
               v-model="surname"
               outlined
               background-color="white"
-              :clearable="editMode"
               :disabled="isLoading || !editMode"
               :readonly="isLoading || !editMode"
               :loading="isLoading"
@@ -159,7 +164,11 @@
               >
               <!-- prepend-inner-icon="icon-user" -->
               <template v-slot:prepend-inner>
-                <v-icon small class="mr-3 pb-0">
+                <v-icon 
+                  small 
+                  :color="editMode ? 'grey' : 'grey lighten-2'"
+                  class="mr-3 pb-0" 
+                  >
                   icon-user
                 </v-icon>
               </template>
@@ -190,7 +199,11 @@
               >
               <!-- prepend-inner-icon="icon-file-text" -->
               <template v-slot:prepend-inner>
-                <v-icon small class="mr-3 pb-0">
+                <v-icon 
+                  small 
+                  :color="editMode ? 'grey' : 'grey lighten-2'"
+                  class="mr-3 pb-0" 
+                  >
                   icon-file-text
                 </v-icon>
               </template>
@@ -211,7 +224,11 @@
               >
               <!-- prepend-inner-icon="icon-eye" -->
               <template v-slot:prepend-inner>
-                <v-icon small class="mr-3 pt-1">
+                <v-icon 
+                  small 
+                  :color="editMode ? 'grey' : 'grey lighten-2'"
+                  class="mr-3 pt-1" 
+                  >
                   icon-eye
                 </v-icon>
               </template>

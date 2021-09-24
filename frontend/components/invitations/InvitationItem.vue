@@ -570,7 +570,7 @@
                       >
                       {{ inviteeIcon }}
                     </v-icon>
-                    <span class="black--text body-2 pb-1">
+                    <span class="black--text body-2">
                       {{ invit.invitee }}
                     </span>
                   </v-btn>
