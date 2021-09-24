@@ -48,8 +48,8 @@
             </v-icon>
           </v-badge>
         </v-list-item-action>
-        <v-list-item-content>
-          <span class="mt-1 mx-1 font-italic">
+        <v-list-item-content class="text-left">
+          <span class="mt-1 font-italic ml-n1">
             {{ $tc( 'notifications.notifsCount', newNotifs, { count: newNotifs } ) }}
           </span>
         </v-list-item-content>
@@ -102,7 +102,7 @@
             color="red"
             overlap
             >
-            <v-icon small class="mr-2">
+            <v-icon small class="mr-2 mb-n1">
               icon-mail
             </v-icon>
           </v-badge>
@@ -127,7 +127,7 @@
             color="red"
             overlap
             >
-            <v-icon small class="mr-2">
+            <v-icon small class="mr-2 mb-n1">
               icon-message-square
             </v-icon>
           </v-badge>
