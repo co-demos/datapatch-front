@@ -257,6 +257,11 @@
             to: '/documentation',
             disabled: true
           },
+          {
+            icon: 'icon-gavel',
+            title: `pages.legal`,
+            to: '/legal',
+          },
       ],
         itemsUser: {
           connected: [

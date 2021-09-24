@@ -60,46 +60,46 @@
 
 <script>
 
-import { mapState, mapActions } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
-export default {
+  export default {
 
-  name: 'Logout',
-  data () {
-    return {
-      pathItems: [
-        { 
-          text: 'login.out',
-          disabled: true,
-        }
-      ],
-      isLoading: false,
-      showPwd: false,
-    }
-  },
-  beforeMount () {
-    this.updatePath(this.pathItems)
-  },
-  computed: {
-    ...mapState({
-      log: (state) => state.log,
-    })
-  },
-  methods: {
-    ...mapActions({
-      updatePath: 'updateCrumbsPath',
-      resetUser: 'user/resetUser',
-    }),
-    submit () {
-      // this.log && console.log('P-Logout > submit > this.scopes : ', this.scopes)
-      this.isLoading = true
-      this.resetUser()
-      this.$cookies.remove('access_token')
-      this.$cookies.remove('refresh_token')
-      this.isLoading = false
-      this.$router.push('/')
+    name: 'Logout',
+    data () {
+      return {
+        pathItems: [
+          { 
+            text: 'login.out',
+            disabled: true,
+          }
+        ],
+        isLoading: false,
+        showPwd: false,
+      }
+    },
+    beforeMount () {
+      this.updatePath(this.pathItems)
+    },
+    computed: {
+      ...mapState({
+        log: (state) => state.log,
+      })
+    },
+    methods: {
+      ...mapActions({
+        updatePath: 'updateCrumbsPath',
+        resetUser: 'user/resetUser',
+      }),
+      submit () {
+        // this.log && console.log('P-Logout > submit > this.scopes : ', this.scopes)
+        this.isLoading = true
+        this.resetUser()
+        this.$cookies.remove('access_token')
+        this.$cookies.remove('refresh_token')
+        this.isLoading = false
+        this.$router.push('/')
+      }
     }
   }
-}
 
 </script>

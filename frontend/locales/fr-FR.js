@@ -10,6 +10,15 @@ export default {
     testSearch: 'Faire une recherche',
     codemos: "un projet libre et original par co-demos",
   },
+  legal: {
+    editorInfos: "Informations sur l’éditeur du site",
+    legalName: "Dénomination ou raison sociale",
+    legalAdress: "Adresse du siège social",
+    legalTel: "Numéro de téléphone",
+    legalCode: "N° SIREN",
+    providerInfos: "Informations sur le prestataire d’hébergement",
+    providerSite: "Site internet",
+  },
   footer: {
     github: "Le code source de Data Patch sur Github",
     twitter: "Contactez le développeur principal sur Twittter",
@@ -215,6 +224,7 @@ export default {
     myWorkspaces: 'Mes espaces de travail',
     mySchemas: 'Mes schémas',
     myMessages: 'Mes messages',
+    legal: 'Mentions légales',
   },
   errors: {
     errorTxt: 'oups',

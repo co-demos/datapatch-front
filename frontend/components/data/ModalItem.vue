@@ -18,7 +18,7 @@
     <v-card class="pb-8">
       
       <!-- CLOSE MODAL -->
-      <v-card-actions class="mr-5 pt-3 pb-0 px-0">
+      <v-card-actions class="mr-5 pt-4 pb-0 mb-n2 px-0">
         <v-spacer></v-spacer>
         <v-btn
           icon

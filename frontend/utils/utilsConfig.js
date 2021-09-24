@@ -147,6 +147,16 @@ export class configApp {
     // API BACKEND
     // this.apiWsBackend = chooseSocketServer(RUN_MODE, env);
 
+    this.legal = {
+      EDITOR_NAME : env.NUXT_ENV_LEGAL_EDITOR_NAME || "...",
+      EDITOR_ADRESS : env.NUXT_ENV_LEGAL_EDITOR_ADRESS || "...",
+      EDITOR_TEL : env.NUXT_ENV_LEGAL_EDITOR_TEL || "...",
+      EDITOR_CODE : env.NUXT_ENV_LEGAL_EDITOR_CODE || "...",
+      PROVIDER_NAME : env.NUXT_ENV_LEGAL_PROVIDER_NAME || "...",
+      PROVIDER_ADRESS : env.NUXT_ENV_LEGAL_PROVIDER_ADRESS || "...",
+      PROVIDER_SITE : env.NUXT_ENV_LEGAL_PROVIDER_SITE || "...",
+    }
+
     this.vuetifyThemes = {
       light : {
         primary: env.NUXT_ENV_THEME_LIGHT_primary,

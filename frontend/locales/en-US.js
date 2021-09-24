@@ -10,6 +10,15 @@ export default {
     testSearch: 'Make a search',
     codemos: "an original and open source project by co-demos",
   },
+  legal: {
+    editorInfos: "Informations about the editor",
+    legalName: "Company name",
+    legalAdress: "Headquarters adress",
+    legalTel: "Phone number",
+    legalCode: "Company number",
+    providerInfos: "Informations about the provider",
+    providerSite: "Website",
+  },
   footer: {
     github: "Data Patch repo on Github",
     twitter: "Contact the lead developer on Twitter",
@@ -213,6 +222,7 @@ export default {
     myWorkspaces: 'My workspaces',
     mySchemas: 'My schemas',
     myMessages: 'My messages',
+    legal: 'Legal mentions',
   },
   errors: {
     errorTxt: 'oops',
