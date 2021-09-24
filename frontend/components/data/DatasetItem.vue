@@ -115,7 +115,7 @@
           <v-card 
             flat
             outlined
-            :class="`text-none pa-2 ${hover ? 'add-border' : ''}`"
+            :class="`text-none pa-2 ${hover ? 'add-border' : ''} elevation-0`"
             :color="`${hover ? 'white' : 'grey lighten-4'}`"
             @mouseover="hover = true"
             @mouseleave="hover = false"

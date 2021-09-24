@@ -17,7 +17,7 @@
 
   <v-scale-transition>
     <v-card
-      :class="`WorkspaceItem workspace mb-8 pl-3 pr-6 pt-2 pb-6 white ${dragging ? 'ws-active' : 'ws-normal'}`"
+      :class="`WorkspaceItem workspace mb-8 pl-3 pr-6 pt-2 pb-6 white ${dragging ? 'ws-active' : 'ws-normal'} elevation-1`"
       flat
       min-height="140"
       v-show="canShow"

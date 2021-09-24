@@ -30,10 +30,9 @@
 <template>
 
   <v-card
-    elevation="0"
     outlined
     flat
-    :class="`InvitationItem invit py-3 ${hover ? 'add-border' : ''} mb-4`"
+    :class="`InvitationItem invit py-3 ${hover ? 'add-border' : ''} mb-4 elevation-0`"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     color="white"
