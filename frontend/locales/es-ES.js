@@ -92,7 +92,7 @@ export default {
   },
   stack: {
     title: 'Tecnologias',
-    stackText: "Las herramientas que utilizamos en este proyecto están todas bajo una licencia gratuita. El proyecto Data Patch es en sí mismo 100% de código abierto. Estamos intentando desarrollarlo como un producto real y como software libre: libre de usar, editar, mejorar, compartir ...",
+    stackText: "Las herramientas que utilizamos en este proyecto están todas bajo una licencia abierta. El proyecto Data Patch es en sí mismo 100% de código abierto. Estamos intentando desarrollarlo como un producto real y como software libre: libre de usar, editar, mejorar, compartir ...",
   },
   buttons: {
     drawer: 'Abrir el menu',
