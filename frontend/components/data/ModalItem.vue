@@ -194,6 +194,7 @@
             <ModalComment
               :item="item"
               :allowPatch="false"
+              @closeComment="closeAllShows()"
             />
           </v-col>
 

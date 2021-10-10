@@ -112,10 +112,10 @@
 
 
     <!-- DEBUGGING -->
-    <p v-if="true">
+    <div v-if="false">
       item : <code>{{ item }}</code><hr>
       buildComment : <code>{{ buildComment }}</code><hr>
-    </p>
+    </div>
 
   </v-card>
 </template>
@@ -127,18 +127,13 @@
   export default {
     name: 'ModalComment',
     props: [
-      // 'hidden',
       'item',
       'allowPatch',
       'parentComment'
     ],
-    // model: {
-    //   prop: 'hidden',
-    //   event: 'blur'
-    // },
     data () {
       return {
-        alertOwner: false,
+        alertItemOwner: false,
         // messageTitle: "",
         message: "",
         addPatch: false,
@@ -175,23 +170,19 @@
           this.item.item_type,    // comment_to_item_type
           this.item.id,           // comment_to_item_id
           this.parentCommentId,   // response_to_comment_id
-          this.patchData          // patch / patch_data
+          this.patchData,         // patch_data
+          this.alertItemOwner,    // alert_item_owner
         )
         return newComment.data
       }
     },
     methods: {
-      // handleInput(val) {
-      //   this.$emit('blur', val)
-      // },
       closeMessageBox() {
         this.$emit('closeComment')
       },
       sendComment() {
-  
-
-        this.log && console.log('C-ModalComment > sendComment > newComment :' , newComment)
         let payload = { ...this.buildComment }
+        this.log && console.log('C-ModalComment > sendComment > payload :' , payload)
         this.isLoading = true
         let url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
         this.$axios.post( url, payload, this.headerUser)

@@ -17,7 +17,8 @@ export class Comment {
     response_to_comment_id=undefined,
 
     patch_data=undefined,
-    
+    alert_item_owner=false,
+
     patch_id=undefined,
 
     comment_status=undefined,
@@ -32,7 +33,8 @@ export class Comment {
     // this.title = title
     this.message = message
     this.creation_date = creation_date
-
+    
+    this.alert_item_owner = alert_item_owner
     this.owner_email = owner_email
     this.comment_to_item_type = comment_to_item_type
     this.comment_to_item_id = comment_to_item_id
@@ -54,6 +56,7 @@ export class Comment {
       
       // owner_id: this.owner_id,
       owner_email: this.owner_email,
+      alert_item_owner: this.alert_item_owner,
 
       comment_to_item_type: this.comment_to_item_type,
       comment_to_item_id: this.comment_to_item_id,
@@ -62,7 +65,7 @@ export class Comment {
       response_to_comment_id: this.response_to_comment_id,
 
       patch_id: this.patch_id,
-      patch: this.patch_data,
+      patch_data: this.patch_data,
     }
   }
 
