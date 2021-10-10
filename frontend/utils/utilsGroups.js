@@ -15,6 +15,7 @@ export class Group {
     color='black',
     icon='icon-users',
     read='owner+groups',
+    comment='owner-only',
     write='owner-only',
     manage='owner-only',
     tags=[],
@@ -33,6 +34,7 @@ export class Group {
     this.icon = icon
     
     this.read = read
+    this.comment = comment
     this.write = write
     this.manage = manage
 
@@ -55,6 +57,7 @@ export class Group {
       icon: this.icon,
 
       read: this.read,
+      comment: this.comment,
       write: this.write,
       manage: this.manage,
 

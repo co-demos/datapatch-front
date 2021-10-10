@@ -135,17 +135,20 @@ export const itemLicenceModel = [
 ]
 
 
-export const itemAuthModelAll = [
-  ...authsModels.AuthsModelsRead,
-  ...authsModels.AuthsModelsPatch,
-  ...authsModels.AuthsModelsWriteDefault
-]
 export const itemAuthModelBasic = [
   ...authsModels.AuthsModelsRead,
+  ...authsModels.AuthsModelsComment,
+  ...authsModels.AuthsModelsWriteDefault
+]
+export const itemAuthModelAll = [
+  ...authsModels.AuthsModelsRead,
+  ...authsModels.AuthsModelsComment,
+  ...authsModels.AuthsModelsPatch,
   ...authsModels.AuthsModelsWriteDefault
 ]
 export const itemAuthModelGroup = [
   ...authsModels.AuthsModelsReadGroup,
+  ...authsModels.AuthsModelsComment,
   ...authsModels.AuthsModelsWriteRestricted
 ]
 

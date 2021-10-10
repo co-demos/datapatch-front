@@ -403,6 +403,7 @@ export default {
     defaultDescription: 'Mon groupe',
     myGroups: 'Mes groupes',
     sharedGroups: 'Groupes en partage',
+    commentGroup: 'Envoyer un commentaire',
     inviteGroup: 'Inviter une personne à rejoindre le groupe',
     askJoinGroup: 'Demander à rejoindre le groupe',
     prefsGroup: 'Préférences du groupe',
@@ -424,6 +425,7 @@ export default {
     defaultTitle: 'Ma nouvelle invitation',
     defaultMessage: 'Mon invitation',
     myInvitations: 'Mes invitations',
+    commentInvitation: 'Envoyer un commentaire',
     addInvitation: 'Ajouter une invitation',
     editInvitation: "Editer les information de l'invitation",
     selectItemType: "Sélectionner le type d'invitation",
@@ -454,6 +456,7 @@ export default {
     defaultDescription: 'La description de mon espace de travail',
     myWorkspaces: 'Mes espaces de travail',
     sharedWorkspaces: 'Espaces de travail partagés',
+    commentWorkspace: 'Envoyer un commentaire',
     inviteWorkspace: 'Inviter une personne ou un groupe',
     prefsWorkspace: "Préférences de l'espace de travail",
     renameWorkspace: "Renommer l'espace de travail",
@@ -470,6 +473,7 @@ export default {
     defaultTitle: 'Mon nouveau jeu de données',
     defaultDescription: 'La description de mon jeu de données',
     prefsDataset: 'Préférences du jeu de données',
+    commentDataset: 'Envoyer un commentaire',
     inviteDataset: 'Inviter une personne ou un groupe',
     editDataset: 'Editer les informations du jeu de données',
     renameDataset: 'Renommer le jeu de données',
@@ -501,6 +505,7 @@ export default {
     defaultTitle: 'Ma nouvelle table',
     defaultDescription: 'La description de ma table',
     prefsTable: 'Préférences de la table',
+    commentTable: 'Envoyer un commentaire',
     inviteTable: 'Inviter une personne ou un groupe',
     editTable: 'Editer les informations de la table',
     renameTable: 'Renommer la table',
@@ -530,6 +535,7 @@ export default {
   fields: {
     newField: 'champ',
     newFieldTitle: 'titre du nouveau champ',
+    commentField: 'Envoyer un commentaire',
     str: 'texte',
     longStr: 'texte long',
     bool: 'booléen',
@@ -554,5 +560,9 @@ export default {
 
   row: {
     edit: 'Editer la ligne',
+    commentRow: 'Envoyer un commentaire',
+  },
+  cell: {
+    commentCell: 'Envoyer un commentaire',
   }
 }

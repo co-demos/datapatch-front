@@ -401,6 +401,7 @@ export default {
     defaultDescription: 'My group description',
     myGroups: 'My groups',
     sharedGroups: 'Shared groups',
+    commentGroup: 'Send a comment',
     inviteGroup: 'Invite people to the group',
     askJoinGroup: 'Ask to join the group',
     prefsGroup: 'Group preferences',
@@ -422,6 +423,7 @@ export default {
     defaultTitle: 'My new invitation',
     defaultMessage: 'My invitation message',
     myInvitations: 'My invitations',
+    commentInvitation: 'Send a comment',
     addInvitation: 'Add a invitation',
     editInvitation: 'Edit invitation infos',
     selectItemType: "Select the invitation type",
@@ -452,6 +454,7 @@ export default {
     defaultDescription: 'My workspace description',
     myWorkspaces: 'My workspaces',
     sharedWorkspaces: 'Shared workspaces',
+    commentWorkspace: 'Send a comment',
     inviteWorkspace: 'Invite people or group',
     prefsWorkspace: 'Workspace preferences',
     renameWorkspace: 'Rename the workspace',
@@ -468,6 +471,7 @@ export default {
     defaultTitle: 'My new dataset',
     defaultDescription: 'My dataset description',
     prefsDataset: 'Dataset preferences',
+    commentDataset: 'Send a comment',
     inviteDataset: 'Invite people or group',
     editDataset: 'Edit dataset infos',
     renameDataset: 'Rename the dataset',
@@ -499,6 +503,7 @@ export default {
     defaultTitle: 'My new table',
     defaultDescription: 'My table description',
     prefsTable: 'Table preferences',
+    commentTable: 'Send a comment',
     inviteTable: 'Invite people or group',
     editTable: 'Edit table infos',
     renameTable: 'Rename the table',
@@ -528,6 +533,7 @@ export default {
   fields: {
     newField: 'field',
     newFieldTitle: "new field's title",
+    commentField: 'Send a comment',
     str: 'string',
     longStr: 'long string',
     bool: 'boolean',
@@ -552,5 +558,9 @@ export default {
 
   row: {
     edit: 'Edit the row',
+    commentRow: 'Send a comment',
+  },
+  cell: {
+    commentCell: 'Send a comment',
   }
 }

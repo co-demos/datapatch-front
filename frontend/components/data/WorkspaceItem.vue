@@ -126,6 +126,23 @@
             <v-divider></v-divider>
 
             <v-list-item
+              @click.stop="dialogComment += 1; dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-message-square
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('workspaces.commentWorkspace') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-list-item
               @click.stop="dialogShare += 1; dialog += 1"
               >
               <!-- @click.stop="shareWorkspace()" -->
@@ -169,6 +186,7 @@
           :noAvatar="true"
           :itemModel="itemModel"
           :parentDialog="dialog"
+          :parentComment="dialogComment"
           :parentShare="dialogShare"
           :itemType="itemType"
           :apiUrl="apiUrl"
@@ -318,7 +336,8 @@
     data () {
       return {
         dialog: 0,
-        dialogShare:0,
+        dialogShare: 0,
+        dialogComment: 0,
         dialogDelete: 0,
         hover: false,
         drag: false,

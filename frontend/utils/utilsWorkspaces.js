@@ -15,7 +15,7 @@ export class Workspace {
     icon='icon-apps',
     datasets=[],
     read='owner-only',
-    // comment='owner-only',
+    comment='owner-only',
     // patch='owner-only',
     write='owner-only',
     manage='owner-only',
@@ -30,7 +30,7 @@ export class Workspace {
     this.icon = icon
     this.datasets = datasets
     this.read = read
-    // this.comment = comment
+    this.comment = comment
     // this.patch = patch
     this.write = write
     this.manage = manage
@@ -51,7 +51,7 @@ export class Workspace {
       datasets: this.datasets,
 
       read: this.read,
-      // comment: this.comment,
+      comment: this.comment,
       // patch: this.patch,
       write: this.write,
       manage: this.manage,

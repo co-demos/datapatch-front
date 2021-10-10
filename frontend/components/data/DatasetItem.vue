@@ -239,6 +239,23 @@
             <v-divider/>
 
             <v-list-item
+              @click.stop="dialogComment += 1; dialog += 1"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-message-square
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.commentDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider/>
+  
+            <v-list-item
               @click.stop="dialogShare += 1; dialog += 1"
               >
               <v-list-item-action>
@@ -280,6 +297,7 @@
       <ModalItem
         v-if="ds"
         :parentDialog="dialog"
+        :parentComment="dialogComment"
         :parentShare="dialogShare"
         :item="ds"
         :fromWorkspace="fromWorkspace"
@@ -363,6 +381,7 @@
       return {
         dialog: 0,
         dialogCreate: 0,
+        dialogComment: 0,
         dialogShare: 0,
         dialogDelete: 0,
 

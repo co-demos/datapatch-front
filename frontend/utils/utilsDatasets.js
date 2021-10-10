@@ -26,7 +26,7 @@ export class Dataset {
     licence='ODbL',
     tables=[],
     read='public',
-    // comment='owner-only',
+    comment='owner-only',
     patch='public',
     write='owner+groups',
     manage='owner-only',
@@ -44,7 +44,7 @@ export class Dataset {
     this.licence=licence
     this.tables = tables
     this.read = read
-    // this.comment = comment
+    this.comment = comment
     this.patch = patch
     this.write = write
     this.manage = manage
@@ -64,7 +64,7 @@ export class Dataset {
       licence: this.licence,
       tables: this.tables,
       read: this.read,
-      // comment: this.comment,
+      comment: this.comment,
       patch: this.patch,
       write: this.write,
       manage: this.manage,

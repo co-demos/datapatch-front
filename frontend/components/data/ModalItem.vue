@@ -51,7 +51,7 @@
 
             <nuxt-link
               v-if="itemType !== 'fields'"
-              :class="`text-none no-decoration ${localItem.color || 'black'}--text ${noPointer ? 'no-pointer' : ''}`"
+              :class="`text-none mr-2 no-decoration ${localItem.color || 'black'}--text ${noPointer ? 'no-pointer' : ''}`"
               :to="getItemLink"
               >
               {{ localItem.title }}
@@ -64,6 +64,31 @@
               >
               {{ localItem.text }}
             </span>
+
+            <!-- OPEN COMMENT -->
+            <v-tooltip
+              right
+              >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  :dark="showComment"
+                  :class="`ml-3 ${showComment ? localItem.color || 'grey' : ''}`"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click.stop="openShow('showComment')"
+                  >
+                  <v-icon
+                    small
+                    :color="showComment ? 'white' : localItem.color || 'grey'"
+                    >
+                    icon-message-square
+                  </v-icon>
+                </v-btn>
+              </template>
+              {{ $t(`buttons.comment`) }}
+            </v-tooltip>
 
             <!-- OPEN INVITATION -->
             <v-tooltip
@@ -78,7 +103,7 @@
                   :class="`ml-3 ${showSearch ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="showSearch = !showSearch"
+                  @click.stop="openShow('showSearch')"
                   >
                   <v-icon
                     small
@@ -104,7 +129,7 @@
                   :class="`ml-3 ${showAskJoin ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="showAskJoin = !showAskJoin"
+                  @click.stop="openShow('showAskJoin')"
                   >
                   <v-icon
                     small
@@ -132,6 +157,50 @@
         </v-row>
       </v-card-title>
 
+      <!-- COMMENT ITEM -->
+      <v-expand-transition>
+        <v-row
+          v-show="showComment"
+          :class="`align-center justify-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color}`"
+          dense
+          >
+          <v-col cols="11" class="offset-1 justify-left">
+            <v-row class="ma-0">
+              <!-- <p class="subtitle-2 white--text mb-0">
+                {{ $t(`buttons.comment`) }}
+              </p> -->
+              <v-btn
+                icon
+                absolute
+                small
+                rounded
+                dark
+                right
+                elevation="0"
+                class="flex align-self-center"
+                @click="closeAllShows()"
+                >
+                <v-icon medium>
+                  icon-clear
+                </v-icon>
+              </v-btn>
+            </v-row>
+          </v-col>
+
+          <v-col
+            cols="8"
+            class="justify-center mb-5 pt-5"
+            >
+            <ModalComment
+              :item="item"
+              :allowPatch="false"
+            />
+          </v-col>
+
+        </v-row>
+      </v-expand-transition>
+
+
       <!-- INVITE SEARCH USER OR GROUP -->
       <v-expand-transition>
         <v-row
@@ -153,7 +222,7 @@
                 right
                 elevation="0"
                 class="flex align-self-center"
-                @click="showSearch = false"
+                @click="closeAllShows()"
                 >
                 <v-icon medium>
                   icon-clear
@@ -203,7 +272,7 @@
                 right
                 elevation="0"
                 class="flex align-self-center"
-                @click="showAskJoin = false"
+                @click="closeAllShows()"
                 >
                 <v-icon medium>
                   icon-clear
@@ -302,6 +371,7 @@
       'fromWorkspace',
       'itemModel',
       'parentDialog',
+      'parentComment',
       'parentShare',
       'parentAskJoin',
       'itemType',
@@ -312,6 +382,9 @@
       'onlyLocalUpdate',
       'noLink'
     ],
+    components: {
+      ModalComment: () => import(/* webpackChunkName: "ModalComment" */ '@/components/dialogs/ModalComment.vue'),
+    },
     watch: {
       item () {
         this.rebuildLocalItem()
@@ -319,12 +392,19 @@
       parentDialog (next) {
         this.dialog = next
       },
+      parentComment (next) {
+        this.showAskJoin = false
+        this.showComment = true
+        this.showSearch = false
+      },
       parentShare (next) {
+        this.showComment = false
         this.showAskJoin = false
         this.showSearch = true
       },
       parentAskJoin (next) {
         this.showSearch = false
+        this.showComment = false
         this.showAskJoin = true
       },
     },
@@ -333,6 +413,7 @@
         localItem: undefined,
         dialog: false,
         showSearch: false,
+        showComment: false,
         showAskJoin: false,
         tab: null,
         tabsSpaces: [],
@@ -354,7 +435,7 @@
         // this.log && console.log('C-ModalItem > isAuthorizedForItem > this.userData :' , this.userData)
         // this.log && console.log('C-ModalItem > isAuthorizedForItem > this.localItem :' , this.localItem)
         let basicAuth = !!this.isAuthenticated && !!this.userData.id
-        let isOwner = this.userData.id === this.localItem.owner_id
+        // let isOwner = this.userData.id === this.localItem.owner_id
         // this.log && console.log('C-ModalItem > isAuthorizedForItem > isOwner :' , isOwner)
         return basicAuth
       },
@@ -378,6 +459,21 @@
       this.tabsSpaces = Object.keys(this.itemModel)
     },
     methods: {
+      openShow(showName)  {
+        let shows = [ 'showSearch', 'showComment', 'showAskJoin' ]
+        shows.forEach( show => { 
+          this[show] = showName === show ? !this[showName] : false
+        })
+        // this.showSearch = false
+        // this.showComment = false
+        // this.showAskJoin = false
+        // this[showName] = !this[showName]
+      },
+      closeAllShows()  {
+        this.showSearch = false
+        this.showComment = false
+        this.showAskJoin = false
+      },
       rebuildLocalItem() {
         let updateInStore = ['fields', 'tables']
         this.needUpdateStore = updateInStore.includes(this.itemType)

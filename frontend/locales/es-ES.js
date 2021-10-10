@@ -403,6 +403,7 @@ export default {
     defaultDescription: 'Mi grupo',
     myGroups: 'Mis grupos',
     sharedGroups: 'Grupos compartidos',
+    commentGroup: 'Comentar',
     inviteGroup: 'Invitar una persona al grupo',
     askJoinGroup: 'Pedir a reunirse al grupo',
     prefsGroup: 'Preferencias del grupo',
@@ -424,6 +425,7 @@ export default {
     defaultTitle: 'Mi nueva invitation',
     defaultMessage: 'Mi invitacion',
     myInvitations: 'Mis invitaciones',
+    commentInvitation: 'Comentar',
     addInvitation: 'Añadir una invitacion',
     editInvitation: "Editar las informaciones de la invitacion",
     selectItemType: "Elejir el tipo de invitacion",
@@ -454,6 +456,7 @@ export default {
     defaultDescription: 'La descripion de mi espacio de trabajo',
     myWorkspaces: 'Mis espacios de trabajo',
     sharedWorkspaces: 'Espacios de trabajo compartidos',
+    commentWorkspace: 'Comentar',
     inviteWorkspace: 'Invitar una persona o un grupo',
     prefsWorkspace: "Preferencias del espacio de trabajo",
     renameWorkspace: "Cambiar el nombre del espacio de trabajo",
@@ -470,6 +473,7 @@ export default {
     defaultTitle: 'Mis nuevos datos',
     defaultDescription: 'La descripcion de mis datos',
     prefsDataset: 'Preferencias de los datos',
+    commentDataset: 'Comentar',
     inviteDataset: 'Invitar una persona o un grupo',
     editDataset: 'Editar las informaciones du datos',
     renameDataset: 'Cambiar el nombre le datos',
@@ -501,6 +505,7 @@ export default {
     defaultTitle: 'Mi nueva tabula',
     defaultDescription: 'La descripcion de ma tabula',
     prefsTable: 'Preferencias de la tabula',
+    commentTable: 'Comentar',
     inviteTable: 'Invitar una persona o un grupo',
     editTable: 'Editar las informaciones de la tabula',
     renameTable: 'Cambiar el nombre la tabula',
@@ -530,6 +535,7 @@ export default {
   fields: {
     newField: 'campo',
     newFieldTitle: 'titulo del nuevo campo',
+    commentField: 'Comentar',
     str: 'texto',
     longStr: 'texto long',
     bool: 'boolean',
@@ -554,5 +560,9 @@ export default {
 
   row: {
     edit: 'Editar la linea',
+    commentCell: 'Comentar',
+  },
+  cell: {
+    commentCell: 'Comentar',
   }
 }
