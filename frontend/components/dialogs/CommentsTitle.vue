@@ -64,7 +64,7 @@
           small
           rounded
           elevation="0"
-          @click="closeMessageBox()"
+          @click="closeCommentsBox()"
           >
           <v-icon>
             icon-clear
@@ -78,7 +78,7 @@
 
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
-  import { Comment } from '@/utils/utilsComments.js'
+  // import { Comment } from '@/utils/utilsComments.js'
 
   export default {
     name: 'CommentsTitle',
@@ -111,9 +111,9 @@
     methods: {
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
-        populateCurrentItem: 'comments/populateCurrentItem',
+        // populateCurrentItem: 'comments/populateCurrentItem',
       }),
-      closeMessageBox() {
+      closeCommentsBox() {
         this.togggleShowCommentsBox(false)
         // this.$emit('closeComment')
       },

@@ -15,34 +15,9 @@
     :style="'width: 100%'"
     >
 
-    <!-- <v-card-title class="mb-6 justify-center">
-      <v-icon
-        small
-        class="mr-4 mb-n1"
-        color="grey"
-        >
-        icon-message-square
-      </v-icon>
-      {{ $t(`buttons.comment`) }}
-    </v-card-title> -->
-
     <v-row class="justify-center mt-3 mb-1 mx-0">
       
       <!-- COMMENT DATA -->
-      <!-- <v-col 
-        cols="10"
-        class="py-0 mb-2"
-        >
-        <v-text-field
-          filled
-          hide-details="auto"
-          :label="$t('dataPackage.title')"
-          clearable
-          v-model="messageTitle"
-          dense
-        />
-      </v-col> -->
-
       <v-col 
         :cols="cols"
         class="py-0 mt-2 mb-6"
@@ -76,13 +51,6 @@
         :cols="cols"
         class="py-0"
         >
-        <!-- <v-text-field
-          regular
-          hide-details="auto"
-          :label="$t('comments.alertItemOwner')"
-          v-model="alertItemOwner"
-          dense
-        /> -->
         <v-checkbox
           class=""
           off-icon="icon-square"
@@ -111,7 +79,7 @@
           text
           rounded
           block
-          @click="closeMessageBox()"
+          @click="closeCommentsBox()"
           >
           <v-icon
             class="mr-2"
@@ -176,7 +144,6 @@
       return {
         cols: 12,
         alertItemOwner: false,
-        // messageTitle: "",
         message: "",
         addPatch: false,
         patchData: undefined,
@@ -206,7 +173,6 @@
       },
       buildComment() {
         let newComment = new Comment(
-          // this.messageTitle,   // title
           this.message,           // message
           this.optionalEmail,     // owner_email
           this.item.item_type,    // comment_to_item_type
@@ -223,7 +189,7 @@
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
       }),
-      closeMessageBox() {
+      closeCommentsBox() {
         this.togggleShowCommentsBox(false)
         // this.$emit('closeComment')
       },
@@ -234,9 +200,10 @@
         let url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
         this.$axios.post( url, payload, this.headerUser)
           .then(resp => {
+            // TO FINISH ...
             this.log && console.log('C-CommentInput > sendComment > resp.data : ', resp.data)
             this.isLoading = false
-            // this.closeMessageBox()
+            // this.closeCommentsBox()
             // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
             // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
             // this.ioBroadcastAction(ioData, rooms, callback)

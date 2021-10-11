@@ -140,7 +140,7 @@
             x-small
             v-bind="attrs"
             v-on="on"
-            @click.stop="searchOpen = !searchOpen"
+            @click.stop="closeCommentsBox(); searchOpen = !searchOpen"
             >
             <v-icon
               :class="searchOpen ? 'primary--text' : ''"
@@ -176,7 +176,7 @@
             small
             rounded
             elevation="0"
-            @click="searchOpen = false"
+            @click="closeCommentsBox(); searchOpen = false"
             dark
             >
             <v-icon>icon-clear</v-icon>
@@ -219,7 +219,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'DefaultNavbar',
@@ -400,6 +400,14 @@
       })
     },
     methods: {
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        // populateCurrentItem: 'comments/populateCurrentItem',
+      }),
+      closeCommentsBox() {
+        this.togggleShowCommentsBox(false)
+        // this.$emit('closeComment')
+      },
       ioBroadcastAction(ioData, rooms, callback) {
         // FOR TESTING PURPOSES
         this.log && console.log("C-InvitationItem > ioBroadcastAction > ioData : ", ioData)
