@@ -1,25 +1,32 @@
+<style scoped>
+  .comment {
+    border-radius: 30px !important;
+  }
+
+</style>
+
 <template>
 
   <v-card
     outlined
     light
-    elevation="0"
-    class="ModalComment my-2 pa-3"
+    :elevation="elevation || 0"
+    class="CommentInput pa-3 comment"
     :style="'width: 100%'"
     >
 
-    <v-card-title class="mb-6 justify-center">
+    <!-- <v-card-title class="mb-6 justify-center">
       <v-icon
         small
-        class="mr-4"
+        class="mr-4 mb-n1"
         color="grey"
         >
         icon-message-square
       </v-icon>
       {{ $t(`buttons.comment`) }}
-    </v-card-title>
+    </v-card-title> -->
 
-    <v-row class="justify-center mb-3">
+    <v-row class="justify-center mt-3 mb-1 mx-0">
       
       <!-- COMMENT DATA -->
       <!-- <v-col 
@@ -37,26 +44,11 @@
       </v-col> -->
 
       <v-col 
-        cols="10"
-        class="py-0 mb-2"
-        >
-        <v-textarea
-          filled
-          rows="3"
-          class="mb-2"
-          hide-details="auto"
-          :label="$t('dataPackage.message')"
-          v-model="message"
-          dense
-        />
-      </v-col>
-
-      <v-col 
-        cols="10"
-        class="py-0 mb-2"
+        :cols="cols"
+        class="py-0 mt-2 mb-6"
         >
         <v-text-field
-          filled
+          regular
           hide-details="auto"
           :label="$t('me.email')"
           clearable
@@ -66,45 +58,93 @@
         />
       </v-col>
 
+      <v-col 
+        :cols="cols"
+        class="py-0"
+        >
+        <v-textarea
+          regular
+          rows="4"
+          hide-details="auto"
+          :label="$t('dataPackage.message')"
+          v-model="message"
+          dense
+        />
+      </v-col>
+
+      <v-col 
+        :cols="cols"
+        class="py-0"
+        >
+        <!-- <v-text-field
+          regular
+          hide-details="auto"
+          :label="$t('comments.alertItemOwner')"
+          v-model="alertItemOwner"
+          dense
+        /> -->
+        <v-checkbox
+          class=""
+          off-icon="icon-square"
+          on-icon="icon-check-square"
+          v-model="alertItemOwner"
+          dense
+          >
+          <template v-slot:label>
+            <span 
+              :class="`caption grey--text`"
+              >
+              {{ $t('comments.alertItemOwner') }}
+            </span>
+          </template>
+        </v-checkbox>
+      </v-col>
 
       <!-- ACTION / BUTTONS -->
-      <v-col cols="5" class="mt-5">
+      <v-col 
+        :cols="cols/2" 
+        class="mt-0 pa-1"
+        >
         <v-btn
           color="grey darken-1"
           class="px-3"
-          dark
-          large
+          text
+          rounded
           block
-          tile
-          elevation="0"
           @click="closeMessageBox()"
           >
           <v-icon
-            class="mr-4"
+            class="mr-2"
+            small
             >
             icon-clear
           </v-icon>
-          {{ $t('buttons.cancel') }}
+          <span class="text-none">
+            {{ $t('buttons.cancel') }}
+          </span>
         </v-btn>
       </v-col>
-      <v-col cols="5" class="mt-5">
+      <v-col 
+        :cols="cols/2" 
+        class="mt-0 pa-1"
+        >
         <v-btn
           :color="'primary darken-1'"
           class="px-3"
-          dark
+          text
+          rounded
           block
-          large
-          tile
-          elevation="0"
           @click="sendComment()"
           >
           <v-icon
             small
-            class="mr-4"
+            class="mr-2"
             >
             icon-message-square
           </v-icon>
-          {{ $t(`buttons.comment`) }}
+          <span class="text-none">
+            {{ $t(`buttons.comment`) }}
+          </span>
         </v-btn>
       </v-col>
 
@@ -121,18 +161,20 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   import { Comment } from '@/utils/utilsComments.js'
 
   export default {
-    name: 'ModalComment',
+    name: 'CommentInput',
     props: [
       'item',
+      'elevation',
       'allowPatch',
       'parentComment'
     ],
     data () {
       return {
+        cols: 12,
         alertItemOwner: false,
         // messageTitle: "",
         message: "",
@@ -164,7 +206,7 @@
       },
       buildComment() {
         let newComment = new Comment(
-          // this.messageTitle,      // title
+          // this.messageTitle,   // title
           this.message,           // message
           this.optionalEmail,     // owner_email
           this.item.item_type,    // comment_to_item_type
@@ -177,17 +219,22 @@
       }
     },
     methods: {
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
+      }),
       closeMessageBox() {
-        this.$emit('closeComment')
+        this.togggleShowCommentsBox(false)
+        // this.$emit('closeComment')
       },
       sendComment() {
         let payload = { ...this.buildComment }
-        this.log && console.log('C-ModalComment > sendComment > payload :' , payload)
+        this.log && console.log('C-CommentInput > sendComment > payload :' , payload)
         this.isLoading = true
         let url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
         this.$axios.post( url, payload, this.headerUser)
           .then(resp => {
-            this.log && console.log('C-SearchList > handleAction > resp.data : ', resp.data)
+            this.log && console.log('C-CommentInput > sendComment > resp.data : ', resp.data)
             this.isLoading = false
             // this.closeMessageBox()
             // let rooms = payload.invitees.map( invitee => invitee.invitee_email )

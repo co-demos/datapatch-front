@@ -603,7 +603,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   import { ItemTypesOptions, InvitationStatuses } from '@/utils/utilsInvitations'
   import { AuthLevelsChoices, GetAuthObject } from '@/utils/utilsAuths'
 
@@ -642,7 +642,7 @@
             color: 'primary',
             icon: 'icon-message-square', 
             for: ['sent', 'received'],
-            disabled: true
+            // disabled: true
           },
           { 
             action: 'refuse', 
@@ -757,6 +757,14 @@
       }
     },
     methods: {
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
+      }),
+      openComments(item) {
+        this.populateCurrentItem(item)
+        this.togggleShowCommentsBox(true)
+      },
       updateItemDebounced(field, val) {
         // cancel pending call
         clearTimeout(this._timerId)
@@ -869,18 +877,20 @@
 
         // user's invitations => comment
         if (this.action === 'comment' ) {
+          this.isLoading = false
+          this.openComments(this.invit)
           // update invitation
-          this.$axios.put( url, payload, this.headerUser)
-            .then(resp => {
-              this.log && console.log('C-InvitationItem > handleAction > comment > resp.data : ', resp.data)
-              let rooms = this.invitType === 'sent' ? [ resp.data.invitee ] : [ resp.data.owner.email ]
-              let callback = { item_type: 'invitation', method: 'get' }
-              this.ioBroadcastAction( resp.data, rooms, callback )
-              this.isLoading = false
-            })
-            .catch(error => {
-              this.isLoading = false
-            })
+          // this.$axios.put( url, payload, this.headerUser)
+          //   .then(resp => {
+          //     this.log && console.log('C-InvitationItem > handleAction > comment > resp.data : ', resp.data)
+          //     let rooms = this.invitType === 'sent' ? [ resp.data.invitee ] : [ resp.data.owner.email ]
+          //     let callback = { item_type: 'invitation', method: 'get' }
+          //     this.ioBroadcastAction( resp.data, rooms, callback )
+          //     this.isLoading = false
+          //   })
+          //   .catch(error => {
+          //     this.isLoading = false
+          //   })
         }
 
       },

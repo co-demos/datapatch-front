@@ -1,8 +1,15 @@
+<style scoped>
+  .top-z {
+    z-index: 400 !important;
+  }
+</style>
+
 <template>
   <v-menu
     offset-y
     close-on-click
     open-on-hover
+    class="top-z"
     >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -16,7 +23,9 @@
         {{ $i18n.locale }}
       </v-btn>
     </template>
-    <v-list v-model="$i18n.locale">
+    <v-list 
+      v-model="$i18n.locale"
+      >
       <v-list-item
         v-for="lang in $i18n.locales"
         :key="lang.code"
@@ -24,8 +33,7 @@
         @click="$i18n.setLocale(lang.code), updateUserLoc(lang.code)"
         >
         {{ lang.name }}
-        </v-list-item
-      >
+        </v-list-item>
     </v-list>
   </v-menu>
 </template>

@@ -12,6 +12,8 @@
 
     <SpaceTabs/>
 
+    <FloatingCommentsBox/>
+
     <v-main class="mt-0 pt-0">
       <!-- {{ $i18n.locale }} -->
       <v-container class="">
@@ -35,9 +37,10 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
-    SpaceTabs: () => import('@/components/navbars/SpaceTabs.vue'),
-    BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
+    DefaultNavbar: () => import(/* webpackChunkName: "DefaultNavbar" */ '@/components/navbars/DefaultNavbar.vue'),
+    FloatingCommentsBox: () => import(/* webpackChunkName: "FloatingCommentsBox" */ '@/components/dialogs/FloatingCommentsBox.vue'),
+    SpaceTabs: () => import(/* webpackChunkName: "SpaceTabs" */ '@/components/navbars/SpaceTabs.vue'),
+    BasicFooter: () => import(/* webpackChunkName: "BasicFooter" */ '@/components/footers/BasicFooter.vue'),
   },
   // head() {
   //   return {

@@ -189,8 +189,9 @@
 
               <v-divider/>
 
+                <!-- @click.stop="dialogComment += 1; dialog += 1" -->
               <v-list-item
-                @click.stop="dialogComment += 1; dialog += 1"
+                @click.stop="openComments(grp)"
                 >
                 <v-list-item-action>
                   <v-icon small>
@@ -199,7 +200,7 @@
                 </v-list-item-action>
                 <v-list-item-content>
                   <v-list-item-title>
-                    {{ $t('groups.commentroup') }}
+                    {{ $t('groups.commentGroup') }}
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -318,7 +319,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   import { Group } from '@/utils/utilsGroups'
 
   import { importOptionsInfos } from '@/utils/utilsImports.js'
@@ -418,6 +419,14 @@
       },
     },
     methods: {
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
+      }),
+      openComments(item) {
+        this.populateCurrentItem(item)
+        this.togggleShowCommentsBox(true)
+      },
       // currentLoadingState() {
       //   return this.loadingItem === this.groupId
       // },

@@ -1,3 +1,9 @@
+<style scoped>
+  .top-z {
+    z-index: 400 !important;
+  }
+</style>
+
 <template>
 
   <v-menu
@@ -5,6 +11,7 @@
     close-on-click
     open-on-hover
     color="white"
+    class="top-z"
     >
     <template v-slot:activator="{ on, attrs }">
       <v-btn

@@ -65,7 +65,7 @@ export class Comment {
       response_to_comment_id: this.response_to_comment_id,
 
       patch_id: this.patch_id,
-      patch_data: this.patch_data,
+      patch: this.patch_data,
     }
   }
 

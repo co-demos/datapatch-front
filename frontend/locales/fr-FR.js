@@ -450,6 +450,9 @@ export default {
     details: "Détails de l'invitation",
     detailsClose: "Fermer le panneau des détails de l'invitation",
   },
+  comments: {
+    alertItemOwner: "Alerter le propriétaire de l'objet",
+  },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',
     defaultTitle: 'Mon nouvel espace de travail',

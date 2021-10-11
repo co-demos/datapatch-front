@@ -125,8 +125,9 @@
 
             <v-divider></v-divider>
 
+                <!-- dialogComment += 1; dialog += 1;  -->
             <v-list-item
-              @click.stop="dialogComment += 1; dialog += 1"
+              @click.stop="openComments(ws)"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -315,7 +316,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   // import { configHeaders } from '@/utils/utilsAxios'
   // import { Workspace } from '@/utils/utilsWorkspaces'
   // import { Dataset } from '@/utils/utilsDatasets'
@@ -397,6 +398,14 @@
       })
     },
     methods: {
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
+      }),
+      openComments(item) {
+        this.populateCurrentItem(item)
+        this.togggleShowCommentsBox(true)
+      },
       getDatasets(ws) {
         // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
         let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)

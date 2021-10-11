@@ -450,6 +450,9 @@ export default {
     details: "Detalles de la invitacion",
     detailsClose: "Cerrar el panel de detalles de la invitacion",
   },
+  comments: {
+    alertItemOwner: 'Alertar el proprietario',
+  },
   workspaces: {
     defaultHelp: 'Puede ahora crear un nuevo espacio de trabajo...',
     defaultTitle: 'Mi nuevo espacio de trabajo',

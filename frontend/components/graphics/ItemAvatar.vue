@@ -7,10 +7,12 @@
 <template>
 
   <div>
-    <!-- <span class="black--text" > -->
-      <!-- {{ item }} -->
-      <!-- - {{ itemType }} -->
-    <!-- </span> -->
+    <!-- DEBUGGING -->
+    <span class="black--text" v-if="false">
+      item : <code>{{ item }}</code><br>
+      itemType: <code>{{ itemType }}</code>
+    </span>
+
     <v-avatar
       v-if="!noAvatar"
       rounded
@@ -27,7 +29,7 @@
         {{ item.icon }}
       </v-icon>
       <v-icon v-else-if="noIconTypes.includes(itemType)" dark class="black--text">
-        icon-table
+        {{ defaultIconTypes[itemType]}}
       </v-icon>
       <span v-else class="white--text body-1 no-decoration">
         {{ getInitials(item.title) }}
@@ -42,6 +44,15 @@
       >
       {{ item.icon }}
     </v-icon>
+
+    <!-- <v-icon
+      v-if="noAvatar && !item.icon"
+      dark
+      color="black"
+      class="mx-3"
+      >
+      {{ getDefaultIcon() }}
+    </v-icon> -->
 
     <v-card
       v-if="itemType === 'fields'"
@@ -98,7 +109,13 @@ export default {
   ],
   data () {
     return {
-      noIconTypes: ['tables', 'field']
+      noIconTypes: ['tables', 'field', 'invitation', 'comment'],
+      defaultIconTypes: {
+        tables : 'icon-table', 
+        field : 'icon-table', 
+        comment : 'icon-message-square',
+        invitation : 'icon-user-plus'
+      }
     }
   },
   methods: {
@@ -108,6 +125,7 @@ export default {
     fieldIcon (type) {
       return FindFieldIcon(type)
     },
+
   }
 
 }

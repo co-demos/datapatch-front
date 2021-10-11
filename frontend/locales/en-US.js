@@ -448,6 +448,9 @@ export default {
     details: 'Invitation details',
     detailsClose: 'Close invitation details panel',
   },
+  comments: {
+    alertItemOwner: 'Alert item owner',
+  },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',
     defaultTitle: 'My new workspace',

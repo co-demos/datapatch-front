@@ -66,7 +66,7 @@
             </span>
 
             <!-- OPEN COMMENT -->
-            <v-tooltip
+            <!-- <v-tooltip
               right
               >
               <template v-slot:activator="{ on, attrs }">
@@ -88,7 +88,7 @@
                 </v-btn>
               </template>
               {{ $t(`buttons.comment`) }}
-            </v-tooltip>
+            </v-tooltip> -->
 
             <!-- OPEN INVITATION -->
             <v-tooltip
@@ -158,7 +158,7 @@
       </v-card-title>
 
       <!-- COMMENT ITEM -->
-      <v-expand-transition>
+      <!-- <v-expand-transition>
         <v-row
           v-show="showComment"
           :class="`align-center justify-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color}`"
@@ -166,9 +166,6 @@
           >
           <v-col cols="11" class="offset-1 justify-left">
             <v-row class="ma-0">
-              <!-- <p class="subtitle-2 white--text mb-0">
-                {{ $t(`buttons.comment`) }}
-              </p> -->
               <v-btn
                 icon
                 absolute
@@ -199,7 +196,7 @@
           </v-col>
 
         </v-row>
-      </v-expand-transition>
+      </v-expand-transition> -->
 
 
       <!-- INVITE SEARCH USER OR GROUP -->
@@ -384,7 +381,7 @@
       'noLink'
     ],
     components: {
-      ModalComment: () => import(/* webpackChunkName: "ModalComment" */ '@/components/dialogs/ModalComment.vue'),
+      // ModalComment: () => import(/* webpackChunkName: "ModalComment" */ '@/components/dialogs/ModalComment.vue'),
     },
     watch: {
       item () {
