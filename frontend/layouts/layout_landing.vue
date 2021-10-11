@@ -31,8 +31,8 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
-    BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
+    DefaultNavbar: () => import(/* webpackChunkName: "DefaultNavbar" */ '@/components/navbars/DefaultNavbar.vue'),
+    BasicFooter: () => import(/* webpackChunkName: "BasicFooter" */ '@/components/footers/BasicFooter.vue'),
   },
   // head() {
   //   return {
