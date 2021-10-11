@@ -88,6 +88,23 @@
           <v-divider/>
 
           <v-list-item
+            @click.stop="openComments(table)"
+            >
+            <v-list-item-action>
+              <v-icon small>
+                icon-message-square
+              </v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('datasets.commentDataset') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-divider/>
+
+          <v-list-item
             :disabled="!canDeleteTable"
             @click.stop="dialogDelete += 1"
             >
@@ -218,6 +235,14 @@
       //     this.hover = true
       //   })
       // },
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
+      }),
+      openComments(item) {
+        this.populateCurrentItem(item)
+        this.togggleShowCommentsBox(true)
+      },
       getTextColor(tableId) {
         let color = this.getDatasetColor
         let txtColor = this.tab !== tableId ? 'white' : color

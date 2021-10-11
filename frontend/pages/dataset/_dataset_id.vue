@@ -116,7 +116,24 @@
             <v-divider/>
 
             <v-list-item
-              @click.stop="dialog += 1"
+              @click.stop="openComments(currentDataset)"
+              >
+              <v-list-item-action>
+                <v-icon small>
+                  icon-message-square
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('datasets.commentDataset') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider/>
+
+            <v-list-item
+              @click.stop="dialogShare += 1; dialog += 1"
               >
               <v-list-item-action>
                 <v-icon small>
@@ -165,6 +182,7 @@
     <ModalItem
       v-if="currentDataset"
       :parentDialog="dialog"
+      :parentShare="dialogShare"
       :item="currentDataset"
       :itemModel="itemModel"
       :itemType="itemType"
@@ -281,8 +299,14 @@
     methods: {
       ...mapActions({
         updatePath: 'updateCrumbsPath',
-        setCurrentTables: 'tables/setCurrentTables'
+        setCurrentTables: 'tables/setCurrentTables',
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
       }),
+      openComments(item) {
+        this.populateCurrentItem(item)
+        this.togggleShowCommentsBox(true)
+      },
       deleteDataset() {
         // this.log && console.log("C-Dataset > deleteDataset > this.headerUser :", this.headerUser)
         // this.log && console.log(`\nC-Dataset > deleteDataset > ds ${this.currentDataset.id} > this.fromWorkspace :`, this.fromWorkspace)

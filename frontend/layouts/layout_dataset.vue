@@ -11,6 +11,8 @@
       :getDatasetColor="true"
     />
 
+    <FloatingCommentsBox/>
+
     <v-main class="pt-5">
 
       <v-container class="my-0 px-0 pt-0">
@@ -28,8 +30,9 @@
 export default {
   name: 'layoutDataset',
   components: {
-    DefaultNavbar: () => import('@/components/navbars/DefaultNavbar.vue'),
-    BasicFooter: () => import('@/components/footers/BasicFooter.vue'),
+    DefaultNavbar: () => import(/* webpackChunkName: "DefaultNavbar" */ '@/components/navbars/DefaultNavbar.vue'),
+    FloatingCommentsBox: () => import(/* webpackChunkName: "FloatingCommentsBox" */ '@/components/dialogs/FloatingCommentsBox.vue'),
+    BasicFooter: () => import(/* webpackChunkName: "BasicFooter" */ '@/components/footers/BasicFooter.vue'),
   },
 }
 </script>

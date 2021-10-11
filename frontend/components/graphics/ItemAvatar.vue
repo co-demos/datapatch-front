@@ -109,9 +109,10 @@ export default {
   ],
   data () {
     return {
-      noIconTypes: ['tables', 'field', 'invitation', 'comment'],
+      noIconTypes: ['tables', 'table', 'field', 'invitation', 'comment'],
       defaultIconTypes: {
         tables : 'icon-table', 
+        table : 'icon-table', 
         field : 'icon-table', 
         comment : 'icon-message-square',
         invitation : 'icon-user-plus'
