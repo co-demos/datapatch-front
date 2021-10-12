@@ -1,131 +1,111 @@
-<style scoped>
-  .comment {
-    border-radius: 30px !important;
-  }
-
-</style>
-
 <template>
 
-  <v-card
-    outlined
-    light
-    :elevation="elevation || 0"
-    class="CommentInput pa-3 comment"
-    :style="'width: 100%'"
+  <!-- INPUT -->
+  <v-row
+    class="CommentInput justify-center mt-5 mb-1 mx-0"
     >
+    
+    <!-- COMMENT DATA -->
+    <v-col 
+      :cols="cols"
+      class="py-0 mt-2 mb-6"
+      >
+      <v-text-field
+        regular
+        hide-details="auto"
+        :label="$t('me.email')"
+        clearable
+        :disabled="!activateEmailField"
+        v-model="optionalEmail"
+        dense
+      />
+    </v-col>
 
-    <v-row class="justify-center mt-3 mb-1 mx-0">
-      
-      <!-- COMMENT DATA -->
-      <v-col 
-        :cols="cols"
-        class="py-0 mt-2 mb-6"
-        >
-        <v-text-field
-          regular
-          hide-details="auto"
-          :label="$t('me.email')"
-          clearable
-          :disabled="!activateEmailField"
-          v-model="optionalEmail"
-          dense
-        />
-      </v-col>
+    <v-col 
+      :cols="cols"
+      class="py-0"
+      >
+      <v-textarea
+        regular
+        rows="4"
+        hide-details="auto"
+        :label="$t('dataPackage.message')"
+        v-model="message"
+        dense
+      />
+    </v-col>
 
-      <v-col 
-        :cols="cols"
-        class="py-0"
+    <v-col 
+      :cols="cols"
+      class="py-0"
+      >
+      <v-checkbox
+        class=""
+        off-icon="icon-square"
+        on-icon="icon-check-square"
+        v-model="alertItemOwner"
+        dense
         >
-        <v-textarea
-          regular
-          rows="4"
-          hide-details="auto"
-          :label="$t('dataPackage.message')"
-          v-model="message"
-          dense
-        />
-      </v-col>
-
-      <v-col 
-        :cols="cols"
-        class="py-0"
-        >
-        <v-checkbox
-          class=""
-          off-icon="icon-square"
-          on-icon="icon-check-square"
-          v-model="alertItemOwner"
-          dense
-          >
-          <template v-slot:label>
-            <span 
-              :class="`caption grey--text`"
-              >
-              {{ $t('comments.alertItemOwner') }}
-            </span>
-          </template>
-        </v-checkbox>
-      </v-col>
-
-      <!-- ACTION / BUTTONS -->
-      <v-col 
-        :cols="cols/2" 
-        class="mt-0 pa-1"
-        >
-        <v-btn
-          color="grey darken-1"
-          class="px-3"
-          text
-          rounded
-          block
-          @click="closeCommentsBox()"
-          >
-          <v-icon
-            class="mr-2"
-            small
+        <template v-slot:label>
+          <span 
+            :class="`caption grey--text`"
             >
-            icon-clear
-          </v-icon>
-          <span class="text-none">
-            {{ $t('buttons.cancel') }}
+            {{ $t('comments.alertItemOwner') }}
           </span>
-        </v-btn>
-      </v-col>
-      <v-col 
-        :cols="cols/2" 
-        class="mt-0 pa-1"
+        </template>
+      </v-checkbox>
+    </v-col>
+
+    <!-- ACTION / BUTTONS -->
+    <v-col 
+      :cols="cols/2" 
+      class="mt-0 pa-1"
+      >
+      <v-btn
+        color="grey darken-1"
+        class="px-3"
+        text
+        rounded
+        block
+        @click="closeCommentsBox()"
         >
-        <v-btn
-          :color="'primary darken-1'"
-          class="px-3"
-          text
-          rounded
-          block
-          @click="sendComment()"
+        <v-icon
+          class="mr-2 mb-n1"
+          small
           >
-          <v-icon
-            small
-            class="mr-2"
-            >
-            icon-message-square
-          </v-icon>
-          <span class="text-none">
-            {{ $t(`buttons.comment`) }}
-          </span>
-        </v-btn>
-      </v-col>
+          icon-clear
+        </v-icon>
+        <span class="text-none">
+          {{ $t('buttons.cancel') }}
+        </span>
+      </v-btn>
+    </v-col>
+    <v-col 
+      :cols="cols/2" 
+      class="mt-0 pa-1"
+      >
+      <v-btn
+        :color="'primary darken-1'"
+        class="px-3"
+        text
+        rounded
+        block
+        @click="sendComment()"
+        >
+        <v-icon
+          small
+          class="mr-2"
+          >
+          icon-message-square
+        </v-icon>
+        <span class="text-none">
+          {{ $t(`buttons.comment`) }}
+        </span>
+      </v-btn>
+    </v-col>
 
-    </v-row>
+  </v-row>
 
-
-    <!-- DEBUGGING -->
-    <div v-if="false">
-      item : <code>{{ item }}</code><hr>
-      buildComment : <code>{{ buildComment }}</code><hr>
-    </div>
-
-  </v-card>
 </template>
 
 <script>
@@ -135,10 +115,7 @@
   export default {
     name: 'CommentInput',
     props: [
-      'item',
-      'elevation',
-      'allowPatch',
-      'parentComment'
+      'parentComment',
     ],
     data () {
       return {
@@ -166,6 +143,7 @@
       }),
       ...mapGetters({
         headerUser: 'user/headerUser',
+        item: 'comments/getCurrentItem',
       }),
       parentCommentId() {
         let parentCommentId = this.parentComment ? this.parentComment.id : undefined
@@ -187,7 +165,7 @@
     methods: {
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
-        populateCurrentItem: 'comments/populateCurrentItem',
+        // populateCurrentItem: 'comments/populateCurrentItem',
       }),
       closeCommentsBox() {
         this.togggleShowCommentsBox(false)

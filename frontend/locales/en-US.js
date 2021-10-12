@@ -449,7 +449,12 @@ export default {
     detailsClose: 'Close invitation details panel',
   },
   comments: {
+    comments: "Comments",
+    addComment: "Add a comment",
+    from: "From",
+    sent: "Sent date : {date} at {time}",
     alertItemOwner: 'Alert item owner',
+    reply: "Reply",
   },
   workspaces: {
     defaultHelp: 'You can now create a new workspace to begin ...',

@@ -451,7 +451,12 @@ export default {
     detailsClose: "Fermer le panneau des détails de l'invitation",
   },
   comments: {
+    comments: "Commentaires",
+    addComment: "Ajouter un commentaire",
+    from: "De",
+    sent: "Envoyé le {date} à {time}",
     alertItemOwner: "Alerter le propriétaire de l'objet",
+    reply: "Répondre",
   },
   workspaces: {
     defaultHelp: 'Vous pouvez désormais créer un nouvel espace de travail...',

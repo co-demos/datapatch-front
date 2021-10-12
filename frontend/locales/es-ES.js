@@ -451,7 +451,12 @@ export default {
     detailsClose: "Cerrar el panel de detalles de la invitacion",
   },
   comments: {
+    comments: "Comentarios",
+    addComment: "Añadir un comentario",
+    from: "Desde",
+    sent: "Enviado el {date} a {time}",
     alertItemOwner: 'Alertar el proprietario',
+    reply: "Responder",
   },
   workspaces: {
     defaultHelp: 'Puede ahora crear un nuevo espacio de trabajo...',

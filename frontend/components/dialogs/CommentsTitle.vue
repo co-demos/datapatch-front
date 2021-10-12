@@ -1,18 +1,11 @@
-<style scoped>
-  .comment {
-    border-radius: 40px !important;
-  }
-
-</style>
-
 <template>
 
   <v-card
     outlined
     light
     :elevation="elevation || 0"
-    class="CommentsTitle mb-3 pa-1 comment"
-    :style="'width: 100%'"
+    class="CommentsTitle mb-3 pa-3"
+    :style="`width: 100%; border-radius: ${roundRadius}px;`"
     >
 
     <!-- CLOSE COMMENTS -->
@@ -33,7 +26,7 @@
         >
 
         <!-- REPEAT COMMENT TEXT -->
-        <span class="caption">
+        <!-- <span class="caption">
           <v-icon
             x-small
             class="mr-2"
@@ -45,7 +38,7 @@
             {{ $t(`buttons.comment`) }} 
           </span>
           <br>
-        </span>
+        </span> -->
 
         <!-- ITEM'S TITLE -->
         <span 
@@ -85,6 +78,7 @@
     props: [
       'item',
       'elevation',
+      'roundRadius'
     ],
     data () {
       return {
