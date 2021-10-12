@@ -54,7 +54,9 @@
               :class="`text-none mr-2 no-decoration ${localItem.color || 'black'}--text ${noPointer ? 'no-pointer' : ''}`"
               :to="getItemLink"
               >
-              {{ localItem.title }}
+              <span class="mr-4">
+                {{ localItem.title }}
+              </span>
               <!-- {{ localItem }} -->
               <!-- <br> wsId: {{ fromWorkspace }} -->
             </nuxt-link>
@@ -66,7 +68,7 @@
             </span>
 
             <!-- OPEN COMMENT -->
-            <!-- <v-tooltip
+            <v-tooltip
               right
               >
               <template v-slot:activator="{ on, attrs }">
@@ -74,10 +76,10 @@
                   icon
                   small
                   :dark="showComment"
-                  :class="`ml-3 ${showComment ? localItem.color || 'grey' : ''}`"
+                  :class="`${showComment ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="openShow('showComment')"
+                  @click.stop="openShow('showComment'); openComments(localItem)"
                   >
                   <v-icon
                     small
@@ -88,7 +90,7 @@
                 </v-btn>
               </template>
               {{ $t(`buttons.comment`) }}
-            </v-tooltip> -->
+            </v-tooltip>
 
             <!-- OPEN INVITATION -->
             <v-tooltip
@@ -100,7 +102,7 @@
                   icon
                   small
                   :dark="showSearch"
-                  :class="`ml-3 ${showSearch ? localItem.color || 'grey' : ''}`"
+                  :class="`${showSearch ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
                   @click.stop="openShow('showSearch')"
@@ -126,7 +128,7 @@
                   icon
                   small
                   :dark="showAskJoin"
-                  :class="`ml-3 ${showAskJoin ? localItem.color || 'grey' : ''}`"
+                  :class="`${showAskJoin ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
                   @click.stop="openShow('showAskJoin')"
@@ -357,7 +359,7 @@
 
 <script>
 
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   import { FindFieldText } from '@/utils/utilsFields'
   import { GetUserAuthOnItem } from '@/utils/utilsAuths'
 
@@ -457,6 +459,14 @@
       this.tabsSpaces = Object.keys(this.itemModel)
     },
     methods: {
+      ...mapActions({
+        togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
+        populateCurrentItem: 'comments/populateCurrentItem',
+      }),
+      openComments(item) {
+        this.populateCurrentItem(item)
+        this.togggleShowCommentsBox(true)
+      },
       openShow(showName)  {
         let shows = [ 'showSearch', 'showComment', 'showAskJoin' ]
         shows.forEach( show => { 
