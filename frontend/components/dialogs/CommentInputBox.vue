@@ -1,3 +1,11 @@
+<style scoped>
+
+  .comment-text {
+    border-radius: 20px;
+  }
+
+</style>
+
 <template>
 
   <v-card
@@ -9,7 +17,10 @@
     >
 
     <!-- TITLE -->
-    <v-row class="align-center justify-center py-0">
+    <v-row
+      class="align-center justify-center py-0"
+      @click="showInput = !showInput"
+      >
       <v-col cols="2" class="text-center">
         <v-icon
           x-small
@@ -28,20 +39,30 @@
           icon
           small
           color="grey lighten-1"
-          @click="showiInput = !showiInput"
           >
+          <!-- @click="showInput = !showInput" -->
           <v-icon
             small
             >
-            {{ `icon-keyboard_arrow_${ showiInput ? 'up' : 'down'} ` }}
+            {{ `icon-keyboard_arrow_${ showInput ? 'up' : 'down'} ` }}
           </v-icon>
         </v-btn>
       </v-col>
     </v-row>
 
-    <CommentInput
-      v-show="showiInput"
-    />    
+    <!-- COMMENT INPUT -->
+    <!-- <v-row
+      class="py-0"
+      > -->
+      <v-sheet
+        v-show="showInput"
+        class="body-2 comment-text mt-3 mb-4 mx-3 py-1 px-1"
+        :color="`grey lighten-4`"
+        outlined
+        >
+        <CommentInput/> 
+      </v-sheet>
+    <!-- </v-row> -->
 
   </v-card>
 </template>
@@ -60,7 +81,7 @@
     },
     data () {
       return {
-        showiInput: true,
+        showInput: true,
       }
     },
     computed: {

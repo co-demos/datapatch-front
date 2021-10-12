@@ -2,7 +2,7 @@
 
   .comments-box {
     width: 400px;
-    position: absolute;
+    position: fixed;
     z-index: 300;
     right: 20px;
     top: 100px;

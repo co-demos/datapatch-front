@@ -2,18 +2,34 @@
 
   <!-- INPUT -->
   <v-row
-    class="CommentInput justify-center mt-5 mb-1 mx-0"
+    class="CommentInput justify-center mt-1 mx-0 pb-3"
     >
-    
+
+    <v-col 
+      :cols="cols"
+      class="py-0 mt-0 mb-3 text-center"
+      >
+      <v-icon
+        x-small
+        color="grey lighten-1"
+        class="mr-2"
+        >
+        icon-message-square
+      </v-icon>
+      <span class="grey--text">
+        {{ $t('comments.yourComment') }}
+      </span>
+    </v-col>
+
     <!-- COMMENT DATA -->
     <v-col 
       :cols="cols"
-      class="py-0 mt-2 mb-6"
+      class="py-0 mt-0 mb-3"
       >
       <v-text-field
-        regular
+        filled
         hide-details="auto"
-        :label="$t('me.email')"
+        :label="$t('comments.yourEmail')"
         clearable
         :disabled="!activateEmailField"
         v-model="optionalEmail"
@@ -26,10 +42,10 @@
       class="py-0"
       >
       <v-textarea
-        regular
-        rows="4"
+        filled
+        rows="3"
         hide-details="auto"
-        :label="$t('dataPackage.message')"
+        :label="$t('comments.yourComment')"
         v-model="message"
         dense
       />
@@ -40,10 +56,11 @@
       class="py-0"
       >
       <v-checkbox
-        class=""
+        class="mt-1 justify-center"
         off-icon="icon-square"
         on-icon="icon-check-square"
         v-model="alertItemOwner"
+        hide-details
         dense
         >
         <template v-slot:label>
@@ -58,50 +75,59 @@
 
     <!-- ACTION / BUTTONS -->
     <v-col 
-      :cols="cols/2" 
-      class="mt-0 pa-1"
+      :cols="cols"
+      class="pt-2 pb-3"
       >
-      <v-btn
-        color="grey darken-1"
-        class="px-3"
-        text
-        rounded
-        block
-        @click="closeCommentsBox()"
-        >
-        <v-icon
-          class="mr-2 mb-n1"
-          small
-          >
-          icon-clear
-        </v-icon>
-        <span class="text-none">
-          {{ $t('buttons.cancel') }}
-        </span>
-      </v-btn>
-    </v-col>
-    <v-col 
-      :cols="cols/2" 
-      class="mt-0 pa-1"
+    <v-row
+      class="mt-0 px-3 pb-2 pt-0"
       >
-      <v-btn
-        :color="'primary darken-1'"
-        class="px-3"
-        text
-        rounded
-        block
-        @click="sendComment()"
+      <v-col 
+        :cols="cols/2"
+        class="pa-0"
         >
-        <v-icon
-          small
-          class="mr-2"
+        <v-btn
+          color="grey darken-1"
+          class="px-3"
+          text
+          rounded
+          block
+          @click="closeCommentsBox()"
           >
-          icon-message-square
-        </v-icon>
-        <span class="text-none">
-          {{ $t(`buttons.comment`) }}
-        </span>
-      </v-btn>
+          <v-icon
+            class="mr-2 mb-n1"
+            small
+            >
+            icon-clear
+          </v-icon>
+          <span class="text-none">
+            {{ $t('buttons.cancel') }}
+          </span>
+        </v-btn>
+      </v-col>
+      <v-col 
+        :cols="cols/2"
+        class="pa-0"
+        >
+        <v-btn
+          :color="'primary darken-1'"
+          class="px-3"
+          text
+          rounded
+          block
+          @click="sendComment()"
+          >
+          <v-icon
+            small
+            class="mr-2"
+            >
+            icon-message-square
+          </v-icon>
+          <span class="text-none">
+            {{ $t(`buttons.comment`) }}
+          </span>
+        </v-btn>
+      </v-col>
+    </v-row>
     </v-col>
 
   </v-row>

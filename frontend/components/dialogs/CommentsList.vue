@@ -8,7 +8,10 @@
     :style="`width: 100%; border-radius: ${roundRadius}px;`"
     >
 
-    <v-row class="align-center justify-center py-0">
+    <v-row 
+      class="align-center justify-center py-0"
+      @click="showComments = !showComments"
+      >
       <v-col cols="2" class="text-center">
         <v-icon
           x-small
@@ -27,8 +30,8 @@
           icon
           small
           color="grey lighten-1"
-          @click="showComments = !showComments"
           >
+          <!-- @click="showComments = !showComments" -->
           <v-icon
             small
             >
@@ -38,6 +41,7 @@
       </v-col>
     </v-row>
 
+    <!-- COMMENT -->
     <CommentItem
       v-show="showComments"
       v-for="(comment, index) in comments"

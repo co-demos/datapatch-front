@@ -451,6 +451,8 @@ export default {
   comments: {
     comments: "Comments",
     addComment: "Add a comment",
+    yourEmail: "Your email (optional)",
+    yourComment: "Your comment",
     from: "From",
     sent: "Sent date : {date} at {time}",
     alertItemOwner: 'Alert item owner',

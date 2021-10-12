@@ -453,6 +453,8 @@ export default {
   comments: {
     comments: "Commentaires",
     addComment: "Ajouter un commentaire",
+    yourEmail: "Votre email (optionnel)",
+    yourComment: "Votre commentaire",
     from: "De",
     sent: "Envoyé le {date} à {time}",
     alertItemOwner: "Alerter le propriétaire de l'objet",
