@@ -3,7 +3,7 @@
   <div class="CommentsTitle">
 
     <!-- CLOSE COMMENTS -->
-    <v-row class="align-center justify-center">
+    <v-row class="align-center justify-center mb-0">
 
       <!-- ITEM'S AVATAR -->
       <v-col cols="2" class="text-center pr-0">
@@ -82,11 +82,11 @@
     methods: {
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
-        // populateCurrentItem: 'comments/populateCurrentItem',
+        populateCurrentItem: 'comments/populateCurrentItem',
       }),
       closeCommentsBox() {
         this.togggleShowCommentsBox(false)
-        // this.$emit('closeComment')
+        this.populateCurrentItem(undefined)
       },
     }
   }

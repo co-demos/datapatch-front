@@ -73,17 +73,17 @@
               >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  icon
                   small
-                  :dark="showComment"
-                  :class="`${showComment ? localItem.color || 'grey' : ''}`"
+                  icon
+                  :dark="isCurrentItemComments"
+                  :class="`${isCurrentItemComments ? localItem.color || 'grey' : ''}`"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="openShow('showComment'); openComments(localItem)"
+                  @click.stop="openShow('showComments')"
                   >
                   <v-icon
                     small
-                    :color="showComment ? 'white' : localItem.color || 'grey'"
+                    :color="isCurrentItemComments ? 'white' : localItem.color || 'grey'"
                     >
                     icon-message-square
                   </v-icon>
@@ -394,17 +394,17 @@
       },
       parentComment (next) {
         this.showAskJoin = false
-        this.showComment = true
+        // this.showComment = true
         this.showSearch = false
       },
       parentShare (next) {
-        this.showComment = false
+        // this.showComment = false
         this.showAskJoin = false
         this.showSearch = true
       },
       parentAskJoin (next) {
         this.showSearch = false
-        this.showComment = false
+        // this.showComment = false
         this.showAskJoin = true
       },
     },
@@ -413,7 +413,7 @@
         localItem: undefined,
         dialog: false,
         showSearch: false,
-        showComment: false,
+        // showComment: false,
         showAskJoin: false,
         tab: null,
         tabsSpaces: [],
@@ -429,6 +429,8 @@
       ...mapGetters({
         isAuthenticated: 'user/isAuthenticated',
         currentDataset: 'datasets/getCurrentItem',
+        getShowCommentsBox: 'comments/getShowCommentsBox',
+        getCurrentItemComments: 'comments/getCurrentItem',
       }),
       isAuthorizedForItem() {
         // this.log && console.log('\nC-ModalItem > isAuthorizedForItem > this.isAuthenticated :' , this.isAuthenticated)
@@ -451,7 +453,14 @@
         if ( this.localItem ) {
           return GetUserAuthOnItem( this.userData, this.localItem )
         }
-      }
+      },
+      isCurrentItemComments() {
+        if ( this.localItem && this.getCurrentItemComments) {
+          return this.getCurrentItemComments.id === this.localItem.id
+        } else {
+          return false
+        } 
+      },
     },
     beforeMount () {
       this.noPointer = this.fromCreate ? true : this.noLink
@@ -463,23 +472,30 @@
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
       }),
-      openComments(item) {
-        this.populateCurrentItem(item)
-        this.togggleShowCommentsBox(true)
+      toggleComments(item) {
+        if (this.isCurrentItemComments) {
+          this.populateCurrentItem(undefined)
+          this.togggleShowCommentsBox(false)
+        } else {
+          this.populateCurrentItem(item)
+          this.togggleShowCommentsBox(true)
+        }
       },
       openShow(showName)  {
-        let shows = [ 'showSearch', 'showComment', 'showAskJoin' ]
+        let shows = [ 'showSearch', 'showAskJoin' ]
         shows.forEach( show => { 
           this[show] = showName === show ? !this[showName] : false
         })
-        // this.showSearch = false
-        // this.showComment = false
-        // this.showAskJoin = false
-        // this[showName] = !this[showName]
+        if (showName === 'showComments') {
+          this.toggleComments(this.localItem)
+        } else {
+          this.populateCurrentItem(undefined)
+          this.togggleShowCommentsBox(false)
+        }
       },
       closeAllShows()  {
         this.showSearch = false
-        this.showComment = false
+        // this.showComment = false
         this.showAskJoin = false
       },
       rebuildLocalItem() {

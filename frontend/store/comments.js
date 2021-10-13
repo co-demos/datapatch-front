@@ -1,5 +1,6 @@
 export const state = () => ({
 
+  needReload: false,
   isLoading: false,
   showCommentsBox: false,
 
@@ -10,6 +11,10 @@ export const state = () => ({
 })
 
 export const getters = {
+
+  getNeedReload: (state) => {
+    return state.needReload
+  },
 
   getShowCommentsBox: (state) => {
     return state.showCommentsBox
@@ -45,6 +50,9 @@ export const getters = {
 
 export const mutations = {
 
+  setNeedReload (state, bool) {
+    state.needReload = bool
+  },
   setIsLoading (state, bool) {
     state.isLoading = bool
   },
@@ -74,6 +82,9 @@ export const mutations = {
 
 export const actions = {
 
+  togggleNeedReload({commit}, bool) {
+    commit('setNeedReload', bool)
+  },
   togggleIsLoading({commit}, bool) {
     commit('setIsLoading', bool)
   },

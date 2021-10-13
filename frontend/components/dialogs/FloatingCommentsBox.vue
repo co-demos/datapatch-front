@@ -3,7 +3,7 @@
   .comments-box {
     width: 400px;
     position: fixed;
-    z-index: 300;
+    z-index: 300 !important;
     right: 20px;
     top: 100px;
   }
@@ -24,22 +24,29 @@
       :style="`
         width: 100%;
         border-radius: ${roundRadius}px;
-        max-height: 700px;
-        overflow-y: scroll;
+        max-height: 800px;
         `"
       >
-
       <CommentsTitle
         v-if="getCurrentItem"
         :item="getCurrentItem"
       />
-      <CommentInputBox
-        v-if="getCurrentItem"
-      />
-      <CommentsList
-        v-if="getCurrentItem"
-        :comments="getCommentsSortedByDate"
-      />
+      
+      <div
+        :style="`
+          height:100%;
+          max-height: 750px;
+          overflow-y: scroll;
+        `"
+        >
+        <CommentInputBox
+          v-if="getCurrentItem"
+        />
+        <CommentsList
+          v-if="getCurrentItem"
+          :comments="getCommentsSortedByDate"
+        />
+      </div>
 
     </v-card>
   </div>
@@ -73,7 +80,13 @@
     watch: {
       getCurrentItem(next, prev) {
         if (next) {
-          this.log && console.log('C-FloatingCommentsBox > watch > getCurrentItem > next : ', next)
+          // this.log && console.log('C-FloatingCommentsBox > watch > getCurrentItem > next : ', next)
+          this.populateActiveCommentId(undefined)
+          this.getRelatedComments()
+        }
+      },
+      getNeedReload(next) {
+        if (next) {
           this.getRelatedComments()
         }
       }
@@ -86,6 +99,7 @@
       }),
       ...mapGetters({
         headerUser: 'user/headerUser',
+        getNeedReload: 'comments/getNeedReload',
         showCommentsBox: 'comments/getShowCommentsBox',
         getCurrentItem: 'comments/getCurrentItem',
         getCommentsSortedByDate: 'comments/getCommentsSortedByDate',
@@ -94,7 +108,9 @@
     },
     methods: {
       ...mapActions({
+        togggleNeedReload: 'comments/togggleNeedReload',
         populateComments: 'comments/populateComments',
+        populateActiveCommentId: 'comments/populateActiveCommentId'
       }),
       getRelatedComments() {
         let url = `${this.api[this.getCurrentItem.item_type + 's']}/${this.getCurrentItem.id}/comments`
@@ -105,6 +121,7 @@
             this.log && console.log('C-FloatingCommentsBox > getRelatedComments > resp.data : ', resp.data)
             // populate comments store
             this.populateComments( resp.data )
+            this.togggleNeedReload( false )
             this.isLoading = false
             // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
             // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }

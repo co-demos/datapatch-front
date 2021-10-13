@@ -1,6 +1,6 @@
 <template>
 
-  <div class="CommentsList mt-2">
+  <div class="CommentsList pt-2">
 
     <v-row 
       class="align-center justify-center py-0"
@@ -28,6 +28,7 @@
       </v-col>
       <v-col cols="2" class="text-center">
         <v-btn
+          v-show="comments.length"
           icon
           small
           color="grey lighten-1"
@@ -72,16 +73,18 @@
         showComments: true,
       }
     },
-    beforeMount() {
+    watch: {
+      getCurrentItem(next, prev) {
+        this.showComments = true
+      }
     },
     computed: {
       ...mapState({
         log: (state) => state.log,
-        // api: (state) => state.api,
         user: (state) => state.user.userData,
       }),
       ...mapGetters({
-        // headerUser: 'user/headerUser',
+        getCurrentItem: 'comments/getCurrentItem',
       }),
     },
     methods: {

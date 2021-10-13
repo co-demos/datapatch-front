@@ -2,13 +2,14 @@
 
   .comment-text {
     border-radius: 20px;
+    z-index: 301 !important;
   }
 
 </style>
 
 <template>
 
-  <div class="CommentInputBox mt-2">
+  <div class="CommentInputBox pt-2">
 
     <!-- TITLE -->
     <v-row
@@ -52,6 +53,7 @@
       outlined
       >
       <CommentInput
+        :hideCancel="true"
       /> 
         <!-- @closeComment="showInput = false" -->
     </v-sheet>

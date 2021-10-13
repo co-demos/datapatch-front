@@ -1,3 +1,9 @@
+<style scoped>
+  .comment-form {
+    width: 100%;
+  }
+</style>
+
 <template>
 
   <!-- INPUT -->
@@ -21,113 +27,125 @@
       </span>
     </v-col>
 
-    <!-- COMMENT DATA -->
-    <v-col 
-      :cols="cols"
-      class="py-0 mt-0 mb-3"
+    <!-- FORM -->
+    <v-form
+      ref="formComment"
+      class="comment-form"
+      v-model="valid"
+      lazy-validation
       >
-      <v-text-field
-        filled
-        hide-details="auto"
-        :label="$t('comments.yourEmail')"
-        clearable
-        :disabled="!activateEmailField"
-        v-model="optionalEmail"
-        dense
-      />
-    </v-col>
-
-    <v-col 
-      :cols="cols"
-      class="py-0"
-      >
-      <v-textarea
-        filled
-        rows="3"
-        hide-details="auto"
-        :label="$t('comments.yourComment')"
-        v-model="message"
-        dense
-      />
-    </v-col>
-
-    <v-col 
-      :cols="cols"
-      class="py-0"
-      >
-      <v-checkbox
-        class="mt-1 justify-center"
-        off-icon="icon-square"
-        on-icon="icon-check-square"
-        v-model="alertItemOwner"
-        hide-details
-        dense
+      <!-- COMMENT DATA -->
+      <v-col 
+        :cols="cols"
+        class="py-0 mt-0 mb-3"
         >
-        <template v-slot:label>
-          <span 
-            :class="`caption grey--text`"
-            >
-            {{ $t('comments.alertItemOwner') }}
-          </span>
-        </template>
-      </v-checkbox>
-    </v-col>
+        <v-text-field
+          v-model="optionalEmail"
+          filled
+          dense
+          clearable
+          hide-details="auto"
+          :label="$t('comments.yourEmail')"
+          :disabled="!activateEmailField"
+        />
+      </v-col>
+
+      <v-col 
+        :cols="cols"
+        class="py-0"
+        >
+        <v-textarea
+          v-model="message"
+          filled
+          dense
+          rows="3"
+          hide-details="auto"
+          :label="$t('comments.yourComment')"
+          :rules="minCharRules"
+        />
+      </v-col>
+
+      <v-col 
+        :cols="cols"
+        class="py-0"
+        >
+        <v-checkbox
+          v-model="alertItemOwner"
+          class="mt-1 justify-center"
+          off-icon="icon-square"
+          on-icon="icon-check-square"
+          hide-details
+          dense
+          >
+          <template v-slot:label>
+            <span 
+              :class="`caption grey--text`"
+              >
+              {{ $t('comments.alertItemOwner') }}
+            </span>
+          </template>
+        </v-checkbox>
+      </v-col>
+    </v-form>
 
     <!-- ACTION / BUTTONS -->
     <v-col 
       :cols="cols"
       class="pt-2 pb-3"
       >
-    <v-row
-      class="mt-0 px-3 pb-2 pt-0"
-      >
-      <v-col 
-        :cols="cols/2"
-        class="pa-0"
+      <v-row
+        class="justify-center mt-0 px-3 pb-2 pt-0"
         >
-        <v-btn
-          color="grey darken-1"
-          class="px-3"
-          text
-          rounded
-          block
-          @click="closeCommentsBox()"
+        <v-col
+          v-if="!hideCancel"
+          :cols="cols/2"
+          class="pa-1"
           >
-          <v-icon
-            class="mr-2 mb-n1"
-            small
+          <v-btn
+            color="grey darken-1"
+            class="px-3"
+            text
+            rounded
+            block
+            @click="closeCommentsBox()"
             >
-            icon-clear
-          </v-icon>
-          <span class="text-none">
-            {{ $t('buttons.cancel') }}
-          </span>
-        </v-btn>
-      </v-col>
-      <v-col 
-        :cols="cols/2"
-        class="pa-0"
-        >
-        <v-btn
-          :color="'primary darken-1'"
-          class="px-3"
-          text
-          rounded
-          block
-          @click="sendComment()"
+            <v-icon
+              class="mr-2 mb-n1"
+              small
+              >
+              icon-clear
+            </v-icon>
+            <span class="text-none">
+              {{ $t('buttons.cancel') }}
+            </span>
+          </v-btn>
+        </v-col>
+        <v-col 
+          :cols="cols/2"
+          class="pa-1"
           >
-          <v-icon
-            small
-            class="mr-2"
+          <v-btn
+            :color="`${ valid ? 'primary' : 'blue'}`"
+            class="px-3"
+            :dark="valid"
+            rounded
+            block
+            elevation="0"
+            :disabled="!valid"
+            @click="sendComment()"
             >
-            icon-message-square
-          </v-icon>
-          <span class="text-none">
-            {{ $t(`buttons.comment`) }}
-          </span>
-        </v-btn>
-      </v-col>
-    </v-row>
+            <v-icon
+              small
+              class="mr-2"
+              >
+              icon-message-square
+            </v-icon>
+            <span class="text-none">
+              {{ $t(`buttons.comment`) }}
+            </span>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-col>
 
   </v-row>
@@ -137,22 +155,36 @@
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { Comment } from '@/utils/utilsComments.js'
+  import { rules } from '@/utils/utilsRules.js'
 
   export default {
     name: 'CommentInput',
     props: [
       'parentComment',
+      'hideCancel'
     ],
     data () {
       return {
+        valid: true,
         cols: 12,
         alertItemOwner: false,
-        message: "",
+        message: '',
         addPatch: false,
         patchData: undefined,
         activateEmailField: true,
         optionalEmail: undefined,
         isLoading: false,
+
+        minCharRules: rules.minCharRules( this.$t('rules.valEnter'), this.$t('rules.minChars') ),
+
+      }
+    },
+    watch: {
+      item(next, prev) {
+        // this.log && console.log('C-CommentInput > watch > item > next :' , next)
+        if (next) {
+          this.resetValidation()
+        }
       }
     },
     beforeMount() {
@@ -186,37 +218,48 @@
           this.alertItemOwner,    // alert_item_owner
         )
         return newComment.data
-      }
+      },
     },
     methods: {
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
-        // populateCurrentItem: 'comments/populateCurrentItem',
+        togggleNeedReload: 'comments/togggleNeedReload',
         populateActiveCommentId: 'comments/populateActiveCommentId',
       }),
+      validateForm() {
+        return this.$refs.formComment.validate()
+      },
       closeCommentsBox() {
         // this.togggleShowCommentsBox(false)
         // this.$emit('closeComment')
         this.populateActiveCommentId(undefined)
       },
+      resetValidation() {
+        this.message = ''
+        this.$refs.formComment.resetValidation()
+      },
       sendComment() {
-        let payload = { ...this.buildComment }
-        this.log && console.log('C-CommentInput > sendComment > payload :' , payload)
-        this.isLoading = true
-        let url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
-        this.$axios.post( url, payload, this.headerUser)
-          .then(resp => {
-            // TO FINISH ...
-            this.log && console.log('C-CommentInput > sendComment > resp.data : ', resp.data)
-            this.isLoading = false
-            this.closeCommentsBox()
-            // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
-            // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
-            // this.ioBroadcastAction(ioData, rooms, callback)
-          })
-          .catch(error => {
-            this.isLoading = false
-          })
+        if ( this.validateForm() ) {
+          let payload = { ...this.buildComment }
+          this.log && console.log('C-CommentInput > sendComment > payload :' , payload)
+          this.isLoading = true
+          let url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
+          this.$axios.post( url, payload, this.headerUser)
+            .then(resp => {
+              // TO FINISH ...
+              this.log && console.log('C-CommentInput > sendComment > resp.data : ', resp.data)
+              this.resetValidation()
+              this.togggleNeedReload(true)
+              this.isLoading = false
+              this.closeCommentsBox()
+              // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
+              // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
+              // this.ioBroadcastAction(ioData, rooms, callback)
+            })
+            .catch(error => {
+              this.isLoading = false
+            })
+        }
       }
     }
   }

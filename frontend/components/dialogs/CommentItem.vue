@@ -7,7 +7,8 @@
 </style>
 
 <template>
-  <div class="CommentItem px-2 pt-1 pb-2">
+  <div 
+    :class="`CommentItem px-2 ${showInput ? 'py-5' : 'pt-1 pb-2'}`">
     
     <v-row
       class="align-top justify-center"
@@ -24,7 +25,7 @@
           <!-- MESSAGE -->
           <v-sheet
             class="body-2 comment-text py-3 px-4"
-            :color="`${ comment.owner_email === user.email ? 'primary' : 'grey'}`"
+            :color="`${ comment.owner_email === user.email ? 'primary' : 'grey'} ${showInput ? 'darken-2' : ''}`"
             >
 
             <p class="white--text mb-1">
@@ -44,7 +45,7 @@
           <!-- COMMENT DETAILS -->
           <p 
             v-show="hover"
-            class="caption grey--text mt-1 ml-5 mb-0"
+            class="caption grey--text mt-1 ml-5 mb-3"
             >
             <!-- SENDER -->
             <span >
@@ -79,7 +80,7 @@
         <v-btn
           :class="`${showInput ? '' : 'primary--text'}`"
           rounded
-          :color="`${showInput ? 'primary' : 'white'}`"
+          :color="`${showInput ? 'grey lighten-2' : 'white'}`"
           small
           :dark="showInput"
           block
@@ -157,10 +158,10 @@
       // },
       toggleCommentId() {
         if (this.getActiveCommentId === this.comment.id) {
-          this.log && console.log(`\nC-CommentItem > toggleCommentId > A > this.getActiveCommentId : `, this.getActiveCommentId )
+          // this.log && console.log(`\nC-CommentItem > toggleCommentId > A > this.getActiveCommentId : `, this.getActiveCommentId )
           this.populateActiveCommentId(undefined) 
         } else {
-          this.log && console.log(`\nC-CommentItem > toggleCommentId > B > this.getActiveCommentId : `, this.getActiveCommentId )
+          // this.log && console.log(`\nC-CommentItem > toggleCommentId > B > this.getActiveCommentId : `, this.getActiveCommentId )
           this.populateActiveCommentId(this.comment.id) 
         }
       },
