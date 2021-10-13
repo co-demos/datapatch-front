@@ -69,6 +69,7 @@
 
             <!-- OPEN COMMENT -->
             <v-tooltip
+              v-if="action !== 'create'"
               right
               >
               <template v-slot:activator="{ on, attrs }">
@@ -158,48 +159,6 @@
           </v-col>
         </v-row>
       </v-card-title>
-
-      <!-- COMMENT ITEM -->
-      <!-- <v-expand-transition>
-        <v-row
-          v-show="showComment"
-          :class="`align-center justify-center px-12 pt-5 ma-0 mt-8 pb-8 ${localItem.color}`"
-          dense
-          >
-          <v-col cols="11" class="offset-1 justify-left">
-            <v-row class="ma-0">
-              <v-btn
-                icon
-                absolute
-                small
-                rounded
-                dark
-                right
-                elevation="0"
-                class="flex align-self-center"
-                @click="closeAllShows()"
-                >
-                <v-icon medium>
-                  icon-clear
-                </v-icon>
-              </v-btn>
-            </v-row>
-          </v-col>
-
-          <v-col
-            cols="8"
-            class="justify-center mb-5 pt-5"
-            >
-            <ModalComment
-              :item="item"
-              :allowPatch="false"
-              @closeComment="closeAllShows()"
-            />
-          </v-col>
-
-        </v-row>
-      </v-expand-transition> -->
-
 
       <!-- INVITE SEARCH USER OR GROUP -->
       <v-expand-transition>

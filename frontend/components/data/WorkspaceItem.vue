@@ -61,7 +61,7 @@
               outlined
               style="background-color: white!important"
               >
-              <v-icon x-small class="mr-2 pb-1">
+              <v-icon x-small class="mr-2">
                 icon-users
               </v-icon>
               {{ $t('share.shared') }}

@@ -35,8 +35,9 @@
       <div
         :style="`
           height:100%;
-          max-height: 750px;
+          max-height: 740px;
           overflow-y: scroll;
+          overflow-x: hidden;
         `"
         >
         <CommentInputBox

@@ -9,7 +9,7 @@ export default {
     repo: "repo sur Github",
     testSearch: 'Faire une recherche',
     codemos: "un projet libre et original par co-demos",
-    ademe: "White paper",
+    ademe: "Livre blanc",
   },
   legal: {
     editorInfos: "Informations sur l’éditeur du site",
