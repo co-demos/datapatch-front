@@ -192,10 +192,12 @@
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         // populateCurrentItem: 'comments/populateCurrentItem',
+        populateActiveCommentId: 'comments/populateActiveCommentId',
       }),
       closeCommentsBox() {
-        this.togggleShowCommentsBox(false)
+        // this.togggleShowCommentsBox(false)
         // this.$emit('closeComment')
+        this.populateActiveCommentId(undefined)
       },
       sendComment() {
         let payload = { ...this.buildComment }
@@ -207,7 +209,7 @@
             // TO FINISH ...
             this.log && console.log('C-CommentInput > sendComment > resp.data : ', resp.data)
             this.isLoading = false
-            // this.closeCommentsBox()
+            this.closeCommentsBox()
             // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
             // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
             // this.ioBroadcastAction(ioData, rooms, callback)

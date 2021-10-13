@@ -1,12 +1,6 @@
 <template>
 
-  <v-card
-    outlined
-    light
-    :elevation="elevation || 0"
-    class="CommentsTitle mb-3 pa-3"
-    :style="`width: 100%; border-radius: ${roundRadius}px;`"
-    >
+  <div class="CommentsTitle">
 
     <!-- CLOSE COMMENTS -->
     <v-row class="align-center justify-center">
@@ -16,7 +10,7 @@
         <ItemAvatar
           :item="item"
           :itemType="item.item_type"
-          :heightAvatar="30"
+          :heightAvatar="25"
         />
       </v-col>
 
@@ -24,21 +18,6 @@
         cols="8"
         class="text-center"
         >
-
-        <!-- REPEAT COMMENT TEXT -->
-        <!-- <span class="caption">
-          <v-icon
-            x-small
-            class="mr-2"
-            color="grey lighten-1"
-            >
-            icon-message-square
-          </v-icon>
-          <span class="grey--text">
-            {{ $t(`buttons.comment`) }} 
-          </span>
-          <br>
-        </span> -->
 
         <!-- ITEM'S TITLE -->
         <span 
@@ -66,7 +45,7 @@
       </v-col>
 
     </v-row>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -77,8 +56,6 @@
     name: 'CommentsTitle',
     props: [
       'item',
-      'elevation',
-      'roundRadius'
     ],
     data () {
       return {

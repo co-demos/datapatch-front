@@ -1,28 +1,29 @@
 <template>
 
-  <v-card
-    outlined
-    light
-    :elevation="elevation || 0"
-    class="CommentsList mb-3 pa-3"
-    :style="`width: 100%; border-radius: ${roundRadius}px;`"
-    >
+  <div class="CommentsList mt-2">
 
     <v-row 
       class="align-center justify-center py-0"
       @click="showComments = !showComments"
       >
-      <v-col cols="2" class="text-center">
+      <!-- <v-col cols="2" class="text-center">
         <v-icon
           x-small
           color="grey lighten-1"
           >
           icon-message-square
         </v-icon>
-      </v-col>
-      <v-col cols="8" class="text-center">
+      </v-col> -->
+      <v-col cols="8" class="text-center offset-2">
+        <v-icon
+          x-small
+          color="grey lighten-1"
+          class="mr-2"
+          >
+          icon-message-square
+        </v-icon>
         <span class="grey--text caption">
-         {{ $t('comments.comments') }}
+         {{ $t('comments.comments') }} ({{ comments.length }})
         </span>
       </v-col>
       <v-col cols="2" class="text-center">
@@ -50,7 +51,7 @@
       :hasDivider="index !== comments.length - 1"
     />
 
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -61,8 +62,6 @@
     name: 'CommentsList',
     props: [
       'comments',
-      'elevation',
-      'roundRadius'
     ],
     components: {
       CommentItem: () => import(/* webpackChunkName: "CommentItem" */ '@/components/dialogs/CommentItem.vue'),

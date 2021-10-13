@@ -8,80 +8,69 @@
 
 <template>
 
-  <v-card
-    outlined
-    light
-    :elevation="elevation || 0"
-    class="CommentInputBox pa-3"
-    :style="`width: 100%; border-radius: ${roundRadius}px;`"
-    >
+  <div class="CommentInputBox mt-2">
 
     <!-- TITLE -->
     <v-row
       class="align-center justify-center py-0"
-      @click="showInput = !showInput"
+      @click="populateActiveCommentId(undefined)"
       >
-      <v-col cols="2" class="text-center">
+      <!-- @click="showInput = !showInput" -->
+      <v-col cols="12" class="text-center">
         <v-icon
           x-small
           color="grey lighten-1"
+          class="mr-2"
           >
           icon-message-square
         </v-icon>
-      </v-col>
-      <v-col cols="8" class="text-center">
         <span class="grey--text caption">
          {{ $t('comments.addComment') }}
         </span>
       </v-col>
-      <v-col cols="2" class="text-center">
+      <!-- @click="showInput = !showInput" -->
+      <!-- <v-col cols="2" class="text-center">
         <v-btn
           icon
           small
           color="grey lighten-1"
           >
-          <!-- @click="showInput = !showInput" -->
           <v-icon
             small
             >
             {{ `icon-keyboard_arrow_${ showInput ? 'up' : 'down'} ` }}
           </v-icon>
         </v-btn>
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <!-- COMMENT INPUT -->
-    <!-- <v-row
-      class="py-0"
-      > -->
-      <v-sheet
-        v-show="showInput"
-        class="body-2 comment-text mt-3 mb-4 mx-3 py-1 px-1"
-        :color="`grey lighten-4`"
-        outlined
-        >
-        <CommentInput/> 
-      </v-sheet>
-    <!-- </v-row> -->
+    <v-sheet
+      v-show="!getActiveCommentId "
+      class="body-2 comment-text mt-3 mb-6 mx-3 py-1 px-1"
+      :color="`grey lighten-4`"
+      outlined
+      >
+      <CommentInput
+      /> 
+        <!-- @closeComment="showInput = false" -->
+    </v-sheet>
 
-  </v-card>
+  </div>
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'CommentInputBox',
-    props: [
-      'elevation',
-      'roundRadius'
-    ],
+    props: [],
     components: {
       CommentInput: () => import(/* webpackChunkName: "CommentInput" */ '@/components/dialogs/CommentInput.vue'),
     },
     data () {
       return {
-        showInput: true,
+        showInputForce: true,
       }
     },
     computed: {
@@ -90,8 +79,17 @@
       }),
       ...mapGetters({
         getCurrentItem: 'comments/getCurrentItem',
-      })
+        getActiveCommentId: 'comments/getActiveCommentId',
+      }),
+      showInput() {
+        return !this.getActiveCommentId
+      }
     },
+    methods: {
+      ...mapActions({
+        populateActiveCommentId: 'comments/populateActiveCommentId',
+      })
+    }
   }
 
 </script>

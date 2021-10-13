@@ -452,12 +452,13 @@ export default {
   },
   comments: {
     comments: "Commentaires",
-    addComment: "Ajouter un commentaire",
+    addComment: "Ajouter un nouveau commentaire",
     yourEmail: "Votre email (optionnel)",
     yourComment: "Votre commentaire",
     from: "De",
+    responseTo: "Réponse à",
     sent: "Envoyé le {date} à {time}",
-    alertItemOwner: "Alerter le propriétaire de l'objet",
+    alertItemOwner: "Notifier le propriétaire de l'objet",
     reply: "Répondre",
   },
   workspaces: {

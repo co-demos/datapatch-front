@@ -26,27 +26,47 @@
             class="body-2 comment-text py-3 px-4"
             :color="`${ comment.owner_email === user.email ? 'primary' : 'grey'}`"
             >
-            <!-- @click="showDetails  = !showDetails" -->
-            <span class="white--text">
+
+            <p class="white--text mb-1">
               {{ comment.message }}
-            </span>
+            </p>
+            
+            <p 
+              v-if="comment.response_to_comment_id"
+              class="white--text font-italic mb-1"
+              >
+              {{ $t('comments.responseTo') }} : 
+              "{{ getParentCommentText(comment.response_to_comment_id) }}"
+            </p>
+
           </v-sheet>
 
-          <!-- SENDER -->
+          <!-- COMMENT DETAILS -->
           <p 
             v-show="hover"
             class="caption grey--text mt-1 ml-5 mb-0"
             >
-            {{ $t('comments.from') }} :
-            {{ comment.owner_email }}
-          </p>
+            <!-- SENDER -->
+            <span >
+              {{ $t('comments.from') }} :
+              {{ comment.owner_email }}
+              <br>
+            </span>
 
-          <!-- DATE -->
-          <p 
-            v-show="hover"
-            class="caption grey--text mb-1 ml-5"
-            >
-            {{ $t('comments.sent', commentSentDate(comment) ) }} :
+            <!-- RESPONSE TO -->
+            <span
+              v-if="comment.response_to_comment_id"
+              >
+              {{ $t('comments.responseTo') }} :
+              {{ getParentCommentOwner(comment.response_to_comment_id) }}
+              <br>
+            </span>
+
+            <!-- DATE -->
+            <span>
+              {{ $t('comments.sent', commentSentDate(comment) ) }} :
+            </span>
+            
           </p>
 
         </v-col>
@@ -57,18 +77,17 @@
         class="text-left align-top"
         >
         <v-btn
-          class=""
+          :class="`${showInput ? '' : 'primary--text'}`"
           rounded
-          color="primary"
+          :color="`${showInput ? 'primary' : 'white'}`"
           small
-          text
+          :dark="showInput"
           block
           elevation="0"
-          @click="showInput = !showInput "
+          @click="toggleCommentId()"
           >
           <v-icon
             small
-            color="primary"
             class="mr-2"
             >
             icon-reply2
@@ -83,25 +102,21 @@
 
     <v-sheet
       v-show="showInput"
-      class="body-2 comment-text mt-3 mb-4 mx-0 py-1 px-1"
+      class="body-2 comment-text mt-3 mb-6 mx-0 py-1 px-1"
       :color="`grey lighten-4`"
       outlined
       >
       <CommentInput
         :parentComment="comment"
       />
+        <!-- @closeComment="showInput = false" -->
     </v-sheet>
-
-    <!-- <v-divider
-      v-if="hasDivider"
-      class="mt-4"
-    /> -->
 
   </div>
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'CommentItem',
@@ -114,7 +129,7 @@
     },
     data () {
       return {
-        showInput: false,
+        // showInput: false,
         showDetails: false,
       }
     },
@@ -125,9 +140,38 @@
       }),
       ...mapGetters({
         getCurrentItem: 'comments/getCurrentItem',
+        getCommentById: 'comments/getCommentById',
+        getActiveCommentId: 'comments/getActiveCommentId',
       }),
+      showInput() {
+        return this.getActiveCommentId === this.comment.id
+      }
     },
     methods: {
+      ...mapActions({
+        populateActiveCommentId: 'comments/populateActiveCommentId',
+      }),
+      // getParentComment(id) {
+      //   let parentComment = this.getCommentById(id)
+      //   return parentComment
+      // },
+      toggleCommentId() {
+        if (this.getActiveCommentId === this.comment.id) {
+          this.log && console.log(`\nC-CommentItem > toggleCommentId > A > this.getActiveCommentId : `, this.getActiveCommentId )
+          this.populateActiveCommentId(undefined) 
+        } else {
+          this.log && console.log(`\nC-CommentItem > toggleCommentId > B > this.getActiveCommentId : `, this.getActiveCommentId )
+          this.populateActiveCommentId(this.comment.id) 
+        }
+      },
+      getParentCommentText(id) {
+        let parentComment = this.getCommentById(id)
+        return parentComment.message
+      },
+      getParentCommentOwner(id) {
+        let parentComment = this.getCommentById(id)
+        return parentComment.owner_email
+      },
       commentSentDate(comment) {
         let date = new Date(comment.created_date)
         let commentDate =  date.toLocaleDateString(this.$i18n.locale)

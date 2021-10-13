@@ -11,28 +11,37 @@
 </style>
 
 <template>
-  
+
   <div
     v-show="showCommentsBox"
     class="comments-box"
     >
-    <CommentsTitle
-      v-if="getCurrentItem"
-      :item="getCurrentItem"
-      :elevation="elevation"
-      :roundRadius="roundRadius"
-    />
-    <CommentsList
-      v-if="getCurrentItem"
-      :comments="getComments"
-      :elevation="elevation"
-      :roundRadius="roundRadius"
-   />
-    <CommentInputBox
-      v-if="getCurrentItem"
-      :elevation="elevation"
-      :roundRadius="roundRadius"
-   />
+    <v-card
+      outlined
+      light
+      :elevation="elevation || 0"
+      class="FloatingCommentsBox mb-3 pa-3"
+      :style="`
+        width: 100%;
+        border-radius: ${roundRadius}px;
+        max-height: 700px;
+        overflow-y: scroll;
+        `"
+      >
+
+      <CommentsTitle
+        v-if="getCurrentItem"
+        :item="getCurrentItem"
+      />
+      <CommentInputBox
+        v-if="getCurrentItem"
+      />
+      <CommentsList
+        v-if="getCurrentItem"
+        :comments="getCommentsSortedByDate"
+      />
+
+    </v-card>
   </div>
 
 </template>
@@ -79,7 +88,8 @@
         headerUser: 'user/headerUser',
         showCommentsBox: 'comments/getShowCommentsBox',
         getCurrentItem: 'comments/getCurrentItem',
-        getComments: 'comments/getComments',
+        getCommentsSortedByDate: 'comments/getCommentsSortedByDate',
+        // getActiveCommentId: 'comments/getActiveCommentId',
       }),
     },
     methods: {

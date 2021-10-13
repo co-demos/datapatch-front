@@ -450,12 +450,13 @@ export default {
   },
   comments: {
     comments: "Comments",
-    addComment: "Add a comment",
+    addComment: "Add a new comment",
     yourEmail: "Your email (optional)",
     yourComment: "Your comment",
     from: "From",
+    responseTo: "Response to",
     sent: "Sent date : {date} at {time}",
-    alertItemOwner: 'Alert item owner',
+    alertItemOwner: 'Notify item owner',
     reply: "Reply",
   },
   workspaces: {
