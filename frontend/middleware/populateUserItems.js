@@ -65,7 +65,7 @@ export default function ({
 
           store.dispatch('groups/populateUserItems', userData.my_groups)
           store.dispatch('workspaces/populateUserItems', userData.my_workspaces)
-          store.dispatch('datasets/populateUserItems', userData.my_datasets)
+          // store.dispatch('datasets/populateUserItems', userData.my_datasets)
 
           store.dispatch('workspaces/populateUserUX', userData.ux_workspaces)
           i18n.setLocale(userData.locale)
@@ -109,7 +109,7 @@ export default function ({
           const sharedData = resp.data
           store.dispatch('groups/populateSharedItems', sharedData.shared_groups)
           store.dispatch('workspaces/populateSharedItems', sharedData.shared_workspaces)
-          store.dispatch('datasets/populateSharedItems', sharedData.shared_datasets)
+          // store.dispatch('datasets/populateSharedItems', sharedData.shared_datasets)
           return
         })
         .catch(error => {

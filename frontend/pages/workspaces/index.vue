@@ -260,13 +260,13 @@
         updatePath: 'updateCrumbsPath',
       }),
       orderWorkspaces() {
-        this.openWorkspaces = [...this.sharedWorkspaces]
+        this.openWorkspaces = [ ...this.sharedWorkspaces ]
         if (this.uxWorkspaces && this.uxWorkspaces.workspaces_order) {
           const workspaces_order = this.uxWorkspaces.workspaces_order
           this.myWorkspaces = mapOrder( [...this.userWorkspaces], workspaces_order, 'id')
         } else {
         // this.myWorkspaces =[ ...this.userWorkspaces, ...this.myWorkspacesDummies ]
-          this.myWorkspaces = [...this.userWorkspaces]
+          this.myWorkspaces = [ ...this.userWorkspaces ]
         }
       },
       resetEmptyWorkspace() {
@@ -290,14 +290,14 @@
           })
       },
       updateWorkspacePositions() {
-        // this.log && console.log("\nP-Workspaces > updateWorkspacePositions > this.myWorkspaces : ", this.myWorkspaces)
+        this.log && console.log("\nP-Workspaces > updateWorkspacePositions > this.myWorkspaces : ", this.myWorkspaces)
         let wsIndexes = this.myWorkspaces.map(ws => ws.id)
         let payloadUser = {
           ux_workspaces: {
             workspaces_order: wsIndexes
           }
         }
-        // this.log && console.log("P-Workspaces > updateWorkspacePositions > wsIndexes : ", wsIndexes)
+        this.log && console.log("P-Workspaces > updateWorkspacePositions > wsIndexes : ", wsIndexes)
         this.$axios
           .put(`${this.api.users}/me/ux`, payloadUser, this.headerUser)
           .then(resp => {

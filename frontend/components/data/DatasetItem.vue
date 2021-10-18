@@ -403,28 +403,30 @@
     watch: {
       datasetId(next) {
         // this.log && console.log("C-DatasetItem > watch > datasetId > next :", next)
-        this.ds = next && { ...this.getUserDatasetById(next) }
+        // this.ds = next && { ...this.getUserDatasetById(next) }
+        this.ds = next && this.getDatasetById(next)
       },
-      currentDataset(next) {
-        // this.log && console.log("C-DatasetItem > watch > currentDataset ...")
-        // this.log && console.log("C-DatasetItem > watch > currentDataset > next : ", next)
-        if (next) {
-          // this.log && console.log("C-DatasetItem > watch > currentDataset > next.id : ", next.id)
-          this.ds = { ...next }
-        }
-      }
+      // currentDataset(next) {
+      //   // this.log && console.log("C-DatasetItem > watch > currentDataset ...")
+      //   // this.log && console.log("C-DatasetItem > watch > currentDataset > next : ", next)
+      //   if (next) {
+      //     // this.log && console.log("C-DatasetItem > watch > currentDataset > next.id : ", next.id)
+      //     this.ds = { ...next }
+      //   }
+      // }
     },
     beforeMount () {
       this.isLoading = true
     },
     mounted () {
-      // this.log && console.log(`\nC-DatasetItem > ${this.action} > mounted > this.datasetId :`, this.datasetId)
+      this.log && console.log(`\nC-DatasetItem > ${this.action} > mounted > this.datasetId :`, this.datasetId)
 
       if (this.action === 'update') {
         // this.log && console.log(`C-DatasetItem > ${this.action} > mounted > this.datasetId :`, this.datasetId)
         setTimeout(() => {
-          this.ds = this.getUserDatasetById(this.datasetId)
-          this.isLoading = false
+          // this.ds = this.getUserDatasetById(this.datasetId)
+          this.ds = this.getDatasetById(this.datasetId)
+          // this.isLoading = false
         }, 200)
       } else {
         // this.log && console.log("\nC-DatasetItem > mounted > this.dataset :", this.dataset)
@@ -435,36 +437,40 @@
       }
       // this.log && console.log(`C-DatasetItem > ${this.action} > mounted > this.ds :`, this.ds)
       this.apiUrl =  this.api[this.itemType]
-
+      
       this.socket = this.$nuxtSocket({
         name: 'main',
         path: '/ws/socket.io',
         transport: ['websocket'],
       })
-      this.socket.on('handshake', (data) => {
-        this.log && console.log("\nC-DatasetItem > mounted > this.socket - handshake > data : ", data)
-        this.socket.emit('join_item_room', {
-          sid: data.sid,
-          item_type: 'dataset',
-          item_id: this.datasetId
+      
+      if ( this.action !== 'create' ) {
+        this.socket.on('handshake', (data) => {
+          this.log && console.log("\nC-DatasetItem > mounted > this.socket - handshake > data : ", data)
+          this.socket.emit('join_item_room', {
+            sid: data.sid,
+            item_type: 'dataset',
+            item_id: this.datasetId
+          })
         })
-      })
-      this.socket.on('item_room', (data) => {
-        this.log && console.log("\nC-DatasetItem > mounted > this.socket - item_room > data : ", data)
-      })
-      this.socket.on('action_message', (data) => {
-        this.log && console.log("\nC-DatasetItem > mounted > this.socket - action_message > data : ", data)
-        if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
-          this.log && console.log("\nC-DatasetItem > mounted > this.socket - action_message > data.callback : ", data.callback)
-          this.togggleCommentsNeedReload(true)
-        }
-      })
+        this.socket.on('item_room', (data) => {
+          this.log && console.log("\nC-DatasetItem > mounted > this.socket - item_room > data : ", data)
+        })
+        this.socket.on('action_message', (data) => {
+          this.log && console.log("\nC-DatasetItem > mounted > this.socket - action_message > data : ", data)
+          if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
+            this.log && console.log("\nC-DatasetItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+            this.togggleCommentsNeedReload(true)
+          }
+        })
+      }
 
     },
     computed: {
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        user: (state) =>  state.user.userData,
         itemModel: (state) => state.datasets.itemModel,
         itemModelMeta: (state) => state.datasets.itemModelMeta,
         itemModelShare: (state) => state.datasets.itemModelShare,
@@ -474,15 +480,18 @@
         userId: 'user/userId',
         getUserWorkspaces: 'workspaces/getUserItems',
         getUserWorkspaceById: 'workspaces/getUserItemById',
-        getUserDatasetById: 'datasets/getUserItemById',
+        // getUserDatasetById: 'datasets/getUserItemById',
+        // getSharedDatasetById: 'datasets/getSharedItemById',
         // getLoading: 'datasets/getLoadingById',
         headerUser: 'user/headerUser'
       }),
-      currentDataset() {
-        return this.getUserDatasetById(this.datasetId)
-      },
+      // currentDataset() {
+      //   // return this.getSharedDatasetById(this.datasetId)
+      //   return this.getUserDatasetById(this.datasetId)
+      // },
       currentLoadingState() {
-        return this.action === 'update' && this.loadingItem === this.datasetId
+        // return this.action === 'update' && this.loadingItem === this.datasetId
+        return this.action === 'update' && this.isLoading
       },
     },
     methods: {
@@ -498,6 +507,31 @@
       // currentLoadingState() {
       //   return this.loadingItem === this.datasetId
       // },
+      getDatasetById(datasetId) {
+        this.log && console.log("C-DatasetItem > getDatasetById > datasetId :", datasetId)
+        this.isLoading = true
+        let url = `${this.api.datasets}/${datasetId}`
+        this.$axios
+          .get(url, this.headerUser)
+          .then(resp => {
+            this.log && console.log("C-DatasetItem > getDatasetById > resp.data :", resp.data)
+            this.ds = resp.data
+            this.isLoading = false
+        })
+      },
+      ioBroadcastAction( ioData, rooms, callback ) {
+        this.log && console.log("C-DatasetItem > ioBroadcastAction > ioData : ", ioData)
+        let payload = {
+          from_user_email: this.user.email,
+          item_type: ioData.item_type,
+          item_id: ioData.id,
+          target_rooms: rooms,
+          action: this.action,
+          callback: callback
+        }
+        this.log && console.log("C-DatasetItem > ioBroadcastAction > payload : ", payload)
+        this.socket.emit('broadcast_action', payload)
+      },
       openCreateWithPreset (preset) {
         this.log && console.log("C-DatasetItem > openCreateWithPreset > preset :", preset)
         this.presetCreate = preset
@@ -531,7 +565,7 @@
           .post(`${this.api.datasets}/`, itemPayload, this.headerUser)
           .then(respPost => {
             this.log && console.log('C-DatasetItem > createItem > respPost.data : ', respPost.data)
-            this.$store.dispatch(`datasets/appendUserItem`, respPost.data)
+            // this.$store.dispatch(`datasets/appendUserItem`, respPost.data)
             // this.log && console.log('C-DatasetItem > createItem > this.localItem : ', this.localItem)
             // this.log && console.log('C-DatasetItem > createItem > this.emptyItem : ', this.emptyItem)
             
@@ -551,9 +585,13 @@
               .then( respPut => {
                 this.$store.dispatch(`workspaces/updateUserItem`, {data: respPut.data})
 
+                let rooms = [ `workspace_${this.fromWorkspace}` ]
+                let callback = { item_type: 'workspace', method: 'get' }
+                this.ioBroadcastAction( respPut.data, rooms, callback )
+
                 // commented during backend dev / debugging
                 this.$router.push(`/dataset/${respPost.data.id}`)
-                return
+                // return
               })
 
           })

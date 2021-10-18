@@ -845,7 +845,8 @@
         // shared's invitations => accept/refuse
         const respActions = [ 'accept', 'refuse' ] 
         if (this.invitType === 'received' && respActions.includes(this.action) ) {
-          this.$axios.post( url, payload, this.headerUser)
+          this.$axios
+            .post( url, payload, this.headerUser)
             .then(resp => {
               this.log && console.log('C-InvitationItem > handleAction > accept/refuse > resp.data : ', resp.data)
               this.$store.dispatch(`invitations/updateSharedItem`, { data: resp.data })
@@ -861,7 +862,8 @@
 
         // user's invitations => remove
         if (this.invitType === 'sent' && this.action === 'remove' ) {
-          this.$axios.delete( url, this.headerUser)
+          this.$axios
+            .delete( url, this.headerUser)
             .then(resp => {
               this.log && console.log('C-InvitationItem > handleAction > remove > resp.data : ', resp.data)
               this.$store.dispatch(`invitations/removeUserItem`, { data: resp.data })

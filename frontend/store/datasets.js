@@ -10,7 +10,7 @@ export const state = () => ({
   // loadingItems: [],
 
   userDatasets: [],
-  shareddatasets: [],
+  sharedDatasets: [],
 
   itemModel: {
     infos: emptyDataset.infos,
@@ -49,10 +49,10 @@ export const getters = {
     return state.userDatasets.find( ds => ds.id === id)
   },
   getSharedItems: (state) => {
-    return state.shareddatasets
+    return state.sharedDatasets
   },
   getSharedItemById: (state) => (id) => {
-    return state.shareddatasets.find( ds => ds.id === id)
+    return state.sharedDatasets.find( ds => ds.id === id)
   },
 }
 

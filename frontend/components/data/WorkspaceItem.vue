@@ -25,9 +25,19 @@
       <!-- @mouseover="hover = true"
       @mouseleave="hover = false" -->
 
-      <!-- <v-row>
-        <code><pre>{{ ws }}</pre></code>  
-      </v-row> -->
+      <!-- DEBUGGING -->
+      <v-row v-if="false">
+        <v-col cols="2">
+          id : <code>{{ ws.id }}</code>
+        </v-col>
+        <v-col cols="3">
+          datasets : <pre><code>{{ ws.datasets }}</code></pre>
+        </v-col>
+        <v-col cols="3">
+          authorized_users : <pre><code>{{ ws.authorized_users }}</code></pre>
+        </v-col>
+        <v-divider/>
+      </v-row>
 
       <!-- workspace / toolbar -->
       <v-toolbar
@@ -378,7 +388,7 @@
         transport: ['websocket'],
       })
       this.socket.on('handshake', (data) => {
-        this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - handshake > data : ", data)
+        this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - handshake > data : `, data)
         this.socket.emit('join_item_room', {
           sid: data.sid,
           item_type: 'workspace',
@@ -386,13 +396,18 @@
         })
       })
       this.socket.on('item_room', (data) => {
-        this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - item_room > data : ", data)
+        this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - item_room > data : `, data)
       })
       this.socket.on('action_message', (data) => {
-        this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - action_message > data : ", data)
+        this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data : `, data)
+        
         if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
-          this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+          this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data.callback : `, data.callback)
           this.togggleCommentsNeedReload(true)
+        }
+        if (data.callback.item_type === 'workspace' && data.callback.method === 'get' ) {
+          this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data.callback : `, data.callback)
+          // this.togggleCommentsNeedReload(true)
         }
       //   if (data.callback.method === 'get' && !data.callback.get_list ) {
       //     this.getItem(data)
@@ -424,6 +439,7 @@
         uxWorkspaces: 'workspaces/getUserUx',
         getLoading: 'workspaces/getLoadingById',
         userDatasets: 'datasets/getUserItems',
+        sharedDatasets: 'datasets/getSharedItems',
         headerUser: 'user/headerUser',
       })
     },
@@ -440,19 +456,26 @@
       getDatasets(ws) {
         this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
         let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
-        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
-        let datasets = hasDatasets ? ws.datasets.ids : []
+        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
+        let datasetsIds = hasDatasets ? ws.datasets.ids : []
+        
         // avoid duplicates
-        datasets = [ ...new Set(datasets) ]
-        // this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasets :` , datasets)
+        datasetsIds = [ ...new Set(datasetsIds) ]
+        this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasetsIds :` , datasetsIds)
+        
         // check if exists 
-        let existingDatasets = this.userDatasets.map(dsIn => dsIn.id)
+        // let existingDatasets = this.userDatasets.map(dsIn => dsIn.id)
         // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > existingDatasets :` , existingDatasets)
         
-        let datasetsIn = datasets.filter( dsId => existingDatasets.includes(dsId) )
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > existingSharedDatasets :` , existingSharedDatasets)
+        // let existingSharedDatasets = this.sharedDatasets.map(dsIn => dsIn.id)
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > existingSharedDatasets :` , existingSharedDatasets)
+
+        // let datasetsIn = datasetsIds.filter( dsId => existingDatasets.includes(dsId) )
         // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > datasetsIn :` , datasetsIn)
 
-        this.datasets = [ ...new Set(datasetsIn) ]
+        // this.datasets = [ ...new Set(datasetsIn) ]
+        this.datasets = datasetsIds
       },
       shareWorkspace() {
         // TO DO
