@@ -381,6 +381,30 @@
       this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
       this.apiUrl =  this.api[this.itemType]
 
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nC-GroupItem > mounted > this.socket - handshake > data : ", data)
+        this.socket.emit('join_item_room', {
+          sid: data.sid,
+          item_type: 'group',
+          item_id: this.groupId
+        })
+      })
+      this.socket.on('item_room', (data) => {
+        this.log && console.log("\nC-GroupItem > mounted > this.socket - item_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nC-GroupItem > mounted > this.socket - action_message > data : ", data)
+        if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
+          this.log && console.log("\nC-GroupItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+          this.togggleCommentsNeedReload(true)
+        }
+      })
+
       if (this.action === 'update') {
         // this.log && console.log(`C-GroupItem > ${this.action} > mounted > this.groupId :`, this.groupId)
         setTimeout(() => {
@@ -422,6 +446,7 @@
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
+        togggleCommentsNeedReload: 'comments/togggleNeedReload',
       }),
       openComments(item) {
         this.populateCurrentItem(item)

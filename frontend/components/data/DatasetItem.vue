@@ -435,6 +435,31 @@
       }
       // this.log && console.log(`C-DatasetItem > ${this.action} > mounted > this.ds :`, this.ds)
       this.apiUrl =  this.api[this.itemType]
+
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nC-DatasetItem > mounted > this.socket - handshake > data : ", data)
+        this.socket.emit('join_item_room', {
+          sid: data.sid,
+          item_type: 'dataset',
+          item_id: this.datasetId
+        })
+      })
+      this.socket.on('item_room', (data) => {
+        this.log && console.log("\nC-DatasetItem > mounted > this.socket - item_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nC-DatasetItem > mounted > this.socket - action_message > data : ", data)
+        if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
+          this.log && console.log("\nC-DatasetItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+          this.togggleCommentsNeedReload(true)
+        }
+      })
+
     },
     computed: {
       ...mapState({
@@ -464,6 +489,7 @@
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
+        togggleCommentsNeedReload: 'comments/togggleNeedReload',
       }),
       openComments(item) {
         this.populateCurrentItem(item)

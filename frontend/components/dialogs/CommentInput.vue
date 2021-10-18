@@ -8,10 +8,11 @@
 
   <!-- INPUT -->
   <v-row
-    class="CommentInput justify-center mt-1 mx-0 pb-3"
+    class="CommentInput justify-center mt-1 mx-0 pt-2 pb-3"
     >
 
     <v-col 
+      v-show="!user.id"
       :cols="cols"
       class="py-0 mt-0 mb-3 text-center"
       >
@@ -35,7 +36,8 @@
       lazy-validation
       >
       <!-- COMMENT DATA -->
-      <v-col 
+      <v-col
+        v-show="!user.id"
         :cols="cols"
         class="py-0 mt-0 mb-3"
         >
@@ -56,9 +58,9 @@
         >
         <v-textarea
           v-model="message"
-          filled
+          regular
           dense
-          rows="3"
+          rows="2"
           hide-details="auto"
           :label="$t('comments.yourComment')"
           :rules="minCharRules"
@@ -175,7 +177,7 @@
         optionalEmail: undefined,
         isLoading: false,
 
-        minCharRules: rules.minCharRules( this.$t('rules.valEnter'), this.$t('rules.minChars') ),
+        minCharRules: rules.minCharRules( this.$t('rules.valEnter'), this.$t('rules.minChars'), 2 ),
 
       }
     },
@@ -192,6 +194,13 @@
         this.optionalEmail = this.user.email
         this.activateEmailField = false
       }
+    },
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
     },
     computed: {
       ...mapState({
@@ -238,23 +247,39 @@
         this.message = ''
         this.$refs.formComment.resetValidation()
       },
+      ioBroadcastAction(ioData, rooms, callback ) {
+        this.log && console.log("C-CommentInput > ioBroadcastAction > ioData : ", ioData)
+        let payload = {
+          from_user_email: this.user &&  this.user.email,
+          item_type: this.item.item_type,
+          item_id: this.item.id,
+          target_rooms: rooms,
+          action: 'comment',
+          callback: callback
+        }
+        this.log && console.log("C-CommentInput > ioBroadcastAction > payload : ", payload)
+        this.socket.emit('broadcast_action', payload)
+      },
       sendComment() {
         if ( this.validateForm() ) {
           let payload = { ...this.buildComment }
           this.log && console.log('C-CommentInput > sendComment > payload :' , payload)
           this.isLoading = true
-          let url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
+          const url = `${this.api[this.item.item_type + 's']}/${this.item.id}/comment`
           this.$axios.post( url, payload, this.headerUser)
             .then(resp => {
-              // TO FINISH ...
               this.log && console.log('C-CommentInput > sendComment > resp.data : ', resp.data)
               this.resetValidation()
               this.togggleNeedReload(true)
               this.isLoading = false
               this.closeCommentsBox()
-              // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
-              // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
-              // this.ioBroadcastAction(ioData, rooms, callback)
+
+              // TO FINISH ...
+              let rooms = [ `${this.item.item_type}_${this.item.id}` ]
+              const getCommentsUrl = `${this.api[this.item.item_type + 's']}/${this.item.id}/comments`
+              let callback = { item_type: 'comment', method: 'get', get_list: true, url: getCommentsUrl }
+              this.ioBroadcastAction(resp.data, rooms, callback)
+              
             })
             .catch(error => {
               this.isLoading = false

@@ -6,10 +6,10 @@ export const rules = {
     ]
   },
 
-  minCharRules: (reqMsg, minMsg) => {
+  minCharRules: (reqMsg, minMsg, minLlength=3) => {
     return [
       (value) => !!value || reqMsg,
-      (value) => (value && value.length >= 3) || minMsg,
+      (value) => (value && value.length >= minLlength) || minMsg,
     ]
   },
 

@@ -197,11 +197,39 @@
         // table: undefined,
       }
     },
+
     beforeMount () {
       // this.log && console.log(`\nC-TableItem > beforeMount > this.tableId : `, this.tableId )
       // this.log && console.log(`C-TableItem > beforeMount > this.getTableMetadataById(this.tableId) : `, this.getTableMetadataById(this.tableId) )
       this.table = this.getTable
     },
+
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nC-TableItem > mounted > this.socket - handshake > data : ", data)
+        this.socket.emit('join_item_room', {
+          sid: data.sid,
+          item_type: 'table',
+          item_id: this.tableId
+        })
+      })
+      this.socket.on('item_room', (data) => {
+        this.log && console.log("\nC-TableItem > mounted > this.socket - item_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nC-TableItem > mounted > this.socket - action_message > data : ", data)
+        if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
+          this.log && console.log("\nC-TableItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+          this.togggleCommentsNeedReload(true)
+        }
+      })
+    },
+
     computed: {
       getTable() {
         return this.getTableMetadataById(this.tableId, this.fromCreate)
@@ -238,6 +266,7 @@
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
+        togggleCommentsNeedReload: 'comments/togggleNeedReload',
       }),
       openComments(item) {
         this.populateCurrentItem(item)

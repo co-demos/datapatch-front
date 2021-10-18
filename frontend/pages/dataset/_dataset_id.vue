@@ -266,11 +266,12 @@
 
       }
     },
+
     beforeMount () {
       // this.log && console.log(`P-Dataset _id > this.$route :`, this.$route)
       this.dsId = this.$route.params.id
-      // this.log && console.log(`P-Dataset _id > this.dsId :`, this.dsId)
-      this.log && console.log(`P-Dataset _id > this.currentDataset :`, this.currentDataset)
+      this.log && console.log(`P-Dataset > beforeMount > _id > this.dsId :`, this.dsId)
+      this.log && console.log(`P-Dataset > beforeMount > _id > this.currentDataset :`, this.currentDataset)
 
       let pathData = {
         text: `${this.currentDataset.title}`,
@@ -282,6 +283,31 @@
       this.updatePath(this.pathItems)
 
     },
+
+    mounted () {
+      this.log && console.log(`P-Dataset > mounted > this.dsId :`, this.dsId)
+      this.log && console.log(`P-Dataset > mounted > this.currentDataset :`, this.currentDataset)
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nP-Dataset > mounted > this.socket - handshake > data : ", data)
+        this.socket.emit('join_item_room', {
+          sid: data.sid,
+          item_type: 'dataset',
+          item_id: this.currentDataset.id
+        })
+      })
+      this.socket.on('item_room', (data) => {
+        this.log && console.log("\nP-Dataset > mounted > this.socket - item_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nP-Dataset > mounted > this.socket - action_message > data : ", data)
+      })
+    },
+
     computed: {
       ...mapState({
         log: (state) => state.log,

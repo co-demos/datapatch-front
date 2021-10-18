@@ -73,6 +73,25 @@
         isLoading: false,
       }
     },
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+      // this.socket.on('action_message', (data) => {
+      //   this.log && console.log("\nC-FloatingCommentsBox > mounted > this.socket - action_message > data : ", data)
+      //   this.log && console.log("C-FloatingCommentsBox > mounted > this.socket - action_message > data.callback : ", data.callback)
+      //   // TO FINISH ...
+      //   // if (data.callback.method === 'get' && !data.callback.get_list ) {
+      //   //   this.getItem(data)
+      //   // }
+      //   if ( data.callback.method === 'get' && data.callback.get_list ) {
+      //     this.log && console.log("C-FloatingCommentsBox > mounted > this.socket - action_message > data.callback : ", data.callback)
+      //     this.getRelatedComments()
+      //   }
+      // })
+    },
     beforeMount() {
       if (this.getCurrentItem) {
         this.getRelatedComments()
@@ -118,15 +137,11 @@
         this.isLoading = true
         this.$axios.get( url, this.headerUser)
           .then(resp => {
-            // TO FINISH ...
             this.log && console.log('C-FloatingCommentsBox > getRelatedComments > resp.data : ', resp.data)
             // populate comments store
             this.populateComments( resp.data )
             this.togggleNeedReload( false )
             this.isLoading = false
-            // let rooms = payload.invitees.map( invitee => invitee.invitee_email )
-            // let callback = { item_type: 'invitation', method: 'get', get_list: true, url: `${this.api.users}/me/invitations` }
-            // this.ioBroadcastAction(ioData, rooms, callback)
           })
           .catch(error => {
             this.isLoading = false

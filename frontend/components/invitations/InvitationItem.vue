@@ -686,6 +686,24 @@
         path: '/ws/socket.io',
         transport: ['websocket'],
       })
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nC-InvitationItem > mounted > this.socket - handshake > data : ", data)
+        this.socket.emit('join_item_room', {
+          sid: data.sid,
+          item_type: 'invitation',
+          item_id: this.invit.id
+        })
+      })
+      this.socket.on('item_room', (data) => {
+        this.log && console.log("\nC-InvitationItem > mounted > this.socket - item_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nC-InvitationItem > mounted > this.socket - action_message > data : ", data)
+        if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
+          this.log && console.log("\nC-InvitationItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+          this.togggleCommentsNeedReload(true)
+        }
+      })
     },
     computed: {
       ...mapState({
@@ -760,6 +778,7 @@
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
+        togggleCommentsNeedReload: 'comments/togggleNeedReload',
       }),
       openComments(item) {
         this.populateCurrentItem(item)

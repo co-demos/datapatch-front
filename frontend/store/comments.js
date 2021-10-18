@@ -6,7 +6,8 @@ export const state = () => ({
 
   currentItem: undefined,
   activeCommentId: undefined,
-  comments: []
+  comments: [],
+  unreadCommentIds: []
 
 })
 

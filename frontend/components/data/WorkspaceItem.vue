@@ -370,9 +370,39 @@
       // this.log && console.log('\nC-WorkspaceItem > beforeMount > this.ws :' , this.ws)
       this.getDatasets(this.workspace)
     },
-    // mounted () {
-    //   this.$store.dispatch('workspaces/togggleIsLoading', false)
-    // },
+
+    mounted() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        path: '/ws/socket.io',
+        transport: ['websocket'],
+      })
+      this.socket.on('handshake', (data) => {
+        this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - handshake > data : ", data)
+        this.socket.emit('join_item_room', {
+          sid: data.sid,
+          item_type: 'workspace',
+          item_id: this.workspace.id
+        })
+      })
+      this.socket.on('item_room', (data) => {
+        this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - item_room > data : ", data)
+      })
+      this.socket.on('action_message', (data) => {
+        this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - action_message > data : ", data)
+        if (data.callback.item_type === 'comment' && data.callback.method === 'get' && data.callback.get_list ) {
+          this.log && console.log("\nC-WorkspaceItem > mounted > this.socket - action_message > data.callback : ", data.callback)
+          this.togggleCommentsNeedReload(true)
+        }
+      //   if (data.callback.method === 'get' && !data.callback.get_list ) {
+      //     this.getItem(data)
+      //   }
+      //   if (data.callback.method === 'get' && data.callback.get_list ) {
+      //     this.getItems(data)
+      //   }
+      })
+    },
+
     computed: {
       dragOptions() {
         return {
@@ -401,13 +431,14 @@
       ...mapActions({
         togggleShowCommentsBox: 'comments/togggleShowCommentsBox',
         populateCurrentItem: 'comments/populateCurrentItem',
+        togggleCommentsNeedReload: 'comments/togggleNeedReload',
       }),
       openComments(item) {
         this.populateCurrentItem(item)
         this.togggleShowCommentsBox(true)
       },
       getDatasets(ws) {
-        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
+        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
         let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
         // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
         let datasets = hasDatasets ? ws.datasets.ids : []
