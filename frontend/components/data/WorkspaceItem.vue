@@ -405,9 +405,9 @@
           this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data.callback : `, data.callback)
           this.togggleCommentsNeedReload(true)
         }
-        if (data.callback.item_type === 'workspace' && data.callback.method === 'get' ) {
+        if (data.callback.item_type === 'dataset' && data.callback.method === 'get' ) {
           this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data.callback : `, data.callback)
-          // this.togggleCommentsNeedReload(true)
+          this.reloadWorkspaceDatasets()
         }
       //   if (data.callback.method === 'get' && !data.callback.get_list ) {
       //     this.getItem(data)
@@ -452,6 +452,9 @@
       openComments(item) {
         this.populateCurrentItem(item)
         this.togggleShowCommentsBox(true)
+      },
+      reloadWorkspaceDatasets() {
+        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > reloadWorkspaceDatasets > this.ws.datasets :` , this.ws.datasets)
       },
       getDatasets(ws) {
         this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)

@@ -583,14 +583,19 @@
             this.$axios
               .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
               .then( respPut => {
+
                 this.$store.dispatch(`workspaces/updateUserItem`, {data: respPut.data})
 
+                // let ioData = {
+                //   item_type: respPut.data.item_type,
+                //   item_id: respPut.data.id,
+                // }
                 let rooms = [ `workspace_${this.fromWorkspace}` ]
-                let callback = { item_type: 'workspace', method: 'get' }
+                let callback = { item_type: 'dataset', method: 'get' }
                 this.ioBroadcastAction( respPut.data, rooms, callback )
 
                 // commented during backend dev / debugging
-                this.$router.push(`/dataset/${respPost.data.id}`)
+                // this.$router.push(`/dataset/${respPost.data.id}`)
                 // return
               })
 
@@ -617,6 +622,11 @@
               }
               // this.log && console.log(`...C-DatasetItem > deleteDataset > ds ${this.ds.id} > payloadWs : `, payloadWs)
               this.$store.dispatch(`workspaces/updateUserItem`, {data: payloadWs})
+
+              let rooms = [ `workspace_${this.fromWorkspace}` ]
+              let callback = { item_type: 'dataset', method: 'get' }
+              // this.ioBroadcastAction( >>>respPut.data, rooms, callback )
+
             }
           })
       },
