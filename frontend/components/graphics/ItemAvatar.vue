@@ -9,8 +9,9 @@
   <div>
     <!-- DEBUGGING -->
     <span class="black--text" v-if="false">
-      item : <code>{{ item }}</code><br>
-      itemType: <code>{{ itemType }}</code>
+      <!-- item : <code>{{ item }}</code><br> -->
+      id : <code>{{ item.id }}</code><br>
+     <!--  itemType: <code>{{ itemType }}</code> -->
     </span>
 
     <v-avatar

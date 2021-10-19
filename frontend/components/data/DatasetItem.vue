@@ -16,6 +16,14 @@
 <template>
   <div class="DatasetItem">
 
+    <!-- DEBUGGING -->
+    <v-row v-if="false" class="justify-center mt-4 pb-0">
+      <v-col cols="12" class="text-center pb-0">
+        datasetId : <code>{{ datasetId }}</code>
+      </v-col>
+    </v-row>
+
+    <!-- DATASET CARD -->
     <v-row
       v-if="ds"
       v-show="!currentLoadingState"
@@ -82,7 +90,7 @@
       </v-col>
 
       <!-- NEW DATASET MESSAGE -->
-      <v-col v-if="isAlone && !isLoading" cols="8 " class="pa-0">
+      <v-col v-if="isAlone && !isLoading" cols="8" class="pa-0">
         <p class="text-body-2 grey--text pt-0 ma-0">
           {{ $t('datasets.newDataset') }}
           <!-- <br> wsId: {{ fromWorkspace }} -->
@@ -332,6 +340,7 @@
 
     </v-row>
 
+    <!-- DATASET CARD LOADING -->
     <v-row
       v-show="currentLoadingState"
       class="ma-0 align-center"
@@ -519,7 +528,7 @@
             this.isLoading = false
         })
       },
-      ioBroadcastAction( ioData, rooms, callback ) {
+      ioBroadcastAction( ioData, rooms, callback, includeSid ) {
         this.log && console.log("C-DatasetItem > ioBroadcastAction > ioData : ", ioData)
         let payload = {
           from_user_email: this.user.email,
@@ -527,7 +536,8 @@
           item_id: ioData.id,
           target_rooms: rooms,
           action: this.action,
-          callback: callback
+          callback: callback,
+          include_sid: includeSid
         }
         this.log && console.log("C-DatasetItem > ioBroadcastAction > payload : ", payload)
         this.socket.emit('broadcast_action', payload)
@@ -573,30 +583,26 @@
 
             // action from workspace : append new dataset to workspace.datasets
             let currentWs = this.getUserWorkspaceById(this.fromWorkspace)
-            // this.log && console.log('C-DatasetItem > createItem > currentWs : ', currentWs)
+            this.log && console.log('C-DatasetItem > createItem > currentWs : ', currentWs)
             let wsPreviousDatasets = currentWs.datasets && currentWs.datasets.ids || []
             let payloadWs = { ...currentWs }
             payloadWs.datasets = {
               ids: [ ...wsPreviousDatasets, respPost.data.id ]
             }
-            // this.log && console.log('C-DatasetItem > createItem > payloadWs : ', payloadWs)
+            this.log && console.log('C-DatasetItem > createItem > payloadWs : ', payloadWs)
             this.$axios
               .put(`${this.api.workspaces}/${this.fromWorkspace}`, payloadWs, this.headerUser)
               .then( respPut => {
 
-                this.$store.dispatch(`workspaces/updateUserItem`, {data: respPut.data})
+                this.log && console.log('C-DatasetItem > createItem > respPut.data : ', respPut.data)
+                // this.$store.dispatch(`workspaces/updateUserItem`, {data: respPut.data})
 
-                // let ioData = {
-                //   item_type: respPut.data.item_type,
-                //   item_id: respPut.data.id,
-                // }
                 let rooms = [ `workspace_${this.fromWorkspace}` ]
                 let callback = { item_type: 'dataset', method: 'get' }
-                this.ioBroadcastAction( respPut.data, rooms, callback )
+                this.ioBroadcastAction( respPut.data, rooms, callback, true )
 
                 // commented during backend dev / debugging
                 // this.$router.push(`/dataset/${respPost.data.id}`)
-                // return
               })
 
           })
@@ -625,7 +631,7 @@
 
               let rooms = [ `workspace_${this.fromWorkspace}` ]
               let callback = { item_type: 'dataset', method: 'get' }
-              // this.ioBroadcastAction( >>>respPut.data, rooms, callback )
+              this.ioBroadcastAction( ws, rooms, callback )
 
             }
           })

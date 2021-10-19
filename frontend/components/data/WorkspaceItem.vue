@@ -30,11 +30,12 @@
         <v-col cols="2">
           id : <code>{{ ws.id }}</code>
         </v-col>
-        <v-col cols="3">
-          datasets : <pre><code>{{ ws.datasets }}</code></pre>
+        <v-col cols="5">
+          ws.datasets.ids : <code>{{ ws.datasets.ids }}</code>
         </v-col>
-        <v-col cols="3">
-          authorized_users : <pre><code>{{ ws.authorized_users }}</code></pre>
+        <v-col cols="5">
+          datasets : <code>{{ datasets }}</code>
+          <!-- authorized_users : <pre><code>{{ ws.authorized_users }}</code></pre> -->
         </v-col>
         <v-divider/>
       </v-row>
@@ -355,14 +356,15 @@
         itemType: 'workspaces',
 
         // itemModel:  undefined,
-        ws: this.workspace,
+        ws: undefined,
         datasets: [],
+        datasetsLoaded: false,
 
       }
     },
     watch: {
       workspace(next) {
-        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > workspace ...`)
+        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > workspace ...`)
         this.ws = { ...next }
         this.getDatasets(next)
       },
@@ -379,6 +381,7 @@
       this.ws = { ...this.workspace }
       // this.log && console.log('\nC-WorkspaceItem > beforeMount > this.ws :' , this.ws)
       this.getDatasets(this.workspace)
+      this.datasetsLoaded = true
     },
 
     mounted() {
@@ -455,11 +458,18 @@
       },
       reloadWorkspaceDatasets() {
         this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > reloadWorkspaceDatasets > this.ws.datasets :` , this.ws.datasets)
+        const url = `${this.api.workspaces}/${this.ws.id}`
+        this.$axios
+          .get(url, this.headerUser)
+          .then( resp => {
+            this.$store.dispatch(`workspaces/updateUserItem`, {data: resp.data})
+            this.datasets = resp.data.datasets.ids
+          })
       },
       getDatasets(ws) {
         this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > this.ws.datasets :` , this.ws.datasets)
         let hasDatasets = Boolean(ws.datasets && ws.datasets.ids)
-        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
+        // this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > getDatasets > hasDatasets :`, hasDatasets)
         let datasetsIds = hasDatasets ? ws.datasets.ids : []
         
         // avoid duplicates
