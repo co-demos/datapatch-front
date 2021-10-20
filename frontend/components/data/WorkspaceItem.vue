@@ -370,9 +370,12 @@
       },
       datasets(next, prev) {
         this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > next : `, next)
-        this.log && console.log("C-WorkspaceItem > watch > datasets > prev : ", prev)
+        this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > watch > datasets > prev : `, prev)
         this.ws.datasets = { ids: next }
-        this.updateDatasetsPositions()
+        if (next.length !== prev.length) {
+          // let ioData = { ...this.ws }
+          this.updateDatasetsPositions()
+        }
       }
     },
     beforeMount () {
@@ -412,6 +415,10 @@
           this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data.callback : `, data.callback)
           this.reloadWorkspaceDatasets()
         }
+        if (data.callback.item_type === 'workspace' && data.callback.method === 'get' ) {
+          this.log && console.log(`\nC-WorkspaceItem > ws ${this.ws.id} > mounted > this.socket - action_message > data.callback : `, data.callback)
+          this.reloadWorkspaceDatasets()
+        }
       //   if (data.callback.method === 'get' && !data.callback.get_list ) {
       //     this.getItem(data)
       //   }
@@ -433,6 +440,7 @@
       ...mapState({
         log: (state) => state.log,
         api: (state) => state.api,
+        user: (state) => state.user.userData,
         itemModel: (state) => state.workspaces.itemModel,
         itemModelShare: (state) => state.workspaces.itemModelShare,
         isWorkspacesLoading: (state) => state.workspaces.isLoading
@@ -455,6 +463,20 @@
       openComments(item) {
         this.populateCurrentItem(item)
         this.togggleShowCommentsBox(true)
+      },
+      ioBroadcastAction( ioData, rooms, callback, includeSid ) {
+        this.log && console.log("C-WorkspaceItem > ioBroadcastAction > ioData : ", ioData)
+        let payload = {
+          from_user_email: this.user.email,
+          item_type: ioData.item_type,
+          item_id: ioData.id,
+          target_rooms: rooms,
+          action: 'update',
+          callback: callback,
+          include_sid: includeSid
+        }
+        this.log && console.log("C-WorkspaceItem > ioBroadcastAction > payload : ", payload)
+        this.socket.emit('broadcast_action', payload)
       },
       reloadWorkspaceDatasets() {
         this.log && console.log(`C-WorkspaceItem > ws ${this.ws.id} > reloadWorkspaceDatasets > this.ws.datasets :` , this.ws.datasets)
@@ -509,9 +531,12 @@
         this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > payloadWs : ', payloadWs)
         this.$axios
           .put(`${this.api.workspaces}/${this.ws.id}`, payloadWs, this.headerUser)
-          // .then( resp => {
-          //   this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
-          // })
+          .then( resp => {
+            this.log && console.log('C-WorkspaceItem > updateDatasetsPositions > resp.data : ', resp.data)
+            let rooms = [ `workspace_${this.ws.id}` ]
+            let callback = { item_type: 'workspace', method: 'get' }
+            this.ioBroadcastAction( resp.data, rooms, callback )
+          })
       },
       deleteWorkspace() {
         // this.log && console.log("C-WorkspaceItem > deleteWorkspace > this.headerUser :", this.headerUser)
