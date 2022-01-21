@@ -41,6 +41,8 @@ The current goal is to make it work with the following generic features, so it c
 # install dependencies
 cd frontend
 nvm use
+cp frontend/example.env frontend/.env
+source frontend/.env
 npm install
 ```
 
